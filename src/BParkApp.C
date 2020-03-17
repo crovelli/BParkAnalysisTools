@@ -13,6 +13,9 @@
 #if Application == 1
 #include "./TaPJpsiSelectionNaod.cc"
 #endif
+#if Application == 2
+#include "./TripletSelection.cc"
+#endif
 
 int main(int argc, char* argv[]) {
 
@@ -62,6 +65,16 @@ int main(int argc, char* argv[]) {
   tnp.PrepareOutputs(outputFileName);   
 
   tnp.Loop();
+
+#endif
+
+#if Application == 2
+
+  TripletSelection triplet(theChain);
+
+  triplet.PrepareOutputs(outputFileName);   
+
+  triplet.Loop();
 
 #endif
 

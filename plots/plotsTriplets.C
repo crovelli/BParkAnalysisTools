@@ -1,0 +1,938 @@
+#define plotsTriplets_cxx
+#include "plotsTriplets.h"
+#include <TH2.h>
+#include <TStyle.h>
+#include <TCanvas.h>
+#include <TLegend.h>
+#include <iostream> 
+
+using namespace std;
+
+void plotsTriplets::Loop()
+{
+  if (fChain == 0) return;
+  Long64_t nentries = fChain->GetEntriesFast();
+  Long64_t nbytes = 0, nb = 0;
+
+  // Histos
+  TH1F *h_numB     = new TH1F("h_numB", "h_numB", 25, -0.5, 24.5);
+  TH1F *h_numCombB = new TH1F("h_numCombB", "h_numCombB", 25, -0.5, 24.5);
+  TH1F *h_numTrueB = new TH1F("h_numTrueB", "h_numTrueB", 10, -0.5, 9.5);
+
+  TH1F *h_trueB_dRminmaxEle = new TH1F("h_trueB_dRminmaxEle", "h_trueB_dRminmaxEle", 100, 0., 0.05);  
+  TH1F *h_combB_dRminmaxEle = new TH1F("h_combB_dRminmaxEle", "h_combB_dRminmaxEle", 100, 0., 6.);  
+  TH1F *h_trueB_dRmaxTrack  = new TH1F("h_trueB_dRmaxTrack",  "h_trueB_dRmaxTrack",  100, 0., 6.);  
+  TH1F *h_combB_dRmaxTrack  = new TH1F("h_combB_dRmaxTrack",  "h_combB_dRmaxTrack",  100, 0., 6.);  
+  TH1F *h_trueB_dRGenEle    = new TH1F("h_trueB_dRGenEle",    "h_trueB_dRGenEle",    100, 0., 6.);  
+
+  TH1F *h_debug_svProbMatch      = new TH1F("h_debug_svProbMatch",      "h_debug_svProbMatch",      50, -0.01, 1.01);
+  TH1F *h_debug_svProbUnMatch    = new TH1F("h_debug_svProbUnMatch",    "h_debug_svProbUnMatch",    50, -0.01, 1.01);
+  TH1F *h_debug_pf_svProbMatch   = new TH1F("h_debug_pf_svProbMatch",   "h_debug_pf_svProbMatch",   50, -0.01, 1.01);
+  TH1F *h_debug_pf_svProbUnMatch = new TH1F("h_debug_pf_svProbUnMatch", "h_debug_pf_svProbUnMatch", 50, -0.01, 1.01);
+
+  TH1F *h_trueBestMatch_svProb   = new TH1F("h_trueBestMatch_svProb", "h_trueBestMatch_svProb", 100, -0.01, 1.01);
+  TH1F *h_trueBestMatch_xysig    = new TH1F("h_trueBestMatch_xysig",  "h_trueBestMatch_xysig",  50,  0., 100.);
+  TH1F *h_trueBestMatch_cos2d    = new TH1F("h_trueBestMatch_cos2d",  "h_trueBestMatch_cos2d",  100,  0.989, 1.001);
+  TH1F *h_trueBestMatch_eleptsum = new TH1F("h_trueBestMatch_eleptsum", "h_trueBestMatch_eleptsum", 100, 0., 100.);
+  TH1F *h_trueBestMatch_kpt      = new TH1F("h_trueBestMatch_kpt",      "h_trueBestMatch_kpt",      100, 0., 50.);
+  TH1F *h_trueBestMatch_maxDrRecoGen    = new TH1F("h_trueBestMatch_maxDrRecoGen",    "h_trueBestMatch_maxDrRecoGen",    100, 0., 6.);
+  TH1F *h_trueBestMatch_minDrRecoGen    = new TH1F("h_trueBestMatch_minDrRecoGen",    "h_trueBestMatch_minDrRecoGen",    100, 0., 6.);
+  TH1F *h_trueBestMatch_drRecoGenTrack  = new TH1F("h_trueBestMatch_drRecoGenTrack",  "h_trueBestMatch_drRecoGenTrack",  100, 0., 6.);
+
+  TH1F *h_comb_svProb   = new TH1F("h_comb_svProb", "h_comb_svProb", 100, -0.01, 1.01);
+  TH1F *h_comb_xysig    = new TH1F("h_comb_xysig",  "h_comb_xysig",  50,  0., 100.);
+  TH1F *h_comb_cos2d    = new TH1F("h_comb_cos2d",  "h_comb_cos2d",  100,  0.989, 1.001);
+  TH1F *h_comb_eleptsum = new TH1F("h_comb_eleptsum", "h_comb_eleptsum", 100, 0., 100.);
+  TH1F *h_comb_kpt      = new TH1F("h_comb_kpt",      "h_comb_kpt",      100, 0., 50.);
+  TH1F *h_comb_maxDrRecoGen    = new TH1F("h_comb_maxDrRecoGen",    "h_comb_maxDrRecoGen",    100, 0., 6.);
+  TH1F *h_comb_minDrRecoGen    = new TH1F("h_comb_minDrRecoGen",    "h_comb_minDrRecoGen",    100, 0., 6.);
+  TH1F *h_comb_drRecoGenTrack  = new TH1F("h_comb_drRecoGenTrack",  "h_comb_drRecoGenTrack",  100, 0., 6.);
+
+  TH1F *h_svProbM_notok_ele1pt  = new TH1F("h_svProbM_notok_ele1pt", "h_svProbM_notok_ele1pt",  60, 0.,30.);
+  TH1F *h_svProbM_notok_ele2pt  = new TH1F("h_svProbM_notok_ele2pt", "h_svProbM_notok_ele2pt",  60, 0.,30.);
+  TH1F *h_svProbM_notok_kpt     = new TH1F("h_svProbM_notok_kpt",    "h_svProbM_notok_kpt",     60, 0.,30.);
+  TH1F *h_svProbM_notok_ele1eta = new TH1F("h_svProbM_notok_ele1eta","h_svProbM_notok_ele1eta", 50,-2.5,2.5);
+  TH1F *h_svProbM_notok_ele2eta = new TH1F("h_svProbM_notok_ele2eta","h_svProbM_notok_ele2eta", 50,-2.5,2.5);
+  TH1F *h_svProbM_notok_keta    = new TH1F("h_svProbM_notok_keta",   "h_svProbM_notok_keta",    50,-2.5,2.5);
+  TH1F *h_svProbM_ok_ele1pt     = new TH1F("h_svProbM_ok_ele1pt",    "h_svProbM_ok_ele1pt",     60, 0.,30.);
+  TH1F *h_svProbM_ok_ele2pt     = new TH1F("h_svProbM_ok_ele2pt",    "h_svProbM_ok_ele2pt",     60, 0.,30.);
+  TH1F *h_svProbM_ok_kpt        = new TH1F("h_svProbM_ok_kpt",       "h_svProbM_ok_kpt",        60, 0.,30.);
+  TH1F *h_svProbM_ok_ele1eta    = new TH1F("h_svProbM_ok_ele1eta",   "h_svProbM_ok_ele1eta",    50,-2.5,2.5);
+  TH1F *h_svProbM_ok_ele2eta    = new TH1F("h_svProbM_ok_ele2eta",   "h_svProbM_ok_ele2eta",    50,-2.5,2.5);
+  TH1F *h_svProbM_ok_keta       = new TH1F("h_svProbM_ok_keta",      "h_svProbM_ok_keta",       50,-2.5,2.5);
+  TH1F *hz_svProbM_notok_ele1pt = new TH1F("hz_svProbM_notok_ele1pt","hz_svProbM_notok_ele1pt", 50, 0.,5.);
+  TH1F *hz_svProbM_notok_ele2pt = new TH1F("hz_svProbM_notok_ele2pt","hz_svProbM_notok_ele2pt", 50, 0.,5.);
+  TH1F *hz_svProbM_notok_kpt    = new TH1F("hz_svProbM_notok_kpt",   "hz_svProbM_notok_kpt",    50, 0.,5.);
+  TH1F *hz_svProbM_ok_ele1pt    = new TH1F("hz_svProbM_ok_ele1pt",   "hz_svProbM_ok_ele1pt",    25, 0.,5.);
+  TH1F *hz_svProbM_ok_ele2pt    = new TH1F("hz_svProbM_ok_ele2pt",   "hz_svProbM_ok_ele2pt",    25, 0.,5.);
+  TH1F *hz_svProbM_ok_kpt       = new TH1F("hz_svProbM_ok_kpt",      "hz_svProbM_ok_kpt",       25, 0.,5.);
+
+  TH1F *h_xySigM_notok_ele1pt   = new TH1F("h_xySigM_notok_ele1pt",  "h_xySigM_notok_ele1pt",  60, 0.,30.);
+  TH1F *h_xySigM_notok_ele2pt   = new TH1F("h_xySigM_notok_ele2pt",  "h_xySigM_notok_ele2pt",  60, 0.,30.);
+  TH1F *h_xySigM_notok_kpt      = new TH1F("h_xySigM_notok_kpt",     "h_xySigM_notok_kpt",     60, 0.,30.);
+  TH1F *h_xySigM_notok_ele1eta  = new TH1F("h_xySigM_notok_ele1eta", "h_xySigM_notok_ele1eta", 50,-2.5,2.5);
+  TH1F *h_xySigM_notok_ele2eta  = new TH1F("h_xySigM_notok_ele2eta", "h_xySigM_notok_ele2eta", 50,-2.5,2.5);
+  TH1F *h_xySigM_notok_keta     = new TH1F("h_xySigM_notok_keta",    "h_xySigM_notok_keta",    50,-2.5,2.5);
+  TH1F *h_xySigM_notok_pfmva1   = new TH1F("h_xySigM_notok_pfmva1",  "h_xySigM_notok_pfmva1",  50,-10.,10.);
+  TH1F *h_xySigM_notok_pfmva2   = new TH1F("h_xySigM_notok_pfmva2",  "h_xySigM_notok_pfmva2",  50,-10.,10.);
+  TH1F *h_xySigM_notok_lptmva1  = new TH1F("h_xySigM_notok_lptmva1", "h_xySigM_notok_lptmva1", 50,-10.,10.);
+  TH1F *h_xySigM_notok_lptmva2  = new TH1F("h_xySigM_notok_lptmva2", "h_xySigM_notok_lptmva2", 50,-10.,10.);
+  TH1F *h_xySigM_ok_ele1pt      = new TH1F("h_xySigM_ok_ele1pt",     "h_xySigM_ok_ele1pt",     60, 0.,30.);
+  TH1F *h_xySigM_ok_ele2pt      = new TH1F("h_xySigM_ok_ele2pt",     "h_xySigM_ok_ele2pt",     60, 0.,30.);
+  TH1F *h_xySigM_ok_kpt         = new TH1F("h_xySigM_ok_kpt",        "h_xySigM_ok_kpt",        60, 0.,30.);
+  TH1F *h_xySigM_ok_ele1eta     = new TH1F("h_xySigM_ok_ele1eta",    "h_xySigM_ok_ele1eta",    50,-2.5,2.5);
+  TH1F *h_xySigM_ok_ele2eta     = new TH1F("h_xySigM_ok_ele2eta",    "h_xySigM_ok_ele2eta",    50,-2.5,2.5);
+  TH1F *h_xySigM_ok_keta        = new TH1F("h_xySigM_ok_keta",       "h_xySigM_ok_keta",       50,-2.5,2.5);
+  TH1F *h_xySigM_ok_pfmva1      = new TH1F("h_xySigM_ok_pfmva1",     "h_xySigM_ok_pfmva1",     50,-10.,10.);
+  TH1F *h_xySigM_ok_pfmva2      = new TH1F("h_xySigM_ok_pfmva2",     "h_xySigM_ok_pfmva2",     50,-10.,10.);
+  TH1F *h_xySigM_ok_lptmva1     = new TH1F("h_xySigM_ok_lptmva1",    "h_xySigM_ok_lptmva1",    50,-10.,10.);
+  TH1F *h_xySigM_ok_lptmva2     = new TH1F("h_xySigM_ok_lptmva2",    "h_xySigM_ok_lptmva2",    50,-10.,10.);
+  TH1F *hz_xySigM_notok_ele1pt  = new TH1F("hz_xySigM_notok_ele1pt", "hz_xySigM_notok_ele1pt", 50, 0.,5.);
+  TH1F *hz_xySigM_notok_ele2pt  = new TH1F("hz_xySigM_notok_ele2pt", "hz_xySigM_notok_ele2pt", 50, 0.,5.);
+  TH1F *hz_xySigM_notok_kpt     = new TH1F("hz_xySigM_notok_kpt",    "hz_xySigM_notok_kpt",    50, 0.,5.);
+  TH1F *hz_xySigM_ok_ele1pt     = new TH1F("hz_xySigM_ok_ele1pt",    "hz_xySigM_ok_ele1pt",    50, 0.,5.);
+  TH1F *hz_xySigM_ok_ele2pt     = new TH1F("hz_xySigM_ok_ele2pt",    "hz_xySigM_ok_ele2pt",    50, 0.,5.);
+  TH1F *hz_xySigM_ok_kpt        = new TH1F("hz_xySigM_ok_kpt",       "hz_xySigM_ok_kpt",       50, 0.,5.);
+
+  TH1F *h_cos2DM_notok_ele1pt   = new TH1F("h_cos2DM_notok_ele1pt",  "h_cos2DM_notok_ele1pt",  60, 0.,30.);
+  TH1F *h_cos2DM_notok_ele2pt   = new TH1F("h_cos2DM_notok_ele2pt",  "h_cos2DM_notok_ele2pt",  60, 0.,30.);
+  TH1F *h_cos2DM_notok_kpt      = new TH1F("h_cos2DM_notok_kpt",     "h_cos2DM_notok_kpt",     60, 0.,30.);
+  TH1F *h_cos2DM_notok_ele1eta  = new TH1F("h_cos2DM_notok_ele1eta", "h_cos2DM_notok_ele1eta", 50,-2.5,2.5);
+  TH1F *h_cos2DM_notok_ele2eta  = new TH1F("h_cos2DM_notok_ele2eta", "h_cos2DM_notok_ele2eta", 50,-2.5,2.5);
+  TH1F *h_cos2DM_notok_keta     = new TH1F("h_cos2DM_notok_keta",    "h_cos2DM_notok_keta",    50,-2.5,2.5);
+  TH1F *h_cos2DM_ok_ele1pt      = new TH1F("h_cos2DM_ok_ele1pt",     "h_cos2DM_ok_ele1pt",     60, 0.,30.);
+  TH1F *h_cos2DM_ok_ele2pt      = new TH1F("h_cos2DM_ok_ele2pt",     "h_cos2DM_ok_ele2pt",     60, 0.,30.);
+  TH1F *h_cos2DM_ok_kpt         = new TH1F("h_cos2DM_ok_kpt",        "h_cos2DM_ok_kpt",        60, 0.,30.);
+  TH1F *h_cos2DM_ok_ele1eta     = new TH1F("h_cos2DM_ok_ele1eta",    "h_cos2DM_ok_ele1eta",    50,-2.5,2.5);
+  TH1F *h_cos2DM_ok_ele2eta     = new TH1F("h_cos2DM_ok_ele2eta",    "h_cos2DM_ok_ele2eta",    50,-2.5,2.5);
+  TH1F *h_cos2DM_ok_keta        = new TH1F("h_cos2DM_ok_keta",       "h_cos2DM_ok_keta",       50,-2.5,2.5);
+  TH1F *hz_cos2DM_notok_ele1pt  = new TH1F("hz_cos2DM_notok_ele1pt", "hz_cos2DM_notok_ele1pt", 50, 0.,5.);
+  TH1F *hz_cos2DM_notok_ele2pt  = new TH1F("hz_cos2DM_notok_ele2pt", "hz_cos2DM_notok_ele2pt", 50, 0.,5.);
+  TH1F *hz_cos2DM_notok_kpt     = new TH1F("hz_cos2DM_notok_kpt",    "hz_cos2DM_notok_kpt",    50, 0.,5.);
+  TH1F *hz_cos2DM_ok_ele1pt     = new TH1F("hz_cos2DM_ok_ele1pt",    "hz_cos2DM_ok_ele1pt",    50, 0.,5.);
+  TH1F *hz_cos2DM_ok_ele2pt     = new TH1F("hz_cos2DM_ok_ele2pt",    "hz_cos2DM_ok_ele2pt",    50, 0.,5.);
+  TH1F *hz_cos2DM_ok_kpt        = new TH1F("hz_cos2DM_ok_kpt",       "hz_cos2DM_ok_kpt",       50, 0.,5.);
+  
+
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {
+    Long64_t ientry = LoadTree(jentry);
+    if (ientry < 0) break;
+    nb = fChain->GetEntry(jentry);   nbytes += nb;
+
+    // debug
+    int debugsize   = debug_svprob_match->size();
+    int debugpfsize = debug_pf_svprob_match->size();
+    for (int ii=0; ii<debugsize; ii++) {
+      if (debug_svprob_match->at(ii)==1)    h_debug_svProbMatch      -> Fill(debug_svprob->at(ii));
+      if (debug_svprob_match->at(ii)==0)    h_debug_svProbUnMatch    -> Fill(debug_svprob->at(ii));
+    }
+    for (int ii=0; ii<debugpfsize; ii++) {
+      if (debug_pf_svprob_match->at(ii)==1) h_debug_pf_svProbMatch   -> Fill(debug_pf_svprob->at(ii));
+      if (debug_pf_svprob_match->at(ii)==0) h_debug_pf_svProbUnMatch -> Fill(debug_pf_svprob->at(ii));
+    }
+
+    // multiplicity
+    h_numB     -> Fill(goodBSize);
+    h_numCombB -> Fill(goodCombBSize);
+    h_numTrueB -> Fill(goodTrueBSize);
+
+    // which true
+    int trueBminmaxsize = goodTrueB_maxMinDREle->size();
+    for (int ii=0; ii<trueBminmaxsize; ii++) { 
+      h_trueB_dRminmaxEle->Fill(goodTrueB_maxMinDREle->at(ii));
+      h_trueB_dRmaxTrack->Fill(goodTrueB_maxDRTrack->at(ii));      
+    }
+    int combBminmaxsize = goodCombB_maxMinDREle->size();
+    for (int ii=0; ii<combBminmaxsize; ii++) { 
+      h_combB_dRminmaxEle->Fill(goodCombB_maxMinDREle->at(ii));
+      h_combB_dRmaxTrack->Fill(goodCombB_maxDRTrack->at(ii));      
+    }
+    int trueBdrgensize = goodTrueB_dRgen->size();
+    for (int ii=0; ii<trueBdrgensize; ii++) h_trueB_dRGenEle->Fill(goodTrueB_dRgen->at(ii));
+
+    // true vs comb: best match
+    h_trueBestMatch_svProb   -> Fill(bestMatch_SvProb);
+    h_trueBestMatch_xysig    -> Fill(bestMatch_XYSig);
+    h_trueBestMatch_cos2d    -> Fill(bestMatch_Cos2D);
+    h_trueBestMatch_eleptsum -> Fill(bestMatch_PtSum);
+    h_trueBestMatch_kpt      -> Fill(bestMatch_KPt);
+    h_trueBestMatch_maxDrRecoGen    -> Fill(bestMatch_maxDrRecoGen);
+    h_trueBestMatch_minDrRecoGen    -> Fill(bestMatch_minDrRecoGen);
+    h_trueBestMatch_drRecoGenTrack  -> Fill(bestMatch_drRecoGenK);
+
+    // true vs comb: comb
+    int goodCombB_size = goodCombB_svProb->size();
+    for (int ii=0; ii<goodCombB_size; ii++) { 
+      h_comb_svProb   -> Fill(goodCombB_svProb->at(ii));
+      h_comb_xysig    -> Fill(goodCombB_xySig->at(ii));
+      h_comb_cos2d    -> Fill(goodCombB_cos2D->at(ii));
+      h_comb_eleptsum -> Fill(goodCombB_ptsum->at(ii));
+      h_comb_kpt      -> Fill(goodCombB_kpt->at(ii));
+      h_comb_maxDrRecoGen   -> Fill(goodCombB_maxDrRecoGen->at(ii));
+      h_comb_minDrRecoGen   -> Fill(goodCombB_minDrRecoGen->at(ii));
+      h_comb_drRecoGenTrack -> Fill(goodCombB_drRecoGenK->at(ii));
+    }
+
+    // offline criteria: bad vs good
+    if (bestSvProbMatch_notok_ele1pt>-990)  h_svProbM_notok_ele1pt  -> Fill(bestSvProbMatch_notok_ele1pt);
+    if (bestSvProbMatch_notok_ele2pt>-990)  h_svProbM_notok_ele2pt  -> Fill(bestSvProbMatch_notok_ele2pt);
+    if (bestSvProbMatch_notok_kpt>-990)     h_svProbM_notok_kpt     -> Fill(bestSvProbMatch_notok_kpt);
+    if (bestSvProbMatch_notok_ele1eta>-990) h_svProbM_notok_ele1eta -> Fill(bestSvProbMatch_notok_ele1eta);
+    if (bestSvProbMatch_notok_ele2eta>-990) h_svProbM_notok_ele2eta -> Fill(bestSvProbMatch_notok_ele2eta);
+    if (bestSvProbMatch_notok_keta>-990)    h_svProbM_notok_keta    -> Fill(bestSvProbMatch_notok_keta);
+    if (bestSvProbMatch_ok_ele1pt>-990)     h_svProbM_ok_ele1pt     -> Fill(bestSvProbMatch_ok_ele1pt);
+    if (bestSvProbMatch_ok_ele2pt>-990)     h_svProbM_ok_ele2pt     -> Fill(bestSvProbMatch_ok_ele2pt);
+    if (bestSvProbMatch_ok_kpt>-990)        h_svProbM_ok_kpt        -> Fill(bestSvProbMatch_ok_kpt);
+    if (bestSvProbMatch_ok_ele1eta>-990)    h_svProbM_ok_ele1eta    -> Fill(bestSvProbMatch_ok_ele1eta);
+    if (bestSvProbMatch_ok_ele2eta>-990)    h_svProbM_ok_ele2eta    -> Fill(bestSvProbMatch_ok_ele2eta);
+    if (bestSvProbMatch_ok_keta>-990)       h_svProbM_ok_keta       -> Fill(bestSvProbMatch_ok_keta);
+    if (bestSvProbMatch_notok_ele1pt>-990)  hz_svProbM_notok_ele1pt -> Fill(bestSvProbMatch_notok_ele1pt);
+    if (bestSvProbMatch_notok_ele2pt>-990)  hz_svProbM_notok_ele2pt -> Fill(bestSvProbMatch_notok_ele2pt);
+    if (bestSvProbMatch_notok_kpt>-990)     hz_svProbM_notok_kpt    -> Fill(bestSvProbMatch_notok_kpt);
+    if (bestSvProbMatch_ok_ele1pt>-990)     hz_svProbM_ok_ele1pt    -> Fill(bestSvProbMatch_ok_ele1pt);
+    if (bestSvProbMatch_ok_ele2pt>-990)     hz_svProbM_ok_ele2pt    -> Fill(bestSvProbMatch_ok_ele2pt);
+    if (bestSvProbMatch_ok_kpt>-990)        hz_svProbM_ok_kpt       -> Fill(bestSvProbMatch_ok_kpt);
+
+    // offline criteria: bad vs good
+    if (bestXYsigMatch_notok_ele1pt>-990)  h_xySigM_notok_ele1pt  -> Fill(bestXYsigMatch_notok_ele1pt);
+    if (bestXYsigMatch_notok_ele2pt>-990)  h_xySigM_notok_ele2pt  -> Fill(bestXYsigMatch_notok_ele2pt);
+    if (bestXYsigMatch_notok_kpt>-990)     h_xySigM_notok_kpt     -> Fill(bestXYsigMatch_notok_kpt);
+    if (bestXYsigMatch_notok_ele1eta>-990) h_xySigM_notok_ele1eta -> Fill(bestXYsigMatch_notok_ele1eta);
+    if (bestXYsigMatch_notok_ele2eta>-990) h_xySigM_notok_ele2eta -> Fill(bestXYsigMatch_notok_ele2eta);
+    if (bestXYsigMatch_notok_keta>-990)    h_xySigM_notok_keta    -> Fill(bestXYsigMatch_notok_keta);
+    if (bestXYsigMatch_notok_pfmva1>-990  && bestXYsigMatch_notok_pfmva1<20)  h_xySigM_notok_pfmva1  -> Fill(bestXYsigMatch_notok_pfmva1);
+    if (bestXYsigMatch_notok_pfmva2>-990  && bestXYsigMatch_notok_pfmva2<20)  h_xySigM_notok_pfmva2  -> Fill(bestXYsigMatch_notok_pfmva2);
+    if (bestXYsigMatch_notok_lptmva1>-990 && bestXYsigMatch_notok_lptmva1<20) h_xySigM_notok_lptmva1 -> Fill(bestXYsigMatch_notok_lptmva1);
+    if (bestXYsigMatch_notok_lptmva2>-990 && bestXYsigMatch_notok_lptmva2<20) h_xySigM_notok_lptmva2 -> Fill(bestXYsigMatch_notok_lptmva2);
+    if (bestXYsigMatch_ok_ele1pt>-990)     h_xySigM_ok_ele1pt     -> Fill(bestXYsigMatch_ok_ele1pt);
+    if (bestXYsigMatch_ok_ele2pt>-990)     h_xySigM_ok_ele2pt     -> Fill(bestXYsigMatch_ok_ele2pt);
+    if (bestXYsigMatch_ok_kpt>-990)        h_xySigM_ok_kpt        -> Fill(bestXYsigMatch_ok_kpt);
+    if (bestXYsigMatch_ok_ele1eta>-990)    h_xySigM_ok_ele1eta    -> Fill(bestXYsigMatch_ok_ele1eta);
+    if (bestXYsigMatch_ok_ele2eta>-990)    h_xySigM_ok_ele2eta    -> Fill(bestXYsigMatch_ok_ele2eta);
+    if (bestXYsigMatch_ok_keta>-990)       h_xySigM_ok_keta       -> Fill(bestXYsigMatch_ok_keta);
+    if (bestXYsigMatch_ok_pfmva1>-990  && bestXYsigMatch_ok_pfmva1<20)  h_xySigM_ok_pfmva1  -> Fill(bestXYsigMatch_ok_pfmva1);
+    if (bestXYsigMatch_ok_pfmva2>-990  && bestXYsigMatch_ok_pfmva2<20)  h_xySigM_ok_pfmva2  -> Fill(bestXYsigMatch_ok_pfmva2);
+    if (bestXYsigMatch_ok_lptmva1>-990 && bestXYsigMatch_ok_lptmva1<20) h_xySigM_ok_lptmva1 -> Fill(bestXYsigMatch_ok_lptmva1);
+    if (bestXYsigMatch_ok_lptmva2>-990 && bestXYsigMatch_ok_lptmva2<20) h_xySigM_ok_lptmva2 -> Fill(bestXYsigMatch_ok_lptmva2);
+    if (bestXYsigMatch_notok_ele1pt>-990)  hz_xySigM_notok_ele1pt -> Fill(bestXYsigMatch_notok_ele1pt);
+    if (bestXYsigMatch_notok_ele2pt>-990)  hz_xySigM_notok_ele2pt -> Fill(bestXYsigMatch_notok_ele2pt);
+    if (bestXYsigMatch_notok_kpt>-990)     hz_xySigM_notok_kpt    -> Fill(bestXYsigMatch_notok_kpt);
+    if (bestXYsigMatch_ok_ele1pt>-990)     hz_xySigM_ok_ele1pt    -> Fill(bestXYsigMatch_ok_ele1pt);
+    if (bestXYsigMatch_ok_ele2pt>-990)     hz_xySigM_ok_ele2pt    -> Fill(bestXYsigMatch_ok_ele2pt);
+    if (bestXYsigMatch_ok_kpt>-990)        hz_xySigM_ok_kpt       -> Fill(bestXYsigMatch_ok_kpt);
+
+    // offline criteria: bad vs good
+    if (bestCos2DMatch_notok_ele1pt>-990)  h_cos2DM_notok_ele1pt  -> Fill(bestCos2DMatch_notok_ele1pt);
+    if (bestCos2DMatch_notok_ele2pt>-990)  h_cos2DM_notok_ele2pt  -> Fill(bestCos2DMatch_notok_ele2pt);
+    if (bestCos2DMatch_notok_kpt>-990)     h_cos2DM_notok_kpt     -> Fill(bestCos2DMatch_notok_kpt);
+    if (bestCos2DMatch_notok_ele1eta>-990) h_cos2DM_notok_ele1eta -> Fill(bestCos2DMatch_notok_ele1eta);
+    if (bestCos2DMatch_notok_ele2eta>-990) h_cos2DM_notok_ele2eta -> Fill(bestCos2DMatch_notok_ele2eta);
+    if (bestCos2DMatch_notok_keta>-990)    h_cos2DM_notok_keta    -> Fill(bestCos2DMatch_notok_keta);
+    if (bestCos2DMatch_ok_ele1pt>-990)     h_cos2DM_ok_ele1pt     -> Fill(bestCos2DMatch_ok_ele1pt);
+    if (bestCos2DMatch_ok_ele2pt>-990)     h_cos2DM_ok_ele2pt     -> Fill(bestCos2DMatch_ok_ele2pt);
+    if (bestCos2DMatch_ok_kpt>-990)        h_cos2DM_ok_kpt        -> Fill(bestCos2DMatch_ok_kpt);
+    if (bestCos2DMatch_ok_ele1eta>-990)    h_cos2DM_ok_ele1eta    -> Fill(bestCos2DMatch_ok_ele1eta);
+    if (bestCos2DMatch_ok_ele2eta>-990)    h_cos2DM_ok_ele2eta    -> Fill(bestCos2DMatch_ok_ele2eta);
+    if (bestCos2DMatch_ok_keta>-990)       h_cos2DM_ok_keta       -> Fill(bestCos2DMatch_ok_keta);
+    if (bestCos2DMatch_notok_ele1pt>-990)  hz_cos2DM_notok_ele1pt -> Fill(bestCos2DMatch_notok_ele1pt);
+    if (bestCos2DMatch_notok_ele2pt>-990)  hz_cos2DM_notok_ele2pt -> Fill(bestCos2DMatch_notok_ele2pt);
+    if (bestCos2DMatch_notok_kpt>-990)     hz_cos2DM_notok_kpt    -> Fill(bestCos2DMatch_notok_kpt);
+    if (bestCos2DMatch_ok_ele1pt>-990)     hz_cos2DM_ok_ele1pt    -> Fill(bestCos2DMatch_ok_ele1pt);
+    if (bestCos2DMatch_ok_ele2pt>-990)     hz_cos2DM_ok_ele2pt    -> Fill(bestCos2DMatch_ok_ele2pt);
+    if (bestCos2DMatch_ok_kpt>-990)        hz_cos2DM_ok_kpt       -> Fill(bestCos2DMatch_ok_kpt);
+  }
+
+
+  // Plots
+  gStyle->SetOptStat(0);
+
+  TCanvas c0("c0","",1);
+  h_debug_svProbMatch   -> SetLineColor(2);
+  h_debug_svProbMatch   -> SetLineWidth(2);
+  h_debug_svProbMatch   -> GetXaxis()-> SetTitle("SV Fit probability");
+  h_debug_svProbMatch   -> SetTitle("");
+  h_debug_svProbUnMatch -> SetLineColor(4);
+  h_debug_svProbUnMatch -> SetLineWidth(2);
+  h_debug_svProbUnMatch -> GetXaxis()-> SetTitle("SV Fit probability");
+  h_debug_svProbUnMatch -> SetTitle("");
+  h_debug_svProbUnMatch   -> DrawNormalized();
+  h_debug_svProbMatch -> DrawNormalized("same");
+  c0.SaveAs("DebugSVProb.png");
+
+  TCanvas c0b("c0b","",1);
+  h_debug_pf_svProbMatch   -> SetLineColor(2);
+  h_debug_pf_svProbMatch   -> SetLineWidth(2);
+  h_debug_pf_svProbMatch   -> GetXaxis()-> SetTitle("SV Fit probability");
+  h_debug_pf_svProbMatch   -> SetTitle("");
+  h_debug_pf_svProbUnMatch -> SetLineColor(4);
+  h_debug_pf_svProbUnMatch -> SetLineWidth(2);
+  h_debug_pf_svProbUnMatch -> GetXaxis()-> SetTitle("SV Fit probability");
+  h_debug_pf_svProbUnMatch -> SetTitle("");
+  h_debug_pf_svProbUnMatch   -> DrawNormalized();
+  h_debug_pf_svProbMatch -> DrawNormalized("same");
+  c0b.SaveAs("DebugPFSVProb.png");
+  
+  TCanvas c1("c1","",1);
+  h_numB -> SetLineColor(2);
+  h_numB -> SetLineWidth(2);
+  h_numB -> Draw();
+  h_numB -> GetXaxis()->SetTitle("Number of selected Bs");
+  h_numB -> SetTitle("");
+  c1.SetLogy();
+  c1.SaveAs("NumberOfBs.png");
+
+  TCanvas c2("c2","",1);
+  h_numTrueB -> SetLineColor(2);
+  h_numTrueB -> SetLineWidth(2);
+  h_numTrueB -> Draw();
+  h_numTrueB -> GetXaxis()->SetTitle("Number of selected Bs matching MC-truth");
+  h_numTrueB -> SetTitle("");
+  c2.SetLogy();
+  c2.SaveAs("NumberOfTrueBs.png");
+
+  TCanvas c3("c3","",1);
+  h_numCombB -> SetLineColor(2);
+  h_numCombB -> SetLineWidth(2);
+  h_numCombB -> Draw();
+  h_numCombB -> GetXaxis()->SetTitle("Number of selected Bs not matching MC-truth");
+  h_numCombB -> SetTitle("");
+  c3.SetLogy();
+  c3.SaveAs("NumberOfCombBs.png");
+
+  TCanvas c4("c4","",1);
+  h_trueB_dRminmaxEle -> SetLineColor(2);
+  h_trueB_dRminmaxEle -> SetLineWidth(2);
+  h_trueB_dRminmaxEle -> Draw();
+  h_trueB_dRminmaxEle -> GetXaxis()->SetTitle("max (min #DeltaR, ele)");
+  h_trueB_dRminmaxEle -> SetTitle("");
+  c4.SetLogy();
+  c4.SaveAs("MaxMinDrEle_trueBs.png");
+
+  TCanvas c5("c5","",1);
+  h_trueB_dRmaxTrack -> SetLineColor(2);
+  h_trueB_dRmaxTrack -> SetLineWidth(2);
+  h_trueB_dRmaxTrack -> Draw();
+  h_trueB_dRmaxTrack -> GetXaxis()->SetTitle("max #DeltaR, K");
+  h_trueB_dRmaxTrack -> SetTitle("");
+  c5.SetLogy();
+  c5.SaveAs("MaxDrK_trueBs.png");
+
+  TCanvas c4a("c4a","",1);
+  h_combB_dRminmaxEle -> SetLineColor(2);
+  h_combB_dRminmaxEle -> SetLineWidth(2);
+  h_combB_dRminmaxEle -> Draw();
+  h_combB_dRminmaxEle -> GetXaxis()->SetTitle("max (min #DeltaR, ele)");
+  h_combB_dRminmaxEle -> SetTitle("");
+  c4a.SetLogy();
+  c4a.SaveAs("MaxMinDrEle_combBs.png");
+
+  TCanvas c5a("c5a","",1);
+  h_combB_dRmaxTrack -> SetLineColor(2);
+  h_combB_dRmaxTrack -> SetLineWidth(2);
+  h_combB_dRmaxTrack -> Draw();
+  h_combB_dRmaxTrack -> GetXaxis()->SetTitle("max #DeltaR, K");
+  h_combB_dRmaxTrack -> SetTitle("");
+  c5a.SetLogy();
+  c5a.SaveAs("MaxDrK_combBs.png");
+
+  TCanvas c6("c6","",1);
+  h_trueB_dRGenEle -> SetLineColor(2);
+  h_trueB_dRGenEle -> SetLineWidth(2);
+  h_trueB_dRGenEle -> Draw();
+  h_trueB_dRGenEle -> GetXaxis()->SetTitle("#DeltaR (gen ele1, gen ele2)");
+  h_trueB_dRGenEle -> SetTitle("");
+  c6.SetLogy();
+  c6.SaveAs("DrGenEle_TrueBs.png");
+
+  h_trueBestMatch_svProb   -> SetLineColor(2);
+  h_trueBestMatch_svProb   -> SetLineWidth(2);
+  h_trueBestMatch_svProb   -> GetXaxis()->SetTitle("SV Fit probability");
+  h_trueBestMatch_svProb   -> SetTitle("");
+  h_trueBestMatch_xysig    -> SetLineColor(2);
+  h_trueBestMatch_xysig    -> SetLineWidth(2);
+  h_trueBestMatch_xysig    -> GetXaxis()->SetTitle("dxy significance");
+  h_trueBestMatch_xysig    -> SetTitle("");
+  h_trueBestMatch_cos2d    -> SetLineColor(2);
+  h_trueBestMatch_cos2d    -> SetLineWidth(2);
+  h_trueBestMatch_cos2d    -> GetXaxis()->SetTitle("cos2D");
+  h_trueBestMatch_cos2d    -> SetTitle("");
+  h_trueBestMatch_eleptsum -> SetLineColor(2);
+  h_trueBestMatch_eleptsum -> SetLineWidth(2);
+  h_trueBestMatch_eleptsum -> GetXaxis()->SetTitle("ele1 pT + ele2 pT");
+  h_trueBestMatch_eleptsum -> SetTitle("");
+  h_trueBestMatch_kpt      -> SetLineColor(2);
+  h_trueBestMatch_kpt      -> SetLineWidth(2);
+  h_trueBestMatch_kpt      -> GetXaxis()->SetTitle("K pT");
+  h_trueBestMatch_kpt      -> SetTitle("");
+  h_trueBestMatch_maxDrRecoGen   -> SetLineColor(2);
+  h_trueBestMatch_maxDrRecoGen   -> SetLineWidth(2);
+  h_trueBestMatch_maxDrRecoGen   -> GetXaxis()->SetTitle("max #DeltaR (gen, reco ele)");
+  h_trueBestMatch_maxDrRecoGen   -> SetTitle("");
+  h_trueBestMatch_minDrRecoGen   -> SetLineColor(2);
+  h_trueBestMatch_minDrRecoGen   -> SetLineWidth(2);
+  h_trueBestMatch_minDrRecoGen   -> GetXaxis()->SetTitle("min #DeltaR (gen, reco ele)");
+  h_trueBestMatch_minDrRecoGen   -> SetTitle("");
+  h_trueBestMatch_drRecoGenTrack -> SetLineColor(2);
+  h_trueBestMatch_drRecoGenTrack -> SetLineWidth(2);
+  h_trueBestMatch_drRecoGenTrack -> GetXaxis()->SetTitle("#DeltaR (gen, reco K)");
+  h_trueBestMatch_drRecoGenTrack -> SetTitle("");
+  //
+  h_comb_svProb   -> SetLineColor(4);
+  h_comb_svProb   -> SetLineWidth(2);
+  h_comb_svProb   -> GetXaxis()->SetTitle("SV Fit probability");
+  h_comb_svProb   -> SetTitle("");
+  h_comb_xysig    -> SetLineColor(4);
+  h_comb_xysig    -> SetLineWidth(2);
+  h_comb_xysig    -> GetXaxis()->SetTitle("dxy significance");
+  h_comb_xysig    -> SetTitle("");
+  h_comb_cos2d    -> SetLineColor(4);
+  h_comb_cos2d    -> SetLineWidth(2);
+  h_comb_cos2d    -> GetXaxis()->SetTitle("cos2D");
+  h_comb_cos2d    -> SetTitle("");
+  h_comb_eleptsum -> SetLineColor(4);
+  h_comb_eleptsum -> SetLineWidth(2);
+  h_comb_eleptsum -> GetXaxis()->SetTitle("ele1 pT + ele2 pT");
+  h_comb_eleptsum -> SetTitle("");
+  h_comb_kpt      -> SetLineColor(4);
+  h_comb_kpt      -> SetLineWidth(2);
+  h_comb_kpt      -> GetXaxis()->SetTitle("K pT");
+  h_comb_kpt      -> SetTitle("");
+  h_comb_maxDrRecoGen   -> SetLineColor(4);
+  h_comb_maxDrRecoGen   -> SetLineWidth(2);
+  h_comb_maxDrRecoGen   -> GetXaxis()->SetTitle("max #DeltaR (gen, reco ele)");
+  h_comb_maxDrRecoGen   -> SetTitle("");
+  h_comb_minDrRecoGen   -> SetLineColor(4);
+  h_comb_minDrRecoGen   -> SetLineWidth(2);
+  h_comb_minDrRecoGen   -> GetXaxis()->SetTitle("min #DeltaR (gen, reco ele)");
+  h_comb_minDrRecoGen   -> SetTitle("");
+  h_comb_drRecoGenTrack -> SetLineColor(4);
+  h_comb_drRecoGenTrack -> SetLineWidth(2);
+  h_comb_drRecoGenTrack -> GetXaxis()->SetTitle("#DeltaR (gen, reco K)");
+  h_comb_drRecoGenTrack -> SetTitle("");
+  //
+  TLegend leg (0.55,0.7,0.95,0.9);
+  leg.SetFillColor(0);
+  leg.SetFillStyle(0);
+  leg.SetBorderSize(0);
+  leg.AddEntry(h_trueBestMatch_svProb,"Best match to MC-truth");
+  leg.AddEntry(h_comb_svProb,"Combinatorics");
+  //
+  TCanvas c10("c10","",1);
+  h_comb_svProb->DrawNormalized();
+  h_trueBestMatch_svProb->DrawNormalized("same");
+  leg.Draw("same");  
+  c10.SaveAs("TrueVsComb_svprob.png");
+  //
+  TCanvas c11("c11","",1);
+  h_comb_xysig->DrawNormalized();
+  h_trueBestMatch_xysig->DrawNormalized("same");
+  leg.Draw("same");  
+  c11.SetLogy();
+  c11.SaveAs("TrueVsComb_dxy.png");
+  //
+  TCanvas c12("c12","",1);
+  h_trueBestMatch_cos2d->DrawNormalized();
+  h_comb_cos2d->DrawNormalized("same");
+  leg.Draw("same");  
+  c12.SetLogy();
+  c12.SaveAs("TrueVsComb_cos2d.png");
+  //
+  TCanvas c13("c13","",1);
+  h_comb_eleptsum->DrawNormalized();
+  h_trueBestMatch_eleptsum->DrawNormalized("same");
+  leg.Draw("same");  
+  c13.SetLogy();
+  c13.SaveAs("TrueVsComb_eleptsum.png");
+  //
+  TCanvas c14("c14","",1);
+  h_comb_kpt->DrawNormalized();
+  h_trueBestMatch_kpt->DrawNormalized("same");
+  leg.Draw("same");  
+  c14.SetLogy();
+  c14.SaveAs("TrueVsComb_kpt.png");
+  //
+  TCanvas c15("c15","",1);
+  h_trueBestMatch_maxDrRecoGen->DrawNormalized();
+  h_comb_maxDrRecoGen->DrawNormalized("same");
+  leg.Draw("same");  
+  c15.SetLogy();
+  c15.SaveAs("TrueVsComb_maxDrRecoGen.png");
+  //
+  TCanvas c16("c16","",1);
+  h_trueBestMatch_minDrRecoGen->DrawNormalized();
+  h_comb_minDrRecoGen->DrawNormalized("same");
+  leg.Draw("same");  
+  c16.SetLogy();
+  c16.SaveAs("TrueVsComb_minDrRecoGen.png");
+  //
+  TCanvas c17("c17","",1);
+  h_trueBestMatch_drRecoGenTrack->DrawNormalized();
+  h_comb_drRecoGenTrack->DrawNormalized("same");
+  leg.Draw("same");  
+  c17.SetLogy();
+  c17.SaveAs("TrueVsComb_drRecoGenTrack.png");
+  //
+  //
+  // Best SV prob
+  h_svProbM_notok_ele1pt  -> SetLineColor(4);
+  h_svProbM_notok_ele1pt  -> SetLineWidth(2);
+  h_svProbM_notok_ele1pt  -> GetXaxis()->SetTitle("ele1 pT");
+  h_svProbM_notok_ele1pt  -> SetTitle("");
+  h_svProbM_notok_ele2pt  -> SetLineColor(4);
+  h_svProbM_notok_ele2pt  -> SetLineWidth(2);
+  h_svProbM_notok_ele2pt  -> GetXaxis()->SetTitle("ele2 pT");
+  h_svProbM_notok_ele2pt  -> SetTitle("");
+  h_svProbM_notok_kpt     -> SetLineColor(4);
+  h_svProbM_notok_kpt     -> SetLineWidth(2);
+  h_svProbM_notok_kpt     -> GetXaxis()->SetTitle("k pT");
+  h_svProbM_notok_kpt     -> SetTitle("");
+  h_svProbM_notok_ele1eta -> SetLineColor(4);
+  h_svProbM_notok_ele1eta -> SetLineWidth(2);
+  h_svProbM_notok_ele1eta -> GetXaxis()->SetTitle("ele1 #eta");
+  h_svProbM_notok_ele1eta -> SetTitle("");
+  h_svProbM_notok_ele2eta -> SetLineColor(4);
+  h_svProbM_notok_ele2eta -> SetLineWidth(2);
+  h_svProbM_notok_ele2eta -> GetXaxis()->SetTitle("ele2 #eta");
+  h_svProbM_notok_ele2eta -> SetTitle("");
+  h_svProbM_notok_keta    -> SetLineColor(4);
+  h_svProbM_notok_keta    -> SetLineWidth(2);
+  h_svProbM_notok_keta    -> GetXaxis()->SetTitle("k #eta");
+  h_svProbM_notok_keta    -> SetTitle("");
+  hz_svProbM_notok_ele1pt -> SetLineColor(4);
+  hz_svProbM_notok_ele1pt -> SetLineWidth(2);
+  hz_svProbM_notok_ele1pt -> GetXaxis()->SetTitle("ele1 pT");
+  hz_svProbM_notok_ele1pt -> SetTitle("");
+  hz_svProbM_notok_ele2pt -> SetLineColor(4);
+  hz_svProbM_notok_ele2pt -> SetLineWidth(2);
+  hz_svProbM_notok_ele2pt -> GetXaxis()->SetTitle("ele2 pT");
+  hz_svProbM_notok_ele2pt -> SetTitle("");
+  hz_svProbM_notok_kpt    -> SetLineColor(4);
+  hz_svProbM_notok_kpt    -> SetLineWidth(2);
+  hz_svProbM_notok_kpt    -> GetXaxis()->SetTitle("k pT");
+  hz_svProbM_notok_kpt    -> SetTitle("");
+  //
+  h_svProbM_ok_ele1pt  -> SetLineColor(2);
+  h_svProbM_ok_ele1pt  -> SetLineWidth(2);
+  h_svProbM_ok_ele1pt  -> GetXaxis()->SetTitle("ele1 pT");
+  h_svProbM_ok_ele1pt  -> SetTitle("");
+  h_svProbM_ok_ele2pt  -> SetLineColor(2);
+  h_svProbM_ok_ele2pt  -> SetLineWidth(2);
+  h_svProbM_ok_ele2pt  -> GetXaxis()->SetTitle("ele2 pT");
+  h_svProbM_ok_ele2pt  -> SetTitle("");
+  h_svProbM_ok_kpt     -> SetLineColor(2);
+  h_svProbM_ok_kpt     -> SetLineWidth(2);
+  h_svProbM_ok_kpt     -> GetXaxis()->SetTitle("k pT");
+  h_svProbM_ok_kpt     -> SetTitle("");
+  h_svProbM_ok_ele1eta -> SetLineColor(2);
+  h_svProbM_ok_ele1eta -> SetLineWidth(2);
+  h_svProbM_ok_ele1eta -> GetXaxis()->SetTitle("ele1 #eta");
+  h_svProbM_ok_ele1eta -> SetTitle("");
+  h_svProbM_ok_ele2eta -> SetLineColor(2);
+  h_svProbM_ok_ele2eta -> SetLineWidth(2);
+  h_svProbM_ok_ele2eta -> GetXaxis()->SetTitle("ele2 #eta");
+  h_svProbM_ok_ele2eta -> SetTitle("");
+  h_svProbM_ok_keta    -> SetLineColor(2);
+  h_svProbM_ok_keta    -> SetLineWidth(2);
+  h_svProbM_ok_keta    -> GetXaxis()->SetTitle("k #eta");
+  h_svProbM_ok_keta    -> SetTitle("");
+  hz_svProbM_ok_ele1pt -> SetLineColor(2);
+  hz_svProbM_ok_ele1pt -> SetLineWidth(2);
+  hz_svProbM_ok_ele1pt -> GetXaxis()->SetTitle("ele1 pT");
+  hz_svProbM_ok_ele1pt -> SetTitle("");
+  hz_svProbM_ok_ele2pt -> SetLineColor(2);
+  hz_svProbM_ok_ele2pt -> SetLineWidth(2);
+  hz_svProbM_ok_ele2pt -> GetXaxis()->SetTitle("ele2 pT");
+  hz_svProbM_ok_ele2pt -> SetTitle("");
+  hz_svProbM_ok_kpt    -> SetLineColor(2);
+  hz_svProbM_ok_kpt    -> SetLineWidth(2);
+  hz_svProbM_ok_kpt    -> GetXaxis()->SetTitle("k pT");
+  hz_svProbM_ok_kpt    -> SetTitle("");
+  //
+  //
+  // Best XYsig
+  h_xySigM_notok_ele1pt  -> SetLineColor(4);
+  h_xySigM_notok_ele1pt  -> SetLineWidth(2);
+  h_xySigM_notok_ele1pt  -> GetXaxis()->SetTitle("ele1 pT");
+  h_xySigM_notok_ele1pt  -> SetTitle("");
+  h_xySigM_notok_ele2pt  -> SetLineColor(4);
+  h_xySigM_notok_ele2pt  -> SetLineWidth(2);
+  h_xySigM_notok_ele2pt  -> GetXaxis()->SetTitle("ele2 pT");
+  h_xySigM_notok_ele2pt  -> SetTitle("");
+  h_xySigM_notok_kpt     -> SetLineColor(4);
+  h_xySigM_notok_kpt     -> SetLineWidth(2);
+  h_xySigM_notok_kpt     -> GetXaxis()->SetTitle("k pT");
+  h_xySigM_notok_kpt     -> SetTitle("");
+  h_xySigM_notok_pfmva1  -> SetLineColor(4);
+  h_xySigM_notok_pfmva1  -> SetLineWidth(2);
+  h_xySigM_notok_pfmva1  -> GetXaxis()->SetTitle("ele1 PF MVA");
+  h_xySigM_notok_pfmva1  -> SetTitle("");
+  h_xySigM_notok_pfmva2  -> SetLineColor(4);
+  h_xySigM_notok_pfmva2  -> SetLineWidth(2);
+  h_xySigM_notok_pfmva2  -> GetXaxis()->SetTitle("ele2 PF MVA");
+  h_xySigM_notok_pfmva2  -> SetTitle("");
+  h_xySigM_notok_lptmva1 -> SetLineColor(4);
+  h_xySigM_notok_lptmva1 -> SetLineWidth(2);
+  h_xySigM_notok_lptmva1 -> GetXaxis()->SetTitle("ele1 Low pT MVA");
+  h_xySigM_notok_lptmva1 -> SetTitle("");
+  h_xySigM_notok_lptmva2 -> SetLineColor(4);
+  h_xySigM_notok_lptmva2 -> SetLineWidth(2);
+  h_xySigM_notok_lptmva2 -> GetXaxis()->SetTitle("ele2 Low pT MVA");
+  h_xySigM_notok_lptmva2 -> SetTitle("");
+  h_xySigM_notok_ele1eta -> SetLineColor(4);
+  h_xySigM_notok_ele1eta -> SetLineWidth(2);
+  h_xySigM_notok_ele1eta -> GetXaxis()->SetTitle("ele1 #eta");
+  h_xySigM_notok_ele1eta -> SetTitle("");
+  h_xySigM_notok_ele2eta -> SetLineColor(4);
+  h_xySigM_notok_ele2eta -> SetLineWidth(2);
+  h_xySigM_notok_ele2eta -> GetXaxis()->SetTitle("ele2 #eta");
+  h_xySigM_notok_ele2eta -> SetTitle("");
+  h_xySigM_notok_keta    -> SetLineColor(4);
+  h_xySigM_notok_keta    -> SetLineWidth(2);
+  h_xySigM_notok_keta    -> GetXaxis()->SetTitle("k #eta");
+  h_xySigM_notok_keta    -> SetTitle("");
+  hz_xySigM_notok_ele1pt -> SetLineColor(4);
+  hz_xySigM_notok_ele1pt -> SetLineWidth(2);
+  hz_xySigM_notok_ele1pt -> GetXaxis()->SetTitle("ele1 pT");
+  hz_xySigM_notok_ele1pt -> SetTitle("");
+  hz_xySigM_notok_ele2pt -> SetLineColor(4);
+  hz_xySigM_notok_ele2pt -> SetLineWidth(2);
+  hz_xySigM_notok_ele2pt -> GetXaxis()->SetTitle("ele2 pT");
+  hz_xySigM_notok_ele2pt -> SetTitle("");
+  hz_xySigM_notok_kpt    -> SetLineColor(4);
+  hz_xySigM_notok_kpt    -> SetLineWidth(2);
+  hz_xySigM_notok_kpt    -> GetXaxis()->SetTitle("k pT");
+  hz_xySigM_notok_kpt    -> SetTitle("");
+  //
+  h_xySigM_ok_ele1pt  -> SetLineColor(2);
+  h_xySigM_ok_ele1pt  -> SetLineWidth(2);
+  h_xySigM_ok_ele1pt  -> GetXaxis()->SetTitle("ele1 pT");
+  h_xySigM_ok_ele1pt  -> SetTitle("");
+  h_xySigM_ok_ele2pt  -> SetLineColor(2);
+  h_xySigM_ok_ele2pt  -> SetLineWidth(2);
+  h_xySigM_ok_ele2pt  -> GetXaxis()->SetTitle("ele2 pT");
+  h_xySigM_ok_ele2pt  -> SetTitle("");
+  h_xySigM_ok_kpt     -> SetLineColor(2);
+  h_xySigM_ok_kpt     -> SetLineWidth(2);
+  h_xySigM_ok_kpt     -> GetXaxis()->SetTitle("k pT");
+  h_xySigM_ok_kpt     -> SetTitle("");
+  h_xySigM_ok_pfmva1  -> SetLineColor(2);
+  h_xySigM_ok_pfmva1  -> SetLineWidth(2);
+  h_xySigM_ok_pfmva1  -> GetXaxis()->SetTitle("ele1 PF MVA");
+  h_xySigM_ok_pfmva1  -> SetTitle("");
+  h_xySigM_ok_pfmva2  -> SetLineColor(2);
+  h_xySigM_ok_pfmva2  -> SetLineWidth(2);
+  h_xySigM_ok_pfmva2  -> GetXaxis()->SetTitle("ele2 PF MVA");
+  h_xySigM_ok_pfmva2  -> SetTitle("");
+  h_xySigM_ok_lptmva1 -> SetLineColor(2);
+  h_xySigM_ok_lptmva1 -> SetLineWidth(2);
+  h_xySigM_ok_lptmva1 -> GetXaxis()->SetTitle("ele1 Low pT MVA");
+  h_xySigM_ok_lptmva1 -> SetTitle("");
+  h_xySigM_ok_lptmva2 -> SetLineColor(2);
+  h_xySigM_ok_lptmva2 -> SetLineWidth(2);
+  h_xySigM_ok_lptmva2 -> GetXaxis()->SetTitle("ele2 Low pT MVA");
+  h_xySigM_ok_lptmva2 -> SetTitle("");
+  h_xySigM_ok_ele1eta -> SetLineColor(2);
+  h_xySigM_ok_ele1eta -> SetLineWidth(2);
+  h_xySigM_ok_ele1eta -> GetXaxis()->SetTitle("ele1 #eta");
+  h_xySigM_ok_ele1eta -> SetTitle("");
+  h_xySigM_ok_ele2eta -> SetLineColor(2);
+  h_xySigM_ok_ele2eta -> SetLineWidth(2);
+  h_xySigM_ok_ele2eta -> GetXaxis()->SetTitle("ele2 #eta");
+  h_xySigM_ok_ele2eta -> SetTitle("");
+  h_xySigM_ok_keta    -> SetLineColor(2);
+  h_xySigM_ok_keta    -> SetLineWidth(2);
+  h_xySigM_ok_keta    -> GetXaxis()->SetTitle("k #eta");
+  h_xySigM_ok_keta    -> SetTitle("");
+  hz_xySigM_ok_ele1pt -> SetLineColor(2);
+  hz_xySigM_ok_ele1pt -> SetLineWidth(2);
+  hz_xySigM_ok_ele1pt -> GetXaxis()->SetTitle("ele1 pT");
+  hz_xySigM_ok_ele1pt -> SetTitle("");
+  hz_xySigM_ok_ele2pt -> SetLineColor(2);
+  hz_xySigM_ok_ele2pt -> SetLineWidth(2);
+  hz_xySigM_ok_ele2pt -> GetXaxis()->SetTitle("ele2 pT");
+  hz_xySigM_ok_ele2pt -> SetTitle("");
+  hz_xySigM_ok_kpt    -> SetLineColor(2);
+  hz_xySigM_ok_kpt    -> SetLineWidth(2);
+  hz_xySigM_ok_kpt    -> GetXaxis()->SetTitle("k pT");
+  hz_xySigM_ok_kpt    -> SetTitle("");
+  //
+  //
+  // Best cos2D
+  h_cos2DM_notok_ele1pt  -> SetLineColor(4);
+  h_cos2DM_notok_ele1pt  -> SetLineWidth(2);
+  h_cos2DM_notok_ele1pt  -> GetXaxis()->SetTitle("ele1 pT");
+  h_cos2DM_notok_ele1pt  -> SetTitle("");
+  h_cos2DM_notok_ele2pt  -> SetLineColor(4);
+  h_cos2DM_notok_ele2pt  -> SetLineWidth(2);
+  h_cos2DM_notok_ele2pt  -> GetXaxis()->SetTitle("ele2 pT");
+  h_cos2DM_notok_ele2pt  -> SetTitle("");
+  h_cos2DM_notok_kpt     -> SetLineColor(4);
+  h_cos2DM_notok_kpt     -> SetLineWidth(2);
+  h_cos2DM_notok_kpt     -> GetXaxis()->SetTitle("k pT");
+  h_cos2DM_notok_kpt     -> SetTitle("");
+  h_cos2DM_notok_ele1eta -> SetLineColor(4);
+  h_cos2DM_notok_ele1eta -> SetLineWidth(2);
+  h_cos2DM_notok_ele1eta -> GetXaxis()->SetTitle("ele1 #eta");
+  h_cos2DM_notok_ele1eta -> SetTitle("");
+  h_cos2DM_notok_ele2eta -> SetLineColor(4);
+  h_cos2DM_notok_ele2eta -> SetLineWidth(2);
+  h_cos2DM_notok_ele2eta -> GetXaxis()->SetTitle("ele2 #eta");
+  h_cos2DM_notok_ele2eta -> SetTitle("");
+  h_cos2DM_notok_keta    -> SetLineColor(4);
+  h_cos2DM_notok_keta    -> SetLineWidth(2);
+  h_cos2DM_notok_keta    -> GetXaxis()->SetTitle("k #eta");
+  h_cos2DM_notok_keta    -> SetTitle("");
+  hz_cos2DM_notok_ele1pt -> SetLineColor(4);
+  hz_cos2DM_notok_ele1pt -> SetLineWidth(2);
+  hz_cos2DM_notok_ele1pt -> GetXaxis()->SetTitle("ele1 pT");
+  hz_cos2DM_notok_ele1pt -> SetTitle("");
+  hz_cos2DM_notok_ele2pt -> SetLineColor(4);
+  hz_cos2DM_notok_ele2pt -> SetLineWidth(2);
+  hz_cos2DM_notok_ele2pt -> GetXaxis()->SetTitle("ele2 pT");
+  hz_cos2DM_notok_ele2pt -> SetTitle("");
+  hz_cos2DM_notok_kpt    -> SetLineColor(4);
+  hz_cos2DM_notok_kpt    -> SetLineWidth(2);
+  hz_cos2DM_notok_kpt    -> GetXaxis()->SetTitle("k pT");
+  hz_cos2DM_notok_kpt    -> SetTitle("");
+  //
+  h_cos2DM_ok_ele1pt  -> SetLineColor(2);
+  h_cos2DM_ok_ele1pt  -> SetLineWidth(2);
+  h_cos2DM_ok_ele1pt  -> GetXaxis()->SetTitle("ele1 pT");
+  h_cos2DM_ok_ele1pt  -> SetTitle("");
+  h_cos2DM_ok_ele2pt  -> SetLineColor(2);
+  h_cos2DM_ok_ele2pt  -> SetLineWidth(2);
+  h_cos2DM_ok_ele2pt  -> GetXaxis()->SetTitle("ele2 pT");
+  h_cos2DM_ok_ele2pt  -> SetTitle("");
+  h_cos2DM_ok_kpt     -> SetLineColor(2);
+  h_cos2DM_ok_kpt     -> SetLineWidth(2);
+  h_cos2DM_ok_kpt     -> GetXaxis()->SetTitle("k pT");
+  h_cos2DM_ok_kpt     -> SetTitle("");
+  h_cos2DM_ok_ele1eta -> SetLineColor(2);
+  h_cos2DM_ok_ele1eta -> SetLineWidth(2);
+  h_cos2DM_ok_ele1eta -> GetXaxis()->SetTitle("ele1 #eta");
+  h_cos2DM_ok_ele1eta -> SetTitle("");
+  h_cos2DM_ok_ele2eta -> SetLineColor(2);
+  h_cos2DM_ok_ele2eta -> SetLineWidth(2);
+  h_cos2DM_ok_ele2eta -> GetXaxis()->SetTitle("ele2 #eta");
+  h_cos2DM_ok_ele2eta -> SetTitle("");
+  h_cos2DM_ok_keta    -> SetLineColor(2);
+  h_cos2DM_ok_keta    -> SetLineWidth(2);
+  h_cos2DM_ok_keta    -> GetXaxis()->SetTitle("k #eta");
+  h_cos2DM_ok_keta    -> SetTitle("");
+  hz_cos2DM_ok_ele1pt -> SetLineColor(2);
+  hz_cos2DM_ok_ele1pt -> SetLineWidth(2);
+  hz_cos2DM_ok_ele1pt -> GetXaxis()->SetTitle("ele1 pT");
+  hz_cos2DM_ok_ele1pt -> SetTitle("");
+  hz_cos2DM_ok_ele2pt -> SetLineColor(2);
+  hz_cos2DM_ok_ele2pt -> SetLineWidth(2);
+  hz_cos2DM_ok_ele2pt -> GetXaxis()->SetTitle("ele2 pT");
+  hz_cos2DM_ok_ele2pt -> SetTitle("");
+  hz_cos2DM_ok_kpt    -> SetLineColor(2);
+  hz_cos2DM_ok_kpt    -> SetLineWidth(2);
+  hz_cos2DM_ok_kpt    -> GetXaxis()->SetTitle("k pT");
+  hz_cos2DM_ok_kpt    -> SetTitle("");
+
+  //
+  TLegend leg2 (0.55,0.7,0.95,0.9);
+  leg2.SetFillColor(0);
+  leg2.SetFillStyle(0);
+  leg2.SetBorderSize(0);
+  leg2.AddEntry(h_svProbM_ok_ele1pt,   "Matched to MC-truth");
+  leg2.AddEntry(h_svProbM_notok_ele1pt,"Combinatorics");
+  TLegend leg3 (0.15,0.7,0.55,0.9);
+  leg3.SetFillColor(0);
+  leg3.SetFillStyle(0);
+  leg3.SetBorderSize(0);
+  leg3.AddEntry(h_svProbM_ok_ele1pt,   "Matched to MC-truth");
+  leg3.AddEntry(h_svProbM_notok_ele1pt,"Combinatorics");
+  //
+  TCanvas c21("c21","",1);
+  h_svProbM_ok_ele1pt->DrawNormalized();
+  h_svProbM_notok_ele1pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c21.SaveAs("BestSvProb_goodVsBad_ele1pt.png");
+  //
+  TCanvas c22("c22","",1);
+  h_svProbM_notok_ele2pt->DrawNormalized();
+  h_svProbM_ok_ele2pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c22.SaveAs("BestSvProb_goodVsBad_ele2pt.png");
+  //
+  TCanvas c23("c23","",1);
+  h_svProbM_notok_kpt->DrawNormalized();
+  h_svProbM_ok_kpt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c23.SaveAs("BestSvProb_goodVsBad_kpt.png");
+  //
+  TCanvas c24("c24","",1);
+  h_svProbM_ok_ele1eta->DrawNormalized();
+  h_svProbM_notok_ele1eta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c24.SaveAs("BestSvProb_goodVsBad_ele1eta.png");
+  //
+  TCanvas c25("c25","",1);
+  h_svProbM_ok_ele2eta->DrawNormalized();
+  h_svProbM_notok_ele2eta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c25.SaveAs("BestSvProb_goodVsBad_ele2eta.png");
+  //
+  TCanvas c26("c26","",1);
+  h_svProbM_ok_keta->DrawNormalized();
+  h_svProbM_notok_keta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c26.SaveAs("BestSvProb_goodVsBad_keta.png");
+  //
+  TCanvas c21b("c21b","",1);
+  hz_svProbM_ok_ele1pt->DrawNormalized();
+  hz_svProbM_notok_ele1pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c21b.SaveAs("BestSvProb_goodVsBad_ele1ptZ.png");
+  //
+  TCanvas c22b("c22b","",1);
+  hz_svProbM_notok_ele2pt->DrawNormalized();
+  hz_svProbM_ok_ele2pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c22b.SaveAs("BestSvProb_goodVsBad_ele2ptZ.png");
+  //
+  TCanvas c23b("c23b","",1);
+  hz_svProbM_notok_kpt->DrawNormalized();
+  hz_svProbM_ok_kpt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c23b.SaveAs("BestSvProb_goodVsBad_kptZ.png");
+  //
+  //
+  //
+  TCanvas c31("c31","",1);
+  h_xySigM_notok_ele1pt->DrawNormalized();
+  h_xySigM_ok_ele1pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c31.SaveAs("BestXYsig_goodVsBad_ele1pt.png");
+  //
+  TCanvas c32("c32","",1);
+  h_xySigM_notok_ele2pt->DrawNormalized();
+  h_xySigM_ok_ele2pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c32.SaveAs("BestXYsig_goodVsBad_ele2pt.png");
+  //
+  TCanvas c33("c33","",1);
+  h_xySigM_notok_kpt->DrawNormalized();
+  h_xySigM_ok_kpt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c33.SaveAs("BestXYsig_goodVsBad_kpt.png");
+  //
+  TCanvas c34("c34","",1);
+  h_xySigM_ok_ele1eta->DrawNormalized();
+  h_xySigM_notok_ele1eta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c34.SaveAs("BestXYsig_goodVsBad_ele1eta.png");
+  //
+  TCanvas c35("c35","",1);
+  h_xySigM_ok_ele2eta->DrawNormalized();
+  h_xySigM_notok_ele2eta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c35.SaveAs("BestXYsig_goodVsBad_ele2eta.png");
+  //
+  TCanvas c36("c36","",1);
+  h_xySigM_ok_keta->DrawNormalized();
+  h_xySigM_notok_keta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c36.SaveAs("BestXYsig_goodVsBad_keta.png");
+  //
+  TCanvas c37("c37","",1);
+  h_xySigM_notok_pfmva1->DrawNormalized();
+  h_xySigM_ok_pfmva1->DrawNormalized("same");
+  leg3.Draw("same");  
+  c37.SaveAs("BestXYsig_goodVsBad_pfmva1.png");
+  //
+  TCanvas c38("c38","",1);
+  h_xySigM_notok_pfmva2->DrawNormalized();
+  h_xySigM_ok_pfmva2->DrawNormalized("same");
+  leg3.Draw("same");  
+  c38.SaveAs("BestXYsig_goodVsBad_pfmva2.png");
+  //
+  TCanvas c39("c39","",1);
+  h_xySigM_ok_lptmva1->DrawNormalized();
+  h_xySigM_notok_lptmva1->DrawNormalized("same");
+  leg3.Draw("same");  
+  c39.SaveAs("BestXYsig_goodVsBad_lptmva1.png");
+  //
+  TCanvas c40("c40","",1);
+  h_xySigM_ok_lptmva2->DrawNormalized();
+  h_xySigM_notok_lptmva2->DrawNormalized("same");
+  leg3.Draw("same");  
+  c40.SaveAs("BestXYsig_goodVsBad_lptmva2.png");
+  //
+  TCanvas c31b("c31b","",1);
+  hz_xySigM_ok_ele1pt->DrawNormalized();
+  hz_xySigM_notok_ele1pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c31b.SaveAs("BestXYsig_goodVsBad_ele1ptZ.png");
+  //
+  TCanvas c32b("c32b","",1);
+  hz_xySigM_notok_ele2pt->DrawNormalized();
+  hz_xySigM_ok_ele2pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c32b.SaveAs("BestXYsig_goodVsBad_ele2ptZ.png");
+  //
+  TCanvas c33b("c33b","",1);
+  hz_xySigM_notok_kpt->DrawNormalized();
+  hz_xySigM_ok_kpt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c33b.SaveAs("BestXYsig_goodVsBad_kptZ.png");
+  //
+  //
+  TCanvas c41("c41","",1);
+  h_cos2DM_ok_ele1pt->DrawNormalized();
+  h_cos2DM_notok_ele1pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c41.SaveAs("BestCos2D_goodVsBad_ele1pt.png");
+  //
+  TCanvas c42("c42","",1);
+  h_cos2DM_notok_ele2pt->DrawNormalized();
+  h_cos2DM_ok_ele2pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c42.SaveAs("BestCos2D_goodVsBad_ele2pt.png");
+  //
+  TCanvas c43("c43","",1);
+  h_cos2DM_notok_kpt->DrawNormalized();
+  h_cos2DM_ok_kpt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c43.SaveAs("BestCos2D_goodVsBad_kpt.png");
+  //
+  TCanvas c44("c44","",1);
+  h_cos2DM_ok_ele1eta->DrawNormalized();
+  h_cos2DM_notok_ele1eta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c44.SaveAs("BestCos2D_goodVsBad_ele1eta.png");
+  //
+  TCanvas c45("c45","",1);
+  h_cos2DM_ok_ele2eta->DrawNormalized();
+  h_cos2DM_notok_ele2eta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c45.SaveAs("BestCos2D_goodVsBad_ele2eta.png");
+  //
+  TCanvas c46("c46","",1);
+  h_cos2DM_ok_keta->DrawNormalized();
+  h_cos2DM_notok_keta->DrawNormalized("same");
+  leg2.Draw("same");  
+  c46.SaveAs("BestCos2D_goodVsBad_keta.png");
+  //
+  TCanvas c41b("c41b","",1);
+  hz_cos2DM_ok_ele1pt->DrawNormalized();
+  hz_cos2DM_notok_ele1pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c41b.SaveAs("BestCos2D_goodVsBad_ele1ptZ.png");
+  //
+  TCanvas c42b("c42b","",1);
+  hz_cos2DM_notok_ele2pt->DrawNormalized();
+  hz_cos2DM_ok_ele2pt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c42b.SaveAs("BestCos2D_goodVsBad_ele2ptZ.png");
+  //
+  TCanvas c43b("c43b","",1);
+  hz_cos2DM_notok_kpt->DrawNormalized();
+  hz_cos2DM_ok_kpt->DrawNormalized("same");
+  leg2.Draw("same");  
+  c43b.SaveAs("BestCos2D_goodVsBad_kptZ.png");
+  //
+}

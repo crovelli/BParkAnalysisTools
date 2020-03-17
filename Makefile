@@ -30,12 +30,15 @@ OUTLIB	         = $(INCLUDEDIR)/lib/
 
 $(OUTLIB)BParkBase.o: $(INCLUDEDIR)/src/BParkBase.C \
 	$(INCLUDEDIR)/src/BPark.cc \
-	$(INCLUDEDIR)/src/TaPJpsiSelectionNaod.cc 
+	$(INCLUDEDIR)/src/TaPJpsiSelectionNaod.cc \
+	$(INCLUDEDIR)/src/TripletSelection.cc 
 	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)BParkBase.o $<
 $(OUTLIB)BPark.o: $(INCLUDEDIR)/src/BPark.cc 
 	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)BPark.o $<
 $(OUTLIB)TaPJpsiSelectionNaod.o: $(INCLUDEDIR)/src/TaPJpsiSelectionNaod.cc
 	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)TaPJpsiSelectionNaod.o $<
+$(OUTLIB)TripletSelection.o: $(INCLUDEDIR)/src/TripletSelection.cc
+	$(CXX) $(CXXFLAGS) -c -I$(INCLUDEDIR) -o $(OUTLIB)TripletSelection.o $<
 
 # ==================== BParkApp =============================================
 BParkApp:  $(INCLUDEDIR)/src/BParkApp.C \
