@@ -718,6 +718,9 @@ void TripletSelection::Loop() {
     bestXYsigMatch_notok_pfmva2=-999;
     bestXYsigMatch_notok_lptmva1=-999;
     bestXYsigMatch_notok_lptmva2=-999;
+    bestXYsigMatch_notok_costhetaSK=-999;
+    bestXYsigMatch_notok_costhetaSKCS=-999;
+    bestXYsigMatch_notok_costhetaL=-999;
     bestXYsigMatch_ok_ele1pt=-999;
     bestXYsigMatch_ok_ele2pt=-999;
     bestXYsigMatch_ok_kpt=-999;
@@ -728,6 +731,10 @@ void TripletSelection::Loop() {
     bestXYsigMatch_ok_pfmva2=-999;
     bestXYsigMatch_ok_lptmva1=-999;
     bestXYsigMatch_ok_lptmva2=-999;
+    bestXYsigMatch_ok_costhetaSK=-999;
+    bestXYsigMatch_ok_costhetaSKCS=-999;
+    bestXYsigMatch_ok_costhetaL=-999;
+    bestXYsigMatch_ok_costhetaSK_gen=-999;
 
     bestCos2DMatch=-999;
     bestCos2DMatch_causeEle1=-999;
@@ -864,6 +871,11 @@ void TripletSelection::Loop() {
 	bestXYsigMatch_ok_pfmva2  = Electron_pfmvaId[ele2_idx]; 
 	bestXYsigMatch_ok_lptmva1 = Electron_mvaId[ele1_idx]; 
 	bestXYsigMatch_ok_lptmva2 = Electron_mvaId[ele2_idx]; 
+	bestXYsigMatch_ok_costhetaSK     = cosThetaStarK(bestXYsig_all);
+	bestXYsigMatch_ok_costhetaSKCS   = cosThetaStarKCS(bestXYsig_all);
+	bestXYsigMatch_ok_costhetaL      = cosThetaL(bestXYsig_all);
+	bestXYsigMatch_ok_costhetaSK_gen = cosThetaStarKGen(bestXYsig_all);
+
       } else {
 	int ele1_idx = BToKEE_l1Idx[bestXYsig_all];
 	int ele2_idx = BToKEE_l2Idx[bestXYsig_all];
@@ -888,6 +900,9 @@ void TripletSelection::Loop() {
 	bestXYsigMatch_notok_pfmva2  = Electron_pfmvaId[ele2_idx]; 
 	bestXYsigMatch_notok_lptmva1 = Electron_mvaId[ele1_idx]; 
 	bestXYsigMatch_notok_lptmva2 = Electron_mvaId[ele2_idx]; 	
+	bestXYsigMatch_notok_costhetaSK   = cosThetaStarK(bestXYsig_all);
+	bestXYsigMatch_notok_costhetaSKCS = cosThetaStarKCS(bestXYsig_all);
+	bestXYsigMatch_notok_costhetaL    = cosThetaL(bestXYsig_all);
       }
 
       if (isMcB(bestCos2D_all)) {
@@ -1014,6 +1029,7 @@ void TripletSelection::Loop() {
   }  
 }
 
+// for B -> K J/Psi -> Kee (resonant)
 bool TripletSelection::isMcB( int theB ) {
   
   // taking index
@@ -1044,6 +1060,7 @@ bool TripletSelection::isMcB( int theB ) {
   int ele2_genGMotherPdgId = GenPart_pdgId[ele2_genGMotherIdx];
 
   // B -> K J/psi(ll) at gen level
+  // 443 = J/Psi; 521 = B+
   bool okMatch = (ele1_genPartIdx>-0.5 && ele2_genPartIdx>-0.5 && k_genPartIdx>-0.5);
   bool RK_res1 = abs(ele1_genMotherPdgId)==443 && abs(k_genMotherPdgId)==521;
   bool RK_res2 = (ele1_genMotherPdgId==ele2_genMotherPdgId) && (k_genMotherPdgId==ele1_genGMotherPdgId) && (k_genMotherPdgId==ele2_genGMotherPdgId);
@@ -1051,6 +1068,39 @@ bool TripletSelection::isMcB( int theB ) {
 
   return RK_res;
 }
+
+/*
+// for B -> Kee (non resonant)
+bool TripletSelection::isMcB( int theB ) {
+  
+  // taking index
+  int ele1_idx = BToKEE_l1Idx[theB];
+  int ele2_idx = BToKEE_l2Idx[theB];
+  int k_idx    = BToKEE_kIdx[theB];
+
+  // Gen tree
+  int k_genPartIdx     = ProbeTracks_genPartIdx[k_idx];  
+  int k_genMotherIdx   = GenPart_genPartIdxMother[k_genPartIdx];
+  int k_genMotherPdgId = GenPart_pdgId[k_genMotherIdx];
+
+  int ele1_genPartIdx     = Electron_genPartIdx[ele1_idx];  
+  int ele1_genMotherIdx   = GenPart_genPartIdxMother[ele1_genPartIdx];
+  int ele1_genMotherPdgId = GenPart_pdgId[ele1_genMotherIdx];
+
+  int ele2_genPartIdx     = Electron_genPartIdx[ele2_idx];  
+  int ele2_genMotherIdx   = GenPart_genPartIdxMother[ele2_genPartIdx];
+  int ele2_genMotherPdgId = GenPart_pdgId[ele2_genMotherIdx];
+
+  // B -> K J/psi(ll) at gen level
+  // 521 = B+
+  bool okMatch  = (ele1_genPartIdx>-0.5 && ele2_genPartIdx>-0.5 && k_genPartIdx>-0.5);
+  bool RK_nres1 = abs(ele1_genMotherPdgId)==521 && abs(ele2_genMotherPdgId)==521 && abs(k_genMotherPdgId)==521;
+  bool RK_nres2 = (ele1_genMotherPdgId==ele2_genMotherPdgId) && (k_genMotherPdgId==ele1_genMotherPdgId) && (k_genMotherPdgId==ele2_genMotherPdgId);
+  bool RK_nres  = okMatch && RK_nres1 && RK_nres2;
+
+  return RK_nres;
+}
+*/
 
 float TripletSelection::dRgen( int theB ) {
   
@@ -1119,6 +1169,130 @@ float TripletSelection::dRRecoGenK( int theRecoK ) {
 
   float deltaR = reco_k.DeltaR(gen_k);
   return deltaR;
+}
+
+// Reco level: cos(theta*) = cos angle between B flight direction (defined from B momentum) and K direction in B rest frame
+float TripletSelection::cosThetaStarK( int theB ) {
+
+  int ele1_idx = BToKEE_l1Idx[theB];
+  int ele2_idx = BToKEE_l2Idx[theB];
+  int k_idx    = BToKEE_kIdx[theB];
+
+  TLorentzVector ele1V3(0.,0.,0.,0.);
+  TLorentzVector ele2V3(0.,0.,0.,0.);
+  TLorentzVector kV3(0.,0.,0.,0.);
+  ele1V3.SetPtEtaPhiM(Electron_pt[ele1_idx], Electron_eta[ele1_idx], Electron_phi[ele1_idx], 0.000511);
+  ele2V3.SetPtEtaPhiM(Electron_pt[ele2_idx], Electron_eta[ele2_idx], Electron_phi[ele2_idx], 0.000511);
+  kV3.SetPtEtaPhiM(ProbeTracks_pt[k_idx],ProbeTracks_eta[k_idx],ProbeTracks_phi[k_idx], 0.000494);
+  
+  TLorentzVector B = ele1V3 + ele2V3 + kV3;
+  TLorentzVector K_Bstar(kV3);
+  K_Bstar.Boost(-B.BoostVector());
+
+  TVector3 K_Bstar_perp(0.,0.,0.); 
+  K_Bstar_perp.SetPtEtaPhi(K_Bstar.Pt(),K_Bstar.Eta(),K_Bstar.Phi());
+  K_Bstar_perp.SetZ(0);
+
+  TVector3 B_perp(0.,0.,0.);
+  B_perp.SetPtEtaPhi(B.Pt(),B.Eta(),B.Phi());
+  B_perp.SetZ(0);
+
+  double den = (B_perp.Mag() * K_Bstar_perp.Mag());
+  if (den!= 0.) return B_perp.Dot(K_Bstar_perp)/den;
+  else return -2.;
+}
+
+// Gen level: cos(theta*) = cos angle between B flight direction (defined from B momentum) and K direction in B rest frame
+float TripletSelection::cosThetaStarKGen( int theB ) {
+
+  int ele1_idx = BToKEE_l1Idx[theB];
+  int ele2_idx = BToKEE_l2Idx[theB];
+  int k_idx    = BToKEE_kIdx[theB];
+
+  int ele1_genPartIdx = Electron_genPartIdx[ele1_idx];  
+  int ele2_genPartIdx = Electron_genPartIdx[ele2_idx];  
+  int k_genPartIdx    = ProbeTracks_genPartIdx[k_idx];  
+  
+  TLorentzVector ele1V3(0.,0.,0.,0.);
+  TLorentzVector ele2V3(0.,0.,0.,0.);
+  TLorentzVector kV3(0.,0.,0.,0.);
+  ele1V3.SetPtEtaPhiM(GenPart_pt[ele1_genPartIdx], GenPart_eta[ele1_genPartIdx], GenPart_phi[ele1_genPartIdx], 0.000511);
+  ele2V3.SetPtEtaPhiM(GenPart_pt[ele2_genPartIdx], GenPart_eta[ele2_genPartIdx], GenPart_phi[ele2_genPartIdx], 0.000511);
+  kV3.SetPtEtaPhiM(GenPart_pt[k_genPartIdx], GenPart_eta[k_genPartIdx], GenPart_phi[k_genPartIdx], 0.000494);
+  
+  TLorentzVector B = ele1V3 + ele2V3 + kV3;
+  TLorentzVector K_Bstar(kV3);
+  K_Bstar.Boost(-B.BoostVector());
+
+  TVector3 K_Bstar_perp(0.,0.,0.); 
+  K_Bstar_perp.SetPtEtaPhi(K_Bstar.Pt(),K_Bstar.Eta(),K_Bstar.Phi());
+  K_Bstar_perp.SetZ(0);
+
+  TVector3 B_perp(0.,0.,0.);
+  B_perp.SetPtEtaPhi(B.Pt(),B.Eta(),B.Phi());
+  B_perp.SetZ(0);
+
+  double den = (B_perp.Mag() * K_Bstar_perp.Mag());
+  if (den!= 0.) return B_perp.Dot(K_Bstar_perp)/den;
+  else return -2.;
+}
+
+// Reco level: cos(thetaL) = cos angle between ele1 momentum and the direction opposite to the B momentum, in e+e- rest frame
+float TripletSelection::cosThetaL( int theB ) {
+
+  int ele1_idx = BToKEE_l1Idx[theB];
+  int ele2_idx = BToKEE_l2Idx[theB];
+  int k_idx    = BToKEE_kIdx[theB];
+
+  TLorentzVector ele1V3(0.,0.,0.,0.);
+  TLorentzVector ele2V3(0.,0.,0.,0.);
+  TLorentzVector kV3(0.,0.,0.,0.);
+  ele1V3.SetPtEtaPhiM(Electron_pt[ele1_idx], Electron_eta[ele1_idx], Electron_phi[ele1_idx], 0.000511);
+  ele2V3.SetPtEtaPhiM(Electron_pt[ele2_idx], Electron_eta[ele2_idx], Electron_phi[ele2_idx], 0.000511);
+  kV3.SetPtEtaPhiM(ProbeTracks_pt[k_idx],ProbeTracks_eta[k_idx],ProbeTracks_phi[k_idx], 0.000494);
+  
+  TLorentzVector ll = ele1V3 + ele2V3;
+
+  TLorentzVector ele1_LLstar(ele1V3);
+  ele1_LLstar.Boost(-ll.BoostVector());
+
+  TLorentzVector minusB = -(ele1V3 + ele2V3 + kV3);
+  TLorentzVector minusB_LLstar(minusB);
+  minusB_LLstar.Boost(-ll.BoostVector());
+
+  TVector3 ele1_LLstar_perp(0.,0.,0.); 
+  ele1_LLstar_perp.SetPtEtaPhi(ele1_LLstar.Pt(),ele1_LLstar.Eta(),ele1_LLstar.Phi());
+  ele1_LLstar_perp.SetZ(0);
+
+  TVector3 minusB_LLstar_perp(0.,0.,0.); 
+  minusB_LLstar_perp.SetPtEtaPhi(minusB_LLstar.Pt(),minusB_LLstar.Eta(),minusB_LLstar.Phi());
+  minusB_LLstar_perp.SetZ(0);
+
+  double den = (ele1_LLstar_perp.Mag() * minusB_LLstar_perp.Mag());
+  if (den!= 0.) return ele1_LLstar_perp.Dot(minusB_LLstar_perp)/den;
+  else return -2.;
+}
+
+// Reco level: cos(theta*) in Collins Sopper frame = cos angle between K and the line that bisects the acute angle between the two
+// colliding protons in B rest frame
+float TripletSelection::cosThetaStarKCS( int theB ) {
+
+  int ele1_idx = BToKEE_l1Idx[theB];
+  int ele2_idx = BToKEE_l2Idx[theB];
+  int k_idx    = BToKEE_kIdx[theB];
+
+  TLorentzVector ele1V3(0.,0.,0.,0.);
+  TLorentzVector ele2V3(0.,0.,0.,0.);
+  TLorentzVector kV3(0.,0.,0.,0.);
+  ele1V3.SetPtEtaPhiM(Electron_pt[ele1_idx], Electron_eta[ele1_idx], Electron_phi[ele1_idx], 0.000511);
+  ele2V3.SetPtEtaPhiM(Electron_pt[ele2_idx], Electron_eta[ele2_idx], Electron_phi[ele2_idx], 0.000511);
+  kV3.SetPtEtaPhiM(ProbeTracks_pt[k_idx],ProbeTracks_eta[k_idx],ProbeTracks_phi[k_idx], 0.000494);
+  
+  TLorentzVector B = ele1V3 + ele2V3 + kV3;
+  TLorentzVector K_Bstar(kV3);
+  K_Bstar.Boost(-B.BoostVector());
+
+  return K_Bstar.CosTheta();
 }
 
 void TripletSelection::PrepareOutputs(std::string filename) 
@@ -1247,6 +1421,9 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestXYsigMatch_notok_pfmva2",   &bestXYsigMatch_notok_pfmva2,   "bestXYsigMatch_notok_pfmva2/F");
   outTree_->Branch("bestXYsigMatch_notok_lptmva1",  &bestXYsigMatch_notok_lptmva1,  "bestXYsigMatch_notok_lptmva1/F");
   outTree_->Branch("bestXYsigMatch_notok_lptmva2",  &bestXYsigMatch_notok_lptmva2,  "bestXYsigMatch_notok_lptmva2/F");
+  outTree_->Branch("bestXYsigMatch_notok_costhetaSK",   &bestXYsigMatch_notok_costhetaSK,   "bestXYsigMatch_notok_costhetaSK/F");
+  outTree_->Branch("bestXYsigMatch_notok_costhetaSKCS", &bestXYsigMatch_notok_costhetaSKCS, "bestXYsigMatch_notok_costhetaSKCS/F");
+  outTree_->Branch("bestXYsigMatch_notok_costhetaL",    &bestXYsigMatch_notok_costhetaL,    "bestXYsigMatch_notok_costhetaL/F");
   outTree_->Branch("bestXYsigMatch_ok_ele1pt",      &bestXYsigMatch_ok_ele1pt,      "bestXYsigMatch_ok_ele1pt/F");
   outTree_->Branch("bestXYsigMatch_ok_ele2pt",      &bestXYsigMatch_ok_ele2pt,      "bestXYsigMatch_ok_ele2pt/F");
   outTree_->Branch("bestXYsigMatch_ok_kpt",         &bestXYsigMatch_ok_kpt,         "bestXYsigMatch_ok_kpt/F");
@@ -1257,6 +1434,10 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestXYsigMatch_ok_pfmva2",      &bestXYsigMatch_ok_pfmva2,      "bestXYsigMatch_ok_pfmva2/F");
   outTree_->Branch("bestXYsigMatch_ok_lptmva1",     &bestXYsigMatch_ok_lptmva1,     "bestXYsigMatch_ok_lptmva1/F");
   outTree_->Branch("bestXYsigMatch_ok_lptmva2",     &bestXYsigMatch_ok_lptmva2,     "bestXYsigMatch_ok_lptmva2/F");
+  outTree_->Branch("bestXYsigMatch_ok_costhetaSK",     &bestXYsigMatch_ok_costhetaSK,     "bestXYsigMatch_ok_costhetaSK/F");
+  outTree_->Branch("bestXYsigMatch_ok_costhetaSKCS",   &bestXYsigMatch_ok_costhetaSKCS,   "bestXYsigMatch_ok_costhetaSKCS/F");
+  outTree_->Branch("bestXYsigMatch_ok_costhetaL",      &bestXYsigMatch_ok_costhetaL,      "bestXYsigMatch_ok_costhetaL/F");
+  outTree_->Branch("bestXYsigMatch_ok_costhetaSK_gen", &bestXYsigMatch_ok_costhetaSK_gen, "bestXYsigMatch_ok_costhetaSK_gen/F");
 
   outTree_->Branch("bestCos2DMatch",                &bestCos2DMatch,                "bestCos2DMatch/I");
   outTree_->Branch("bestCos2DMatch_causeEle1",      &bestCos2DMatch_causeEle1,      "bestCos2DMatch_causeEle1/I");

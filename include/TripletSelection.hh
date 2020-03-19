@@ -31,6 +31,10 @@ private:
   float dRgen( int myB ); 
   float dRRecoGenEle( int theRecoEle );
   float dRRecoGenK( int theRecoK );
+  float cosThetaL( int myB );
+  float cosThetaStarK( int myB );
+  float cosThetaStarKCS( int myB );
+  float cosThetaStarKGen( int myB );
   void bookOutputTree();
   void bookOutputHistos();
 
@@ -150,6 +154,9 @@ private:
   float bestXYsigMatch_notok_pfmva2;
   float bestXYsigMatch_notok_lptmva1;
   float bestXYsigMatch_notok_lptmva2;
+  float bestXYsigMatch_notok_costhetaSK;
+  float bestXYsigMatch_notok_costhetaSKCS;
+  float bestXYsigMatch_notok_costhetaL;
   float bestXYsigMatch_ok_ele1pt;
   float bestXYsigMatch_ok_ele2pt;
   float bestXYsigMatch_ok_kpt;
@@ -160,6 +167,10 @@ private:
   float bestXYsigMatch_ok_pfmva2;
   float bestXYsigMatch_ok_lptmva1;
   float bestXYsigMatch_ok_lptmva2;
+  float bestXYsigMatch_ok_costhetaSK;
+  float bestXYsigMatch_ok_costhetaSKCS;
+  float bestXYsigMatch_ok_costhetaL;
+  float bestXYsigMatch_ok_costhetaSK_gen;
 
   int bestCos2DMatch;
   int bestCos2DMatch_causeEle1;
