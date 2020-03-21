@@ -31,8 +31,8 @@ void TripletSelection::Loop() {
   Long64_t nentries = fChain->GetEntriesFast();
   Long64_t nbytes = 0, nb = 0;
   cout << "entries : " <<  nentries << endl;
-  for (Long64_t jentry=0; jentry<nentries;jentry++) {
-    //for (Long64_t jentry=0; jentry<200;jentry++) {
+  //for (Long64_t jentry=0; jentry<nentries;jentry++) {
+  for (Long64_t jentry=0; jentry<200;jentry++) {
 
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
@@ -60,6 +60,9 @@ void TripletSelection::Loop() {
     h_selection->Fill(1.,perEveW);
 
     // Trigger
+    iHLT_Mu12_IP6 = (int)HLT_Mu12_IP6;
+    iHLT_Mu9_IP6  = (int)HLT_Mu9_IP6;
+
     bool okTrigger = false;
     if (HLT_Mu7_IP4 || HLT_Mu8_IP6 || HLT_Mu8_IP5 || HLT_Mu8_IP3 || HLT_Mu8p5_IP3p5 || HLT_Mu9_IP6 || HLT_Mu9_IP5 || HLT_Mu9_IP4 || HLT_Mu10p5_IP3p5 || HLT_Mu12_IP6) okTrigger = true;
     if (!okTrigger) continue;
@@ -111,8 +114,8 @@ void TripletSelection::Loop() {
       if (!isBsel) continue;
 
       // Removing B from low-pT electrons with PF overlap
-      if (Electron_isPFoverlap[ele1_idx]==1) continue;
-      if (Electron_isPFoverlap[ele2_idx]==1) continue;
+      //if (Electron_isPFoverlap[ele1_idx]==1) continue;
+      //if (Electron_isPFoverlap[ele2_idx]==1) continue;
 
       // how many "good" Bs, real or from combinatorics
       goodBs.push_back(iB);
@@ -711,6 +714,7 @@ void TripletSelection::Loop() {
     bestXYsigMatch_notok_ele1pt=-999;
     bestXYsigMatch_notok_ele2pt=-999;
     bestXYsigMatch_notok_kpt=-999;
+    bestXYsigMatch_notok_minpt=-999;
     bestXYsigMatch_notok_ele1eta=-999;
     bestXYsigMatch_notok_ele2eta=-999;
     bestXYsigMatch_notok_keta=-999;
@@ -724,6 +728,7 @@ void TripletSelection::Loop() {
     bestXYsigMatch_ok_ele1pt=-999;
     bestXYsigMatch_ok_ele2pt=-999;
     bestXYsigMatch_ok_kpt=-999;
+    bestXYsigMatch_ok_minpt=-999;
     bestXYsigMatch_ok_ele1eta=-999;
     bestXYsigMatch_ok_ele2eta=-999;
     bestXYsigMatch_ok_keta=-999;
@@ -864,6 +869,10 @@ void TripletSelection::Loop() {
 	bestXYsigMatch_ok_ele1pt  = Electron_pt[ele1_idx];
 	bestXYsigMatch_ok_ele2pt  = Electron_pt[ele2_idx];
 	bestXYsigMatch_ok_kpt     = ProbeTracks_pt[k_idx];
+	if (Electron_pt[ele2_idx]<=ProbeTracks_pt[k_idx])
+	  bestXYsigMatch_ok_minpt = Electron_pt[ele2_idx];
+	else 
+	  bestXYsigMatch_ok_minpt = ProbeTracks_pt[k_idx];
 	bestXYsigMatch_ok_ele1eta = Electron_eta[ele1_idx];
 	bestXYsigMatch_ok_ele2eta = Electron_eta[ele2_idx];
 	bestXYsigMatch_ok_keta    = ProbeTracks_eta[k_idx];
@@ -893,6 +902,10 @@ void TripletSelection::Loop() {
 	bestXYsigMatch_notok_ele1pt  = Electron_pt[ele1_idx];
 	bestXYsigMatch_notok_ele2pt  = Electron_pt[ele2_idx];
 	bestXYsigMatch_notok_kpt     = ProbeTracks_pt[k_idx];
+	if (Electron_pt[ele2_idx]<=ProbeTracks_pt[k_idx])
+	  bestXYsigMatch_notok_minpt = Electron_pt[ele2_idx];
+	else 
+	  bestXYsigMatch_notok_minpt = ProbeTracks_pt[k_idx];
 	bestXYsigMatch_notok_ele1eta = Electron_eta[ele1_idx];
 	bestXYsigMatch_notok_ele2eta = Electron_eta[ele2_idx];
 	bestXYsigMatch_notok_keta    = ProbeTracks_eta[k_idx];
@@ -1030,6 +1043,7 @@ void TripletSelection::Loop() {
 }
 
 // for B -> K J/Psi -> Kee (resonant)
+/*
 bool TripletSelection::isMcB( int theB ) {
   
   // taking index
@@ -1068,8 +1082,8 @@ bool TripletSelection::isMcB( int theB ) {
 
   return RK_res;
 }
+*/
 
-/*
 // for B -> Kee (non resonant)
 bool TripletSelection::isMcB( int theB ) {
   
@@ -1100,7 +1114,6 @@ bool TripletSelection::isMcB( int theB ) {
 
   return RK_nres;
 }
-*/
 
 float TripletSelection::dRgen( int theB ) {
   
@@ -1319,6 +1332,9 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("debug_pf_svprob", "std::vector<float>", &debug_pf_svprob);
   outTree_->Branch("debug_pf_svprob_match", "std::vector<int>", &debug_pf_svprob_match);
 
+  outTree_->Branch("iHLT_Mu12_IP6", &iHLT_Mu12_IP6, "iHLT_Mu12_IP6/I");
+  outTree_->Branch("iHLT_Mu9_IP6",  &iHLT_Mu9_IP6,  "iHLT_Mu9_IP6/I");
+
   outTree_->Branch("theEvent", &theEvent, "theEvent/I");
   
   outTree_->Branch("rho", &rho, "rho/F");    
@@ -1414,6 +1430,7 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestXYsigMatch_notok_ele1pt",   &bestXYsigMatch_notok_ele1pt,   "bestXYsigMatch_notok_ele1pt/F");
   outTree_->Branch("bestXYsigMatch_notok_ele2pt",   &bestXYsigMatch_notok_ele2pt,   "bestXYsigMatch_notok_ele2pt/F");
   outTree_->Branch("bestXYsigMatch_notok_kpt",      &bestXYsigMatch_notok_kpt,      "bestXYsigMatch_notok_kpt/F");
+  outTree_->Branch("bestXYsigMatch_notok_minpt",    &bestXYsigMatch_notok_minpt,    "bestXYsigMatch_notok_minpt/F");
   outTree_->Branch("bestXYsigMatch_notok_ele1eta",  &bestXYsigMatch_notok_ele1eta,  "bestXYsigMatch_notok_ele1eta/F");
   outTree_->Branch("bestXYsigMatch_notok_ele2eta",  &bestXYsigMatch_notok_ele2eta,  "bestXYsigMatch_notok_ele2eta/F");
   outTree_->Branch("bestXYsigMatch_notok_keta",     &bestXYsigMatch_notok_keta,     "bestXYsigMatch_notok_keta/F");
@@ -1427,6 +1444,7 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestXYsigMatch_ok_ele1pt",      &bestXYsigMatch_ok_ele1pt,      "bestXYsigMatch_ok_ele1pt/F");
   outTree_->Branch("bestXYsigMatch_ok_ele2pt",      &bestXYsigMatch_ok_ele2pt,      "bestXYsigMatch_ok_ele2pt/F");
   outTree_->Branch("bestXYsigMatch_ok_kpt",         &bestXYsigMatch_ok_kpt,         "bestXYsigMatch_ok_kpt/F");
+  outTree_->Branch("bestXYsigMatch_ok_minpt",       &bestXYsigMatch_ok_minpt,       "bestXYsigMatch_ok_minpt/F");
   outTree_->Branch("bestXYsigMatch_ok_ele1eta",     &bestXYsigMatch_ok_ele1eta,     "bestXYsigMatch_ok_ele1eta/F");
   outTree_->Branch("bestXYsigMatch_ok_ele2eta",     &bestXYsigMatch_ok_ele2eta,     "bestXYsigMatch_ok_ele2eta/F");
   outTree_->Branch("bestXYsigMatch_ok_keta",        &bestXYsigMatch_ok_keta,        "bestXYsigMatch_ok_keta/F");

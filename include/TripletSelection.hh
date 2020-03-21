@@ -55,6 +55,9 @@ private:
 
   int theEvent;
   float  rho;
+  //
+  int iHLT_Mu12_IP6;
+  int iHLT_Mu9_IP6;
   // 
   int goodBSize;
   int goodTrueBSize;
@@ -147,6 +150,7 @@ private:
   float bestXYsigMatch_notok_ele1pt;
   float bestXYsigMatch_notok_ele2pt;
   float bestXYsigMatch_notok_kpt;
+  float bestXYsigMatch_notok_minpt;
   float bestXYsigMatch_notok_ele1eta;
   float bestXYsigMatch_notok_ele2eta;
   float bestXYsigMatch_notok_keta;
@@ -160,6 +164,7 @@ private:
   float bestXYsigMatch_ok_ele1pt;
   float bestXYsigMatch_ok_ele2pt;
   float bestXYsigMatch_ok_kpt;
+  float bestXYsigMatch_ok_minpt;
   float bestXYsigMatch_ok_ele1eta;
   float bestXYsigMatch_ok_ele2eta;
   float bestXYsigMatch_ok_keta;
