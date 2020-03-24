@@ -31,8 +31,8 @@ void TripletSelection::Loop() {
   Long64_t nentries = fChain->GetEntriesFast();
   Long64_t nbytes = 0, nb = 0;
   cout << "entries : " <<  nentries << endl;
-  //for (Long64_t jentry=0; jentry<nentries;jentry++) {
-  for (Long64_t jentry=0; jentry<200;jentry++) {
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {
+  //for (Long64_t jentry=0; jentry<200;jentry++) {
 
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
@@ -111,11 +111,23 @@ void TripletSelection::Loop() {
       bool additionalSel = BToKEE_fit_mass[iB]>4.5 && BToKEE_fit_mass[iB]<6.0;
       bool isBsel = vtxFitSel && ele1Sel && ele2Sel && kSel && additionalSel;
 
+      // Extra to be tested
+      /*
+      if (Electron_pfmvaId[ele1_idx]<-4) continue;
+      if (Electron_pfmvaId[ele2_idx]<-4) continue;
+      if (Electron_mvaId[ele1_idx]<-2)   continue;
+      if (Electron_mvaId[ele2_idx]<-4)   continue;
+      ////if (k_pt<0.9 || BToKEE_fit_l2_pt[iB]<1.3) continue;
+      if (k_pt<=BToKEE_fit_l2_pt[iB] && k_pt<0.8) continue;
+      if (k_pt>BToKEE_fit_l2_pt[iB] && BToKEE_fit_l2_pt[iB]<0.8)  continue;
+      */
+      // Extra to be tested
+
       if (!isBsel) continue;
 
       // Removing B from low-pT electrons with PF overlap
-      //if (Electron_isPFoverlap[ele1_idx]==1) continue;
-      //if (Electron_isPFoverlap[ele2_idx]==1) continue;
+      if (Electron_isPFoverlap[ele1_idx]==1) continue;
+      if (Electron_isPFoverlap[ele2_idx]==1) continue;
 
       // how many "good" Bs, real or from combinatorics
       goodBs.push_back(iB);
@@ -140,7 +152,7 @@ void TripletSelection::Loop() {
     // ------------------------------------
     // Debug SV prob: flat or not?
     if (goodBs.size()>=1) {
-      u_int myBestSvprob = -1;
+      int myBestSvprob = -1;
       float mySvprobMax  = -999.;
       for (u_int iB=0; iB<goodBs.size(); iB++) {        
 	int thisB = goodBs[iB];
@@ -411,7 +423,7 @@ void TripletSelection::Loop() {
     // Q: Which are the better reconstructed ones? 
     // 
     // a) Best reco-gen DR, as a reference.   bestMatchedB = -1 ==> no "true" B 
-    u_int bestMatchedB = -1;
+    int bestMatchedB = -1;
     float dRtotMin=999.;
     for (u_int iB=0; iB<goodTrueBs.size(); iB++) {        
       int thisB    = goodTrueBs[iB];
@@ -433,6 +445,16 @@ void TripletSelection::Loop() {
     bestMatch_Cos2D  = -999.;
     bestMatch_PtSum  = -999.;
     bestMatch_KPt    = -999.;
+    bestMatch_KEta    = -999.;
+    bestMatch_Ele1Pt  = -999.;
+    bestMatch_Ele2Pt  = -999.;
+    bestMatch_MinPt   = -999.;
+    bestMatch_Ele1Eta = -999.;
+    bestMatch_Ele2Eta = -999.;
+    bestMatch_Ele1pfmva  = -999.;
+    bestMatch_Ele2pfmva  = -999.;
+    bestMatch_Ele1lptmva = -999.;
+    bestMatch_Ele2lptmva = -999.;
     bestMatch_maxDrRecoGen = -999.; 
     bestMatch_minDrRecoGen = -999.;
     bestMatch_drRecoGenK   = -999.;
@@ -446,6 +468,20 @@ void TripletSelection::Loop() {
       bestMatch_Cos2D  = BToKEE_fit_cos2D[bestMatchedB]; 
       bestMatch_PtSum  = Electron_pt[ele1BM_idx] + Electron_pt[ele2BM_idx];
       bestMatch_KPt    = ProbeTracks_pt[kBM_idx];
+      bestMatch_KEta   = ProbeTracks_eta[kBM_idx];
+      bestMatch_Ele1Pt = Electron_pt[ele1BM_idx];
+      bestMatch_Ele2Pt = Electron_pt[ele2BM_idx];
+      if (bestMatch_Ele2Pt>bestMatch_KPt)
+	bestMatch_MinPt = bestMatch_KPt;
+      else
+	bestMatch_MinPt = bestMatch_Ele2Pt;
+      bestMatch_Ele1Eta = Electron_eta[ele1BM_idx];
+      bestMatch_Ele2Eta = Electron_eta[ele2BM_idx];
+      bestMatch_Ele1pfmva  = Electron_pfmvaId[ele1BM_idx];
+      bestMatch_Ele2pfmva  = Electron_pfmvaId[ele2BM_idx];
+      bestMatch_Ele1lptmva = Electron_mvaId[ele1BM_idx];
+      bestMatch_Ele2lptmva = Electron_mvaId[ele2BM_idx];
+
       float dRRecoGenEle1BM = dRRecoGenEle(ele1BM_idx);
       float dRRecoGenEle2BM = dRRecoGenEle(ele2BM_idx);
       if (dRRecoGenEle1BM>dRRecoGenEle2BM) {
@@ -479,11 +515,11 @@ void TripletSelection::Loop() {
 
     if (goodTrueBs.size()>=2) {
 
-      u_int bestSvprob_onlyTrue = -1;
-      u_int bestXYsig_onlyTrue  = -1;
-      u_int bestCos2D_onlyTrue  = -1;
-      u_int bestPtSum_onlyTrue  = -1;
-      u_int bestKPt_onlyTrue    = -1;
+      int bestSvprob_onlyTrue = -1;
+      int bestXYsig_onlyTrue  = -1;
+      int bestCos2D_onlyTrue  = -1;
+      int bestPtSum_onlyTrue  = -1;
+      int bestKPt_onlyTrue    = -1;
       float svprobMax_onlyTrue  = -999.;
       float xysigMax_onlyTrue   = -999.;
       float cos2DMax_onlyTrue   = -999.;
@@ -671,6 +707,19 @@ void TripletSelection::Loop() {
       goodCombB_cos2D.push_back(BToKEE_fit_cos2D[thisB]);
       goodCombB_ptsum.push_back(ptsum);
       goodCombB_kpt.push_back(ProbeTracks_pt[k_idx]);
+      goodCombB_keta.push_back(ProbeTracks_eta[k_idx]);
+      goodCombB_ele1pt.push_back(Electron_pt[ele1_idx]);
+      goodCombB_ele2pt.push_back(Electron_pt[ele2_idx]);
+      if (Electron_pt[ele2_idx]>ProbeTracks_pt[k_idx])
+	goodCombB_minpt.push_back(ProbeTracks_pt[k_idx]);
+      else 
+	goodCombB_minpt.push_back(Electron_pt[ele2_idx]);
+      goodCombB_ele1eta.push_back(Electron_eta[ele1_idx]);
+      goodCombB_ele2eta.push_back(Electron_eta[ele2_idx]);
+      goodCombB_ele1pfmva.push_back(Electron_pfmvaId[ele1_idx]);
+      goodCombB_ele2pfmva.push_back(Electron_pfmvaId[ele2_idx]);
+      goodCombB_ele1lptmva.push_back(Electron_mvaId[ele1_idx]);
+      goodCombB_ele2lptmva.push_back(Electron_mvaId[ele2_idx]);
       goodCombB_maxDrRecoGen.push_back(maxDrRecoGenEle);
       goodCombB_minDrRecoGen.push_back(minDrRecoGenEle);
       goodCombB_drRecoGenK.push_back(drRecoGenK);
@@ -691,6 +740,9 @@ void TripletSelection::Loop() {
     // f) how often the best B according to reco criteria is NOT matched (not only not the best, but not matched at all)
     //    only cases with at least 1 true and 1 combinatorics selected 
     bestSvProbMatch=-999;
+    bestSvProbMatchCat0=-999;
+    bestSvProbMatchCat1=-999;
+    bestSvProbMatchCat2=-999;
     bestSvProbMatch_causeEle1=-999;
     bestSvProbMatch_causeEle2=-999;
     bestSvProbMatch_causeK=-999;
@@ -708,6 +760,9 @@ void TripletSelection::Loop() {
     bestSvProbMatch_ok_keta=-999;
 
     bestXYsigMatch=-999;
+    bestXYsigMatchCat0=-999;
+    bestXYsigMatchCat1=-999;
+    bestXYsigMatchCat2=-999;
     bestXYsigMatch_causeEle1=-999;
     bestXYsigMatch_causeEle2=-999;
     bestXYsigMatch_causeK=-999;
@@ -769,17 +824,29 @@ void TripletSelection::Loop() {
 
     if (goodTrueBs.size()>0 && goodCombBs.size()>0) {
       
-      u_int bestSvprob_all = -1;
-      u_int bestXYsig_all  = -1;
-      u_int bestCos2D_all  = -1;
-      u_int bestPtSum_all  = -1;
-      u_int bestKPt_all    = -1;
+      int bestSvprob_all  = -1;
+      int bestSvprob_cat0 = -1;
+      int bestSvprob_cat1 = -1;
+      int bestSvprob_cat2 = -1;
+      int bestXYsig_all   = -1;
+      int bestXYsig_cat0  = -1;
+      int bestXYsig_cat1  = -1;
+      int bestXYsig_cat2  = -1;
+      int bestCos2D_all   = -1;
+      int bestPtSum_all   = -1;
+      int bestKPt_all     = -1;
       //
-      float svprobBest_all = -999.;
-      float xysigBest_all  = -999.;
-      float cos2DBest_all  = -999.;
-      float ptsumBest_all  = -999.;
-      float kptBest_all    = -999.;
+      float svprobBest_all  = -999.;
+      float svprobBest_cat0 = -999.;
+      float svprobBest_cat1 = -999.;
+      float svprobBest_cat2 = -999.;
+      float xysigBest_all   = -999.;
+      float xysigBest_cat0  = -999.;
+      float xysigBest_cat1  = -999.;
+      float xysigBest_cat2  = -999.;
+      float cos2DBest_all   = -999.;
+      float ptsumBest_all   = -999.;
+      float kptBest_all     = -999.;
       
       for (u_int iB=0; iB<goodBs.size(); iB++) {        
 	int thisB    = goodBs[iB];
@@ -787,17 +854,46 @@ void TripletSelection::Loop() {
 	int ele2_idx = BToKEE_l2Idx[thisB];
 	int k_idx    = BToKEE_kIdx[thisB];
 	
+	int whichCat = -1;
+	if (Electron_pfmvaId[ele1_idx]<20 && Electron_pfmvaId[ele2_idx]<20)  whichCat = 0;
+	else if (Electron_mvaId[ele1_idx]<20 && Electron_mvaId[ele2_idx]<20) whichCat = 2;
+	else if ( (Electron_pfmvaId[ele1_idx]<20 && Electron_mvaId[ele2_idx]<20) || (Electron_pfmvaId[ele2_idx]<20 && Electron_mvaId[ele1_idx]<20) ) whichCat = 1;
+
 	// best fit
 	if (BToKEE_svprob[thisB]>svprobBest_all) {
 	  svprobBest_all = BToKEE_svprob[thisB];
 	  bestSvprob_all = thisB; 
 	}
-	
+	if (whichCat==0 && BToKEE_svprob[thisB]>svprobBest_cat0) {
+	  svprobBest_cat0 = BToKEE_svprob[thisB];
+	  bestSvprob_cat0 = thisB; 
+	}
+	if (whichCat==1 && BToKEE_svprob[thisB]>svprobBest_cat1) {
+	  svprobBest_cat1 = BToKEE_svprob[thisB];
+	  bestSvprob_cat1 = thisB; 
+	}
+	if (whichCat==2 && BToKEE_svprob[thisB]>svprobBest_cat2) {
+	  svprobBest_cat2 = BToKEE_svprob[thisB];
+	  bestSvprob_cat2 = thisB; 
+	}
+
 	// best XYsign
 	float theXySig = BToKEE_l_xy[thisB]/BToKEE_l_xy_unc[thisB];
 	if (theXySig>xysigBest_all) {
 	  xysigBest_all = theXySig;
 	  bestXYsig_all = thisB;
+	} 
+	if (whichCat==0 && theXySig>xysigBest_cat0) {
+	  xysigBest_cat0 = theXySig;
+	  bestXYsig_cat0 = thisB;
+	} 
+	if (whichCat==1 && theXySig>xysigBest_cat1) {
+	  xysigBest_cat1 = theXySig;
+	  bestXYsig_cat1 = thisB;
+	} 
+	if (whichCat==2 && theXySig>xysigBest_cat2) {
+	  xysigBest_cat2 = theXySig;
+	  bestXYsig_cat2 = thisB;
 	} 
 	
 	// highest cos2D
@@ -823,7 +919,13 @@ void TripletSelection::Loop() {
 
       // Counting, per event
       bestSvProbMatch=0;
+      bestSvProbMatchCat0=-999;
+      bestSvProbMatchCat1=-999;
+      bestSvProbMatchCat2=-999;
       bestXYsigMatch=0;
+      bestXYsigMatchCat0=-999;     // PFPF
+      bestXYsigMatchCat1=-999;     // PFLP
+      bestXYsigMatchCat2=-999;     // LPLP
       bestCos2DMatch=0;
       bestPtSumMatch=0;
       bestKPtMatch=0;
@@ -860,6 +962,19 @@ void TripletSelection::Loop() {
 	bestSvProbMatch_notok_ele2eta = Electron_eta[ele2_idx];
 	bestSvProbMatch_notok_keta    = ProbeTracks_eta[k_idx];
       }
+      if (bestSvprob_cat0>=0) {
+	if (isMcB(bestSvprob_cat0)) bestSvProbMatchCat0=1;
+	else bestSvProbMatchCat0=0;
+      }
+      else if (bestSvprob_cat1>=0) {                         // with else this becomes exclusive: order events in 0-1-2
+	if (isMcB(bestSvprob_cat1)) bestSvProbMatchCat1=1;
+	else bestSvProbMatchCat1=0;
+      }
+      else if (bestSvprob_cat2>=0) {
+	if (isMcB(bestSvprob_cat2)) bestSvProbMatchCat2=1;
+	else bestSvProbMatchCat2=0;
+      }
+
 
       if (isMcB(bestXYsig_all)) { 
 	bestXYsigMatch=1;
@@ -916,6 +1031,18 @@ void TripletSelection::Loop() {
 	bestXYsigMatch_notok_costhetaSK   = cosThetaStarK(bestXYsig_all);
 	bestXYsigMatch_notok_costhetaSKCS = cosThetaStarKCS(bestXYsig_all);
 	bestXYsigMatch_notok_costhetaL    = cosThetaL(bestXYsig_all);
+      }
+      if (bestXYsig_cat0>=0) {
+	if (isMcB(bestXYsig_cat0)) bestXYsigMatchCat0=1;
+	else bestXYsigMatchCat0=0;
+      }
+      else if (bestXYsig_cat1>=0) {                         // with else this becomes exclusive: order events in 0-1-2
+	if (isMcB(bestXYsig_cat1)) bestXYsigMatchCat1=1;
+	else bestXYsigMatchCat1=0;
+      }
+      else if (bestXYsig_cat2>=0) {
+	if (isMcB(bestXYsig_cat2)) bestXYsigMatchCat2=1;
+	else bestXYsigMatchCat2=0;
       }
 
       if (isMcB(bestCos2D_all)) {
@@ -1027,6 +1154,18 @@ void TripletSelection::Loop() {
     goodCombB_cos2D.clear();
     goodCombB_ptsum.clear();
     goodCombB_kpt.clear();
+
+    goodCombB_keta.clear();
+    goodCombB_ele1pt.clear();
+    goodCombB_ele2pt.clear();
+    goodCombB_minpt.clear();
+    goodCombB_ele1eta.clear();
+    goodCombB_ele2eta.clear();
+    goodCombB_ele1pfmva.clear();
+    goodCombB_ele2pfmva.clear();
+    goodCombB_ele1lptmva.clear();
+    goodCombB_ele2lptmva.clear();
+
     goodCombB_maxDrRecoGen.clear();
     goodCombB_minDrRecoGen.clear();
     goodCombB_drRecoGenK.clear();
@@ -1378,6 +1517,16 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestMatch_Cos2D",        &bestMatch_Cos2D,        "bestMatch_Cos2D/F");
   outTree_->Branch("bestMatch_PtSum",        &bestMatch_PtSum,        "bestMatch_PtSum/F");
   outTree_->Branch("bestMatch_KPt",          &bestMatch_KPt,          "bestMatch_KPt/F");
+  outTree_->Branch("bestMatch_KEta",         &bestMatch_KEta,         "bestMatch_KEta/F");
+  outTree_->Branch("bestMatch_Ele1Pt",       &bestMatch_Ele1Pt,       "bestMatch_Ele1Pt/F");
+  outTree_->Branch("bestMatch_Ele2Pt",       &bestMatch_Ele2Pt,       "bestMatch_Ele2Pt/F");
+  outTree_->Branch("bestMatch_MinPt",        &bestMatch_MinPt,        "bestMatch_MinPt/F");
+  outTree_->Branch("bestMatch_Ele1Eta",      &bestMatch_Ele1Eta,      "bestMatch_Ele1Eta/F");
+  outTree_->Branch("bestMatch_Ele2Eta",      &bestMatch_Ele2Eta,      "bestMatch_Ele2Eta/F");
+  outTree_->Branch("bestMatch_Ele1pfmva",    &bestMatch_Ele1pfmva,    "bestMatch_Ele1pfmva/F");
+  outTree_->Branch("bestMatch_Ele2pfmva",    &bestMatch_Ele2pfmva,    "bestMatch_Ele2pfmva/F");
+  outTree_->Branch("bestMatch_Ele1lptmva",   &bestMatch_Ele1lptmva,   "bestMatch_Ele1lptmva/F");
+  outTree_->Branch("bestMatch_Ele2lptmva",   &bestMatch_Ele2lptmva,   "bestMatch_Ele2lptmva/F");
   outTree_->Branch("bestMatch_maxDrRecoGen", &bestMatch_maxDrRecoGen, "bestMatch_maxDrRecoGen/F");
   outTree_->Branch("bestMatch_minDrRecoGen", &bestMatch_minDrRecoGen, "bestMatch_minDrRecoGen/F");
   outTree_->Branch("bestMatch_drRecoGenK",   &bestMatch_drRecoGenK,   "bestMatch_drRecoGenK/F");
@@ -1393,6 +1542,16 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("goodCombB_cos2D",        "std::vector<float>", &goodCombB_cos2D);
   outTree_->Branch("goodCombB_ptsum",        "std::vector<float>", &goodCombB_ptsum);
   outTree_->Branch("goodCombB_kpt",          "std::vector<float>", &goodCombB_kpt);
+  outTree_->Branch("goodCombB_keta",         "std::vector<float>", &goodCombB_keta);
+  outTree_->Branch("goodCombB_ele1pt",       "std::vector<float>", &goodCombB_ele1pt);
+  outTree_->Branch("goodCombB_ele2pt",       "std::vector<float>", &goodCombB_ele2pt);
+  outTree_->Branch("goodCombB_minpt",        "std::vector<float>", &goodCombB_minpt);
+  outTree_->Branch("goodCombB_ele1eta",      "std::vector<float>", &goodCombB_ele1eta);
+  outTree_->Branch("goodCombB_ele2eta",      "std::vector<float>", &goodCombB_ele2eta);
+  outTree_->Branch("goodCombB_ele1pfmva",    "std::vector<float>", &goodCombB_ele1pfmva);
+  outTree_->Branch("goodCombB_ele2pfmva",    "std::vector<float>", &goodCombB_ele2pfmva);
+  outTree_->Branch("goodCombB_ele1lptmva",   "std::vector<float>", &goodCombB_ele1lptmva);
+  outTree_->Branch("goodCombB_ele2lptmva",   "std::vector<float>", &goodCombB_ele2lptmva);
   outTree_->Branch("goodCombB_maxDrRecoGen", "std::vector<float>", &goodCombB_maxDrRecoGen);
   outTree_->Branch("goodCombB_minDrRecoGen", "std::vector<float>", &goodCombB_minDrRecoGen);
   outTree_->Branch("goodCombB_drRecoGenK",   "std::vector<float>", &goodCombB_drRecoGenK);
@@ -1407,6 +1566,9 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("combToBestB_drRecoGenK",   "std::vector<float>", &combToBestB_drRecoGenK);
 
   outTree_->Branch("bestSvProbMatch",               &bestSvProbMatch,               "bestSvProbMatch/I");
+  outTree_->Branch("bestSvProbMatchCat0",           &bestSvProbMatchCat0,           "bestSvProbMatchCat0/I");
+  outTree_->Branch("bestSvProbMatchCat1",           &bestSvProbMatchCat1,           "bestSvProbMatchCat1/I");
+  outTree_->Branch("bestSvProbMatchCat2",           &bestSvProbMatchCat2,           "bestSvProbMatchCat2/I");
   outTree_->Branch("bestSvProbMatch_causeEle1",     &bestSvProbMatch_causeEle1,     "bestSvProbMatch_causeEle1/I");
   outTree_->Branch("bestSvProbMatch_causeEle2",     &bestSvProbMatch_causeEle2,     "bestSvProbMatch_causeEle2/I");
   outTree_->Branch("bestSvProbMatch_causeK",        &bestSvProbMatch_causeK,        "bestSvProbMatch_causeK/I");
@@ -1424,6 +1586,9 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestSvProbMatch_ok_keta",       &bestSvProbMatch_ok_keta,       "bestSvProbMatch_ok_keta/F");
 
   outTree_->Branch("bestXYsigMatch",                &bestXYsigMatch,                "bestXYsigMatch/I");
+  outTree_->Branch("bestXYsigMatchCat0",            &bestXYsigMatchCat0,            "bestXYsigMatchCat0/I");
+  outTree_->Branch("bestXYsigMatchCat1",            &bestXYsigMatchCat1,            "bestXYsigMatchCat1/I");
+  outTree_->Branch("bestXYsigMatchCat2",            &bestXYsigMatchCat2,            "bestXYsigMatchCat2/I");
   outTree_->Branch("bestXYsigMatch_causeEle1",      &bestXYsigMatch_causeEle1,      "bestXYsigMatch_causeEle1/I");
   outTree_->Branch("bestXYsigMatch_causeEle2",      &bestXYsigMatch_causeEle2,      "bestXYsigMatch_causeEle2/I");
   outTree_->Branch("bestXYsigMatch_causeK",         &bestXYsigMatch_causeK,         "bestXYsigMatch_causeK/I");
