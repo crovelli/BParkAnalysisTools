@@ -93,6 +93,7 @@ private:
   float goodTrueBs_bestKpt_dRmax;
   float goodTrueBs_bestKpt_dRmin;
   //
+  float bestMatch_Bmass;
   float bestMatch_SvProb;
   float bestMatch_XYSig;
   float bestMatch_Cos2D;
@@ -133,6 +134,9 @@ private:
   vector<float> goodCombB_ele2pfmva={};
   vector<float> goodCombB_ele1lptmva={};
   vector<float> goodCombB_ele2lptmva={};
+  vector<float> goodCombB_causeEle1={};
+  vector<float> goodCombB_causeEle2={};
+  vector<float> goodCombB_causeK={};
   vector<float> goodCombB_maxDrRecoGen={};
   vector<float> goodCombB_minDrRecoGen={};
   vector<float> goodCombB_drRecoGenK={};
@@ -150,6 +154,9 @@ private:
   int bestSvProbMatchCat0;
   int bestSvProbMatchCat1;
   int bestSvProbMatchCat2;
+  int bestSvProbMatchCatNew0;
+  int bestSvProbMatchCatNew1;
+  int bestSvProbMatchCatNew2;
   int bestSvProbMatch_causeEle1;
   int bestSvProbMatch_causeEle2;
   int bestSvProbMatch_causeK;
@@ -170,6 +177,9 @@ private:
   int bestXYsigMatchCat0;
   int bestXYsigMatchCat1;
   int bestXYsigMatchCat2;
+  int bestXYsigMatchCatNew0;
+  int bestXYsigMatchCatNew1;
+  int bestXYsigMatchCatNew2;
   int bestXYsigMatch_causeEle1;
   int bestXYsigMatch_causeEle2;
   int bestXYsigMatch_causeK;
