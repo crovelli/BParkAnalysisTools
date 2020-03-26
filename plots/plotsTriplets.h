@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Mon Mar 16 18:26:08 2020 by ROOT version 6.14/00
+// Wed Mar 25 11:50:12 2020 by ROOT version 6.14/00
 // from TTree TaPtree/TaPtree
-// found on file: BuToKJpsi_Toee_BParkNANO_mc_2020Jan16.txt.root
+// found on file: BuToKee_Toee_BParkNANO_mc_2020Jan16__noTagli_k07.root
 //////////////////////////////////////////////////////////
 
 #ifndef plotsTriplets_h
@@ -28,6 +28,8 @@ public :
    vector<int>     *debug_svprob_match;
    vector<float>   *debug_pf_svprob;
    vector<int>     *debug_pf_svprob_match;
+   Int_t           iHLT_Mu12_IP6;
+   Int_t           iHLT_Mu9_IP6;
    Int_t           theEvent;
    Float_t         rho;
    Int_t           goodBSize;
@@ -59,11 +61,22 @@ public :
    Float_t         goodTrueBs_bestCos2d_dRmin;
    Float_t         goodTrueBs_bestPtsum_dRmin;
    Float_t         goodTrueBs_bestKpt_dRmin;
+   Float_t         bestMatch_Bmass;
    Float_t         bestMatch_SvProb;
    Float_t         bestMatch_XYSig;
    Float_t         bestMatch_Cos2D;
    Float_t         bestMatch_PtSum;
    Float_t         bestMatch_KPt;
+   Float_t         bestMatch_KEta;
+   Float_t         bestMatch_Ele1Pt;
+   Float_t         bestMatch_Ele2Pt;
+   Float_t         bestMatch_MinPt;
+   Float_t         bestMatch_Ele1Eta;
+   Float_t         bestMatch_Ele2Eta;
+   Float_t         bestMatch_Ele1pfmva;
+   Float_t         bestMatch_Ele2pfmva;
+   Float_t         bestMatch_Ele1lptmva;
+   Float_t         bestMatch_Ele2lptmva;
    Float_t         bestMatch_maxDrRecoGen;
    Float_t         bestMatch_minDrRecoGen;
    Float_t         bestMatch_drRecoGenK;
@@ -77,6 +90,19 @@ public :
    vector<float>   *goodCombB_cos2D;
    vector<float>   *goodCombB_ptsum;
    vector<float>   *goodCombB_kpt;
+   vector<float>   *goodCombB_keta;
+   vector<float>   *goodCombB_ele1pt;
+   vector<float>   *goodCombB_ele2pt;
+   vector<float>   *goodCombB_minpt;
+   vector<float>   *goodCombB_ele1eta;
+   vector<float>   *goodCombB_ele2eta;
+   vector<float>   *goodCombB_ele1pfmva;
+   vector<float>   *goodCombB_ele2pfmva;
+   vector<float>   *goodCombB_ele1lptmva;
+   vector<float>   *goodCombB_ele2lptmva;
+   vector<float>   *goodCombB_causeEle1;
+   vector<float>   *goodCombB_causeEle2;
+   vector<float>   *goodCombB_causeK;
    vector<float>   *goodCombB_maxDrRecoGen;
    vector<float>   *goodCombB_minDrRecoGen;
    vector<float>   *goodCombB_drRecoGenK;
@@ -89,6 +115,9 @@ public :
    vector<float>   *combToBestB_minDrRecoGen;
    vector<float>   *combToBestB_drRecoGenK;
    Int_t           bestSvProbMatch;
+   Int_t           bestSvProbMatchCat0;
+   Int_t           bestSvProbMatchCat1;
+   Int_t           bestSvProbMatchCat2;
    Int_t           bestSvProbMatch_causeEle1;
    Int_t           bestSvProbMatch_causeEle2;
    Int_t           bestSvProbMatch_causeK;
@@ -105,12 +134,16 @@ public :
    Float_t         bestSvProbMatch_ok_ele2eta;
    Float_t         bestSvProbMatch_ok_keta;
    Int_t           bestXYsigMatch;
+   Int_t           bestXYsigMatchCat0;
+   Int_t           bestXYsigMatchCat1;
+   Int_t           bestXYsigMatchCat2;
    Int_t           bestXYsigMatch_causeEle1;
    Int_t           bestXYsigMatch_causeEle2;
    Int_t           bestXYsigMatch_causeK;
    Float_t         bestXYsigMatch_notok_ele1pt;
    Float_t         bestXYsigMatch_notok_ele2pt;
    Float_t         bestXYsigMatch_notok_kpt;
+   Float_t         bestXYsigMatch_notok_minpt;
    Float_t         bestXYsigMatch_notok_ele1eta;
    Float_t         bestXYsigMatch_notok_ele2eta;
    Float_t         bestXYsigMatch_notok_keta;
@@ -118,9 +151,13 @@ public :
    Float_t         bestXYsigMatch_notok_pfmva2;
    Float_t         bestXYsigMatch_notok_lptmva1;
    Float_t         bestXYsigMatch_notok_lptmva2;
+   Float_t         bestXYsigMatch_notok_costhetaSK;
+   Float_t         bestXYsigMatch_notok_costhetaSKCS;
+   Float_t         bestXYsigMatch_notok_costhetaL;
    Float_t         bestXYsigMatch_ok_ele1pt;
    Float_t         bestXYsigMatch_ok_ele2pt;
    Float_t         bestXYsigMatch_ok_kpt;
+   Float_t         bestXYsigMatch_ok_minpt;
    Float_t         bestXYsigMatch_ok_ele1eta;
    Float_t         bestXYsigMatch_ok_ele2eta;
    Float_t         bestXYsigMatch_ok_keta;
@@ -128,6 +165,10 @@ public :
    Float_t         bestXYsigMatch_ok_pfmva2;
    Float_t         bestXYsigMatch_ok_lptmva1;
    Float_t         bestXYsigMatch_ok_lptmva2;
+   Float_t         bestXYsigMatch_ok_costhetaSK;
+   Float_t         bestXYsigMatch_ok_costhetaSKCS;
+   Float_t         bestXYsigMatch_ok_costhetaL;
+   Float_t         bestXYsigMatch_ok_costhetaSK_gen;
    Int_t           bestCos2DMatch;
    Int_t           bestCos2DMatch_causeEle1;
    Int_t           bestCos2DMatch_causeEle2;
@@ -158,6 +199,8 @@ public :
    TBranch        *b_debug_svprob_match;   //!
    TBranch        *b_debug_pf_svprob;   //!
    TBranch        *b_debug_pf_svprob_match;   //!
+   TBranch        *b_iHLT_Mu12_IP6;   //!
+   TBranch        *b_iHLT_Mu9_IP6;   //!
    TBranch        *b_theEvent;   //!
    TBranch        *b_rho;   //!
    TBranch        *b_goodBSize;   //!
@@ -189,11 +232,22 @@ public :
    TBranch        *b_goodTrueBs_bestCos2d_dRmin;   //!
    TBranch        *b_goodTrueBs_bestPtsum_dRmin;   //!
    TBranch        *b_goodTrueBs_bestKpt_dRmin;   //!
+   TBranch        *b_bestMatch_Bmass;   //!
    TBranch        *b_bestMatch_SvProb;   //!
    TBranch        *b_bestMatch_XYSig;   //!
    TBranch        *b_bestMatch_Cos2D;   //!
    TBranch        *b_bestMatch_PtSum;   //!
    TBranch        *b_bestMatch_KPt;   //!
+   TBranch        *b_bestMatch_KEta;   //!
+   TBranch        *b_bestMatch_Ele1Pt;   //!
+   TBranch        *b_bestMatch_Ele2Pt;   //!
+   TBranch        *b_bestMatch_MinPt;   //!
+   TBranch        *b_bestMatch_Ele1Eta;   //!
+   TBranch        *b_bestMatch_Ele2Eta;   //!
+   TBranch        *b_bestMatch_Ele1pfmva;   //!
+   TBranch        *b_bestMatch_Ele2pfmva;   //!
+   TBranch        *b_bestMatch_Ele1lptmva;   //!
+   TBranch        *b_bestMatch_Ele2lptmva;   //!
    TBranch        *b_bestMatch_maxDrRecoGen;   //!
    TBranch        *b_bestMatch_minDrRecoGen;   //!
    TBranch        *b_bestMatch_drRecoGenK;   //!
@@ -207,6 +261,19 @@ public :
    TBranch        *b_goodCombB_cos2D;   //!
    TBranch        *b_goodCombB_ptsum;   //!
    TBranch        *b_goodCombB_kpt;   //!
+   TBranch        *b_goodCombB_keta;   //!
+   TBranch        *b_goodCombB_ele1pt;   //!
+   TBranch        *b_goodCombB_ele2pt;   //!
+   TBranch        *b_goodCombB_minpt;   //!
+   TBranch        *b_goodCombB_ele1eta;   //!
+   TBranch        *b_goodCombB_ele2eta;   //!
+   TBranch        *b_goodCombB_ele1pfmva;   //!
+   TBranch        *b_goodCombB_ele2pfmva;   //!
+   TBranch        *b_goodCombB_ele1lptmva;   //!
+   TBranch        *b_goodCombB_ele2lptmva;   //!
+   TBranch        *b_goodCombB_causeEle1;   //!
+   TBranch        *b_goodCombB_causeEle2;   //!
+   TBranch        *b_goodCombB_causeK;   //!
    TBranch        *b_goodCombB_maxDrRecoGen;   //!
    TBranch        *b_goodCombB_minDrRecoGen;   //!
    TBranch        *b_goodCombB_drRecoGenK;   //!
@@ -219,6 +286,9 @@ public :
    TBranch        *b_combToBestB_minDrRecoGen;   //!
    TBranch        *b_combToBestB_drRecoGenK;   //!
    TBranch        *b_bestSvProbMatch;   //!
+   TBranch        *b_bestSvProbMatchCat0;   //!
+   TBranch        *b_bestSvProbMatchCat1;   //!
+   TBranch        *b_bestSvProbMatchCat2;   //!
    TBranch        *b_bestSvProbMatch_causeEle1;   //!
    TBranch        *b_bestSvProbMatch_causeEle2;   //!
    TBranch        *b_bestSvProbMatch_causeK;   //!
@@ -235,12 +305,16 @@ public :
    TBranch        *b_bestSvProbMatch_ok_ele2eta;   //!
    TBranch        *b_bestSvProbMatch_ok_keta;   //!
    TBranch        *b_bestXYsigMatch;   //!
+   TBranch        *b_bestXYsigMatchCat0;   //!
+   TBranch        *b_bestXYsigMatchCat1;   //!
+   TBranch        *b_bestXYsigMatchCat2;   //!
    TBranch        *b_bestXYsigMatch_causeEle1;   //!
    TBranch        *b_bestXYsigMatch_causeEle2;   //!
    TBranch        *b_bestXYsigMatch_causeK;   //!
    TBranch        *b_bestXYsigMatch_notok_ele1pt;   //!
    TBranch        *b_bestXYsigMatch_notok_ele2pt;   //!
    TBranch        *b_bestXYsigMatch_notok_kpt;   //!
+   TBranch        *b_bestXYsigMatch_notok_minpt;   //!
    TBranch        *b_bestXYsigMatch_notok_ele1eta;   //!
    TBranch        *b_bestXYsigMatch_notok_ele2eta;   //!
    TBranch        *b_bestXYsigMatch_notok_keta;   //!
@@ -248,9 +322,13 @@ public :
    TBranch        *b_bestXYsigMatch_notok_pfmva2;   //!
    TBranch        *b_bestXYsigMatch_notok_lptmva1;   //!
    TBranch        *b_bestXYsigMatch_notok_lptmva2;   //!
+   TBranch        *b_bestXYsigMatch_notok_costhetaSK;   //!
+   TBranch        *b_bestXYsigMatch_notok_costhetaSKCS;   //!
+   TBranch        *b_bestXYsigMatch_notok_costhetaL;   //!
    TBranch        *b_bestXYsigMatch_ok_ele1pt;   //!
    TBranch        *b_bestXYsigMatch_ok_ele2pt;   //!
    TBranch        *b_bestXYsigMatch_ok_kpt;   //!
+   TBranch        *b_bestXYsigMatch_ok_minpt;   //!
    TBranch        *b_bestXYsigMatch_ok_ele1eta;   //!
    TBranch        *b_bestXYsigMatch_ok_ele2eta;   //!
    TBranch        *b_bestXYsigMatch_ok_keta;   //!
@@ -258,6 +336,10 @@ public :
    TBranch        *b_bestXYsigMatch_ok_pfmva2;   //!
    TBranch        *b_bestXYsigMatch_ok_lptmva1;   //!
    TBranch        *b_bestXYsigMatch_ok_lptmva2;   //!
+   TBranch        *b_bestXYsigMatch_ok_costhetaSK;   //!
+   TBranch        *b_bestXYsigMatch_ok_costhetaSKCS;   //!
+   TBranch        *b_bestXYsigMatch_ok_costhetaL;   //!
+   TBranch        *b_bestXYsigMatch_ok_costhetaSK_gen;   //!
    TBranch        *b_bestCos2DMatch;   //!
    TBranch        *b_bestCos2DMatch_causeEle1;   //!
    TBranch        *b_bestCos2DMatch_causeEle2;   //!
@@ -302,9 +384,9 @@ plotsTriplets::plotsTriplets(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("BuToKJpsi_Toee_BParkNANO_mc_2020Jan16.txt.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("BuToKee_Toee_BParkNANO_mc_2020Jan16__noTagli_k07.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("BuToKJpsi_Toee_BParkNANO_mc_2020Jan16.txt.root");
+         f = new TFile("BuToKee_Toee_BParkNANO_mc_2020Jan16__noTagli_k07.root");
       }
       f->GetObject("TaPtree",tree);
 
@@ -373,6 +455,19 @@ void plotsTriplets::Init(TTree *tree)
    goodCombB_cos2D = 0;
    goodCombB_ptsum = 0;
    goodCombB_kpt = 0;
+   goodCombB_keta = 0;
+   goodCombB_ele1pt = 0;
+   goodCombB_ele2pt = 0;
+   goodCombB_minpt = 0;
+   goodCombB_ele1eta = 0;
+   goodCombB_ele2eta = 0;
+   goodCombB_ele1pfmva = 0;
+   goodCombB_ele2pfmva = 0;
+   goodCombB_ele1lptmva = 0;
+   goodCombB_ele2lptmva = 0;
+   goodCombB_causeEle1 = 0;
+   goodCombB_causeEle2 = 0;
+   goodCombB_causeK = 0;
    goodCombB_maxDrRecoGen = 0;
    goodCombB_minDrRecoGen = 0;
    goodCombB_drRecoGenK = 0;
@@ -394,6 +489,8 @@ void plotsTriplets::Init(TTree *tree)
    fChain->SetBranchAddress("debug_svprob_match", &debug_svprob_match, &b_debug_svprob_match);
    fChain->SetBranchAddress("debug_pf_svprob", &debug_pf_svprob, &b_debug_pf_svprob);
    fChain->SetBranchAddress("debug_pf_svprob_match", &debug_pf_svprob_match, &b_debug_pf_svprob_match);
+   fChain->SetBranchAddress("iHLT_Mu12_IP6", &iHLT_Mu12_IP6, &b_iHLT_Mu12_IP6);
+   fChain->SetBranchAddress("iHLT_Mu9_IP6", &iHLT_Mu9_IP6, &b_iHLT_Mu9_IP6);
    fChain->SetBranchAddress("theEvent", &theEvent, &b_theEvent);
    fChain->SetBranchAddress("rho", &rho, &b_rho);
    fChain->SetBranchAddress("goodBSize", &goodBSize, &b_goodBSize);
@@ -425,11 +522,22 @@ void plotsTriplets::Init(TTree *tree)
    fChain->SetBranchAddress("goodTrueBs_bestCos2d_dRmin", &goodTrueBs_bestCos2d_dRmin, &b_goodTrueBs_bestCos2d_dRmin);
    fChain->SetBranchAddress("goodTrueBs_bestPtsum_dRmin", &goodTrueBs_bestPtsum_dRmin, &b_goodTrueBs_bestPtsum_dRmin);
    fChain->SetBranchAddress("goodTrueBs_bestKpt_dRmin", &goodTrueBs_bestKpt_dRmin, &b_goodTrueBs_bestKpt_dRmin);
+   fChain->SetBranchAddress("bestMatch_Bmass", &bestMatch_Bmass, &b_bestMatch_Bmass);
    fChain->SetBranchAddress("bestMatch_SvProb", &bestMatch_SvProb, &b_bestMatch_SvProb);
    fChain->SetBranchAddress("bestMatch_XYSig", &bestMatch_XYSig, &b_bestMatch_XYSig);
    fChain->SetBranchAddress("bestMatch_Cos2D", &bestMatch_Cos2D, &b_bestMatch_Cos2D);
    fChain->SetBranchAddress("bestMatch_PtSum", &bestMatch_PtSum, &b_bestMatch_PtSum);
    fChain->SetBranchAddress("bestMatch_KPt", &bestMatch_KPt, &b_bestMatch_KPt);
+   fChain->SetBranchAddress("bestMatch_KEta", &bestMatch_KEta, &b_bestMatch_KEta);
+   fChain->SetBranchAddress("bestMatch_Ele1Pt", &bestMatch_Ele1Pt, &b_bestMatch_Ele1Pt);
+   fChain->SetBranchAddress("bestMatch_Ele2Pt", &bestMatch_Ele2Pt, &b_bestMatch_Ele2Pt);
+   fChain->SetBranchAddress("bestMatch_MinPt", &bestMatch_MinPt, &b_bestMatch_MinPt);
+   fChain->SetBranchAddress("bestMatch_Ele1Eta", &bestMatch_Ele1Eta, &b_bestMatch_Ele1Eta);
+   fChain->SetBranchAddress("bestMatch_Ele2Eta", &bestMatch_Ele2Eta, &b_bestMatch_Ele2Eta);
+   fChain->SetBranchAddress("bestMatch_Ele1pfmva", &bestMatch_Ele1pfmva, &b_bestMatch_Ele1pfmva);
+   fChain->SetBranchAddress("bestMatch_Ele2pfmva", &bestMatch_Ele2pfmva, &b_bestMatch_Ele2pfmva);
+   fChain->SetBranchAddress("bestMatch_Ele1lptmva", &bestMatch_Ele1lptmva, &b_bestMatch_Ele1lptmva);
+   fChain->SetBranchAddress("bestMatch_Ele2lptmva", &bestMatch_Ele2lptmva, &b_bestMatch_Ele2lptmva);
    fChain->SetBranchAddress("bestMatch_maxDrRecoGen", &bestMatch_maxDrRecoGen, &b_bestMatch_maxDrRecoGen);
    fChain->SetBranchAddress("bestMatch_minDrRecoGen", &bestMatch_minDrRecoGen, &b_bestMatch_minDrRecoGen);
    fChain->SetBranchAddress("bestMatch_drRecoGenK", &bestMatch_drRecoGenK, &b_bestMatch_drRecoGenK);
@@ -443,6 +551,19 @@ void plotsTriplets::Init(TTree *tree)
    fChain->SetBranchAddress("goodCombB_cos2D", &goodCombB_cos2D, &b_goodCombB_cos2D);
    fChain->SetBranchAddress("goodCombB_ptsum", &goodCombB_ptsum, &b_goodCombB_ptsum);
    fChain->SetBranchAddress("goodCombB_kpt", &goodCombB_kpt, &b_goodCombB_kpt);
+   fChain->SetBranchAddress("goodCombB_keta", &goodCombB_keta, &b_goodCombB_keta);
+   fChain->SetBranchAddress("goodCombB_ele1pt", &goodCombB_ele1pt, &b_goodCombB_ele1pt);
+   fChain->SetBranchAddress("goodCombB_ele2pt", &goodCombB_ele2pt, &b_goodCombB_ele2pt);
+   fChain->SetBranchAddress("goodCombB_minpt", &goodCombB_minpt, &b_goodCombB_minpt);
+   fChain->SetBranchAddress("goodCombB_ele1eta", &goodCombB_ele1eta, &b_goodCombB_ele1eta);
+   fChain->SetBranchAddress("goodCombB_ele2eta", &goodCombB_ele2eta, &b_goodCombB_ele2eta);
+   fChain->SetBranchAddress("goodCombB_ele1pfmva", &goodCombB_ele1pfmva, &b_goodCombB_ele1pfmva);
+   fChain->SetBranchAddress("goodCombB_ele2pfmva", &goodCombB_ele2pfmva, &b_goodCombB_ele2pfmva);
+   fChain->SetBranchAddress("goodCombB_ele1lptmva", &goodCombB_ele1lptmva, &b_goodCombB_ele1lptmva);
+   fChain->SetBranchAddress("goodCombB_ele2lptmva", &goodCombB_ele2lptmva, &b_goodCombB_ele2lptmva);
+   fChain->SetBranchAddress("goodCombB_causeEle1", &goodCombB_causeEle1, &b_goodCombB_causeEle1);
+   fChain->SetBranchAddress("goodCombB_causeEle2", &goodCombB_causeEle2, &b_goodCombB_causeEle2);
+   fChain->SetBranchAddress("goodCombB_causeK", &goodCombB_causeK, &b_goodCombB_causeK);
    fChain->SetBranchAddress("goodCombB_maxDrRecoGen", &goodCombB_maxDrRecoGen, &b_goodCombB_maxDrRecoGen);
    fChain->SetBranchAddress("goodCombB_minDrRecoGen", &goodCombB_minDrRecoGen, &b_goodCombB_minDrRecoGen);
    fChain->SetBranchAddress("goodCombB_drRecoGenK", &goodCombB_drRecoGenK, &b_goodCombB_drRecoGenK);
@@ -455,6 +576,9 @@ void plotsTriplets::Init(TTree *tree)
    fChain->SetBranchAddress("combToBestB_minDrRecoGen", &combToBestB_minDrRecoGen, &b_combToBestB_minDrRecoGen);
    fChain->SetBranchAddress("combToBestB_drRecoGenK", &combToBestB_drRecoGenK, &b_combToBestB_drRecoGenK);
    fChain->SetBranchAddress("bestSvProbMatch", &bestSvProbMatch, &b_bestSvProbMatch);
+   fChain->SetBranchAddress("bestSvProbMatchCat0", &bestSvProbMatchCat0, &b_bestSvProbMatchCat0);
+   fChain->SetBranchAddress("bestSvProbMatchCat1", &bestSvProbMatchCat1, &b_bestSvProbMatchCat1);
+   fChain->SetBranchAddress("bestSvProbMatchCat2", &bestSvProbMatchCat2, &b_bestSvProbMatchCat2);
    fChain->SetBranchAddress("bestSvProbMatch_causeEle1", &bestSvProbMatch_causeEle1, &b_bestSvProbMatch_causeEle1);
    fChain->SetBranchAddress("bestSvProbMatch_causeEle2", &bestSvProbMatch_causeEle2, &b_bestSvProbMatch_causeEle2);
    fChain->SetBranchAddress("bestSvProbMatch_causeK", &bestSvProbMatch_causeK, &b_bestSvProbMatch_causeK);
@@ -471,12 +595,16 @@ void plotsTriplets::Init(TTree *tree)
    fChain->SetBranchAddress("bestSvProbMatch_ok_ele2eta", &bestSvProbMatch_ok_ele2eta, &b_bestSvProbMatch_ok_ele2eta);
    fChain->SetBranchAddress("bestSvProbMatch_ok_keta", &bestSvProbMatch_ok_keta, &b_bestSvProbMatch_ok_keta);
    fChain->SetBranchAddress("bestXYsigMatch", &bestXYsigMatch, &b_bestXYsigMatch);
+   fChain->SetBranchAddress("bestXYsigMatchCat0", &bestXYsigMatchCat0, &b_bestXYsigMatchCat0);
+   fChain->SetBranchAddress("bestXYsigMatchCat1", &bestXYsigMatchCat1, &b_bestXYsigMatchCat1);
+   fChain->SetBranchAddress("bestXYsigMatchCat2", &bestXYsigMatchCat2, &b_bestXYsigMatchCat2);
    fChain->SetBranchAddress("bestXYsigMatch_causeEle1", &bestXYsigMatch_causeEle1, &b_bestXYsigMatch_causeEle1);
    fChain->SetBranchAddress("bestXYsigMatch_causeEle2", &bestXYsigMatch_causeEle2, &b_bestXYsigMatch_causeEle2);
    fChain->SetBranchAddress("bestXYsigMatch_causeK", &bestXYsigMatch_causeK, &b_bestXYsigMatch_causeK);
    fChain->SetBranchAddress("bestXYsigMatch_notok_ele1pt", &bestXYsigMatch_notok_ele1pt, &b_bestXYsigMatch_notok_ele1pt);
    fChain->SetBranchAddress("bestXYsigMatch_notok_ele2pt", &bestXYsigMatch_notok_ele2pt, &b_bestXYsigMatch_notok_ele2pt);
    fChain->SetBranchAddress("bestXYsigMatch_notok_kpt", &bestXYsigMatch_notok_kpt, &b_bestXYsigMatch_notok_kpt);
+   fChain->SetBranchAddress("bestXYsigMatch_notok_minpt", &bestXYsigMatch_notok_minpt, &b_bestXYsigMatch_notok_minpt);
    fChain->SetBranchAddress("bestXYsigMatch_notok_ele1eta", &bestXYsigMatch_notok_ele1eta, &b_bestXYsigMatch_notok_ele1eta);
    fChain->SetBranchAddress("bestXYsigMatch_notok_ele2eta", &bestXYsigMatch_notok_ele2eta, &b_bestXYsigMatch_notok_ele2eta);
    fChain->SetBranchAddress("bestXYsigMatch_notok_keta", &bestXYsigMatch_notok_keta, &b_bestXYsigMatch_notok_keta);
@@ -484,9 +612,13 @@ void plotsTriplets::Init(TTree *tree)
    fChain->SetBranchAddress("bestXYsigMatch_notok_pfmva2", &bestXYsigMatch_notok_pfmva2, &b_bestXYsigMatch_notok_pfmva2);
    fChain->SetBranchAddress("bestXYsigMatch_notok_lptmva1", &bestXYsigMatch_notok_lptmva1, &b_bestXYsigMatch_notok_lptmva1);
    fChain->SetBranchAddress("bestXYsigMatch_notok_lptmva2", &bestXYsigMatch_notok_lptmva2, &b_bestXYsigMatch_notok_lptmva2);
+   fChain->SetBranchAddress("bestXYsigMatch_notok_costhetaSK", &bestXYsigMatch_notok_costhetaSK, &b_bestXYsigMatch_notok_costhetaSK);
+   fChain->SetBranchAddress("bestXYsigMatch_notok_costhetaSKCS", &bestXYsigMatch_notok_costhetaSKCS, &b_bestXYsigMatch_notok_costhetaSKCS);
+   fChain->SetBranchAddress("bestXYsigMatch_notok_costhetaL", &bestXYsigMatch_notok_costhetaL, &b_bestXYsigMatch_notok_costhetaL);
    fChain->SetBranchAddress("bestXYsigMatch_ok_ele1pt", &bestXYsigMatch_ok_ele1pt, &b_bestXYsigMatch_ok_ele1pt);
    fChain->SetBranchAddress("bestXYsigMatch_ok_ele2pt", &bestXYsigMatch_ok_ele2pt, &b_bestXYsigMatch_ok_ele2pt);
    fChain->SetBranchAddress("bestXYsigMatch_ok_kpt", &bestXYsigMatch_ok_kpt, &b_bestXYsigMatch_ok_kpt);
+   fChain->SetBranchAddress("bestXYsigMatch_ok_minpt", &bestXYsigMatch_ok_minpt, &b_bestXYsigMatch_ok_minpt);
    fChain->SetBranchAddress("bestXYsigMatch_ok_ele1eta", &bestXYsigMatch_ok_ele1eta, &b_bestXYsigMatch_ok_ele1eta);
    fChain->SetBranchAddress("bestXYsigMatch_ok_ele2eta", &bestXYsigMatch_ok_ele2eta, &b_bestXYsigMatch_ok_ele2eta);
    fChain->SetBranchAddress("bestXYsigMatch_ok_keta", &bestXYsigMatch_ok_keta, &b_bestXYsigMatch_ok_keta);
@@ -494,6 +626,10 @@ void plotsTriplets::Init(TTree *tree)
    fChain->SetBranchAddress("bestXYsigMatch_ok_pfmva2", &bestXYsigMatch_ok_pfmva2, &b_bestXYsigMatch_ok_pfmva2);
    fChain->SetBranchAddress("bestXYsigMatch_ok_lptmva1", &bestXYsigMatch_ok_lptmva1, &b_bestXYsigMatch_ok_lptmva1);
    fChain->SetBranchAddress("bestXYsigMatch_ok_lptmva2", &bestXYsigMatch_ok_lptmva2, &b_bestXYsigMatch_ok_lptmva2);
+   fChain->SetBranchAddress("bestXYsigMatch_ok_costhetaSK", &bestXYsigMatch_ok_costhetaSK, &b_bestXYsigMatch_ok_costhetaSK);
+   fChain->SetBranchAddress("bestXYsigMatch_ok_costhetaSKCS", &bestXYsigMatch_ok_costhetaSKCS, &b_bestXYsigMatch_ok_costhetaSKCS);
+   fChain->SetBranchAddress("bestXYsigMatch_ok_costhetaL", &bestXYsigMatch_ok_costhetaL, &b_bestXYsigMatch_ok_costhetaL);
+   fChain->SetBranchAddress("bestXYsigMatch_ok_costhetaSK_gen", &bestXYsigMatch_ok_costhetaSK_gen, &b_bestXYsigMatch_ok_costhetaSK_gen);
    fChain->SetBranchAddress("bestCos2DMatch", &bestCos2DMatch, &b_bestCos2DMatch);
    fChain->SetBranchAddress("bestCos2DMatch_causeEle1", &bestCos2DMatch_causeEle1, &b_bestCos2DMatch_causeEle1);
    fChain->SetBranchAddress("bestCos2DMatch_causeEle2", &bestCos2DMatch_causeEle2, &b_bestCos2DMatch_causeEle2);
