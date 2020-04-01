@@ -28,6 +28,7 @@ private:
   
   // Analysis methods
   bool isMcB( int myB );
+  int whichMcB( int myB );
   float dRgen( int myB ); 
   float dRRecoGenEle( int theRecoEle );
   float dRRecoGenK( int theRecoK );
@@ -137,6 +138,7 @@ private:
   vector<float> goodCombB_causeEle1={};
   vector<float> goodCombB_causeEle2={};
   vector<float> goodCombB_causeK={};
+  vector<int>   goodCombB_notmatching={};
   vector<float> goodCombB_maxDrRecoGen={};
   vector<float> goodCombB_minDrRecoGen={};
   vector<float> goodCombB_drRecoGenK={};
@@ -151,12 +153,20 @@ private:
   vector<float> combToBestB_drRecoGenK={};
   //
   int bestSvProbMatch;
+  int bestSvProbMatch_second;
+  int bestSvProbMatch_notmatching;
   int bestSvProbMatchCat0;
   int bestSvProbMatchCat1;
   int bestSvProbMatchCat2;
+  int bestSvProbMatchCat0_second;
+  int bestSvProbMatchCat1_second;
+  int bestSvProbMatchCat2_second;
   int bestSvProbMatchCatNew0;
   int bestSvProbMatchCatNew1;
   int bestSvProbMatchCatNew2;
+  int bestSvProbMatchCatNew0_second;
+  int bestSvProbMatchCatNew1_second;
+  int bestSvProbMatchCatNew2_second;
   int bestSvProbMatch_causeEle1;
   int bestSvProbMatch_causeEle2;
   int bestSvProbMatch_causeK;
@@ -174,12 +184,20 @@ private:
   float bestSvProbMatch_ok_keta;
 
   int bestXYsigMatch;
+  int bestXYsigMatch_second;
+  int bestXYsigMatch_notmatching;
   int bestXYsigMatchCat0;
   int bestXYsigMatchCat1;
   int bestXYsigMatchCat2;
+  int bestXYsigMatchCat0_second;
+  int bestXYsigMatchCat1_second;
+  int bestXYsigMatchCat2_second;
   int bestXYsigMatchCatNew0;
   int bestXYsigMatchCatNew1;
   int bestXYsigMatchCatNew2;
+  int bestXYsigMatchCatNew0_second;
+  int bestXYsigMatchCatNew1_second;
+  int bestXYsigMatchCatNew2_second;
   int bestXYsigMatch_causeEle1;
   int bestXYsigMatch_causeEle2;
   int bestXYsigMatch_causeK;
@@ -229,6 +247,9 @@ private:
   float bestCos2DMatch_ok_ele1eta;
   float bestCos2DMatch_ok_ele2eta;
   float bestCos2DMatch_ok_keta;
+
+  int numberBetterSvProbTriplets;
+  int numberBetterXYsigTriplets;
 
   int bestPtSumMatch;
   int bestPtSumMatch_causeEle1;

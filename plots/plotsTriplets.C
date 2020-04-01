@@ -61,17 +61,15 @@ void plotsTriplets::Loop()
   TH1F *h_trueBestMatch_BmassPFPF = new TH1F("h_trueBestMatch_BmassPFPF",  "h_trueBestMatch_BmassPFPF",  50, 4.5, 5.7);
   TH1F *h_trueBestMatch_BmassPFLP = new TH1F("h_trueBestMatch_BmassPFLP",  "h_trueBestMatch_BmassPFLP",  50, 4.5, 5.7);
   TH1F *h_trueBestMatch_BmassLPLP = new TH1F("h_trueBestMatch_BmassLPLP",  "h_trueBestMatch_BmassLPLP",  50, 4.5, 5.7);
-  TH1F *h_trueBestMatch_BmassPFLP_ptgt2 = new TH1F("h_trueBestMatch_BmassPFLP_ptgt2",  "h_trueBestMatch_BmassPFLP_ptgt2",  50, 4.5, 5.7);
-  TH1F *h_trueBestMatch_BmassPFLP_ptlt2 = new TH1F("h_trueBestMatch_BmassPFLP_ptlt2",  "h_trueBestMatch_BmassPFLP_ptlt2",  50, 4.5, 5.7);  
-  TH1F *h_trueBestMatch_BmassLPLP_ptgt2 = new TH1F("h_trueBestMatch_BmassLPLP_ptgt2",  "h_trueBestMatch_BmassLPLP_ptgt2",  50, 4.5, 5.7);
-  TH1F *h_trueBestMatch_BmassLPLP_ptlt2 = new TH1F("h_trueBestMatch_BmassLPLP_ptlt2",  "h_trueBestMatch_BmassLPLP_ptlt2",  50, 4.5, 5.7);
+  //
+  TH1F *h_trueBestMatch_Bmass_PFPForPFLP_ele2PF    = new TH1F("h_trueBestMatch_Bmass_PFPForPFLP_ele2PF",    "h_trueBestMatch_Bmass_PFPForPFLP_ele2PF",    50, 4.5, 5.7);
+  TH1F *h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2 = new TH1F("h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2", "h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2", 50, 4.5, 5.7);
+  TH1F *h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2 = new TH1F("h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2", "h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2", 50, 4.5, 5.7);
+  //
   TH1F *h_trueBestMatch_BmassPFLP_idgt2 = new TH1F("h_trueBestMatch_BmassPFLP_idgt2",  "h_trueBestMatch_BmassPFLP_idgt2",  50, 4.5, 5.7);
   TH1F *h_trueBestMatch_BmassPFLP_idlt2 = new TH1F("h_trueBestMatch_BmassPFLP_idlt2",  "h_trueBestMatch_BmassPFLP_idlt2",  50, 4.5, 5.7);  
   TH1F *h_trueBestMatch_BmassLPLP_idgt2 = new TH1F("h_trueBestMatch_BmassLPLP_idgt2",  "h_trueBestMatch_BmassLPLP_idgt2",  50, 4.5, 5.7);
   TH1F *h_trueBestMatch_BmassLPLP_idlt2 = new TH1F("h_trueBestMatch_BmassLPLP_idlt2",  "h_trueBestMatch_BmassLPLP_idlt2",  50, 4.5, 5.7);
-  TH1F *h_trueBestMatch_Bmass_PFPForPFLP_ele2PF    = new TH1F("h_trueBestMatch_Bmass_PFPForPFLP_ele2PF",    "h_trueBestMatch_Bmass_PFPForPFLP_ele2PF",    50, 4.5, 5.7);
-  TH1F *h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2 = new TH1F("h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2", "h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2", 50, 4.5, 5.7);
-  TH1F *h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2 = new TH1F("h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2", "h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2", 50, 4.5, 5.7);
 
   TH1F *h_comb_svProb   = new TH1F("h_comb_svProb", "h_comb_svProb", 100, -0.01, 1.01);
   TH1F *h_comb_xysig    = new TH1F("h_comb_xysig",  "h_comb_xysig",  50,  0., 100.);
@@ -125,6 +123,7 @@ void plotsTriplets::Loop()
   TH1F *hz_svProbM_ok_ele1pt    = new TH1F("hz_svProbM_ok_ele1pt",   "hz_svProbM_ok_ele1pt",    50, 0.,10.);
   TH1F *hz_svProbM_ok_ele2pt    = new TH1F("hz_svProbM_ok_ele2pt",   "hz_svProbM_ok_ele2pt",    50, 0.,5.);
   TH1F *hz_svProbM_ok_kpt       = new TH1F("hz_svProbM_ok_kpt",      "hz_svProbM_ok_kpt",       50, 0.,5.);
+  TH1F *h_svProbM_notmatching   = new TH1F("h_svProbM_notmatching",  "h_svProbM_notmatching", 9, -1.5, 7.5);
 
   TH1F *h_xySigM_notok_ele1pt   = new TH1F("h_xySigM_notok_ele1pt",  "h_xySigM_notok_ele1pt",  60, 0.,30.);
   TH1F *h_xySigM_notok_ele2pt   = new TH1F("h_xySigM_notok_ele2pt",  "h_xySigM_notok_ele2pt",  60, 0.,30.);
@@ -163,6 +162,8 @@ void plotsTriplets::Loop()
   TH1F *hz_xySigM_ok_minpt      = new TH1F("hz_xySigM_ok_minpt",     "hz_xySigM_ok_minpt",     50, 0.,5.);
   TH2F *hz_xySigM_notok_ele2Vskpt = new TH2F("hz_xySigM_notok_ele2Vskpt", "hz_xySigM_noyok_ele2Vskpt", 50, 0.,5., 50, 0.,5.);
   TH2F *hz_xySigM_ok_ele2Vskpt    = new TH2F("hz_xySigM_ok_ele2Vskpt",    "hz_xySigM_ok_ele2Vskpt",    50, 0.,5., 50, 0.,5.);
+  TH1F *h_xySigM_notmatching   = new TH1F("h_xySigM_notmatching",  "h_xySigM_notmatching", 9, -1.5, 7.5);
+  TH1F *h_numberBetterXYsigTriplets = new TH1F("h_numberBetterXYsigTriplets", "h_numberBetterXYsigTriplets", 16, -0.5, 15.5);
 
   TH1F *h_cos2DM_notok_ele1pt   = new TH1F("h_cos2DM_notok_ele1pt",  "h_cos2DM_notok_ele1pt",  60, 0.,30.);
   TH1F *h_cos2DM_notok_ele2pt   = new TH1F("h_cos2DM_notok_ele2pt",  "h_cos2DM_notok_ele2pt",  60, 0.,30.);
@@ -241,20 +242,15 @@ void plotsTriplets::Loop()
       if (is1pf && is2pf)                           h_trueBestMatch_BmassPFPF -> Fill(bestMatch_Bmass);
       if ( (is1pf && !is2pf) || (is2pf && !is1pf) ) h_trueBestMatch_BmassPFLP -> Fill(bestMatch_Bmass);
       if (!is1pf && !is2pf)                         h_trueBestMatch_BmassLPLP -> Fill(bestMatch_Bmass);
-      // various checks
-      if ( (is1pf && !is2pf && bestMatch_Ele2Pt<2) || (is2pf && !is1pf && bestMatch_Ele1Pt<2) ) h_trueBestMatch_BmassPFLP_ptlt2 -> Fill(bestMatch_Bmass);
-      if ( (is1pf && !is2pf && bestMatch_Ele2Pt>2) || (is2pf && !is1pf && bestMatch_Ele1Pt>2) ) h_trueBestMatch_BmassPFLP_ptgt2 -> Fill(bestMatch_Bmass);
-      if ( !is1pf && !is2pf && bestMatch_Ele1Pt<2 && bestMatch_Ele2Pt<2) h_trueBestMatch_BmassLPLP_ptlt2 -> Fill(bestMatch_Bmass);
-      if ( !is1pf && !is2pf && bestMatch_Ele1Pt>2 && bestMatch_Ele2Pt>2) h_trueBestMatch_BmassLPLP_ptgt2 -> Fill(bestMatch_Bmass);
-      //
-      if ( (is1pf && bestMatch_Ele2lptmva<2) || (is2pf && bestMatch_Ele1lptmva<2) ) h_trueBestMatch_BmassPFLP_idlt2 -> Fill(bestMatch_Bmass);
+      // alternative cat 
+      if (is2pf) h_trueBestMatch_Bmass_PFPForPFLP_ele2PF -> Fill(bestMatch_Bmass);                                // PFPF o PFLP con leading lowPT
+      if (!is2pf && bestMatch_Ele2lptmva>2) h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2 -> Fill(bestMatch_Bmass);  // PFLP/LPLP con subleading LP e id>2     
+      if (!is2pf && bestMatch_Ele2lptmva<2) h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2 -> Fill(bestMatch_Bmass);  // PFLP/LPLP con subleading LP e id<2 
+      // impact of 2nd ele ID
+      if ( (is1pf && !is2pf && bestMatch_Ele2lptmva<2) || (is2pf && !is1pf && bestMatch_Ele1lptmva<2) ) h_trueBestMatch_BmassPFLP_idlt2 -> Fill(bestMatch_Bmass);
       if ( (is1pf && !is2pf && bestMatch_Ele2lptmva>2) || (is2pf && !is1pf && bestMatch_Ele1lptmva>2) ) h_trueBestMatch_BmassPFLP_idgt2 -> Fill(bestMatch_Bmass);
       if (!is1pf && !is2pf && bestMatch_Ele2lptmva<2) h_trueBestMatch_BmassLPLP_idlt2 -> Fill(bestMatch_Bmass);
       if (!is1pf && !is2pf && bestMatch_Ele2lptmva>2) h_trueBestMatch_BmassLPLP_idgt2 -> Fill(bestMatch_Bmass);
-      // PFPF o PFLP con leading lowPT; PFLP/LPLP con subleading LP e pT>2; PFLP/LPLP con subleading LP e pT<2  
-      if (is2pf) h_trueBestMatch_Bmass_PFPForPFLP_ele2PF -> Fill(bestMatch_Bmass);                            // PFPF o PFLP con leading lowPT
-      if (!is2pf && bestMatch_Ele2Pt>2) h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2 -> Fill(bestMatch_Bmass);  // PFLP/LPLP con subleading LP e pT>2     
-      if (!is2pf && bestMatch_Ele2Pt<2) h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2 -> Fill(bestMatch_Bmass);  // PFLP/LPLP con subleading LP e pT<2 
       //
       //
       h_trueBestMatch_svProb   -> Fill(bestMatch_SvProb);
@@ -342,6 +338,7 @@ void plotsTriplets::Loop()
     if (bestSvProbMatch_ok_ele1pt>-990)     hz_svProbM_ok_ele1pt    -> Fill(bestSvProbMatch_ok_ele1pt);
     if (bestSvProbMatch_ok_ele2pt>-990)     hz_svProbM_ok_ele2pt    -> Fill(bestSvProbMatch_ok_ele2pt);
     if (bestSvProbMatch_ok_kpt>-990)        hz_svProbM_ok_kpt       -> Fill(bestSvProbMatch_ok_kpt);
+    if (bestSvProbMatch_notmatching>-990)   h_svProbM_notmatching   -> Fill(bestSvProbMatch_notmatching);
 
     // offline criteria: bad vs good
     if (bestXYsigMatch_notok_ele1pt>-990)  h_xySigM_notok_ele1pt  -> Fill(bestXYsigMatch_notok_ele1pt);
@@ -389,6 +386,8 @@ void plotsTriplets::Loop()
       if (bestXYsigMatch_ok_ele2pt<bestXYsigMatch_ok_kpt)  hz_xySigM_ok_minpt -> Fill(bestXYsigMatch_ok_ele2pt);
       if (bestXYsigMatch_ok_ele2pt>=bestXYsigMatch_ok_kpt) hz_xySigM_ok_minpt -> Fill(bestXYsigMatch_ok_kpt);
     }
+    if (bestXYsigMatch_notmatching>-990) h_xySigM_notmatching -> Fill(bestXYsigMatch_notmatching);
+    if (numberBetterXYsigTriplets>-999) h_numberBetterXYsigTriplets -> Fill(numberBetterXYsigTriplets);
 
     // offline criteria: bad vs good
     if (bestCos2DMatch_notok_ele1pt>-990)  h_cos2DM_notok_ele1pt  -> Fill(bestCos2DMatch_notok_ele1pt);
@@ -547,12 +546,8 @@ void plotsTriplets::Loop()
   h_trueBestMatch_BmassPFLP       -> SetLineColor(3);
   h_trueBestMatch_BmassLPLP       -> SetLineColor(4);
   h_trueBestMatch_Bmass_PFPForPFLP_ele2PF    -> SetLineColor(2);
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2 -> SetLineColor(3);
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2 -> SetLineColor(4);
-  h_trueBestMatch_BmassPFLP_ptgt2 -> SetLineColor(5);
-  h_trueBestMatch_BmassPFLP_ptlt2 -> SetLineColor(6);
-  h_trueBestMatch_BmassLPLP_ptgt2 -> SetLineColor(7);
-  h_trueBestMatch_BmassLPLP_ptlt2 -> SetLineColor(8);
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2 -> SetLineColor(3);
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2 -> SetLineColor(4);
   h_trueBestMatch_BmassPFLP_idgt2 -> SetLineColor(5);
   h_trueBestMatch_BmassPFLP_idlt2 -> SetLineColor(6);
   h_trueBestMatch_BmassLPLP_idgt2 -> SetLineColor(7);
@@ -562,12 +557,8 @@ void plotsTriplets::Loop()
   h_trueBestMatch_BmassPFLP       -> SetLineWidth(2);
   h_trueBestMatch_BmassLPLP       -> SetLineWidth(2);
   h_trueBestMatch_Bmass_PFPForPFLP_ele2PF    -> SetLineWidth(2);
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2 -> SetLineWidth(2);
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2 -> SetLineWidth(2);
-  h_trueBestMatch_BmassPFLP_ptgt2 -> SetLineWidth(2);
-  h_trueBestMatch_BmassPFLP_ptlt2 -> SetLineWidth(2);
-  h_trueBestMatch_BmassLPLP_ptgt2 -> SetLineWidth(2);
-  h_trueBestMatch_BmassLPLP_ptlt2 -> SetLineWidth(2);
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2 -> SetLineWidth(2);
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2 -> SetLineWidth(2);
   h_trueBestMatch_BmassPFLP_idgt2 -> SetLineWidth(2);
   h_trueBestMatch_BmassPFLP_idlt2 -> SetLineWidth(2);
   h_trueBestMatch_BmassLPLP_idgt2 -> SetLineWidth(2);
@@ -577,12 +568,8 @@ void plotsTriplets::Loop()
   h_trueBestMatch_BmassPFLP       -> GetXaxis()->SetTitle("B mass");
   h_trueBestMatch_BmassLPLP       -> GetXaxis()->SetTitle("B mass");
   h_trueBestMatch_Bmass_PFPForPFLP_ele2PF    -> GetXaxis()->SetTitle("B mass");
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2 -> GetXaxis()->SetTitle("B mass");
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2 -> GetXaxis()->SetTitle("B mass");
-  h_trueBestMatch_BmassPFLP_ptgt2 -> GetXaxis()->SetTitle("B mass");
-  h_trueBestMatch_BmassPFLP_ptlt2 -> GetXaxis()->SetTitle("B mass");
-  h_trueBestMatch_BmassLPLP_ptgt2 -> GetXaxis()->SetTitle("B mass");
-  h_trueBestMatch_BmassLPLP_ptlt2 -> GetXaxis()->SetTitle("B mass");
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2 -> GetXaxis()->SetTitle("B mass");
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2 -> GetXaxis()->SetTitle("B mass");
   h_trueBestMatch_BmassPFLP_idgt2 -> GetXaxis()->SetTitle("B mass");
   h_trueBestMatch_BmassPFLP_idlt2 -> GetXaxis()->SetTitle("B mass");
   h_trueBestMatch_BmassLPLP_idgt2 -> GetXaxis()->SetTitle("B mass");
@@ -592,12 +579,8 @@ void plotsTriplets::Loop()
   h_trueBestMatch_BmassPFLP       -> SetTitle("");
   h_trueBestMatch_BmassLPLP       -> SetTitle("");
   h_trueBestMatch_Bmass_PFPForPFLP_ele2PF    -> SetTitle("");
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2 -> SetTitle("");
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2 -> SetTitle("");
-  h_trueBestMatch_BmassPFLP_ptgt2 -> SetTitle("");
-  h_trueBestMatch_BmassPFLP_ptlt2 -> SetTitle("");
-  h_trueBestMatch_BmassLPLP_ptgt2 -> SetTitle("");
-  h_trueBestMatch_BmassLPLP_ptlt2 -> SetTitle("");
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2 -> SetTitle("");
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2 -> SetTitle("");
   h_trueBestMatch_BmassPFLP_idgt2 -> SetTitle("");
   h_trueBestMatch_BmassPFLP_idlt2 -> SetTitle("");
   h_trueBestMatch_BmassLPLP_idgt2 -> SetTitle("");
@@ -619,81 +602,17 @@ void plotsTriplets::Loop()
 
   TCanvas c00aa("c00aa","",1);
   h_trueBestMatch_Bmass_PFPForPFLP_ele2PF    -> DrawNormalized(); 
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2 -> DrawNormalized("same");
-  h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2 -> DrawNormalized("same");
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2 -> DrawNormalized("same");
+  h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2 -> DrawNormalized("same");
   TLegend leg00aa (0.15,0.7,0.45,0.9);
   leg00aa.SetFillColor(0);
   leg00aa.SetFillStyle(0);
   leg00aa.SetBorderSize(0);
   leg00aa.AddEntry(h_trueBestMatch_Bmass_PFPForPFLP_ele2PF,   "ele2 PF");
-  leg00aa.AddEntry(h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtGt2,"ele2 LP, pT2>2");
-  leg00aa.AddEntry(h_trueBestMatch_Bmass_PFLPorLPLP_ele2PtLt2,"ele2 LP, pT2<2");
+  leg00aa.AddEntry(h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdGt2,"ele2 LP, eleID>2");
+  leg00aa.AddEntry(h_trueBestMatch_Bmass_PFLPorLPLP_ele2IdLt2,"ele2 LP, eleID<2");
   leg00aa.Draw();
   c00aa.SaveAs("Bmass_catNew.png");
-
-  TCanvas c00b("c00b","",1);
-  h_trueBestMatch_BmassPFPF       -> DrawNormalized(); 
-  h_trueBestMatch_BmassPFLP_ptgt2 -> DrawNormalized("same"); 
-  h_trueBestMatch_BmassLPLP_ptgt2 -> DrawNormalized("same"); 
-  TLegend leg00b (0.15,0.7,0.45,0.9);
-  leg00b.SetFillColor(0);
-  leg00b.SetFillStyle(0);
-  leg00b.SetBorderSize(0);
-  leg00b.AddEntry(h_trueBestMatch_BmassPFPF,"PF-PF");
-  leg00b.AddEntry(h_trueBestMatch_BmassPFLP_ptgt2,"PF - LPwithPt>2");
-  leg00b.AddEntry(h_trueBestMatch_BmassLPLP_ptgt2,"LPwithPt>2 - LPwithPt>2");
-  leg00b.Draw();
-  c00b.SaveAs("Bmass_ptgt2.png");
-
-  TCanvas c00b2("c00b2","",1);
-  h_trueBestMatch_BmassPFPF       -> DrawNormalized(); 
-  h_trueBestMatch_BmassPFLP_idgt2 -> DrawNormalized("same"); 
-  h_trueBestMatch_BmassLPLP_idgt2 -> DrawNormalized("same"); 
-  TLegend leg00b2 (0.15,0.7,0.45,0.9);
-  leg00b2.SetFillColor(0);
-  leg00b2.SetFillStyle(0);
-  leg00b2.SetBorderSize(0);
-  leg00b2.AddEntry(h_trueBestMatch_BmassPFPF,"PF-PF");
-  leg00b2.AddEntry(h_trueBestMatch_BmassPFLP_idgt2,"PF - LPwithMva>2");
-  leg00b2.AddEntry(h_trueBestMatch_BmassLPLP_idgt2,"LPwithMva>2 - LPwithMva>2");
-  leg00b2.Draw();
-  c00b2.SaveAs("Bmass_idgt2.png");
-
-  TCanvas c00c("c00c","",1);
-  h_trueBestMatch_BmassLPLP       -> DrawNormalized(); 
-  h_trueBestMatch_BmassLPLP_ptlt2 -> DrawNormalized("same"); 
-  TLegend leg00c (0.15,0.7,0.45,0.9);
-  leg00c.SetFillColor(0);
-  leg00c.SetFillStyle(0);
-  leg00c.SetBorderSize(0);
-  leg00c.AddEntry(h_trueBestMatch_BmassLPLP,"LP-LP");
-  leg00c.AddEntry(h_trueBestMatch_BmassLPLP_ptlt2,"LPwithPt>2 - LPwithPt>2");
-  leg00c.Draw();
-  c00c.SaveAs("Bmass_ptlt2.png");
-
-  TCanvas c00c2("c00c2","",1);
-  h_trueBestMatch_BmassLPLP       -> DrawNormalized(); 
-  h_trueBestMatch_BmassLPLP_idlt2 -> DrawNormalized("same"); 
-  TLegend leg00c2(0.15,0.7,0.45,0.9);
-  leg00c2.SetFillColor(0);
-  leg00c2.SetFillStyle(0);
-  leg00c2.SetBorderSize(0);
-  leg00c2.AddEntry(h_trueBestMatch_BmassLPLP,"LP-LP");
-  leg00c2.AddEntry(h_trueBestMatch_BmassLPLP_idlt2,"LPwithMva>2 - LPwithMva>2");
-  leg00c2.Draw();
-  c00c2.SaveAs("Bmass_idlt2.png");
-
-  TCanvas c00d("c00d","",1);
-  h_trueBestMatch_BmassPFLP_ptlt2 -> DrawNormalized(); 
-  h_trueBestMatch_BmassPFLP_ptgt2 -> DrawNormalized("same"); 
-  TLegend leg00d (0.15,0.7,0.45,0.9);
-  leg00d.SetFillColor(0);
-  leg00d.SetFillStyle(0);
-  leg00d.SetBorderSize(0);
-  leg00d.AddEntry(h_trueBestMatch_BmassPFLP_ptgt2,"PF-LP, LPwithPt>2");
-  leg00d.AddEntry(h_trueBestMatch_BmassPFLP_ptlt2,"PF-LP, LPwithPt<2");
-  leg00d.Draw();
-  c00d.SaveAs("Bmass_PFLP_ptsplit.png");
 
   TCanvas c00d2("c00d2","",1);
   h_trueBestMatch_BmassPFLP_idgt2 -> DrawNormalized(); 
@@ -706,18 +625,6 @@ void plotsTriplets::Loop()
   leg00d2.AddEntry(h_trueBestMatch_BmassPFLP_idlt2,"PF-LP, LPwithId<2");
   leg00d2.Draw();
   c00d2.SaveAs("Bmass_PFLP_idsplit.png");
-
-  TCanvas c00e("c00e","",1);
-  h_trueBestMatch_BmassLPLP_ptlt2 -> DrawNormalized(); 
-  h_trueBestMatch_BmassLPLP_ptgt2 -> DrawNormalized("same"); 
-  TLegend leg00e (0.15,0.7,0.45,0.9);
-  leg00e.SetFillColor(0);
-  leg00e.SetFillStyle(0);
-  leg00e.SetBorderSize(0);
-  leg00e.AddEntry(h_trueBestMatch_BmassLPLP_ptgt2,"LP-LP, LPwithPt>2");
-  leg00e.AddEntry(h_trueBestMatch_BmassLPLP_ptlt2,"LP-LP, LPwithPt<2");
-  leg00e.Draw();
-  c00e.SaveAs("Bmass_LPLP_ptsplit.png");
 
   TCanvas c00e2("c00e2","",1);
   h_trueBestMatch_BmassLPLP_idgt2 -> DrawNormalized(); 
@@ -1215,6 +1122,10 @@ void plotsTriplets::Loop()
   hz_svProbM_notok_kpt    -> SetLineWidth(2);
   hz_svProbM_notok_kpt    -> GetXaxis()->SetTitle("k pT");
   hz_svProbM_notok_kpt    -> SetTitle("");
+  h_svProbM_notmatching    -> SetLineColor(4);
+  h_svProbM_notmatching    -> SetLineWidth(2);
+  h_svProbM_notmatching    -> GetXaxis()->SetTitle("not matching");
+  h_svProbM_notmatching    -> SetTitle("");
   //
   h_svProbM_ok_ele1pt  -> SetLineColor(2);
   h_svProbM_ok_ele1pt  -> SetLineWidth(2);
@@ -1326,6 +1237,14 @@ void plotsTriplets::Loop()
   hz_xySigM_notok_ele2Vskpt -> GetXaxis()->SetTitle("k pT");
   hz_xySigM_notok_ele2Vskpt -> GetYaxis()->SetTitle("ele2 pT");
   hz_xySigM_notok_ele2Vskpt -> SetTitle("");
+  h_xySigM_notmatching    -> SetLineColor(4);
+  h_xySigM_notmatching    -> SetLineWidth(2);
+  h_xySigM_notmatching    -> GetXaxis()->SetTitle("not matching");
+  h_xySigM_notmatching    -> SetTitle("");
+  h_numberBetterXYsigTriplets -> SetLineColor(4);
+  h_numberBetterXYsigTriplets -> SetLineWidth(2);
+  h_numberBetterXYsigTriplets -> GetXaxis()->SetTitle("True B in ranking");
+  h_numberBetterXYsigTriplets -> SetTitle("");
   //
   h_xySigM_ok_ele1pt  -> SetLineColor(2);
   h_xySigM_ok_ele1pt  -> SetLineWidth(2);
@@ -1547,6 +1466,9 @@ void plotsTriplets::Loop()
   leg2.Draw("same");  
   c23b.SaveAs("BestSvProb_goodVsBad_kptZ.png");
   //
+  TCanvas c31cc("c31cc","",1);
+  h_svProbM_notmatching -> DrawNormalized();
+  c31cc.SaveAs("BestSvProb_NotMatching.png");
   //
   //
   TCanvas c31("c31","",1);
@@ -1664,6 +1586,14 @@ void plotsTriplets::Loop()
   hz_xySigM_notok_ele2Vskpt -> Draw("colz");
   c30c2.SaveAs("BestXYsig_Bad_ele2VsKptZ.png");
   //
+  TCanvas c31c("c31c","",1);
+  h_xySigM_notmatching -> DrawNormalized();
+  c31c.SaveAs("BestXYsig_NotMatching.png");
+  //
+  TCanvas c31ccc("c31ccc","",1);
+  h_numberBetterXYsigTriplets-> DrawNormalized();
+  c31ccc.SetLogy();
+  c31ccc.SaveAs("BestXYsig_numberBetterTriplets.png");
   //
   TCanvas c41("c41","",1);
   h_cos2DM_ok_ele1pt->DrawNormalized();
