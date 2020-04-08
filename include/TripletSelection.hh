@@ -60,6 +60,11 @@ private:
   int iHLT_Mu12_IP6;
   int iHLT_Mu9_IP6;
   // 
+  int rightMcTruth;
+  //
+  int handMadeB;
+  float handMadeBmass;
+  //
   int goodBSize;
   int goodTrueBSize;
   int goodCombBSize;
@@ -113,6 +118,9 @@ private:
   float bestMatch_maxDrRecoGen;
   float bestMatch_minDrRecoGen;
   float bestMatch_drRecoGenK;
+  float bestMatch_maxDrRecoGenFromB;
+  float bestMatch_minDrRecoGenFromB;
+  float bestMatch_drRecoGenFromBK;
   //            
   vector<float> goodTrueB_svProb_notBestMatch={};
   vector<float> goodTrueB_xySig_notBestMatch={};
@@ -142,15 +150,9 @@ private:
   vector<float> goodCombB_maxDrRecoGen={};
   vector<float> goodCombB_minDrRecoGen={};
   vector<float> goodCombB_drRecoGenK={};
-  //
-  vector<float> combToBestB_svProb={};
-  vector<float> combToBestB_xySig={};
-  vector<float> combToBestB_cos2D={};
-  vector<float> combToBestB_ptsum={};
-  vector<float> combToBestB_kpt={};
-  vector<float> combToBestB_maxDrRecoGen={};
-  vector<float> combToBestB_minDrRecoGen={};
-  vector<float> combToBestB_drRecoGenK={};
+  vector<float> goodCombB_maxDrRecoGenFromB={};
+  vector<float> goodCombB_minDrRecoGenFromB={};
+  vector<float> goodCombB_drRecoGenFromBK={};
   //
   int bestSvProbMatch;
   int bestSvProbMatch_second;
@@ -232,6 +234,19 @@ private:
   float bestXYsigMatch_ok_costhetaSK_gen;
 
   int bestCos2DMatch;
+  int bestCos2DMatch_second;
+  int bestCos2DMatchCat0;
+  int bestCos2DMatchCat1;
+  int bestCos2DMatchCat2;
+  int bestCos2DMatchCat0_second;
+  int bestCos2DMatchCat1_second;
+  int bestCos2DMatchCat2_second;
+  int bestCos2DMatchCatNew0;
+  int bestCos2DMatchCatNew1;
+  int bestCos2DMatchCatNew2;
+  int bestCos2DMatchCatNew0_second;
+  int bestCos2DMatchCatNew1_second;
+  int bestCos2DMatchCatNew2_second;
   int bestCos2DMatch_causeEle1;
   int bestCos2DMatch_causeEle2;
   int bestCos2DMatch_causeK;
@@ -250,15 +265,27 @@ private:
 
   int numberBetterSvProbTriplets;
   int numberBetterXYsigTriplets;
+  int numberBetterCos2DTriplets;
+  int numberBetterAllPtSumTriplets;
 
-  int bestPtSumMatch;
-  int bestPtSumMatch_causeEle1;
-  int bestPtSumMatch_causeEle2;
-  int bestPtSumMatch_causeK;
-  int bestKPtMatch;
-  int bestKPtMatch_causeEle1;
-  int bestKPtMatch_causeEle2;
-  int bestKPtMatch_causeK;
+  int bestAllPtSumMatch;
+  int bestAllPtSumMatch_second;
+  int bestAllPtSumMatchCat0;
+  int bestAllPtSumMatchCat1;
+  int bestAllPtSumMatchCat2;
+  int bestAllPtSumMatchCatNew0;
+  int bestAllPtSumMatchCatNew1;
+  int bestAllPtSumMatchCatNew2;
+  int bestAllPtSumMatchCat0_second;
+  int bestAllPtSumMatchCat1_second;
+  int bestAllPtSumMatchCat2_second;
+  int bestAllPtSumMatchCatNew0_second;
+  int bestAllPtSumMatchCatNew1_second;
+  int bestAllPtSumMatchCatNew2_second;
+  int bestAllPtSumMatch_causeEle1;
+  int bestAllPtSumMatch_causeEle2;
+  int bestAllPtSumMatch_causeK;
+
 };
 
 #endif
