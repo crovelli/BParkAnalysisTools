@@ -267,6 +267,7 @@ private:
   int numberBetterXYsigTriplets;
   int numberBetterCos2DTriplets;
   int numberBetterAllPtSumTriplets;
+  int numberBetterBPtTriplets;
 
   int bestAllPtSumMatch;
   int bestAllPtSumMatch_second;
@@ -286,6 +287,23 @@ private:
   int bestAllPtSumMatch_causeEle2;
   int bestAllPtSumMatch_causeK;
 
+  int bestBPtMatch;
+  int bestBPtMatch_second;
+  int bestBPtMatchCat0;
+  int bestBPtMatchCat1;
+  int bestBPtMatchCat2;
+  int bestBPtMatchCatNew0;
+  int bestBPtMatchCatNew1;
+  int bestBPtMatchCatNew2;
+  int bestBPtMatchCat0_second;
+  int bestBPtMatchCat1_second;
+  int bestBPtMatchCat2_second;
+  int bestBPtMatchCatNew0_second;
+  int bestBPtMatchCatNew1_second;
+  int bestBPtMatchCatNew2_second;
+  int bestBPtMatch_causeEle1;
+  int bestBPtMatch_causeEle2;
+  int bestBPtMatch_causeK;
 };
 
 #endif
