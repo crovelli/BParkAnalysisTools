@@ -77,6 +77,9 @@ void TripletSelection::Loop() {
     if (HLT_Mu7_IP4 || HLT_Mu8_IP6 || HLT_Mu8_IP5 || HLT_Mu8_IP3 || HLT_Mu8p5_IP3p5 || HLT_Mu9_IP6 || HLT_Mu9_IP5 || HLT_Mu9_IP4 || HLT_Mu10p5_IP3p5 || HLT_Mu12_IP6) okTrigger = true;
     if (!okTrigger) continue;
 
+    // Trigger HLT_Mu9_IP6
+    // if (iHLT_Mu9_IP6==0) continue;
+    
     // Triggering muons
     if (nTriggerMuon<=0) continue;
     h_selection->Fill(2.,perEveW);
@@ -207,7 +210,7 @@ void TripletSelection::Loop() {
 
 
     // -------------------------------------------------
-    // Mc truth
+    // MC truth
     int myGenEle = -1;
     int myGenPos = -1;
     int myGenK   = -1;
@@ -215,9 +218,13 @@ void TripletSelection::Loop() {
       int theId    = GenPart_pdgId[iGen];
       int theMum   = GenPart_genPartIdxMother[iGen];
       int theMumId = GenPart_pdgId[theMum];
-      if (abs(theMumId)==521 && theId==11)       myGenPos = iGen;
-      if (abs(theMumId)==521 && theId==-11)      myGenEle = iGen;
-      if (abs(theMumId)==521 && abs(theId)==321) myGenK   = iGen;
+      if (abs(theMumId)==521 && abs(theId)==321) myGenK = iGen;
+      // resonant
+      // if (abs(theMumId)==443 && theId==11)  myGenPos = iGen;
+      // if (abs(theMumId)==443 && theId==-11) myGenEle = iGen;
+      // non resonant
+      if (abs(theMumId)==521 && theId==11)  myGenPos = iGen;
+      if (abs(theMumId)==521 && theId==-11) myGenEle = iGen;
     }
     TVector3 genEle(0.,0.,0.);
     TVector3 genPos(0.,0.,0.);
@@ -228,6 +235,17 @@ void TripletSelection::Loop() {
     // to verify that all events have the correct MC chain
     rightMcTruth = 1;
     if (myGenEle<0 || myGenPos<0 || myGenK<0) rightMcTruth = 0;
+    
+    if (rightMcTruth==1) {
+      gen_costhetaSKRad = cosThetaStarKRad_Gen(myGenEle, myGenPos, myGenK);;
+      gen_costhetaSKCS  = cosThetaStarKCS_Gen(myGenEle, myGenPos, myGenK);;
+      gen_costhetaSKHel = cosThetaStarKHel_Gen(myGenEle, myGenPos, myGenK);;
+    } else {
+      gen_costhetaSKRad = -999.;
+      gen_costhetaSKCS  = -999.;
+      gen_costhetaSKHel = -999.;
+    }
+
 
 
     // -------------------------------------------------
@@ -589,6 +607,9 @@ void TripletSelection::Loop() {
     bestMatch_KEta    = -999.;
     bestMatch_Ele1Pt  = -999.;
     bestMatch_Ele2Pt  = -999.;
+    bestMatch_costhetaSKRad=-999.;
+    bestMatch_costhetaSKCS=-999.;
+    bestMatch_costhetaSKHel=-999.;
     bestMatch_MinPt   = -999.;
     bestMatch_Ele1Eta = -999.;
     bestMatch_Ele2Eta = -999.;
@@ -617,6 +638,9 @@ void TripletSelection::Loop() {
       float bestMatch_KPhi   = ProbeTracks_phi[kBM_idx];
       bestMatch_Ele1Pt = Electron_pt[ele1BM_idx];
       bestMatch_Ele2Pt = Electron_pt[ele2BM_idx];
+      bestMatch_costhetaSKRad = cosThetaStarKRad(bestMatchedB);
+      bestMatch_costhetaSKCS  = cosThetaStarKCS(bestMatchedB);
+      bestMatch_costhetaSKHel = cosThetaStarKHel(bestMatchedB);
       if (bestMatch_Ele2Pt>bestMatch_KPt)
 	bestMatch_MinPt = bestMatch_KPt;
       else
@@ -888,6 +912,9 @@ void TripletSelection::Loop() {
       goodCombB_keta.push_back(ProbeTracks_eta[k_idx]);
       goodCombB_ele1pt.push_back(Electron_pt[ele1_idx]);
       goodCombB_ele2pt.push_back(Electron_pt[ele2_idx]);
+      goodCombB_costhetaSKRad.push_back(cosThetaStarKRad(thisB));
+      goodCombB_costhetaSKCS.push_back(cosThetaStarKCS(thisB));
+      goodCombB_costhetaSKHel.push_back(cosThetaStarKHel(thisB));
       if (Electron_pt[ele2_idx]>ProbeTracks_pt[k_idx])
 	goodCombB_minpt.push_back(ProbeTracks_pt[k_idx]);
       else 
@@ -998,9 +1025,6 @@ void TripletSelection::Loop() {
     bestXYsigMatch_notok_pfmva2=-999;
     bestXYsigMatch_notok_lptmva1=-999;
     bestXYsigMatch_notok_lptmva2=-999;
-    bestXYsigMatch_notok_costhetaSK=-999;
-    bestXYsigMatch_notok_costhetaSKCS=-999;
-    bestXYsigMatch_notok_costhetaL=-999;
     bestXYsigMatch_ok_ele1pt=-999;
     bestXYsigMatch_ok_ele2pt=-999;
     bestXYsigMatch_ok_kpt=-999;
@@ -1012,10 +1036,6 @@ void TripletSelection::Loop() {
     bestXYsigMatch_ok_pfmva2=-999;
     bestXYsigMatch_ok_lptmva1=-999;
     bestXYsigMatch_ok_lptmva2=-999;
-    bestXYsigMatch_ok_costhetaSK=-999;
-    bestXYsigMatch_ok_costhetaSKCS=-999;
-    bestXYsigMatch_ok_costhetaL=-999;
-    bestXYsigMatch_ok_costhetaSK_gen=-999;
     numberBetterXYsigTriplets=-999;
     bestXYsigMatch_second=-999;
     bestXYsigMatchCat0_second=-999;
@@ -1859,10 +1879,6 @@ void TripletSelection::Loop() {
 	bestXYsigMatch_ok_pfmva2  = Electron_pfmvaId[ele2_idx]; 
 	bestXYsigMatch_ok_lptmva1 = Electron_mvaId[ele1_idx]; 
 	bestXYsigMatch_ok_lptmva2 = Electron_mvaId[ele2_idx]; 
-	bestXYsigMatch_ok_costhetaSK     = cosThetaStarK(bestXYsig_all);
-	bestXYsigMatch_ok_costhetaSKCS   = cosThetaStarKCS(bestXYsig_all);
-	bestXYsigMatch_ok_costhetaL      = cosThetaL(bestXYsig_all);
-	bestXYsigMatch_ok_costhetaSK_gen = cosThetaStarKGen(bestXYsig_all);
 
       } else {
 	bestXYsigMatch=0;
@@ -1893,9 +1909,6 @@ void TripletSelection::Loop() {
 	bestXYsigMatch_notok_pfmva2  = Electron_pfmvaId[ele2_idx]; 
 	bestXYsigMatch_notok_lptmva1 = Electron_mvaId[ele1_idx]; 
 	bestXYsigMatch_notok_lptmva2 = Electron_mvaId[ele2_idx]; 	
-	bestXYsigMatch_notok_costhetaSK   = cosThetaStarK(bestXYsig_all);
-	bestXYsigMatch_notok_costhetaSKCS = cosThetaStarKCS(bestXYsig_all);
-	bestXYsigMatch_notok_costhetaL    = cosThetaL(bestXYsig_all);
 	bestXYsigMatch_notmatching = whichMcB(bestXYsig_all);
       }
 
@@ -2194,10 +2207,12 @@ void TripletSelection::Loop() {
     goodCombB_cos2D.clear();
     goodCombB_ptsum.clear();
     goodCombB_kpt.clear();
-
     goodCombB_keta.clear();
     goodCombB_ele1pt.clear();
     goodCombB_ele2pt.clear();
+    goodCombB_costhetaSKRad.clear();
+    goodCombB_costhetaSKCS.clear();
+    goodCombB_costhetaSKHel.clear();
     goodCombB_minpt.clear();
     goodCombB_ele1eta.clear();
     goodCombB_ele2eta.clear();
@@ -2223,7 +2238,6 @@ void TripletSelection::Loop() {
   cout << "Keeping all triplets, I've " << allTriplets << " triplets to analyze" << endl;
   for (int nn=0; nn<20; nn++) cout << "Keeping " << nn+1 << " ==> " << nTriplets[nn] << endl;
 }
-
 
 
 // for B -> K J/Psi -> Kee (resonant)
@@ -2289,7 +2303,7 @@ bool TripletSelection::isMcB( int theB ) {
   int ele2_genMotherIdx   = GenPart_genPartIdxMother[ele2_genPartIdx];
   int ele2_genMotherPdgId = GenPart_pdgId[ele2_genMotherIdx];
 
-  // B -> K J/psi(ll) at gen level
+  // B -> K ll at gen level
   // 521 = B+
   bool okMatch  = (ele1_genPartIdx>-0.5 && ele2_genPartIdx>-0.5 && k_genPartIdx>-0.5);
   bool RK_nres1 = abs(ele1_genMotherPdgId)==521 && abs(ele2_genMotherPdgId)==521 && abs(k_genMotherPdgId)==521;
@@ -2333,10 +2347,6 @@ int TripletSelection::whichMcB( int theB ) {
   if (abs(ele2_genMotherPdgId)!=521) bad2 = true;
   if (abs(k_genMotherPdgId)!=521)    badK = true;
   //
-  //if (ele1_genMotherPdgId!=ele2_genMotherPdgId && ele1_genMotherPdgId!=k_genMotherPdgId) bad1 = true;
-  //if (ele2_genMotherPdgId!=ele1_genMotherPdgId && ele2_genMotherPdgId!=k_genMotherPdgId) bad2 = true;
-  //if (k_genMotherPdgId!=ele1_genMotherPdgId && k_genMotherPdgId!=ele2_genMotherPdgId)    badK = true;
-
   if (bad1 && !bad2 && !badK) return 1;   // only ele1 bad
   if (bad2 && !bad1 && !badK) return 2;   // only ele2 bad
   if (badK && !bad1 && !bad2) return 3;   // only K bad
@@ -2417,7 +2427,8 @@ float TripletSelection::dRRecoGenK( int theRecoK ) {
 }
 
 // Reco level: cos(theta*) = cos angle between B flight direction (defined from B momentum) and K direction in B rest frame
-float TripletSelection::cosThetaStarK( int theB ) {
+// Helicity frame
+float TripletSelection::cosThetaStarKHel( int theB ) {
 
   int ele1_idx = BToKEE_l1Idx[theB];
   int ele2_idx = BToKEE_l2Idx[theB];
@@ -2434,52 +2445,12 @@ float TripletSelection::cosThetaStarK( int theB ) {
   TLorentzVector K_Bstar(kV3);
   K_Bstar.Boost(-B.BoostVector());
 
-  TVector3 K_Bstar_perp(0.,0.,0.); 
-  K_Bstar_perp.SetPtEtaPhi(K_Bstar.Pt(),K_Bstar.Eta(),K_Bstar.Phi());
-  K_Bstar_perp.SetZ(0);
-
-  TVector3 B_perp(0.,0.,0.);
-  B_perp.SetPtEtaPhi(B.Pt(),B.Eta(),B.Phi());
-  B_perp.SetZ(0);
-
-  double den = (B_perp.Mag() * K_Bstar_perp.Mag());
-  if (den!= 0.) return B_perp.Dot(K_Bstar_perp)/den;
-  else return -2.;
-}
-
-// Gen level: cos(theta*) = cos angle between B flight direction (defined from B momentum) and K direction in B rest frame
-float TripletSelection::cosThetaStarKGen( int theB ) {
-
-  int ele1_idx = BToKEE_l1Idx[theB];
-  int ele2_idx = BToKEE_l2Idx[theB];
-  int k_idx    = BToKEE_kIdx[theB];
-
-  int ele1_genPartIdx = Electron_genPartIdx[ele1_idx];  
-  int ele2_genPartIdx = Electron_genPartIdx[ele2_idx];  
-  int k_genPartIdx    = ProbeTracks_genPartIdx[k_idx];  
-  
-  TLorentzVector ele1V3(0.,0.,0.,0.);
-  TLorentzVector ele2V3(0.,0.,0.,0.);
-  TLorentzVector kV3(0.,0.,0.,0.);
-  ele1V3.SetPtEtaPhiM(GenPart_pt[ele1_genPartIdx], GenPart_eta[ele1_genPartIdx], GenPart_phi[ele1_genPartIdx], 0.000511);
-  ele2V3.SetPtEtaPhiM(GenPart_pt[ele2_genPartIdx], GenPart_eta[ele2_genPartIdx], GenPart_phi[ele2_genPartIdx], 0.000511);
-  kV3.SetPtEtaPhiM(GenPart_pt[k_genPartIdx], GenPart_eta[k_genPartIdx], GenPart_phi[k_genPartIdx], 0.000494);
-  
-  TLorentzVector B = ele1V3 + ele2V3 + kV3;
-  TLorentzVector K_Bstar(kV3);
-  K_Bstar.Boost(-B.BoostVector());
-
-  TVector3 K_Bstar_perp(0.,0.,0.); 
-  K_Bstar_perp.SetPtEtaPhi(K_Bstar.Pt(),K_Bstar.Eta(),K_Bstar.Phi());
-  K_Bstar_perp.SetZ(0);
-
-  TVector3 B_perp(0.,0.,0.);
-  B_perp.SetPtEtaPhi(B.Pt(),B.Eta(),B.Phi());
-  B_perp.SetZ(0);
-
-  double den = (B_perp.Mag() * K_Bstar_perp.Mag());
-  if (den!= 0.) return B_perp.Dot(K_Bstar_perp)/den;
-  else return -2.;
+  // Angle
+  TVector3 B_v = B.Vect();
+  B_v.Unit(); 
+  TVector3 K_Bstar_v = K_Bstar.Vect();
+  K_Bstar_v.Unit(); 
+  return cos(K_Bstar_v.Angle(B_v));
 }
 
 // Reco level: cos(thetaL) = cos angle between ele1 momentum and the direction opposite to the B momentum, in e+e- rest frame
@@ -2518,9 +2489,8 @@ float TripletSelection::cosThetaL( int theB ) {
   else return -2.;
 }
 
-// Reco level: cos(theta*) in Collins Sopper frame = cos angle between K and the line that bisects the acute angle between the two
-// colliding protons in B rest frame
-float TripletSelection::cosThetaStarKCS( int theB ) {
+// Reco level: cos(theta*) defined ad in the Radion analysis
+float TripletSelection::cosThetaStarKRad( int theB ) {
 
   int ele1_idx = BToKEE_l1Idx[theB];
   int ele2_idx = BToKEE_l2Idx[theB];
@@ -2538,6 +2508,140 @@ float TripletSelection::cosThetaStarKCS( int theB ) {
   K_Bstar.Boost(-B.BoostVector());
 
   return K_Bstar.CosTheta();
+}
+
+// Reco level: cos(theta*) in Collins Sopper frame = cos angle between K and the line that bisects the acute angle between the two
+// colliding protons in B rest frame
+float TripletSelection::cosThetaStarKCS( int theB ) {
+
+  // B constituents
+  int ele1_idx = BToKEE_l1Idx[theB];
+  int ele2_idx = BToKEE_l2Idx[theB];
+  int k_idx    = BToKEE_kIdx[theB];
+  TLorentzVector ele1V3(0.,0.,0.,0.);
+  TLorentzVector ele2V3(0.,0.,0.,0.);
+  TLorentzVector kV3(0.,0.,0.,0.);
+  ele1V3.SetPtEtaPhiM(Electron_pt[ele1_idx], Electron_eta[ele1_idx], Electron_phi[ele1_idx], 0.000511);
+  ele2V3.SetPtEtaPhiM(Electron_pt[ele2_idx], Electron_eta[ele2_idx], Electron_phi[ele2_idx], 0.000511);
+  kV3.SetPtEtaPhiM(ProbeTracks_pt[k_idx],ProbeTracks_eta[k_idx],ProbeTracks_phi[k_idx], 0.000494);
+
+  // B vector
+  TLorentzVector B = ele1V3 + ele2V3 + kV3;
+
+  // Beam 
+  float pMass   = 0.938272;   // GeV
+  float beamEne = 6500.;      // GeV
+  float pEne = sqrt(pMass*pMass+beamEne*beamEne); 
+  int sign = 1;
+  if (B.Z()<0) sign=-1;
+  TLorentzVector proton1(0.,0.,beamEne*sign,pEne);
+  TLorentzVector proton2(0.,0.,-beamEne*sign,pEne);
+
+  // Protons boosted in B rest frame
+  TLorentzVector proton1_Bstar(proton1);
+  TLorentzVector proton2_Bstar(proton2);
+  proton1_Bstar.Boost(-B.BoostVector());
+  proton2_Bstar.Boost(-B.BoostVector());
+
+  // CS frame
+  TVector3 CSAxis = (proton1_Bstar.Vect().Unit()-proton2_Bstar.Vect().Unit()).Unit();
+  TVector3  yAxis = (proton1_Bstar.Vect().Unit()).Cross((proton2_Bstar.Vect().Unit()));
+  yAxis = yAxis.Unit();
+  TVector3  xAxis = yAxis.Cross(CSAxis);
+  xAxis = xAxis.Unit();
+
+  // K boosted in B rest frame
+  TLorentzVector K_Bstar(kV3);
+  K_Bstar.Boost(-B.BoostVector());
+  TVector3 K_Bstar_v = K_Bstar.Vect();
+  K_Bstar_v.Unit(); 
+
+  // Angle
+  return cos(K_Bstar.Angle(CSAxis));
+}
+
+// Genlevel: cos(theta*) defined in the helicity frame
+float TripletSelection::cosThetaStarKHel_Gen( int theGenEle1, int theGenEle2, int theGenK ) {
+
+  TLorentzVector ele1V3(0.,0.,0.,0.);
+  TLorentzVector ele2V3(0.,0.,0.,0.);
+  TLorentzVector kV3(0.,0.,0.,0.);
+  ele1V3.SetPtEtaPhiM(GenPart_pt[theGenEle1], GenPart_eta[theGenEle1], GenPart_phi[theGenEle1], 0.000511);
+  ele2V3.SetPtEtaPhiM(GenPart_pt[theGenEle2], GenPart_eta[theGenEle2], GenPart_phi[theGenEle2], 0.000511);
+  kV3.SetPtEtaPhiM(GenPart_pt[theGenK], GenPart_eta[theGenK], GenPart_phi[theGenK], 0.000494);
+
+  TLorentzVector B = ele1V3 + ele2V3 + kV3;
+  TLorentzVector K_Bstar(kV3);
+  K_Bstar.Boost(-B.BoostVector());
+
+  // Angle
+  TVector3 B_v = B.Vect();
+  B_v.Unit(); 
+  TVector3 K_Bstar_v = K_Bstar.Vect();
+  K_Bstar_v.Unit(); 
+  return cos(K_Bstar_v.Angle(B_v));
+}
+
+// Genlevel: cos(theta*) defined ad in the Radion analysis
+float TripletSelection::cosThetaStarKRad_Gen( int theGenEle1, int theGenEle2, int theGenK ) {
+
+  TLorentzVector ele1V3(0.,0.,0.,0.);
+  TLorentzVector ele2V3(0.,0.,0.,0.);
+  TLorentzVector kV3(0.,0.,0.,0.);
+  ele1V3.SetPtEtaPhiM(GenPart_pt[theGenEle1], GenPart_eta[theGenEle1], GenPart_phi[theGenEle1], 0.000511);
+  ele2V3.SetPtEtaPhiM(GenPart_pt[theGenEle2], GenPart_eta[theGenEle2], GenPart_phi[theGenEle2], 0.000511);
+  kV3.SetPtEtaPhiM(GenPart_pt[theGenK], GenPart_eta[theGenK], GenPart_phi[theGenK], 0.000494);
+  
+  TLorentzVector B = ele1V3 + ele2V3 + kV3;
+  TLorentzVector K_Bstar(kV3);
+  K_Bstar.Boost(-B.BoostVector());
+
+  return K_Bstar.CosTheta();
+}
+
+// Gen level: cos(theta*) in Collins Sopper frame 
+float TripletSelection::cosThetaStarKCS_Gen( int theGenEle1, int theGenEle2, int theGenK ) {
+
+  TLorentzVector ele1V3(0.,0.,0.,0.);
+  TLorentzVector ele2V3(0.,0.,0.,0.);
+  TLorentzVector kV3(0.,0.,0.,0.);
+  ele1V3.SetPtEtaPhiM(GenPart_pt[theGenEle1], GenPart_eta[theGenEle1], GenPart_phi[theGenEle1], 0.000511);
+  ele2V3.SetPtEtaPhiM(GenPart_pt[theGenEle2], GenPart_eta[theGenEle2], GenPart_phi[theGenEle2], 0.000511);
+  kV3.SetPtEtaPhiM(GenPart_pt[theGenK], GenPart_eta[theGenK], GenPart_phi[theGenK], 0.000494);
+
+  // B vector
+  TLorentzVector B = ele1V3 + ele2V3 + kV3;
+
+  // Beam 
+  float pMass   = 0.938272;   // GeV
+  float beamEne = 6500.;      // GeV
+  float pEne = sqrt(pMass*pMass+beamEne*beamEne); 
+  int sign = 1;
+  if (B.Z()<0) sign=-1;
+  TLorentzVector proton1(0.,0.,beamEne*sign,pEne);
+  TLorentzVector proton2(0.,0.,-beamEne*sign,pEne);
+
+  // Protons boosted in B rest frame
+  TLorentzVector proton1_Bstar(proton1);
+  TLorentzVector proton2_Bstar(proton2);
+  proton1_Bstar.Boost(-B.BoostVector());
+  proton2_Bstar.Boost(-B.BoostVector());
+
+  // CS frame
+  TVector3 CSAxis = (proton1_Bstar.Vect().Unit()-proton2_Bstar.Vect().Unit()).Unit();
+  TVector3  yAxis = (proton1_Bstar.Vect().Unit()).Cross((proton2_Bstar.Vect().Unit()));
+  yAxis = yAxis.Unit();
+  TVector3  xAxis = yAxis.Cross(CSAxis);
+  xAxis = xAxis.Unit();
+
+  // K boosted in B rest frame
+  TLorentzVector K_Bstar(kV3);
+  K_Bstar.Boost(-B.BoostVector());
+  TVector3 K_Bstar_v = K_Bstar.Vect();
+  K_Bstar_v.Unit(); 
+
+  // Angle
+  return cos(K_Bstar.Angle(CSAxis));
 }
 
 void TripletSelection::PrepareOutputs(std::string filename) 
@@ -2571,7 +2675,11 @@ void TripletSelection::bookOutputTree()
   
   outTree_->Branch("rho", &rho, "rho/F");    
 
-  outTree_->Branch("rightMcTruth",     &rightMcTruth,     "rightMcTruth/I");   
+  outTree_->Branch("rightMcTruth",      &rightMcTruth,       "rightMcTruth/I");   
+  outTree_->Branch("gen_costhetaSKRad", &gen_costhetaSKRad,  "gen_costhetaSKRad/F");   
+  outTree_->Branch("gen_costhetaSKCS",  &gen_costhetaSKCS,   "gen_costhetaSKCS/F");   
+  outTree_->Branch("gen_costhetaSKHel", &gen_costhetaSKHel,  "gen_costhetaSKHel/F");   
+
   outTree_->Branch("goodBSize",        &goodBSize,        "goodBSize/I");   
   outTree_->Branch("goodTrueBSize",    &goodTrueBSize,    "goodTrueBSize/I");   
   outTree_->Branch("goodCombBSize",    &goodCombBSize,    "goodCombBSize/I");   
@@ -2618,6 +2726,9 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestMatch_KEta",         &bestMatch_KEta,         "bestMatch_KEta/F");
   outTree_->Branch("bestMatch_Ele1Pt",       &bestMatch_Ele1Pt,       "bestMatch_Ele1Pt/F");
   outTree_->Branch("bestMatch_Ele2Pt",       &bestMatch_Ele2Pt,       "bestMatch_Ele2Pt/F");
+  outTree_->Branch("bestMatch_costhetaSKRad",  &bestMatch_costhetaSKRad, "bestMatch_costhetaSKRad/F");
+  outTree_->Branch("bestMatch_costhetaSKCS",   &bestMatch_costhetaSKCS,  "bestMatch_costhetaSKCS/F");
+  outTree_->Branch("bestMatch_costhetaSKHel",  &bestMatch_costhetaSKHel, "bestMatch_costhetaSKHel/F");
   outTree_->Branch("bestMatch_MinPt",        &bestMatch_MinPt,        "bestMatch_MinPt/F");
   outTree_->Branch("bestMatch_Ele1Eta",      &bestMatch_Ele1Eta,      "bestMatch_Ele1Eta/F");
   outTree_->Branch("bestMatch_Ele2Eta",      &bestMatch_Ele2Eta,      "bestMatch_Ele2Eta/F");
@@ -2638,28 +2749,31 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("goodTrueB_ptsum_notBestMatch",        "std::vector<float>", &goodTrueB_ptsum_notBestMatch);
   outTree_->Branch("goodTrueB_kpt_notBestMatch",          "std::vector<float>", &goodTrueB_kpt_notBestMatch);
 
-  outTree_->Branch("goodCombB_svProb",       "std::vector<float>", &goodCombB_svProb);
-  outTree_->Branch("goodCombB_xySig"  ,      "std::vector<float>", &goodCombB_xySig);
-  outTree_->Branch("goodCombB_cos2D",        "std::vector<float>", &goodCombB_cos2D);
-  outTree_->Branch("goodCombB_ptsum",        "std::vector<float>", &goodCombB_ptsum);
-  outTree_->Branch("goodCombB_kpt",          "std::vector<float>", &goodCombB_kpt);
-  outTree_->Branch("goodCombB_keta",         "std::vector<float>", &goodCombB_keta);
-  outTree_->Branch("goodCombB_ele1pt",       "std::vector<float>", &goodCombB_ele1pt);
-  outTree_->Branch("goodCombB_ele2pt",       "std::vector<float>", &goodCombB_ele2pt);
-  outTree_->Branch("goodCombB_minpt",        "std::vector<float>", &goodCombB_minpt);
-  outTree_->Branch("goodCombB_ele1eta",      "std::vector<float>", &goodCombB_ele1eta);
-  outTree_->Branch("goodCombB_ele2eta",      "std::vector<float>", &goodCombB_ele2eta);
-  outTree_->Branch("goodCombB_ele1pfmva",    "std::vector<float>", &goodCombB_ele1pfmva);
-  outTree_->Branch("goodCombB_ele2pfmva",    "std::vector<float>", &goodCombB_ele2pfmva);
-  outTree_->Branch("goodCombB_ele1lptmva",   "std::vector<float>", &goodCombB_ele1lptmva);
-  outTree_->Branch("goodCombB_ele2lptmva",   "std::vector<float>", &goodCombB_ele2lptmva);
-  outTree_->Branch("goodCombB_causeEle1",    "std::vector<float>", &goodCombB_causeEle1);
-  outTree_->Branch("goodCombB_causeEle2",    "std::vector<float>", &goodCombB_causeEle2);
-  outTree_->Branch("goodCombB_causeK",       "std::vector<float>", &goodCombB_causeK);
-  outTree_->Branch("goodCombB_notmatching",  "std::vector<int>",   &goodCombB_notmatching);
-  outTree_->Branch("goodCombB_maxDrRecoGen", "std::vector<float>", &goodCombB_maxDrRecoGen);
-  outTree_->Branch("goodCombB_minDrRecoGen", "std::vector<float>", &goodCombB_minDrRecoGen);
-  outTree_->Branch("goodCombB_drRecoGenK",   "std::vector<float>", &goodCombB_drRecoGenK);
+  outTree_->Branch("goodCombB_svProb",        "std::vector<float>", &goodCombB_svProb);
+  outTree_->Branch("goodCombB_xySig"  ,       "std::vector<float>", &goodCombB_xySig);
+  outTree_->Branch("goodCombB_cos2D",         "std::vector<float>", &goodCombB_cos2D);
+  outTree_->Branch("goodCombB_ptsum",         "std::vector<float>", &goodCombB_ptsum);
+  outTree_->Branch("goodCombB_kpt",           "std::vector<float>", &goodCombB_kpt);
+  outTree_->Branch("goodCombB_keta",          "std::vector<float>", &goodCombB_keta);
+  outTree_->Branch("goodCombB_ele1pt",        "std::vector<float>", &goodCombB_ele1pt);
+  outTree_->Branch("goodCombB_ele2pt",        "std::vector<float>", &goodCombB_ele2pt);
+  outTree_->Branch("goodCombB_costhetaSKRad", "std::vector<float>", &goodCombB_costhetaSKRad);
+  outTree_->Branch("goodCombB_costhetaSKCS",  "std::vector<float>", &goodCombB_costhetaSKCS);
+  outTree_->Branch("goodCombB_costhetaSKHel", "std::vector<float>", &goodCombB_costhetaSKHel);
+  outTree_->Branch("goodCombB_minpt",         "std::vector<float>", &goodCombB_minpt);
+  outTree_->Branch("goodCombB_ele1eta",       "std::vector<float>", &goodCombB_ele1eta);
+  outTree_->Branch("goodCombB_ele2eta",       "std::vector<float>", &goodCombB_ele2eta);
+  outTree_->Branch("goodCombB_ele1pfmva",     "std::vector<float>", &goodCombB_ele1pfmva);
+  outTree_->Branch("goodCombB_ele2pfmva",     "std::vector<float>", &goodCombB_ele2pfmva);
+  outTree_->Branch("goodCombB_ele1lptmva",    "std::vector<float>", &goodCombB_ele1lptmva);
+  outTree_->Branch("goodCombB_ele2lptmva",    "std::vector<float>", &goodCombB_ele2lptmva);
+  outTree_->Branch("goodCombB_causeEle1",     "std::vector<float>", &goodCombB_causeEle1);
+  outTree_->Branch("goodCombB_causeEle2",     "std::vector<float>", &goodCombB_causeEle2);
+  outTree_->Branch("goodCombB_causeK",        "std::vector<float>", &goodCombB_causeK);
+  outTree_->Branch("goodCombB_notmatching",   "std::vector<int>",   &goodCombB_notmatching);
+  outTree_->Branch("goodCombB_maxDrRecoGen",  "std::vector<float>", &goodCombB_maxDrRecoGen);
+  outTree_->Branch("goodCombB_minDrRecoGen",  "std::vector<float>", &goodCombB_minDrRecoGen);
+  outTree_->Branch("goodCombB_drRecoGenK",    "std::vector<float>", &goodCombB_drRecoGenK);
   outTree_->Branch("goodCombB_maxDrRecoGenFromB", "std::vector<float>", &goodCombB_maxDrRecoGenFromB);
   outTree_->Branch("goodCombB_minDrRecoGenFromB", "std::vector<float>", &goodCombB_minDrRecoGenFromB);
   outTree_->Branch("goodCombB_drRecoGenFromBK",   "std::vector<float>", &goodCombB_drRecoGenFromBK);
@@ -2724,9 +2838,6 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestXYsigMatch_notok_pfmva2",   &bestXYsigMatch_notok_pfmva2,   "bestXYsigMatch_notok_pfmva2/F");
   outTree_->Branch("bestXYsigMatch_notok_lptmva1",  &bestXYsigMatch_notok_lptmva1,  "bestXYsigMatch_notok_lptmva1/F");
   outTree_->Branch("bestXYsigMatch_notok_lptmva2",  &bestXYsigMatch_notok_lptmva2,  "bestXYsigMatch_notok_lptmva2/F");
-  outTree_->Branch("bestXYsigMatch_notok_costhetaSK",   &bestXYsigMatch_notok_costhetaSK,   "bestXYsigMatch_notok_costhetaSK/F");
-  outTree_->Branch("bestXYsigMatch_notok_costhetaSKCS", &bestXYsigMatch_notok_costhetaSKCS, "bestXYsigMatch_notok_costhetaSKCS/F");
-  outTree_->Branch("bestXYsigMatch_notok_costhetaL",    &bestXYsigMatch_notok_costhetaL,    "bestXYsigMatch_notok_costhetaL/F");
   outTree_->Branch("bestXYsigMatch_ok_ele1pt",      &bestXYsigMatch_ok_ele1pt,      "bestXYsigMatch_ok_ele1pt/F");
   outTree_->Branch("bestXYsigMatch_ok_ele2pt",      &bestXYsigMatch_ok_ele2pt,      "bestXYsigMatch_ok_ele2pt/F");
   outTree_->Branch("bestXYsigMatch_ok_kpt",         &bestXYsigMatch_ok_kpt,         "bestXYsigMatch_ok_kpt/F");
@@ -2738,10 +2849,6 @@ void TripletSelection::bookOutputTree()
   outTree_->Branch("bestXYsigMatch_ok_pfmva2",      &bestXYsigMatch_ok_pfmva2,      "bestXYsigMatch_ok_pfmva2/F");
   outTree_->Branch("bestXYsigMatch_ok_lptmva1",     &bestXYsigMatch_ok_lptmva1,     "bestXYsigMatch_ok_lptmva1/F");
   outTree_->Branch("bestXYsigMatch_ok_lptmva2",     &bestXYsigMatch_ok_lptmva2,     "bestXYsigMatch_ok_lptmva2/F");
-  outTree_->Branch("bestXYsigMatch_ok_costhetaSK",     &bestXYsigMatch_ok_costhetaSK,     "bestXYsigMatch_ok_costhetaSK/F");
-  outTree_->Branch("bestXYsigMatch_ok_costhetaSKCS",   &bestXYsigMatch_ok_costhetaSKCS,   "bestXYsigMatch_ok_costhetaSKCS/F");
-  outTree_->Branch("bestXYsigMatch_ok_costhetaL",      &bestXYsigMatch_ok_costhetaL,      "bestXYsigMatch_ok_costhetaL/F");
-  outTree_->Branch("bestXYsigMatch_ok_costhetaSK_gen", &bestXYsigMatch_ok_costhetaSK_gen, "bestXYsigMatch_ok_costhetaSK_gen/F");
 
   outTree_->Branch("numberBetterSvProbTriplets",   &numberBetterSvProbTriplets,   "numberBetterSvProbTriplets/I");
   outTree_->Branch("numberBetterXYsigTriplets",    &numberBetterXYsigTriplets,    "numberBetterXYsigTriplets/I");

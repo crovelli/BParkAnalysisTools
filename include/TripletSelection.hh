@@ -33,9 +33,12 @@ private:
   float dRRecoGenEle( int theRecoEle );
   float dRRecoGenK( int theRecoK );
   float cosThetaL( int myB );
-  float cosThetaStarK( int myB );
-  float cosThetaStarKCS( int myB );
-  float cosThetaStarKGen( int myB );
+  float cosThetaStarKHel( int myB );
+  float cosThetaStarKRad( int myB );
+  float cosThetaStarKCS( int theB );
+  float cosThetaStarKHel_Gen( int theGenEle1, int theGenEle2, int theGenK );
+  float cosThetaStarKRad_Gen( int theGenEle1, int theGenEle2, int theGenK );
+  float cosThetaStarKCS_Gen( int theGenEle1, int theGenEle2, int theGenK );
   void bookOutputTree();
   void bookOutputHistos();
 
@@ -61,6 +64,9 @@ private:
   int iHLT_Mu9_IP6;
   // 
   int rightMcTruth;
+  float gen_costhetaSKRad;
+  float gen_costhetaSKCS;
+  float gen_costhetaSKHel;
   //
   int handMadeB;
   float handMadeBmass;
@@ -108,6 +114,9 @@ private:
   float bestMatch_KEta;
   float bestMatch_Ele1Pt;
   float bestMatch_Ele2Pt;
+  float bestMatch_costhetaSKRad;
+  float bestMatch_costhetaSKCS;
+  float bestMatch_costhetaSKHel;
   float bestMatch_MinPt;
   float bestMatch_Ele1Eta;
   float bestMatch_Ele2Eta;
@@ -136,6 +145,9 @@ private:
   vector<float> goodCombB_keta={};
   vector<float> goodCombB_ele1pt={};
   vector<float> goodCombB_ele2pt={};
+  vector<float> goodCombB_costhetaSKRad={};
+  vector<float> goodCombB_costhetaSKCS={};
+  vector<float> goodCombB_costhetaSKHel={};
   vector<float> goodCombB_minpt={};
   vector<float> goodCombB_ele1eta={};
   vector<float> goodCombB_ele2eta={};
@@ -214,9 +226,6 @@ private:
   float bestXYsigMatch_notok_pfmva2;
   float bestXYsigMatch_notok_lptmva1;
   float bestXYsigMatch_notok_lptmva2;
-  float bestXYsigMatch_notok_costhetaSK;
-  float bestXYsigMatch_notok_costhetaSKCS;
-  float bestXYsigMatch_notok_costhetaL;
   float bestXYsigMatch_ok_ele1pt;
   float bestXYsigMatch_ok_ele2pt;
   float bestXYsigMatch_ok_kpt;
@@ -228,10 +237,6 @@ private:
   float bestXYsigMatch_ok_pfmva2;
   float bestXYsigMatch_ok_lptmva1;
   float bestXYsigMatch_ok_lptmva2;
-  float bestXYsigMatch_ok_costhetaSK;
-  float bestXYsigMatch_ok_costhetaSKCS;
-  float bestXYsigMatch_ok_costhetaL;
-  float bestXYsigMatch_ok_costhetaSK_gen;
 
   int bestCos2DMatch;
   int bestCos2DMatch_second;
