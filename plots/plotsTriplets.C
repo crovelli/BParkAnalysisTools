@@ -19,6 +19,10 @@ void plotsTriplets::Loop()
   TH1F *h_numCombB = new TH1F("h_numCombB", "h_numCombB", 25, -0.5, 24.5);
   TH1F *h_numTrueB = new TH1F("h_numTrueB", "h_numTrueB", 10, -0.5, 9.5);
 
+  TH1F *h_gen_costhetaSKRad = new TH1F("h_gen_costhetaSKRad", "h_gen_costhetaSKRad", 60, -1.01, 1.01);
+  TH1F *h_gen_costhetaSKCS  = new TH1F("h_gen_costhetaSKCS",  "h_gen_costhetaSKCS",  60, -1.01, 1.01);
+  TH1F *h_gen_costhetaSKHel = new TH1F("h_gen_costhetaSKHel", "h_gen_costhetaSKHel", 60, -1.01, 1.01);
+
   TH1F *h_trueB_dRminmaxEle = new TH1F("h_trueB_dRminmaxEle", "h_trueB_dRminmaxEle", 100, 0., 0.05);  
   TH1F *h_combB_dRminmaxEle = new TH1F("h_combB_dRminmaxEle", "h_combB_dRminmaxEle", 100, 0., 6.);  
   TH1F *h_trueB_dRmaxTrack  = new TH1F("h_trueB_dRmaxTrack",  "h_trueB_dRmaxTrack",  100, 0., 6.);  
@@ -44,6 +48,9 @@ void plotsTriplets::Loop()
   TH1F *h_trueBestMatch_ele2eta_lowpt_idlt0   = new TH1F("h_trueBestMatch_ele2eta_lowpt_idlt0",   "h_trueBestMatch_ele2eta_lowpt_idlt0",   50,-2.5,2.5);
   TH1F *h_trueBestMatch_ele1pt   = new TH1F("h_trueBestMatch_ele1pt",  "h_trueBestMatch_ele1pt",  60, 0., 30.);
   TH1F *h_trueBestMatch_ele2pt   = new TH1F("h_trueBestMatch_ele2pt",  "h_trueBestMatch_ele2pt",  60, 0., 30.);
+  TH1F *h_trueBestMatch_costhetaSKRad = new TH1F("h_trueBestMatch_costhetaSKRad", "h_trueBestMatch_costhetaSKRad", 60, -1.01, 1.01);
+  TH1F *h_trueBestMatch_costhetaSKCS  = new TH1F("h_trueBestMatch_costhetaSKCS",  "h_trueBestMatch_costhetaSKCS",  60, -1.01, 1.01);
+  TH1F *h_trueBestMatch_costhetaSKHel = new TH1F("h_trueBestMatch_costhetaSKHel", "h_trueBestMatch_costhetaSKHel", 60, -1.01, 1.01);
   TH1F *h_trueBestMatch_pfmva1   = new TH1F("h_trueBestMatch_pfmva1",  "h_trueBestMatch_pfmva1",  50,-10.,10.);
   TH1F *h_trueBestMatch_pfmva2   = new TH1F("h_trueBestMatch_pfmva2",  "h_trueBestMatch_pfmva2",  50,-10.,10.);
   TH1F *h_trueBestMatch_lptmva1  = new TH1F("h_trueBestMatch_lptmva1", "h_trueBestMatch_lptmva1", 50,-10.,10.);
@@ -85,6 +92,9 @@ void plotsTriplets::Loop()
   TH1F *h_comb_ele2eta_lowpt_idlt0   = new TH1F("h_comb_ele2eta_lowpt_idlt0",   "h_comb_ele2eta_lowpt_idlt0",   50,-2.5,2.5);
   TH1F *h_comb_ele1pt   = new TH1F("h_comb_ele1pt",  "h_comb_ele1pt",  60, 0., 30.);
   TH1F *h_comb_ele2pt   = new TH1F("h_comb_ele2pt",  "h_comb_ele2pt",  60, 0., 30.);
+  TH1F *h_comb_costhetaSKRad = new TH1F("h_comb_costhetaSKRad", "h_comb_costhetaSKRad", 60, -1.01, 1.01);
+  TH1F *h_comb_costhetaSKCS  = new TH1F("h_comb_costhetaSKCS",  "h_comb_costhetaSKCS",  60, -1.01, 1.01);
+  TH1F *h_comb_costhetaSKHel = new TH1F("h_comb_costhetaSKHel", "h_comb_costhetaSKHel", 60, -1.01, 1.01);
   TH1F *h_comb_pfmva1   = new TH1F("h_comb_pfmva1",  "h_comb_pfmva1",  50,-10.,10.);
   TH1F *h_comb_pfmva2   = new TH1F("h_comb_pfmva2",  "h_comb_pfmva2",  50,-10.,10.);
   TH1F *h_comb_lptmva1  = new TH1F("h_comb_lptmva1", "h_comb_lptmva1", 50,-10.,10.);
@@ -135,9 +145,6 @@ void plotsTriplets::Loop()
   TH1F *h_xySigM_notok_pfmva2   = new TH1F("h_xySigM_notok_pfmva2",  "h_xySigM_notok_pfmva2",  50,-10.,10.);
   TH1F *h_xySigM_notok_lptmva1  = new TH1F("h_xySigM_notok_lptmva1", "h_xySigM_notok_lptmva1", 50,-10.,10.);
   TH1F *h_xySigM_notok_lptmva2  = new TH1F("h_xySigM_notok_lptmva2", "h_xySigM_notok_lptmva2", 50,-10.,10.);
-  TH1F *h_xySigM_notok_costhetaSK   = new TH1F("h_xySigM_notok_costhetaSK",   "h_xySigM_notok_costhetaSK",   11,0.,1.1);
-  TH1F *h_xySigM_notok_costhetaSKCS = new TH1F("h_xySigM_notok_costhetaSKCS", "h_xySigM_notok_costhetaSKCS", 11,0.,1.1);
-  TH1F *h_xySigM_notok_costhetaL    = new TH1F("h_xySigM_notok_costhetaL",    "h_xySigM_notok_costhetaL",    11,0.,1.1);
   TH1F *h_xySigM_ok_ele1pt      = new TH1F("h_xySigM_ok_ele1pt",     "h_xySigM_ok_ele1pt",     60, 0.,30.);
   TH1F *h_xySigM_ok_ele2pt      = new TH1F("h_xySigM_ok_ele2pt",     "h_xySigM_ok_ele2pt",     60, 0.,30.);
   TH1F *h_xySigM_ok_kpt         = new TH1F("h_xySigM_ok_kpt",        "h_xySigM_ok_kpt",        60, 0.,30.);
@@ -148,10 +155,6 @@ void plotsTriplets::Loop()
   TH1F *h_xySigM_ok_pfmva2      = new TH1F("h_xySigM_ok_pfmva2",     "h_xySigM_ok_pfmva2",     50,-10.,10.);
   TH1F *h_xySigM_ok_lptmva1     = new TH1F("h_xySigM_ok_lptmva1",    "h_xySigM_ok_lptmva1",    50,-10.,10.);
   TH1F *h_xySigM_ok_lptmva2     = new TH1F("h_xySigM_ok_lptmva2",    "h_xySigM_ok_lptmva2",    50,-10.,10.);
-  TH1F *h_xySigM_ok_costhetaSK_gen = new TH1F("h_xySigM_ok_costhetaSK_gen", "h_xySigM_ok_costhetaSK_gen", 11,0.,1.1);
-  TH1F *h_xySigM_ok_costhetaSK     = new TH1F("h_xySigM_ok_costhetaSK",     "h_xySigM_ok_costhetaSK",     11,0.,1.1);
-  TH1F *h_xySigM_ok_costhetaSKCS   = new TH1F("h_xySigM_ok_costhetaSKCS",   "h_xySigM_ok_costhetaSKCS",   11,0.,1.1);
-  TH1F *h_xySigM_ok_costhetaL      = new TH1F("h_xySigM_ok_costhetaL",      "h_xySigM_ok_costhetaL",      11,0.,1.1);
   TH1F *hz_xySigM_notok_ele1pt  = new TH1F("hz_xySigM_notok_ele1pt", "hz_xySigM_notok_ele1pt", 50, 0.,10.);
   TH1F *hz_xySigM_notok_ele2pt  = new TH1F("hz_xySigM_notok_ele2pt", "hz_xySigM_notok_ele2pt", 50, 0.,5.);
   TH1F *hz_xySigM_notok_kpt     = new TH1F("hz_xySigM_notok_kpt",    "hz_xySigM_notok_kpt",    50, 0.,5.);
@@ -191,6 +194,9 @@ void plotsTriplets::Loop()
   float tot_notok_presel = 0.;
 
   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+
+    //cout << jentry << endl;
+
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
@@ -211,6 +217,13 @@ void plotsTriplets::Loop()
     h_numB     -> Fill(goodBSize);
     h_numCombB -> Fill(goodCombBSize);
     h_numTrueB -> Fill(goodTrueBSize);
+
+    // MC-truth
+    if (gen_costhetaSKRad>-999) {
+      h_gen_costhetaSKRad -> Fill(gen_costhetaSKRad);
+      h_gen_costhetaSKCS  -> Fill(gen_costhetaSKCS);
+      h_gen_costhetaSKHel -> Fill(gen_costhetaSKHel);
+    }
 
     // which true
     int trueBminmaxsize = goodTrueB_maxMinDREle->size();
@@ -267,6 +280,9 @@ void plotsTriplets::Loop()
       if (bestMatch_Ele2lptmva<0)                           h_trueBestMatch_ele2eta_lowpt_idlt0   -> Fill(bestMatch_Ele2Eta); 
       h_trueBestMatch_ele1pt   -> Fill(bestMatch_Ele1Pt);
       h_trueBestMatch_ele2pt   -> Fill(bestMatch_Ele2Pt);
+      h_trueBestMatch_costhetaSKRad -> Fill(bestMatch_costhetaSKRad);
+      h_trueBestMatch_costhetaSKCS  -> Fill(bestMatch_costhetaSKCS);
+      h_trueBestMatch_costhetaSKHel -> Fill(bestMatch_costhetaSKHel);
       h_trueBestMatch_pfmva1   -> Fill(bestMatch_Ele1pfmva);
       h_trueBestMatch_pfmva2   -> Fill(bestMatch_Ele2pfmva);
       h_trueBestMatch_lptmva1  -> Fill(bestMatch_Ele1lptmva);
@@ -298,6 +314,9 @@ void plotsTriplets::Loop()
       if (goodCombB_ele2lptmva->at(ii)<0)                                   h_comb_ele2eta_lowpt_idlt0   -> Fill(goodCombB_ele2eta->at(ii)); 
       h_comb_ele1pt   -> Fill(goodCombB_ele1pt->at(ii));
       h_comb_ele2pt   -> Fill(goodCombB_ele2pt->at(ii));
+      h_comb_costhetaSKRad -> Fill(goodCombB_costhetaSKRad->at(ii));
+      h_comb_costhetaSKCS  -> Fill(goodCombB_costhetaSKCS->at(ii));
+      h_comb_costhetaSKHel -> Fill(goodCombB_costhetaSKHel->at(ii));
       h_comb_pfmva1   -> Fill(goodCombB_ele1pfmva->at(ii));
       h_comb_pfmva2   -> Fill(goodCombB_ele2pfmva->at(ii));
       h_comb_lptmva1  -> Fill(goodCombB_ele1lptmva->at(ii));
@@ -351,10 +370,6 @@ void plotsTriplets::Loop()
     if (bestXYsigMatch_notok_pfmva2>-990  && bestXYsigMatch_notok_pfmva2<20)  h_xySigM_notok_pfmva2  -> Fill(bestXYsigMatch_notok_pfmva2);
     if (bestXYsigMatch_notok_lptmva1>-990 && bestXYsigMatch_notok_lptmva1<20) h_xySigM_notok_lptmva1 -> Fill(bestXYsigMatch_notok_lptmva1);
     if (bestXYsigMatch_notok_lptmva2>-990 && bestXYsigMatch_notok_lptmva2<20) h_xySigM_notok_lptmva2 -> Fill(bestXYsigMatch_notok_lptmva2);
-    if (bestXYsigMatch_notok_costhetaSK>-990)   h_xySigM_notok_costhetaSK   -> Fill(fabs(bestXYsigMatch_notok_costhetaSK));
-    if (bestXYsigMatch_notok_costhetaSKCS>-990) h_xySigM_notok_costhetaSKCS -> Fill(fabs(bestXYsigMatch_notok_costhetaSKCS));
-    if (bestXYsigMatch_notok_costhetaL>-990)    h_xySigM_notok_costhetaL    -> Fill(fabs(bestXYsigMatch_notok_costhetaL));
-
     if (bestXYsigMatch_ok_ele1pt>-990)     h_xySigM_ok_ele1pt     -> Fill(bestXYsigMatch_ok_ele1pt);
     if (bestXYsigMatch_ok_ele2pt>-990)     h_xySigM_ok_ele2pt     -> Fill(bestXYsigMatch_ok_ele2pt);
     if (bestXYsigMatch_ok_kpt>-990)        h_xySigM_ok_kpt        -> Fill(bestXYsigMatch_ok_kpt);
@@ -365,10 +380,6 @@ void plotsTriplets::Loop()
     if (bestXYsigMatch_ok_pfmva2>-990  && bestXYsigMatch_ok_pfmva2<20)  h_xySigM_ok_pfmva2  -> Fill(bestXYsigMatch_ok_pfmva2);
     if (bestXYsigMatch_ok_lptmva1>-990 && bestXYsigMatch_ok_lptmva1<20) h_xySigM_ok_lptmva1 -> Fill(bestXYsigMatch_ok_lptmva1);
     if (bestXYsigMatch_ok_lptmva2>-990 && bestXYsigMatch_ok_lptmva2<20) h_xySigM_ok_lptmva2 -> Fill(bestXYsigMatch_ok_lptmva2);
-    if (bestXYsigMatch_ok_costhetaSK_gen>-990) h_xySigM_ok_costhetaSK_gen -> Fill(fabs(bestXYsigMatch_ok_costhetaSK_gen));
-    if (bestXYsigMatch_ok_costhetaSK>-990)     h_xySigM_ok_costhetaSK     -> Fill(fabs(bestXYsigMatch_ok_costhetaSK));
-    if (bestXYsigMatch_ok_costhetaSKCS>-990)   h_xySigM_ok_costhetaSKCS   -> Fill(fabs(bestXYsigMatch_ok_costhetaSKCS));
-    if (bestXYsigMatch_ok_costhetaL>-990)      h_xySigM_ok_costhetaL      -> Fill(fabs(bestXYsigMatch_ok_costhetaL));
 
     if (bestXYsigMatch_notok_ele1pt>-990)  hz_xySigM_notok_ele1pt -> Fill(bestXYsigMatch_notok_ele1pt);
     if (bestXYsigMatch_notok_ele2pt>-990)  hz_xySigM_notok_ele2pt -> Fill(bestXYsigMatch_notok_ele2pt);
@@ -441,6 +452,19 @@ void plotsTriplets::Loop()
 
   // Plots
   gStyle->SetOptStat(0);
+
+  h_gen_costhetaSKRad -> SetLineColor(3);
+  h_gen_costhetaSKRad -> SetLineWidth(2);
+  h_gen_costhetaSKRad -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_gen_costhetaSKRad -> SetTitle("");
+  h_gen_costhetaSKCS  -> SetLineColor(3);
+  h_gen_costhetaSKCS  -> SetLineWidth(2);
+  h_gen_costhetaSKCS  -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_gen_costhetaSKCS  -> SetTitle("");
+  h_gen_costhetaSKHel -> SetLineColor(3);
+  h_gen_costhetaSKHel -> SetLineWidth(2);
+  h_gen_costhetaSKHel -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_gen_costhetaSKHel -> SetTitle("");
 
   TCanvas c0("c0","",1);
   h_debug_svProbMatch   -> SetLineColor(2);
@@ -694,6 +718,18 @@ void plotsTriplets::Loop()
   h_trueBestMatch_ele2pt   -> SetLineWidth(2);
   h_trueBestMatch_ele2pt   -> GetXaxis()->SetTitle("ele2 pt");
   h_trueBestMatch_ele2pt   -> SetTitle("");
+  h_trueBestMatch_costhetaSKRad   -> SetLineColor(2);
+  h_trueBestMatch_costhetaSKRad   -> SetLineWidth(2);
+  h_trueBestMatch_costhetaSKRad   -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_trueBestMatch_costhetaSKRad   -> SetTitle("");
+  h_trueBestMatch_costhetaSKCS    -> SetLineColor(2);
+  h_trueBestMatch_costhetaSKCS    -> SetLineWidth(2);
+  h_trueBestMatch_costhetaSKCS    -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_trueBestMatch_costhetaSKCS    -> SetTitle("");
+  h_trueBestMatch_costhetaSKHel   -> SetLineColor(2);
+  h_trueBestMatch_costhetaSKHel   -> SetLineWidth(2);
+  h_trueBestMatch_costhetaSKHel   -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_trueBestMatch_costhetaSKHel   -> SetTitle("");
   h_trueBestMatch_pfmva1   -> SetLineColor(2);
   h_trueBestMatch_pfmva1   -> SetLineWidth(2);
   h_trueBestMatch_pfmva1   -> GetXaxis()->SetTitle("ele1 PF mva");
@@ -795,6 +831,18 @@ void plotsTriplets::Loop()
   h_comb_ele2pt      -> SetLineWidth(2);
   h_comb_ele2pt      -> GetXaxis()->SetTitle("ele2 pT");
   h_comb_ele2pt      -> SetTitle("");
+  h_comb_costhetaSKRad -> SetLineColor(4);
+  h_comb_costhetaSKRad -> SetLineWidth(2);
+  h_comb_costhetaSKRad -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_comb_costhetaSKRad -> SetTitle("");
+  h_comb_costhetaSKCS  -> SetLineColor(4);
+  h_comb_costhetaSKCS  -> SetLineWidth(2);
+  h_comb_costhetaSKCS  -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_comb_costhetaSKCS  -> SetTitle("");
+  h_comb_costhetaSKHel -> SetLineColor(4);
+  h_comb_costhetaSKHel -> SetLineWidth(2);
+  h_comb_costhetaSKHel -> GetXaxis()->SetTitle("cos(#theta *)");
+  h_comb_costhetaSKHel -> SetTitle("");
   h_comb_pfmva1 -> SetLineColor(4);
   h_comb_pfmva1 -> SetLineWidth(2);
   h_comb_pfmva1 -> GetXaxis()->SetTitle("ele1 PF mva");
@@ -874,6 +922,14 @@ void plotsTriplets::Loop()
   leg.SetBorderSize(0);
   leg.AddEntry(h_trueBestMatch_svProb,"Best match to MC-truth");
   leg.AddEntry(h_comb_svProb,"Combinatorics");
+  //
+  TLegend legMC (0.55,0.7,0.95,0.9);
+  legMC.SetFillColor(0);
+  legMC.SetFillStyle(0);
+  legMC.SetBorderSize(0);
+  legMC.AddEntry(h_trueBestMatch_costhetaSKRad,"Best match to MC-truth");
+  legMC.AddEntry(h_comb_costhetaSKRad,"Combinatorics");
+  legMC.AddEntry(h_gen_costhetaSKRad,"MC truth");
   //
   TCanvas c10("c10","",1);
   h_comb_svProb->DrawNormalized();
@@ -1084,6 +1140,30 @@ void plotsTriplets::Loop()
   hz_comb_ele2Vskpt->Draw("colz");
   c18b.SaveAs("Comb_ele2vsKpt.png");
   //
+  TCanvas c19a("c19a","",1);
+  h_comb_costhetaSKRad->DrawNormalized();
+  h_gen_costhetaSKRad->DrawNormalized("same");
+  h_trueBestMatch_costhetaSKRad->DrawNormalized("same");
+  legMC.Draw("same");  
+  c19a.SaveAs("TrueVsComb_costhetaSKRad.png");
+  //
+  TCanvas c19b("c19b","",1);
+  h_comb_costhetaSKCS->DrawNormalized();
+  h_gen_costhetaSKCS->DrawNormalized("same");
+  h_trueBestMatch_costhetaSKCS->DrawNormalized("same");
+  legMC.Draw("same");  
+  c19b.SaveAs("TrueVsComb_costhetaSKCS.png");
+  //
+  TCanvas c19c("c19c","",1);
+  h_comb_costhetaSKHel->DrawNormalized();
+  h_gen_costhetaSKHel->DrawNormalized("same");
+  h_trueBestMatch_costhetaSKHel->DrawNormalized("same");
+  legMC.Draw("same");  
+  c19c.SaveAs("TrueVsComb_costhetaSKHel.png");
+  //
+  //
+
+  //
   //
   // Best SV prob
   h_svProbM_notok_ele1pt  -> SetLineColor(4);
@@ -1194,18 +1274,6 @@ void plotsTriplets::Loop()
   h_xySigM_notok_lptmva2 -> SetLineWidth(2);
   h_xySigM_notok_lptmva2 -> GetXaxis()->SetTitle("ele2 Low pT MVA");
   h_xySigM_notok_lptmva2 -> SetTitle("");
-  h_xySigM_notok_costhetaSK -> SetLineColor(4);
-  h_xySigM_notok_costhetaSK -> SetLineWidth(2);
-  h_xySigM_notok_costhetaSK -> GetXaxis()->SetTitle("cos(Theta*) K");
-  h_xySigM_notok_costhetaSK -> SetTitle("");
-  h_xySigM_notok_costhetaSKCS -> SetLineColor(4);
-  h_xySigM_notok_costhetaSKCS -> SetLineWidth(2);
-  h_xySigM_notok_costhetaSKCS -> GetXaxis()->SetTitle("cos(Theta*) K");
-  h_xySigM_notok_costhetaSKCS -> SetTitle("");
-  h_xySigM_notok_costhetaL -> SetLineColor(4);
-  h_xySigM_notok_costhetaL -> SetLineWidth(2);
-  h_xySigM_notok_costhetaL -> GetXaxis()->SetTitle("cos(Theta) ele1");
-  h_xySigM_notok_costhetaL -> SetTitle("");
   h_xySigM_notok_ele1eta -> SetLineColor(4);
   h_xySigM_notok_ele1eta -> SetLineWidth(2);
   h_xySigM_notok_ele1eta -> GetXaxis()->SetTitle("ele1 #eta");
@@ -1274,22 +1342,6 @@ void plotsTriplets::Loop()
   h_xySigM_ok_lptmva2 -> SetLineWidth(2);
   h_xySigM_ok_lptmva2 -> GetXaxis()->SetTitle("ele2 Low pT MVA");
   h_xySigM_ok_lptmva2 -> SetTitle("");
-  h_xySigM_ok_costhetaSK_gen -> SetLineColor(2);
-  h_xySigM_ok_costhetaSK_gen -> SetLineWidth(2);
-  h_xySigM_ok_costhetaSK_gen -> GetXaxis()->SetTitle("cos(Theta*) K");
-  h_xySigM_ok_costhetaSK_gen -> SetTitle("");
-  h_xySigM_ok_costhetaSK -> SetLineColor(2);
-  h_xySigM_ok_costhetaSK -> SetLineWidth(2);
-  h_xySigM_ok_costhetaSK -> GetXaxis()->SetTitle("cos(Theta*) K");
-  h_xySigM_ok_costhetaSK -> SetTitle("");
-  h_xySigM_ok_costhetaSKCS -> SetLineColor(2);
-  h_xySigM_ok_costhetaSKCS -> SetLineWidth(2);
-  h_xySigM_ok_costhetaSKCS -> GetXaxis()->SetTitle("cos(Theta*) K");
-  h_xySigM_ok_costhetaSKCS -> SetTitle("");
-  h_xySigM_ok_costhetaL -> SetLineColor(2);
-  h_xySigM_ok_costhetaL -> SetLineWidth(2);
-  h_xySigM_ok_costhetaL -> GetXaxis()->SetTitle("cos(Theta) ele1");
-  h_xySigM_ok_costhetaL -> SetTitle("");
   h_xySigM_ok_ele1eta -> SetLineColor(2);
   h_xySigM_ok_ele1eta -> SetLineWidth(2);
   h_xySigM_ok_ele1eta -> GetXaxis()->SetTitle("ele1 #eta");
@@ -1530,28 +1582,6 @@ void plotsTriplets::Loop()
   h_xySigM_notok_lptmva2->DrawNormalized("same");
   leg3.Draw("same");  
   c40.SaveAs("BestXYsig_goodVsBad_lptmva2.png");
-  //
-  TCanvas c41a("c41a","",1);
-  h_xySigM_notok_costhetaSK -> DrawNormalized();
-  h_xySigM_ok_costhetaSK -> DrawNormalized("same");
-  leg3.Draw("same");
-  c41a.SaveAs("BestXYsig_goodVsBad_costhetaSK.png");
-  //
-  TCanvas c41aa("c41aa","",1);
-  h_xySigM_ok_costhetaSK_gen -> DrawNormalized();
-  c41aa.SaveAs("BestXYsig_costhetaSK_genLevel.png");
-  //
-  TCanvas c41aaa("c41aaa","",1);
-  h_xySigM_notok_costhetaL -> DrawNormalized();
-  h_xySigM_ok_costhetaL    -> DrawNormalized("same");
-  leg3.Draw("same");
-  c41aaa.SaveAs("BestXYsig_goodVsBad_costhetaL.png");
-  //
-  TCanvas c41aaaa("c41aaaa","",1);
-  h_xySigM_notok_costhetaSKCS -> DrawNormalized();
-  h_xySigM_ok_costhetaSKCS -> DrawNormalized("same");
-  leg3.Draw("same");
-  c41aaaa.SaveAs("BestXYsig_goodVsBad_costhetaSKCS.png");
   //
   //
   TCanvas c31b("c31b","",1);
