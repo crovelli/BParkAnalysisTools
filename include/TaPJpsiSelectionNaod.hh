@@ -33,6 +33,8 @@ private:
   bool isProbe( int myEle );     
   void bookOutputTree();
   void bookOutputHistos();
+  void SetPuWeights(std::string puWeightFile);
+  float GetPUWeight(float pun);
 
   // to compute weights for pileup
   std::vector<Double_t> puweights_;
@@ -42,7 +44,7 @@ private:
   int sampleID;
   string puWFileName_;
   float lumiWeight_;
-  
+
   // ---- outputs
   TFile* outFile_;
   TTree* outTree_;
@@ -63,6 +65,9 @@ private:
   float  pu_weight;
   float  pu_n;
   float perEveW;
+  //
+  int hlt9;
+  int hlt12;
   // 
   int selectedBSize;
   //
@@ -70,20 +75,26 @@ private:
   vector <float> tag_eta={};
   vector <float> tag_phi={};
   vector <bool> tag_isPF={};
+  vector <bool> tag_isPFOverlap={};
   vector <bool> tag_isLowPt={};
   vector <float> tag_mvaId={};
   vector <float> tag_pfmvaId={};
   vector <float> tag_unBiased ={};
   vector <bool>  tag_matchMC={};
+  vector <float> tag_pfRelIso={};
   //
   vector <float> probe_Bmass={};   
   vector <float> probe_Bpt={};   
   vector <float> probe_Bcos2D={};   
+  vector <float> probe_Bsvprob={};
+  vector <float> probe_Bxysig={};
   vector <bool> probe_BmatchMC={};   
+  vector <float> probe_Kpt={}; 
   vector <float> probe_pt={}; 
   vector <float> probe_eta ={};
   vector <float> probe_phi={};
   vector <bool> probe_isPF ={};
+  vector <bool> probe_isPFOverlap ={};
   vector <bool> probe_isLowPt ={};
   vector <float> probe_mvaId={};        
   vector <float> probe_pfmvaId={};        

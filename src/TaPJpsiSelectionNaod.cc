@@ -13,11 +13,10 @@ using namespace std;
 TaPJpsiSelectionNaod::TaPJpsiSelectionNaod(TTree *tree)     
   : BParkBase(tree) {        
 
-  // Chiara: To be set by hand   
-  dopureweight_ = false;
-  sampleID = 0;    // 0 = data
-  puWFileName_ = "puWFileName";   
-  lumiWeight_  = 1.;
+  // Chiara: to be set by hand   
+  sampleID = 1;         // 0 = data, >=1 MC
+  dopureweight_ = 0;    // chiara: eventualmente da fare con numero di vertici    
+  puWFileName_ = "";
 }
 
 TaPJpsiSelectionNaod::~TaPJpsiSelectionNaod() {
@@ -53,63 +52,52 @@ void TaPJpsiSelectionNaod::Loop() {
     theLumi  = luminosityBlock;
     theEvent = event;
     theSampleID = sampleID;
-    theLumiWeight = lumiWeight_;
 
     // # Vertices
-    nvtx = nOtherPV+1;   // chiara, controlla che sia ok
+    nvtx = nOtherPV+1;
 
     // Energy density
     rho = fixedGridRhoFastjetAll;
     
     // PU weight (for MC only and if requested)
     pu_weight = 1.;
-    pu_n      = -1.;
-    /*
+    pu_n = -1.;
     if (sampleID>0) {     // MC
-      pu_n = Pileup_nTrueInt;           // chiara: verifica che sia questo
+      pu_n = Pileup_nTrueInt;           
       if (dopureweight_) pu_weight = GetPUWeight(pu_n);         
     }
-    */
 
     // other weights for the dataset
     perEveW = 1.;
-    //if (sampleID>0) { 
-    //const auto & eveWeights = genInfo->weights();
-    //if(!eveWeights.empty()) perEveW = eveWeights[0];
-    //}
-
+    if (sampleID>0) perEveW = Generator_weight;
 
     // Events breakdown  
     h_selection->Fill(0.,perEveW);
     
 
     // ----------------------------------------------------
-    // save events only if:
-    // 1) good vertex
-    // 2) triggering muon
-    // 3) reconstructed B + JPsi
-    // 2) at least one tag and one probe
-    // ----------------------------------------------------
-    
 
-    // PV must be there - chiara: should always be the case
+    // PV must be there
     bool goodPV = false;
     if (PV_x>-999) goodPV = true;
     if (!goodPV) continue;
     h_selection->Fill(1.,perEveW);
 
-    // Trigger - chiara: capire se basta cosi' o se bisogna controllare altro (L1?)
-    bool okTrigger = false;
-    if (HLT_Mu7_IP4 || HLT_Mu8_IP6 || HLT_Mu8_IP5 || HLT_Mu8_IP3 || HLT_Mu8p5_IP3p5 || HLT_Mu9_IP6 || HLT_Mu9_IP5 || HLT_Mu9_IP4 || HLT_Mu10p5_IP3p5 || HLT_Mu12_IP6) okTrigger = true;
-    if (!okTrigger) continue;
-
-    // Triggering muons - chiara
+    // Trigger 
+    int iHLT_Mu12_IP6 = (int)HLT_Mu12_IP6;
+    int iHLT_Mu9_IP6  = (int)HLT_Mu9_IP6;
+    if (iHLT_Mu12_IP6==0 && iHLT_Mu9_IP6==0) continue;         
+    hlt9  = iHLT_Mu9_IP6;
+    hlt12 = iHLT_Mu12_IP6;
+    
+    // Triggering muons
     if (nTriggerMuon<=0) continue;
     h_selection->Fill(2.,perEveW);
 
     // B candidates
     if (nBToKEE<=0) continue;
     h_selection->Fill(3.,perEveW);
+
 
     // Minimal Bcandidate requirements
     vector<int> goodBs;
@@ -118,40 +106,37 @@ void TaPJpsiSelectionNaod::Loop() {
       // preparing variables
       int ele1_idx = BToKEE_l1Idx[iB];
       int ele2_idx = BToKEE_l2Idx[iB];
-      int k_idx    = BToKEE_kIdx[iB];
 
-      float ele1_pt = Electron_pt[ele1_idx];
-      float ele2_pt = Electron_pt[ele2_idx];
-      float k_pt    = ProbeTracks_pt[k_idx];
+      float ele1_pt = BToKEE_fit_l1_pt[iB];
+      float ele2_pt = BToKEE_fit_l2_pt[iB];
+      float k_pt    = BToKEE_fit_k_pt[iB];
 
-      float ele1_eta = Electron_eta[ele1_idx];
-      float ele2_eta = Electron_eta[ele2_idx];
-      float k_eta    = ProbeTracks_eta[k_idx];
-      float ele1_phi = Electron_phi[ele1_idx];
-      float ele2_phi = Electron_phi[ele2_idx];
+      float ele1_eta = BToKEE_fit_l1_eta[iB];     
+      float ele2_eta = BToKEE_fit_l2_eta[iB];    
+      float k_eta    = BToKEE_fit_k_eta[iB];    
+      float ele1_phi = BToKEE_fit_l1_phi[iB];    
+      float ele2_phi = BToKEE_fit_l2_phi[iB];    
 
       bool ele1_convveto = Electron_convVeto[ele1_idx];     
       bool ele2_convveto = Electron_convVeto[ele2_idx];     
 
       float b_xySig = BToKEE_l_xy[iB]/BToKEE_l_xy_unc[iB];
 
-      // B selection
-      // standard cut based selection:  BToKEE_fit_pt[iB]>10.0, cos>0.999
-      bool vtxFitSel = BToKEE_fit_pt[iB]>3.0 && b_xySig>6.0 && BToKEE_svprob[iB]>0.1 && BToKEE_fit_cos2D[iB]>0.99;
-      bool ele1Sel = ele1_convveto && BToKEE_fit_l1_pt[iB]>0.5 && abs(ele1_eta)<2.4;  
-      bool ele2Sel = ele2_convveto && BToKEE_fit_l2_pt[iB]>0.5 && abs(ele2_eta)<2.4;  
-      // standard cut based selection: pt>1.5
+      // B selection (standard cut)
+      bool vtxFitSel = BToKEE_fit_pt[iB]>10.0 && b_xySig>6.0 && BToKEE_svprob[iB]>0.1 && BToKEE_fit_cos2D[iB]>0.999;
+      bool ele1Sel = ele1_convveto && ele1_pt>1.5 && fabs(ele1_eta)<2.4;  
+      bool ele2Sel = ele2_convveto && ele2_pt>0.5 && fabs(ele2_eta)<2.4;  
       bool kSel = k_pt>0.8 && fabs(k_eta)<2.4; 
       bool additionalSel = BToKEE_fit_mass[iB]>4.5 && BToKEE_fit_mass[iB]<6.0;
       bool isBsel = vtxFitSel && ele1Sel && ele2Sel && kSel && additionalSel;
 
-      // JPsi selection - capire se quantita pre-post fit, chiara
-      TLorentzVector ele1TLV(0,0,0,0);
-      ele1TLV.SetPtEtaPhiM(ele1_pt,ele1_eta,ele1_phi,0);
-      TLorentzVector ele2TLV(0,0,0,0);
-      ele2TLV.SetPtEtaPhiM(ele2_pt,ele2_eta,ele2_phi,0);
-      float mee = (ele1TLV+ele2TLV).M();
-      if (mee>3.4 || mee<2.8) continue;  // chiara, mio
+      // JPsi selection
+      // TLorentzVector ele1TLV(0,0,0,0);
+      // ele1TLV.SetPtEtaPhiM(ele1_pt,ele1_eta,ele1_phi,0);
+      // TLorentzVector ele2TLV(0,0,0,0);
+      // ele2TLV.SetPtEtaPhiM(ele2_pt,ele2_eta,ele2_phi,0);
+      // float mee = (ele1TLV+ele2TLV).M();
+      // if (mee>3.6 || mee<2.6) continue; 
 
       if (!isBsel) continue;
 
@@ -169,7 +154,7 @@ void TaPJpsiSelectionNaod::Loop() {
       int thisB    = goodBs[iB];
       int ele1_idx = BToKEE_l1Idx[thisB];
       int ele2_idx = BToKEE_l2Idx[thisB];
-      float BFitprob = BToKEE_svprob[thisB];
+      float theXySig = BToKEE_l_xy[thisB]/BToKEE_l_xy_unc[thisB];
 
       int toadd = -1;
       vector<int> toBeErased;
@@ -177,16 +162,16 @@ void TaPJpsiSelectionNaod::Loop() {
 	int thisBC    = cleanGoodBs[iBC];
 	int ele1_idxC = BToKEE_l1Idx[thisBC];
 	int ele2_idxC = BToKEE_l2Idx[thisBC];
-	float BCFitprob = BToKEE_svprob[thisBC];
+	float theXySigC = BToKEE_l_xy[thisBC]/BToKEE_l_xy_unc[thisBC];
 	
 	// already there - eventually to be replaced
-	if ( ele1_idxC==ele1_idx && ele2_idxC==ele2_idx && BFitprob>BCFitprob ){
+	if ( ele1_idxC==ele1_idx && ele2_idxC==ele2_idx && theXySig>theXySigC ){
 	  toBeErased.push_back(iBC);
 	  cleanGoodBs.push_back(thisB);
 	  // this B is already in, not to be added
 	  toadd = -100;      
 
-	} else if ( ele1_idxC==ele1_idx && ele2_idxC==ele2_idx && BFitprob<=BCFitprob ) {  // there's already a better B candidate with same leptons -> not to be added
+	} else if ( ele1_idxC==ele1_idx && ele2_idxC==ele2_idx && theXySig<=theXySigC ) {  // there's already a better B candidate with same leptons -> not to be added
 	  toadd = -100;
 
 	} else if ( (ele1_idxC!=ele1_idx || ele2_idxC!=ele2_idx) && toadd>-50 ) {   // new leptons and B not yet added -> to be added
@@ -206,6 +191,7 @@ void TaPJpsiSelectionNaod::Loop() {
 
     selectedBSize = cleanGoodBs.size();
 
+
     // ------------------------------------------------------------------
     // At least one good B candidate
     if (cleanGoodBs.size()<=0) continue;
@@ -218,26 +204,28 @@ void TaPJpsiSelectionNaod::Loop() {
 
       // B-infos for further cuts offline
       int thisB = cleanGoodBs[iB];
-      float thisBmass = BToKEE_fit_mass[thisB];
-      float thisBpt   = BToKEE_fit_pt[thisB];
-      float thisBcos  = BToKEE_fit_cos2D[thisB];
+      float thisBmass   = BToKEE_fit_mass[thisB];
+      float thisBpt     = BToKEE_fit_pt[thisB];
+      float thisBcos    = BToKEE_fit_cos2D[thisB];
+      float thisBsvprob = BToKEE_svprob[thisB];
+      float thisBxysig  = BToKEE_l_xy[thisB]/BToKEE_l_xy_unc[thisB];
       bool isThisAMcB = -1;
-      if (sampleID>0) isThisAMcB = isMcB(thisB);
+      if (sampleID>0) isThisAMcB = isMcB(thisB);      
 
       // K-infos for further cuts offline
       int thisK = BToKEE_kIdx[thisB];
-      float thisKpt = ProbeTracks_pt[thisK];
+      float thisKpt = BToKEE_fit_k_pt[thisB];   
 
       // Electrons
       int ele1_idx = BToKEE_l1Idx[thisB];
       int ele2_idx = BToKEE_l2Idx[thisB];
 
-      float ele1_pt  = Electron_pt[ele1_idx];
-      float ele2_pt  = Electron_pt[ele2_idx];
-      float ele1_eta = Electron_eta[ele1_idx];
-      float ele2_eta = Electron_eta[ele2_idx];
-      float ele1_phi = Electron_phi[ele1_idx];
-      float ele2_phi = Electron_phi[ele2_idx];
+      float ele1_pt  = Electron_pt[ele1_idx];      
+      float ele2_pt  = Electron_pt[ele2_idx];   
+      float ele1_eta = Electron_eta[ele1_idx];   
+      float ele2_eta = Electron_eta[ele2_idx];          
+      float ele1_phi = Electron_phi[ele1_idx];          
+      float ele2_phi = Electron_phi[ele2_idx];    
 
       TLorentzVector ele1TLV(0,0,0,0);
       ele1TLV.SetPtEtaPhiM(ele1_pt,ele1_eta,ele1_phi,0);
@@ -255,21 +243,27 @@ void TaPJpsiSelectionNaod::Loop() {
 	tag_pt.push_back(Electron_pt[ele1_idx]);
 	tag_eta.push_back(Electron_eta[ele1_idx]);
 	tag_phi.push_back(Electron_phi[ele1_idx]);
-	tag_isPF.push_back(Electron_isPF[ele1_idx]);
+	tag_isPF.push_back(Electron_isPF[ele1_idx]);           
+	tag_isPFOverlap.push_back(Electron_isPFoverlap[ele1_idx]); 
 	tag_isLowPt.push_back(Electron_isLowPt[ele1_idx]);
 	tag_mvaId.push_back(Electron_mvaId[ele1_idx]);
-	tag_unBiased.push_back(Electron_unBiased[ele1_idx]);  
 	tag_pfmvaId.push_back(Electron_pfmvaId[ele1_idx]);
+	tag_unBiased.push_back(Electron_unBiased[ele1_idx]);  
+	tag_pfRelIso.push_back(Electron_pfRelIso[ele1_idx]);  
 	//
 	probe_Bmass.push_back(thisBmass);
 	probe_Bpt.push_back(thisBpt);
 	probe_Bcos2D.push_back(thisBcos);
+	probe_Bsvprob.push_back(thisBsvprob);
+	probe_Bxysig.push_back(thisBxysig);
 	probe_BmatchMC.push_back(isThisAMcB);
+	probe_Kpt.push_back(thisKpt);
 	probe_pt.push_back(Electron_pt[ele2_idx]);
 	probe_eta.push_back(Electron_eta[ele2_idx]);
 	probe_phi.push_back(Electron_phi[ele2_idx]);
 	probe_isPF.push_back(Electron_isPF[ele2_idx]);
-	probe_isLowPt.push_back(Electron_isLowPt[ele2_idx]);
+	probe_isPFOverlap.push_back(Electron_isPFoverlap[ele2_idx]); 
+	probe_isLowPt.push_back(Electron_isLowPt[ele2_idx]); 
 	probe_mvaId.push_back(Electron_mvaId[ele2_idx]);
 	probe_pfmvaId.push_back(Electron_pfmvaId[ele2_idx]);
 	probe_dxySig.push_back(Electron_dxy[ele2_idx]/Electron_dxyErr[ele2_idx]);  
@@ -300,19 +294,25 @@ void TaPJpsiSelectionNaod::Loop() {
 	tag_eta.push_back(Electron_eta[ele2_idx]);
 	tag_phi.push_back(Electron_phi[ele2_idx]);
 	tag_isPF.push_back(Electron_isPF[ele2_idx]);
+	tag_isPFOverlap.push_back(Electron_isPFoverlap[ele2_idx]); 
 	tag_isLowPt.push_back(Electron_isLowPt[ele2_idx]);
 	tag_mvaId.push_back(Electron_mvaId[ele2_idx]);
-	tag_unBiased.push_back(Electron_unBiased[ele2_idx]);  
 	tag_pfmvaId.push_back(Electron_pfmvaId[ele2_idx]);
+	tag_unBiased.push_back(Electron_unBiased[ele2_idx]);  
+	tag_pfRelIso.push_back(Electron_pfRelIso[ele2_idx]);  
 	//
 	probe_Bmass.push_back(thisBmass);
 	probe_Bpt.push_back(thisBpt);
 	probe_Bcos2D.push_back(thisBcos);
+	probe_Bsvprob.push_back(thisBsvprob);
+	probe_Bxysig.push_back(thisBxysig);
 	probe_BmatchMC.push_back(isThisAMcB);
+	probe_Kpt.push_back(thisKpt);
 	probe_pt.push_back(Electron_pt[ele1_idx]);
 	probe_eta.push_back(Electron_eta[ele1_idx]);
 	probe_phi.push_back(Electron_phi[ele1_idx]);
 	probe_isPF.push_back(Electron_isPF[ele1_idx]);
+	probe_isPFOverlap.push_back(Electron_isPFoverlap[ele1_idx]); 
 	probe_isLowPt.push_back(Electron_isLowPt[ele1_idx]);
 	probe_mvaId.push_back(Electron_mvaId[ele1_idx]);
 	probe_pfmvaId.push_back(Electron_pfmvaId[ele1_idx]);
@@ -356,20 +356,26 @@ void TaPJpsiSelectionNaod::Loop() {
     tag_eta.clear();  
     tag_phi.clear();  
     tag_isPF.clear();  
+    tag_isPFOverlap.clear();
     tag_isLowPt.clear();  
     tag_mvaId.clear();  
     tag_pfmvaId.clear();  
     tag_unBiased.clear();  
+    tag_pfRelIso.clear();
     tag_matchMC.clear();  
     //
     probe_Bmass.clear();
     probe_Bpt.clear();
     probe_Bcos2D.clear();
+    probe_Bsvprob.clear();    
+    probe_Bxysig.clear();    
     probe_BmatchMC.clear();
+    probe_Kpt.clear();
     probe_pt.clear();  
     probe_eta.clear();  
     probe_phi.clear();  
     probe_isPF.clear();  
+    probe_isPFOverlap.clear();
     probe_isLowPt.clear();  
     probe_mvaId.clear();  
     probe_pfmvaId.clear();  
@@ -384,6 +390,50 @@ void TaPJpsiSelectionNaod::Loop() {
     probe_invMass.clear();  
     probe_matchMC.clear();  
   }
+}
+
+void TaPJpsiSelectionNaod::SetPuWeights(std::string puWeightFile) {
+
+  if (puWeightFile == "") {
+    std::cout << "you need a weights file to use this function" << std::endl;
+    return;
+  }
+  std::cout << "PU REWEIGHTING:: Using file " << puWeightFile << std::endl;
+  
+  TFile *f_pu  = new TFile(puWeightFile.c_str(),"READ");
+  f_pu->cd();
+  
+  TH1D *puweights = 0;
+  TH1D *gen_pu = 0;
+  gen_pu    = (TH1D*) f_pu->Get("generated_pu");
+  puweights = (TH1D*) f_pu->Get("weights");
+  
+  if (!puweights || !gen_pu) {
+    std::cout << "weights histograms  not found in file " << puWeightFile << std::endl;
+    return;
+  }
+  TH1D* weightedPU= (TH1D*)gen_pu->Clone("weightedPU");
+  weightedPU->Multiply(puweights);
+  
+  // Rescaling weights in order to preserve same integral of events                               
+  TH1D* weights = (TH1D*)puweights->Clone("rescaledWeights");
+  weights->Scale( gen_pu->Integral(1,MAX_PU_REWEIGHT) / weightedPU->Integral(1,MAX_PU_REWEIGHT) );
+  
+  float sumPuWeights=0.;
+  for (int i = 0; i<MAX_PU_REWEIGHT; i++) {
+    float weight=1.;
+    weight=weights->GetBinContent(i+1);
+    sumPuWeights+=weight;
+    puweights_.push_back(weight);
+  }
+}
+
+float TaPJpsiSelectionNaod::GetPUWeight(float pun) {
+  
+  float weight=1;
+  if (sampleID!=0 && pun<MAX_PU_REWEIGHT && puweights_.size()>0 && dopureweight_) weight = puweights_[pun];
+
+  return weight;
 }
 
 bool TaPJpsiSelectionNaod::isMcB( int theB ) {
@@ -468,6 +518,9 @@ void TaPJpsiSelectionNaod::PrepareOutputs(std::string filename)
 
   bookOutputTree();
   bookOutputHistos();
+
+  // loading weights for pileup if needed
+  if (dopureweight_) SetPuWeights(puWFileName_);
 };
 
 
@@ -483,10 +536,12 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("nvtx", &nvtx, "nvtx/I");    
   outTree_->Branch("sampleID", &sampleID, "sampleID/I");    
   outTree_->Branch("rho", &rho, "rho/F");    
-  outTree_->Branch("theLumiWeight", &theLumiWeight, "theLumiWeight/F");    
   outTree_->Branch("pu_weight", &pu_weight, "pu_weight/F");    
   outTree_->Branch("pu_n", &pu_n, "pu_n/F");    
   outTree_->Branch("perEveW", &perEveW, "perEveW/F");    
+
+  outTree_->Branch("hlt9", &hlt9, "hlt9/I");
+  outTree_->Branch("hlt12", &hlt12, "hlt12/I");
 
   outTree_->Branch("selectedBSize",  &selectedBSize,  "selectedBSize/I");   
   
@@ -494,20 +549,26 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("tag_eta", "std::vector<float>", &tag_eta);  
   outTree_->Branch("tag_phi", "std::vector<float>", &tag_phi);  
   outTree_->Branch("tag_isPF", "std::vector<bool>", &tag_isPF);  
+  outTree_->Branch("tag_isPFOverlap", "std::vector<bool>", &tag_isPFOverlap);  
   outTree_->Branch("tag_isLowPt", "std::vector<bool>", &tag_isLowPt);  
   outTree_->Branch("tag_mvaId", "std::vector<float>", &tag_mvaId);  
   outTree_->Branch("tag_pfmvaId", "std::vector<float>", &tag_pfmvaId);  
   outTree_->Branch("tag_unBiased", "std::vector<float>", &tag_unBiased);  
+  outTree_->Branch("tag_pfRelIso", "std::vector<float>", &tag_pfRelIso);  
   outTree_->Branch("tag_matchMC", "std::vector<bool>", &tag_matchMC);  
 
-  outTree_->Branch("probe_Bmass", "std::vector<float>", &probe_Bmass);  
-  outTree_->Branch("probe_Bpt", "std::vector<float>", &probe_Bpt);  
-  outTree_->Branch("probe_Bcos2D", "std::vector<float>", &probe_Bcos2D);  
+  outTree_->Branch("probe_Bmass",   "std::vector<float>", &probe_Bmass);  
+  outTree_->Branch("probe_Bpt",     "std::vector<float>", &probe_Bpt);  
+  outTree_->Branch("probe_Bcos2D",  "std::vector<float>", &probe_Bcos2D);  
+  outTree_->Branch("probe_Bsvprob", "std::vector<float>", &probe_Bsvprob);  
+  outTree_->Branch("probe_Bxysig",  "std::vector<float>", &probe_Bxysig);  
   outTree_->Branch("probe_BmatchMC", "std::vector<bool>", &probe_BmatchMC);  
+  outTree_->Branch("probe_Kpt", "std::vector<float>", &probe_Kpt);  
   outTree_->Branch("probe_pt", "std::vector<float>", &probe_pt);  
   outTree_->Branch("probe_eta", "std::vector<float>", &probe_eta);  
   outTree_->Branch("probe_phi", "std::vector<float>", &probe_phi);  
   outTree_->Branch("probe_isPF", "std::vector<bool>", &probe_isPF);  
+  outTree_->Branch("probe_isPFOverlap", "std::vector<bool>", &probe_isPFOverlap);  
   outTree_->Branch("probe_isLowPt", "std::vector<bool>", &probe_isLowPt);  
   outTree_->Branch("probe_mvaId", "std::vector<float>", &probe_mvaId);  
   outTree_->Branch("probe_pfmvaId", "std::vector<float>", &probe_pfmvaId);  
