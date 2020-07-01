@@ -57,11 +57,9 @@ private:
   //---output tree branches variables
   int    theRun;
   int    theEvent;
-  int    theLumi;
   int    nvtx;
   int    theSampleID;
   float  rho;
-  float  theLumiWeight;
   float  pu_weight;
   float  pu_n;
   float perEveW;
@@ -79,8 +77,8 @@ private:
   vector <bool> tag_isLowPt={};
   vector <float> tag_mvaId={};
   vector <float> tag_pfmvaId={};
-  vector <float> tag_unBiased ={};
   vector <bool>  tag_matchMC={};
+  vector <bool> tag_convveto={};
   vector <float> tag_pfRelIso={};
   //
   vector <float> probe_Bmass={};   
@@ -105,6 +103,7 @@ private:
   vector <float> probe_fBrem ={};
   vector <float> probe_unBiased ={};
   vector <float> probe_ptBiased ={};
+  vector <bool> probe_convveto={};
   vector <bool> probe_isTag ={};
   vector <float> probe_invMass={};
   vector <bool>  probe_matchMC={};
