@@ -49,7 +49,6 @@ void TaPJpsiSelectionNaod::Loop() {
     
     // Event info     
     theRun   = run;
-    theLumi  = luminosityBlock;
     theEvent = event;
     theSampleID = sampleID;
 
@@ -86,7 +85,7 @@ void TaPJpsiSelectionNaod::Loop() {
     // Trigger 
     int iHLT_Mu12_IP6 = (int)HLT_Mu12_IP6;
     int iHLT_Mu9_IP6  = (int)HLT_Mu9_IP6;
-    if (iHLT_Mu12_IP6==0 && iHLT_Mu9_IP6==0) continue;         
+    ////////////////////////////if (iHLT_Mu12_IP6==0 && iHLT_Mu9_IP6==0) continue;         
     hlt9  = iHLT_Mu9_IP6;
     hlt12 = iHLT_Mu12_IP6;
     
@@ -124,9 +123,13 @@ void TaPJpsiSelectionNaod::Loop() {
 
       // B selection (standard cut)
       bool vtxFitSel = BToKEE_fit_pt[iB]>10.0 && b_xySig>6.0 && BToKEE_svprob[iB]>0.1 && BToKEE_fit_cos2D[iB]>0.999;
-      bool ele1Sel = ele1_convveto && ele1_pt>1.5 && fabs(ele1_eta)<2.4;  
-      bool ele2Sel = ele2_convveto && ele2_pt>0.5 && fabs(ele2_eta)<2.4;  
-      bool kSel = k_pt>0.8 && fabs(k_eta)<2.4; 
+      //bool ele1Sel = ele1_convveto && ele1_pt>1.5 && fabs(ele1_eta)<2.4;  
+      //bool ele2Sel = ele2_convveto && ele2_pt>0.5 && fabs(ele2_eta)<2.4;  
+      //bool kSel = k_pt>0.8 && fabs(k_eta)<2.4; 
+      bool ele1Sel = ele1_pt>1.5 && fabs(ele1_eta)<2.4;  
+      bool ele2Sel = ele2_pt>0.5 && fabs(ele2_eta)<2.4;  
+      bool kSel = k_pt>0.7 && fabs(k_eta)<2.4; 
+
       bool additionalSel = BToKEE_fit_mass[iB]>4.5 && BToKEE_fit_mass[iB]<6.0;
       bool isBsel = vtxFitSel && ele1Sel && ele2Sel && kSel && additionalSel;
 
@@ -248,7 +251,7 @@ void TaPJpsiSelectionNaod::Loop() {
 	tag_isLowPt.push_back(Electron_isLowPt[ele1_idx]);
 	tag_mvaId.push_back(Electron_mvaId[ele1_idx]);
 	tag_pfmvaId.push_back(Electron_pfmvaId[ele1_idx]);
-	tag_unBiased.push_back(Electron_unBiased[ele1_idx]);  
+	tag_convveto.push_back(Electron_convVeto[ele1_idx]);
 	tag_pfRelIso.push_back(Electron_pfRelIso[ele1_idx]);  
 	//
 	probe_Bmass.push_back(thisBmass);
@@ -273,6 +276,7 @@ void TaPJpsiSelectionNaod::Loop() {
 	probe_fBrem.push_back(Electron_fBrem[ele2_idx]);  
 	probe_unBiased.push_back(Electron_unBiased[ele2_idx]);  
 	probe_ptBiased.push_back(Electron_ptBiased[ele2_idx]);  
+	probe_convveto.push_back(Electron_convVeto[ele2_idx]);
 	probe_isTag.push_back( is2tag );
 	probe_invMass.push_back(mee);  
 	//
@@ -298,7 +302,7 @@ void TaPJpsiSelectionNaod::Loop() {
 	tag_isLowPt.push_back(Electron_isLowPt[ele2_idx]);
 	tag_mvaId.push_back(Electron_mvaId[ele2_idx]);
 	tag_pfmvaId.push_back(Electron_pfmvaId[ele2_idx]);
-	tag_unBiased.push_back(Electron_unBiased[ele2_idx]);  
+	tag_convveto.push_back(Electron_convVeto[ele2_idx]);
 	tag_pfRelIso.push_back(Electron_pfRelIso[ele2_idx]);  
 	//
 	probe_Bmass.push_back(thisBmass);
@@ -323,6 +327,7 @@ void TaPJpsiSelectionNaod::Loop() {
 	probe_fBrem.push_back(Electron_fBrem[ele1_idx]);  
 	probe_unBiased.push_back(Electron_unBiased[ele1_idx]);  
 	probe_ptBiased.push_back(Electron_ptBiased[ele1_idx]);  
+	probe_convveto.push_back(Electron_convVeto[ele1_idx]);
 	probe_isTag.push_back( is1tag );
 	probe_invMass.push_back(mee);  
 	//
@@ -360,7 +365,7 @@ void TaPJpsiSelectionNaod::Loop() {
     tag_isLowPt.clear();  
     tag_mvaId.clear();  
     tag_pfmvaId.clear();  
-    tag_unBiased.clear();  
+    tag_convveto.clear();
     tag_pfRelIso.clear();
     tag_matchMC.clear();  
     //
@@ -386,6 +391,7 @@ void TaPJpsiSelectionNaod::Loop() {
     probe_fBrem.clear();  
     probe_unBiased.clear();  
     probe_ptBiased.clear();  
+    probe_convveto.clear();
     probe_isTag.clear();  
     probe_invMass.clear();  
     probe_matchMC.clear();  
@@ -532,7 +538,6 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   
   outTree_->Branch("theRun", &theRun, "theRun/I");    
   outTree_->Branch("theEvent", &theEvent, "theEvent/I");    
-  outTree_->Branch("theLumi", &theLumi, "theLumi/I");    
   outTree_->Branch("nvtx", &nvtx, "nvtx/I");    
   outTree_->Branch("sampleID", &sampleID, "sampleID/I");    
   outTree_->Branch("rho", &rho, "rho/F");    
@@ -553,7 +558,7 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("tag_isLowPt", "std::vector<bool>", &tag_isLowPt);  
   outTree_->Branch("tag_mvaId", "std::vector<float>", &tag_mvaId);  
   outTree_->Branch("tag_pfmvaId", "std::vector<float>", &tag_pfmvaId);  
-  outTree_->Branch("tag_unBiased", "std::vector<float>", &tag_unBiased);  
+  outTree_->Branch("tag_convveto", "std::vector<bool>", &tag_convveto);  
   outTree_->Branch("tag_pfRelIso", "std::vector<float>", &tag_pfRelIso);  
   outTree_->Branch("tag_matchMC", "std::vector<bool>", &tag_matchMC);  
 
@@ -579,6 +584,7 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("probe_fBrem", "std::vector<float>", &probe_fBrem);  
   outTree_->Branch("probe_unBiased", "std::vector<float>", &probe_unBiased);  
   outTree_->Branch("probe_ptBiased", "std::vector<float>", &probe_ptBiased);  
+  outTree_->Branch("probe_convveto", "std::vector<bool>", &probe_convveto);  
   outTree_->Branch("probe_isTag", "std::vector<bool>", &probe_isTag);  
   outTree_->Branch("probe_invMass", "std::vector<float>", &probe_invMass);  
   outTree_->Branch("probe_matchMC", "std::vector<bool>", &probe_matchMC);  
