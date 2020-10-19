@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void tnpTreeFormat(const char* filename, float lumiForW) {
+void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
 
   cout << "Formatting " << filename << endl;  
 
@@ -72,7 +72,8 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
   vector<float>   *tag_pfmvaId = nullptr;
   vector<float>   *tag_pfRelIso = nullptr;
   vector<int>     *tag_convveto = nullptr;
-  vector<bool>    *tag_matchMC = nullptr;
+  vector<bool>    *tag_matchMc = nullptr;
+  vector<bool>    *tag_matchMcFromJPsi = nullptr;
   vector<float>   *probe_Bmass = nullptr;
   vector<float>   *probe_Bpt = nullptr;
   vector<float>   *probe_Bcos2D = nullptr;
@@ -98,7 +99,8 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
   vector<bool>    *probe_isTag = nullptr;
   vector<float>   *probe_invMass = nullptr;
   vector<int>     *probe_convveto = nullptr;
-  vector<bool>    *probe_matchMC = nullptr;
+  vector<bool>    *probe_matchMc = nullptr;
+  vector<bool>    *probe_matchMcFromJPsi = nullptr;
   Int_t           selectedPairsSize = 0;
   
   // List of branches - original tree
@@ -123,7 +125,8 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
   TBranch        *b_tag_pfmvaId;   //!
   TBranch        *b_tag_pfRelIso;   //!
   TBranch        *b_tag_convveto;   //!
-  TBranch        *b_tag_matchMC;   //!
+  TBranch        *b_tag_matchMc;   //!
+  TBranch        *b_tag_matchMcFromJPsi;   //!
   TBranch        *b_probe_Bmass;   //!
   TBranch        *b_probe_Bpt;   //!
   TBranch        *b_probe_Bcos2D;   //!
@@ -149,7 +152,8 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
   TBranch        *b_probe_isTag;   //!
   TBranch        *b_probe_invMass;   //!
   TBranch        *b_probe_convveto;   //!
-  TBranch        *b_probe_matchMC;   //!
+  TBranch        *b_probe_matchMc;   //!
+  TBranch        *b_probe_matchMcFromJPsi;   //!
   TBranch        *b_selectedPairsSize;   //!
   
   // Set branch addresses and branch pointers 
@@ -174,7 +178,8 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
   treeOrig->SetBranchAddress("tag_pfmvaId", &tag_pfmvaId, &b_tag_pfmvaId);
   treeOrig->SetBranchAddress("tag_pfRelIso", &tag_pfRelIso, &b_tag_pfRelIso);
   treeOrig->SetBranchAddress("tag_convveto", &tag_convveto, &b_tag_convveto);
-  treeOrig->SetBranchAddress("tag_matchMC", &tag_matchMC, &b_tag_matchMC);
+  treeOrig->SetBranchAddress("tag_matchMc", &tag_matchMc, &b_tag_matchMc);
+  treeOrig->SetBranchAddress("tag_matchMcFromJPsi", &tag_matchMcFromJPsi, &b_tag_matchMcFromJPsi);
   treeOrig->SetBranchAddress("probe_Bmass", &probe_Bmass, &b_probe_Bmass);
   treeOrig->SetBranchAddress("probe_Bpt", &probe_Bpt, &b_probe_Bpt);
   treeOrig->SetBranchAddress("probe_Bcos2D", &probe_Bcos2D, &b_probe_Bcos2D);
@@ -200,14 +205,16 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
   treeOrig->SetBranchAddress("probe_isTag", &probe_isTag, &b_probe_isTag);
   treeOrig->SetBranchAddress("probe_invMass", &probe_invMass, &b_probe_invMass);
   treeOrig->SetBranchAddress("probe_convveto", &probe_convveto, &b_probe_convveto);
-  treeOrig->SetBranchAddress("probe_matchMC", &probe_matchMC, &b_probe_matchMC);
+  treeOrig->SetBranchAddress("probe_matchMc", &probe_matchMc, &b_probe_matchMc);
+  treeOrig->SetBranchAddress("probe_matchMcFromJPsi", &probe_matchMcFromJPsi, &b_probe_matchMcFromJPsi);
   treeOrig->SetBranchAddress("selectedPairsSize", &selectedPairsSize, &b_selectedPairsSize);
 
   // New variables
   Int_t     hlt_9;
   Int_t     hlt_12;
-  Int_t     tagMatchMC;
-  Int_t     tagConvVeto;
+  Int_t     numvtx;
+  Int_t     tagMatchMc;
+  Int_t     tagMatchMcFromJPsi;
   Float_t   tagPt;
   Float_t   tagEta;
   Float_t   tagRelIso;
@@ -219,9 +226,13 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
   Float_t   probeMvaId;
   Float_t   probePfmvaId;
   Float_t   probeUnBiased;
+  Float_t   probePtBiased;
   Int_t     probeConvVeto;
-  Int_t     probeMatchMC;
+  Int_t     probeMatchMc;
+  Int_t     probeMatchMcFromJPsi;
   Float_t   probeTrkRelIso;
+  Float_t   probePFRelIso;
+  Float_t   probeFBrem;
   Float_t   probeDxySig;
   Float_t   probeDzSig;
   Float_t   K_pt;
@@ -234,8 +245,9 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
     TTree *theTreeNew = trees[i];
     theTreeNew->Branch("hlt_9", &hlt_9, "hlt_9/I");
     theTreeNew->Branch("hlt_12", &hlt_12, "hlt_12/I");
-    theTreeNew->Branch("tagConvVeto",&tagConvVeto,"tagConvVeto/I");
-    theTreeNew->Branch("tagMatchMC",&tagMatchMC,"tagMatchMC/I");
+    theTreeNew->Branch("numvtx", &numvtx, "numvtx/I");
+    theTreeNew->Branch("tagMatchMc",&tagMatchMc,"tagMatchMc/I");
+    theTreeNew->Branch("tagMatchMcFromJPsi",&tagMatchMcFromJPsi,"tagMatchMcFromJPsi/I");
     theTreeNew->Branch("tagPt",&tagPt,"tagPt/F");
     theTreeNew->Branch("tagEta",&tagEta,"tagEta/F");
     theTreeNew->Branch("tagRelIso",&tagRelIso,"tagRelIso/F");
@@ -247,9 +259,13 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
     theTreeNew->Branch("probeMvaId",&probeMvaId,"probeMvaId/F");
     theTreeNew->Branch("probePfmvaId",&probePfmvaId,"probePfmvaId/F");
     theTreeNew->Branch("probeUnBiased",&probeUnBiased,"probeUnBiased/F");
+    theTreeNew->Branch("probePtBiased",&probePtBiased,"probePtBiased/F");
     theTreeNew->Branch("probeConvVeto",&probeConvVeto,"probeConvVeto/I");
-    theTreeNew->Branch("probeMatchMC",&probeMatchMC,"probeMatchMC/I");
+    theTreeNew->Branch("probeMatchMc",&probeMatchMc,"probeMatchMc/I");
+    theTreeNew->Branch("probeMatchMcFromJPsi",&probeMatchMcFromJPsi,"probeMatchMcFromJPsi/I");
     theTreeNew->Branch("probeTrkRelIso",&probeTrkRelIso,"probeTrkRelIso/F");
+    theTreeNew->Branch("probePFRelIso",&probePFRelIso,"probePFRelIso/F");
+    theTreeNew->Branch("probeFBrem",&probeFBrem,"probeFBrem/F");
     theTreeNew->Branch("probeDxySig",&probeDxySig,"probeDxySig/F");
     theTreeNew->Branch("probeDzSig",&probeDzSig,"probeDzSig/F");
     theTreeNew->Branch("K_pt",&K_pt,"K_pt/F");
@@ -266,27 +282,36 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
 
     for (unsigned int ii=0; ii<probe_Bmass->size(); ii++) {
 
-      // further selection on tag 
-      if ( tag_isPF->at(ii)==0 ) continue;
-      if ( tag_pt->at(ii)<5 && tag_pfmvaId->at(ii)<1. )  continue;
-      if ( tag_pt->at(ii)>=5 && tag_pfmvaId->at(ii)<2. ) continue;
-      // chiara: add conv. veto
+      if ( tag_convveto->at(ii)==0)   continue;      
+      if ( probe_convveto->at(ii)==0) continue;      
 
-      // further selection on probe 
-      // chiara: add conv. veto
+      // further selection on tag and probe
+      if (isProbeLpt==1) { // probe=lowPT; tag=PF
+	if ( tag_isPF->at(ii)==0 ) continue;
+	if ( tag_pt->at(ii)<5 && tag_pfmvaId->at(ii)<1. )  continue;
+	if ( tag_pt->at(ii)>=5 && tag_pfmvaId->at(ii)<2. ) continue;
+	if ( probe_isLowPt->at(ii)==0) continue;                   
+      }
+
+      if (isProbeLpt==0) { // probe=PF; tag=anything
+	if ( probe_isPF->at(ii)==0) continue;  
+      }
 
       // e+e- invariant mass selection
-      if (probe_invMass->at(ii)<2 || probe_invMass->at(ii)>4) continue;
+      ////////////// if (probe_invMass->at(ii)<2 || probe_invMass->at(ii)>4) continue;  // comment for ROCs, uncomment for TnP
+
 
       // save new variables, making flat tree
       hlt_9  = hlt9;
       hlt_12 = hlt12;
-      
+
+      numvtx = nvtx;     
+
       B_mass = probe_Bmass->at(ii);
       pair_mass = probe_invMass->at(ii);
       
-      tagMatchMC = tag_matchMC->at(ii);
-      tagConvVeto = (int)tag_convveto->at(ii);
+      tagMatchMc = tag_matchMc->at(ii);
+      tagMatchMcFromJPsi = tag_matchMcFromJPsi->at(ii);
       tagPt  = tag_pt->at(ii);
       tagEta = tag_eta->at(ii);
       tagRelIso = tag_pfRelIso->at(ii);
@@ -298,9 +323,13 @@ void tnpTreeFormat(const char* filename, float lumiForW) {
       probeMvaId = probe_mvaId->at(ii);
       probePfmvaId = probe_pfmvaId->at(ii);
       probeUnBiased = probe_unBiased->at(ii);
+      probePtBiased = probe_ptBiased->at(ii);
       probeConvVeto = (int)probe_convveto->at(ii);
-      probeMatchMC = probe_matchMC->at(ii);
+      probeMatchMc = probe_matchMc->at(ii);
+      probeMatchMcFromJPsi = probe_matchMcFromJPsi->at(ii);
       probeTrkRelIso = probe_trkRelIso->at(ii);
+      probePFRelIso = probe_pfRelIso->at(ii);
+      probeFBrem = probe_fBrem->at(ii);
       probeDxySig = probe_dxySig->at(ii);
       probeDzSig = probe_dzSig->at(ii);
       K_pt = probe_Kpt->at(ii);
