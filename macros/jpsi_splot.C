@@ -1,5 +1,9 @@
 // Based on ROOT/tutorials/roostats/rs301_splot.C
 
+// To be run on data tnp formatted ntuples 
+// - Fit mee invariant mass as a reference distribution
+// - Extract electron-related distributions for signal and background with the sPlots technique
+
 #include "RooRealVar.h"
 #include "RooDataSet.h"
 #include "RooDataHist.h"
