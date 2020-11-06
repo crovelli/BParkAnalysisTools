@@ -133,8 +133,8 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   // combined model
   
   // These variables represent the number of JPsi or background events to be fitted
-  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",     500 ,1.,500000) ;      // Init MC: 500 ,100.,60000; Init Data: 500 ,1000.,500000
-  //RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",     500 ,1000.,500000) ;      // Init MC: 500 ,100.,60000; Init Data: 500 ,1000.,500000
+  //RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",     500 ,1.,500000) ;      // Init MC: 500 ,100.,60000; Init Data: 500 ,1000.,500000
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",     500 ,1000.,500000) ;      // Init MC: 500 ,100.,60000; Init Data: 500 ,1000.,500000
   RooRealVar bkgYield("bkgYield","fitted yield for background", 500 ,1000.,500000) ;      // Init MC: 500 ,100.,40000; Init Data: 500 ,1000.,500000
   
   // now make the combined model
@@ -429,7 +429,7 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   RooRealVar pair_mass("pair_mass", "M_{inv}", lowRange, highRange,"GeV");
   // discriminating variables
   RooRealVar probeMvaId("probeMvaId", "probeMvaId", -10., 10., "");
-  RooRealVar probePt("probePt", "probePt", 0., 20., "");
+  RooRealVar probePt("probePt", "probePt", 0., 15., "");
   RooRealVar probeEta("probeEta", "probeEta", -2.5, 2.5, "");
   RooRealVar probeFBrem("probeFBrem", "probeFBrem", 0., 1., "");
   RooRealVar probeDxySig("probeDxySig", "probeDxySig", -50., 50., "");
@@ -464,7 +464,7 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   // pt: 2.0-5.0 GeV 
   // data = (RooDataSet*)data->reduce("probePt>2.0 && probePt<5.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: >5.0 GeV 
-  data = (RooDataSet*)data->reduce("probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");    
 
   data->Print();
 
