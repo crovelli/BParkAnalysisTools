@@ -14,7 +14,7 @@ using namespace std;
 void prepareInputsFromFakes::Loop(bool applyWeight)
 {
   if (fChain == 0) return;
-
+  
   // B
   TH1F *bMassH      = new TH1F("bMassH",      "bMassH",      50, 4.4, 6.);
   TH1F *bMassAfterH = new TH1F("bMassAfterH", "bMassAfterH", 50, 4.4, 6.);
@@ -138,6 +138,9 @@ void prepareInputsFromFakes::Loop(bool applyWeight)
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
+
+    // Trigger
+    if (hlt_9==0) continue;
 
     // Acceptance
     if (fabs(eleEta)>2.4 || (elePt<0.5)) cout << "problems with acceptance" << endl;
