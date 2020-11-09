@@ -352,6 +352,9 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight)
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
+
+    // HLT
+    if (hlt_9==0) continue;
     
     // Acceptance
     if (fabs(probeEta)>2.4) continue;
