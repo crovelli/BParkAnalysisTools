@@ -293,8 +293,10 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
 	if ( probe_isLowPt->at(ii)==0) continue;                   
       }
 
-      if (isProbeLpt==0) { // probe=PF; tag=anything
+      if (isProbeLpt==0) { // probe=PF; tag=PF or good lowPT
 	if ( probe_isPF->at(ii)==0) continue;  
+	if ( tag_isPF->at(ii)==0 && tag_mvaId->at(ii)<2) continue;
+	// TaPtree->Draw("probe_mvaId","probe_isPF==1 && ((tag_isPF==0 && tag_mvaId<20 && tag_mvaId>5) || (tag_isPF==1 && tag_pfmvaId>1))")
       }
 
       // e+e- invariant mass selection
