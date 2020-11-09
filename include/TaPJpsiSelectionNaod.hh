@@ -77,7 +77,8 @@ private:
   vector <bool> tag_isLowPt={};
   vector <float> tag_mvaId={};
   vector <float> tag_pfmvaId={};
-  vector <bool>  tag_matchMC={};
+  vector <bool>  tag_matchMcFromJPsi={};
+  vector <bool>  tag_matchMc={};
   vector <bool> tag_convveto={};
   vector <float> tag_pfRelIso={};
   //
@@ -106,7 +107,8 @@ private:
   vector <bool> probe_convveto={};
   vector <bool> probe_isTag ={};
   vector <float> probe_invMass={};
-  vector <bool>  probe_matchMC={};
+  vector <bool>  probe_matchMcFromJPsi={};
+  vector <bool>  probe_matchMc={};
   //
   int selectedPairsSize;
 };

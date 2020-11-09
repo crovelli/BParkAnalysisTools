@@ -14,7 +14,7 @@ TaPJpsiSelectionNaod::TaPJpsiSelectionNaod(TTree *tree)
   : BParkBase(tree) {        
 
   // Chiara: to be set by hand   
-  sampleID = 1;         // 0 = data, >=1 MC
+  sampleID = 0;         // 0 = data, >=1 MC
   dopureweight_ = 0;    // chiara: eventualmente da fare con numero di vertici    
   puWFileName_ = "";
 }
@@ -53,7 +53,7 @@ void TaPJpsiSelectionNaod::Loop() {
     theSampleID = sampleID;
 
     // # Vertices
-    nvtx = nOtherPV+1;
+    nvtx = PV_npvs;
 
     // Energy density
     rho = fixedGridRhoFastjetAll;
@@ -281,13 +281,21 @@ void TaPJpsiSelectionNaod::Loop() {
 	probe_invMass.push_back(mee);  
 	//
 	if (sampleID>0) {     // MC      
-	  bool isTagAMcEle   = isMcEleFromJPsi(ele1_idx);
-	  bool isProbeAMcEle = isMcEleFromJPsi(ele2_idx);
-	  tag_matchMC.push_back(isTagAMcEle);
-	  probe_matchMC.push_back(isProbeAMcEle);
+	  bool isTagAMcEleFromJPsi   = isMcEleFromJPsi(ele1_idx);
+	  bool isProbeAMcEleFromJPsi = isMcEleFromJPsi(ele2_idx);
+	  tag_matchMcFromJPsi.push_back(isTagAMcEleFromJPsi);
+	  probe_matchMcFromJPsi.push_back(isProbeAMcEleFromJPsi);
+	  //
+	  bool isTagAMcEle   = (Electron_genPartIdx[ele1_idx]>-0.5);
+	  bool isProbeAMcEle = (Electron_genPartIdx[ele2_idx]>-0.5);
+	  tag_matchMc.push_back(isTagAMcEle);
+	  probe_matchMc.push_back(isProbeAMcEle);
+
 	} else {
-	  tag_matchMC.push_back(0);  
-	  probe_matchMC.push_back(0);  
+	  tag_matchMcFromJPsi.push_back(0);  
+	  probe_matchMcFromJPsi.push_back(0);  
+	  tag_matchMc.push_back(0);  
+	  probe_matchMc.push_back(0);  
 	}
       }
       //
@@ -332,13 +340,20 @@ void TaPJpsiSelectionNaod::Loop() {
 	probe_invMass.push_back(mee);  
 	//
 	if (sampleID>0) {     // MC      
-	  bool isTagAMcEle   = isMcEleFromJPsi(ele2_idx);
-	  bool isProbeAMcEle = isMcEleFromJPsi(ele1_idx);
-	  tag_matchMC.push_back(isTagAMcEle);
-	  probe_matchMC.push_back(isProbeAMcEle);
+	  bool isTagAMcEleFromJPsi   = isMcEleFromJPsi(ele2_idx);
+	  bool isProbeAMcEleFromJPsi = isMcEleFromJPsi(ele1_idx);
+	  tag_matchMcFromJPsi.push_back(isTagAMcEleFromJPsi);
+	  probe_matchMcFromJPsi.push_back(isProbeAMcEleFromJPsi);
+	  //
+	  bool isTagAMcEle   = (Electron_genPartIdx[ele2_idx]>-0.5);
+	  bool isProbeAMcEle = (Electron_genPartIdx[ele1_idx]>-0.5);
+	  tag_matchMc.push_back(isTagAMcEle);
+	  probe_matchMc.push_back(isProbeAMcEle);
 	} else {
-	  tag_matchMC.push_back(0);  
-	  probe_matchMC.push_back(0);  
+	  tag_matchMcFromJPsi.push_back(0);  
+	  probe_matchMcFromJPsi.push_back(0);  
+	  tag_matchMc.push_back(0);  
+	  probe_matchMc.push_back(0);  
 	}
       }
 
@@ -367,7 +382,8 @@ void TaPJpsiSelectionNaod::Loop() {
     tag_pfmvaId.clear();  
     tag_convveto.clear();
     tag_pfRelIso.clear();
-    tag_matchMC.clear();  
+    tag_matchMcFromJPsi.clear();  
+    tag_matchMc.clear();  
     //
     probe_Bmass.clear();
     probe_Bpt.clear();
@@ -394,7 +410,8 @@ void TaPJpsiSelectionNaod::Loop() {
     probe_convveto.clear();
     probe_isTag.clear();  
     probe_invMass.clear();  
-    probe_matchMC.clear();  
+    probe_matchMcFromJPsi.clear();  
+    probe_matchMc.clear();  
   }
 }
 
@@ -560,7 +577,8 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("tag_pfmvaId", "std::vector<float>", &tag_pfmvaId);  
   outTree_->Branch("tag_convveto", "std::vector<bool>", &tag_convveto);  
   outTree_->Branch("tag_pfRelIso", "std::vector<float>", &tag_pfRelIso);  
-  outTree_->Branch("tag_matchMC", "std::vector<bool>", &tag_matchMC);  
+  outTree_->Branch("tag_matchMcFromJPsi", "std::vector<bool>", &tag_matchMcFromJPsi);  
+  outTree_->Branch("tag_matchMc", "std::vector<bool>", &tag_matchMc);  
 
   outTree_->Branch("probe_Bmass",   "std::vector<float>", &probe_Bmass);  
   outTree_->Branch("probe_Bpt",     "std::vector<float>", &probe_Bpt);  
@@ -587,7 +605,8 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("probe_convveto", "std::vector<bool>", &probe_convveto);  
   outTree_->Branch("probe_isTag", "std::vector<bool>", &probe_isTag);  
   outTree_->Branch("probe_invMass", "std::vector<float>", &probe_invMass);  
-  outTree_->Branch("probe_matchMC", "std::vector<bool>", &probe_matchMC);  
+  outTree_->Branch("probe_matchMcFromJPsi", "std::vector<bool>", &probe_matchMcFromJPsi);  
+  outTree_->Branch("probe_matchMc", "std::vector<bool>", &probe_matchMc);  
 
   outTree_->Branch("selectedPairsSize",  &selectedPairsSize,  "selectedPairsSize/I");   
 }
