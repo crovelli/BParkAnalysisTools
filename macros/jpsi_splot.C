@@ -51,8 +51,8 @@ void jpsi_splot()
   AddModel(wspace, lowRange, highRange);
   
   // add dataset from converted root tree
-  // getDataSet("/afs/cern.ch/work/c/crovelli/BPhys/BParkAnalysisTools/macros/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root", wspace, lowRange, highRange);
-  getDataSet("Formatted_ParkingBPH1_Run2018D_ALL_probeLowPt.root", wspace, lowRange, highRange);
+  // getDataSet("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root", wspace, lowRange, highRange);
+  getDataSet("Formatted_ParkingRun2018DAll_probeLowPt.root", wspace, lowRange, highRange);
   
   // inspect the workspace if you wish
   wspace->Print();
@@ -77,6 +77,8 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   
   // make a RooRealVar for the observables
   RooRealVar pair_mass("pair_mass", "M_{inv}", lowRange, highRange,"GeV");
+  // 
+  RooRealVar hlt_9("hlt_9", "hlt_9", -0.5, 1.5, "");
   // 
   RooRealVar probeMvaId("probeMvaId", "probeMvaId", -10., 10., "");
   RooRealVar probePt("probePt", "probePt", 0., 15., "");
@@ -311,6 +313,7 @@ void MakeHistos(RooWorkspace* ws){
   std::cout << "save histos" << std::endl;
 
   RooRealVar* probeMvaId = ws->var("probeMvaId");
+  RooRealVar* hlt_9 = ws->var("hlt_9");
   RooRealVar* probePt  = ws->var("probePt");
   RooRealVar* probeEta = ws->var("probeEta");
   RooRealVar* probeFBrem = ws->var("probeFBrem");
@@ -427,6 +430,8 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   
   // fit variables
   RooRealVar pair_mass("pair_mass", "M_{inv}", lowRange, highRange,"GeV");
+  // trigger
+  RooRealVar hlt_9("hlt_9", "hlt_9", -0.5, 1.5, "");
   // discriminating variables
   RooRealVar probeMvaId("probeMvaId", "probeMvaId", -10., 10., "");
   RooRealVar probePt("probePt", "probePt", 0., 15., "");
@@ -435,36 +440,37 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   RooRealVar probeDxySig("probeDxySig", "probeDxySig", -50., 50., "");
   RooRealVar probeDzSig("probeDzSig", "probeDzSig", -50., 50., "");
 
-  RooArgSet setall(pair_mass,probeMvaId,probePt,probeEta,probeFBrem,probeDxySig,probeDzSig);
+  RooArgSet setall(pair_mass,hlt_9,probeMvaId,probePt,probeEta,probeFBrem,probeDxySig,probeDzSig);
 
   TFile *file = TFile::Open(rootfile);
   TTree *tree = (TTree*)file->Get("tnpAna/fitter_tree");
 
   RooDataSet *data = new RooDataSet("data","data",tree,setall,0); 
+  data = (RooDataSet*)data->reduce("hlt_9==1");
 
   // Barrel:
   // pt: 0.5-1.0 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>0.5 && probePt<1.0 && probeEta<1.5 && probeEta>-1.5");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<1.0 && probeEta<1.5 && probeEta>-1.5");    
   // pt: 1.0-1.5 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>1.0 && probePt<1.5 && probeEta<1.5 && probeEta>-1.5");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.0 && probePt<1.5 && probeEta<1.5 && probeEta>-1.5");    
   // pt: 1.5-2.0 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>1.5 && probePt<2.0 && probeEta<1.5 && probeEta>-1.5");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.5 && probePt<2.0 && probeEta<1.5 && probeEta>-1.5");    
   // pt: 2.0-5.0 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>2.0 && probePt<5.0 && probeEta<1.5 && probeEta>-1.5");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>2.0 && probePt<5.0 && probeEta<1.5 && probeEta>-1.5");    
   // pt: >5.0 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>5.0 && probeEta<1.5 && probeEta>-1.5");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && probeEta<1.5 && probeEta>-1.5");    
   //
   // Endcap:
   // pt: 0.5-1.0 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>0.5 && probePt<1.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<1.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: 1.0-1.5 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>1.0 && probePt<1.5 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.0 && probePt<1.5 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: 1.5-2.0 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>1.5 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.5 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: 2.0-5.0 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>2.0 && probePt<5.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>2.0 && probePt<5.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: >5.0 GeV 
-  // data = (RooDataSet*)data->reduce("probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");    
 
   data->Print();
 
