@@ -133,6 +133,10 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt)
     // Loop over electrons
     for (int iEle=0; iEle<nElectron; iEle++) {
 
+      // HLT
+      int iHLT_Mu9_IP6 = (int)HLT_Mu9_IP6;
+      if (iHLT_Mu9_IP6==0) continue;
+
       // LowPt or PF only    
       if (testLowPt==1 && Electron_isLowPt[iEle]==0) continue;
       if (testLowPt==0 && Electron_isPF[iEle]==0) continue;
