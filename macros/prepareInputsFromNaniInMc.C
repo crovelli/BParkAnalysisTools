@@ -133,9 +133,9 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt)
     // Loop over electrons
     for (int iEle=0; iEle<nElectron; iEle++) {
 
-      // HLT
-      int iHLT_Mu9_IP6 = (int)HLT_Mu9_IP6;
-      if (iHLT_Mu9_IP6==0) continue;
+      // HLT - not needed in MC
+      // int iHLT_Mu9_IP6 = (int)HLT_Mu9_IP6;
+      // if (iHLT_Mu9_IP6==0) continue;
 
       // LowPt or PF only    
       if (testLowPt==1 && Electron_isLowPt[iEle]==0) continue;
@@ -165,7 +165,8 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt)
 
       // Full eta/pT range
       if (trueEle==1) { 
-	mvaSignalMc->Fill(Electron_mvaId[iEle]);    
+	if (testLowPt==1) mvaSignalMc->Fill(Electron_mvaId[iEle]);    
+	if (testLowPt==0) mvaSignalMc->Fill(Electron_pfmvaId[iEle]);    
 	ptSignalMc->Fill(Electron_pt[iEle]);
 	etaSignalMc->Fill(Electron_eta[iEle]);
 	ptVsEtaSignalMc->Fill(Electron_eta[iEle],Electron_pt[iEle]);
@@ -176,7 +177,8 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt)
 	if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) etaSignalMc3->Fill(Electron_eta[iEle]); 
 	if (Electron_pt[iEle]>=5.0) etaSignalMc4->Fill(Electron_eta[iEle]); 
       } else {
-	mvaFakeMc->Fill(Electron_mvaId[iEle]);
+	if (testLowPt==1) mvaFakeMc->Fill(Electron_mvaId[iEle]);
+	if (testLowPt==0) mvaFakeMc->Fill(Electron_pfmvaId[iEle]);
 	ptFakeMc->Fill(Electron_pt[iEle]);
 	etaFakeMc->Fill(Electron_eta[iEle]);
 	ptVsEtaFakeMc->Fill(Electron_eta[iEle],Electron_pt[iEle]);
@@ -190,32 +192,42 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt)
 
       // Eta/pT bins
       if (trueEle==1) { 
+	
+	float theId = -1;
+	if (testLowPt==1) theId=Electron_mvaId[iEle];
+	if (testLowPt==0) theId=Electron_pfmvaId[iEle];
+
 	if (fabs(Electron_eta[iEle])<1.5) {
-	  if (Electron_pt[iEle]>=0.5 && Electron_pt[iEle]<1.0) mvaSignalEBMc0->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=1.0 && Electron_pt[iEle]<1.5) mvaSignalEBMc1->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=1.5 && Electron_pt[iEle]<2.0) mvaSignalEBMc2->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) mvaSignalEBMc3->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=5.0) mvaSignalEBMc4->Fill(Electron_mvaId[iEle]);
+	  if (Electron_pt[iEle]>=0.5 && Electron_pt[iEle]<1.0) mvaSignalEBMc0->Fill(theId);
+	  if (Electron_pt[iEle]>=1.0 && Electron_pt[iEle]<1.5) mvaSignalEBMc1->Fill(theId);
+	  if (Electron_pt[iEle]>=1.5 && Electron_pt[iEle]<2.0) mvaSignalEBMc2->Fill(theId);
+	  if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) mvaSignalEBMc3->Fill(theId);
+	  if (Electron_pt[iEle]>=5.0) mvaSignalEBMc4->Fill(theId);
 	} else {
-	  if (Electron_pt[iEle]>=0.5 && Electron_pt[iEle]<1.0) mvaSignalEEMc0->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=1.0 && Electron_pt[iEle]<1.5) mvaSignalEEMc1->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=1.5 && Electron_pt[iEle]<2.0) mvaSignalEEMc2->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) mvaSignalEEMc3->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=5.0) mvaSignalEEMc4->Fill(Electron_mvaId[iEle]);
+	  if (Electron_pt[iEle]>=0.5 && Electron_pt[iEle]<1.0) mvaSignalEEMc0->Fill(theId);
+	  if (Electron_pt[iEle]>=1.0 && Electron_pt[iEle]<1.5) mvaSignalEEMc1->Fill(theId);
+	  if (Electron_pt[iEle]>=1.5 && Electron_pt[iEle]<2.0) mvaSignalEEMc2->Fill(theId);
+	  if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) mvaSignalEEMc3->Fill(theId);
+	  if (Electron_pt[iEle]>=5.0) mvaSignalEEMc4->Fill(theId);
 	}
       } else {
+
+	float theId = -1;
+	if (testLowPt==1) theId=Electron_mvaId[iEle];
+	if (testLowPt==0) theId=Electron_pfmvaId[iEle];
+
 	if (fabs(Electron_eta[iEle])<1.5) {
-	  if (Electron_pt[iEle]>=0.5 && Electron_pt[iEle]<1.0) mvaFakeEBMc0->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=1.0 && Electron_pt[iEle]<1.5) mvaFakeEBMc1->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=1.5 && Electron_pt[iEle]<2.0) mvaFakeEBMc2->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) mvaFakeEBMc3->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=5.0) mvaFakeEBMc4->Fill(Electron_mvaId[iEle]);
+	  if (Electron_pt[iEle]>=0.5 && Electron_pt[iEle]<1.0) mvaFakeEBMc0->Fill(theId);
+	  if (Electron_pt[iEle]>=1.0 && Electron_pt[iEle]<1.5) mvaFakeEBMc1->Fill(theId);
+	  if (Electron_pt[iEle]>=1.5 && Electron_pt[iEle]<2.0) mvaFakeEBMc2->Fill(theId);
+	  if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) mvaFakeEBMc3->Fill(theId);
+	  if (Electron_pt[iEle]>=5.0) mvaFakeEBMc4->Fill(theId);
 	} else {
-	  if (Electron_pt[iEle]>=0.5 && Electron_pt[iEle]<1.0) mvaFakeEEMc0->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=1.0 && Electron_pt[iEle]<1.5) mvaFakeEEMc1->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=1.5 && Electron_pt[iEle]<2.0) mvaFakeEEMc2->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) mvaFakeEEMc3->Fill(Electron_mvaId[iEle]);
-	  if (Electron_pt[iEle]>=5.0) mvaFakeEEMc4->Fill(Electron_mvaId[iEle]);
+	  if (Electron_pt[iEle]>=0.5 && Electron_pt[iEle]<1.0) mvaFakeEEMc0->Fill(theId);
+	  if (Electron_pt[iEle]>=1.0 && Electron_pt[iEle]<1.5) mvaFakeEEMc1->Fill(theId);
+	  if (Electron_pt[iEle]>=1.5 && Electron_pt[iEle]<2.0) mvaFakeEEMc2->Fill(theId);
+	  if (Electron_pt[iEle]>=2.0 && Electron_pt[iEle]<5.0) mvaFakeEEMc3->Fill(theId);
+	  if (Electron_pt[iEle]>=5.0) mvaFakeEEMc4->Fill(theId);
 	}
       }
 
