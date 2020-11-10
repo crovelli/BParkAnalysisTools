@@ -139,8 +139,8 @@ void prepareInputsFromFakes::Loop(bool applyWeight)
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
 
-    // Trigger
-    if (hlt_9==0) continue;
+    // Trigger - already applied to data only when formatting
+    // if (hlt_9==0) continue;
 
     // Acceptance
     if (fabs(eleEta)>2.4 || (elePt<0.5)) cout << "problems with acceptance" << endl;
