@@ -17,12 +17,11 @@ using namespace std;
 // and to make control distributions
 // before and after applying weights
 
-void weightsNanoVsFakeSel()
+void weightsNanoVsFakeSel(bool isLowPt)
 {
   // Files
-  // TFile fileFakes("filesNew/myFileFakesInMc.root");           // using fake selection applied to MC (prepareInputsFromFakes)
-  TFile fileNoFakes("filesNew/myFileFromNani.root");          // without fake selection, directy applied to nanpAODs (prepareInputsFromNaniInMc)
   TFile fileFakes("myFileFakesInMc.root");           // using fake selection applied to MC (prepareInputsFromFakes)
+  TFile fileNoFakes("myFileFromNani.root");          // without fake selection, directy applied to nanpAODs (prepareInputsFromNaniInMc)
 
   // Histos: pT
   TH1F *ptFromFakesSel     = (TH1F*)fileFakes.Get("ptFakes");
@@ -181,12 +180,15 @@ void weightsNanoVsFakeSel()
   leg3ww->AddEntry(ptFakeMcNoFakesSel, "No fakes sel", "lp");
 
   TCanvas cs1("cs1","cs1",1);
+  if (isLowPt==0) ptFakeMcNoFakesSel->Rebin(4);
+  if (isLowPt==0) ptFromFakesSel->Rebin(4);
   ptFakeMcNoFakesSel->DrawNormalized("hist");
   ptFromFakesSel->DrawNormalized("samehist");
   leg->Draw();
   cs1.SaveAs("ptSignal_naniVsFakeSel.png");
 
   TCanvas cs2("cs2","cs2",1);
+  if (isLowPt==0) ptFromFakesSelWW->Rebin(4);
   ptFakeMcNoFakesSel->DrawNormalized("hist");
   ptFromFakesSelWW->DrawNormalized("samehist");
   legww->Draw();
@@ -195,12 +197,15 @@ void weightsNanoVsFakeSel()
   // -----------
 
   TCanvas cs3("cs3","cs3",1);
+  if (isLowPt==0) etaFakeMcNoFakesSel->Rebin(4);
+  if (isLowPt==0) etaFromFakesSel->Rebin(4);
   etaFromFakesSel->DrawNormalized("hist");
   etaFakeMcNoFakesSel->DrawNormalized("samehist");
   leg3->Draw();
   cs3.SaveAs("etaSignal_naniVsFakeSel.png");
 
   TCanvas cs4("cs4","cs4",1);
+  if (isLowPt==0) etaFromFakesSelWW->Rebin(4);
   etaFromFakesSelWW->DrawNormalized("hist");
   etaFakeMcNoFakesSel->DrawNormalized("samehist");
   leg3ww->Draw();
@@ -209,12 +214,15 @@ void weightsNanoVsFakeSel()
   // -----------
 
   TCanvas cs5("cs5","cs5",1);
+  if (isLowPt==0) mvaFakeMcNoFakesSel->Rebin(4);
+  if (isLowPt==0) mvaFromFakesSel->Rebin(4);
   mvaFakeMcNoFakesSel->DrawNormalized("hist");
   mvaFromFakesSel->DrawNormalized("samehist");
   leg2->Draw();
   cs5.SaveAs("mvaSignal_naniVsFakeSel.png");
 
   TCanvas cs6("cs6","cs6",1);
+  if (isLowPt==0) mvaFromFakesSelWW->Rebin(4);
   mvaFakeMcNoFakesSel->DrawNormalized("hist");
   mvaFromFakesSelWW->DrawNormalized("samehist");
   leg2ww->Draw();
