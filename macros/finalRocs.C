@@ -15,17 +15,19 @@
 
 using namespace std;
 
-void finalRocs()
+void finalRocs(bool isLowPt)
 {
   // Files
-  TFile fileSPlotsData("filesNew/fileSPlots_inclusive.root");                      // TnP selection, sPlots             (jpsi_splot.C)
-  TFile fileTnpMc("filesNew/myFileMcAfterTnp.root");                               // TnP selection, match to MC-truth  (prepareInputsFromMcWithTnP.C)
-  TFile fileFakeSelData("filesNew/myFileFakesInData__weightsBasedOnMc.root");      // Fakes selection applied to data   (prepareInputsFromFakes.C)
-  TFile fileFakeSelMc("filesNew/myFileFakesInMc__weightsBasedOnMc.root");          // Fakes selection applied to MC     (prepareInputsFromFakes.C)   
-  TFile fileNani("filesNew/myFileFromNani.root");                                  // Match to MC-truth                 (prepareInputsFromNaniInMc.C)
+  TFile fileSPlotsData("filesNew/probePF/fileSPlots_inclusive.root");                      // TnP selection, sPlots             (jpsi_splot.C)
+  TFile fileTnpMc("filesNew/probePF/myFileMcAfterTnp.root");                               // TnP selection, match to MC-truth  (prepareInputsFromMcWithTnP.C)
+  TFile fileFakeSelData("filesNew/probePF/myFileFakesInData__weightsBasedOnMc.root");      // Fakes selection applied to data   (prepareInputsFromFakes.C)
+  TFile fileFakeSelMc("filesNew/probePF/myFileFakesInMc__weightsBasedOnMc.root");          // Fakes selection applied to MC     (prepareInputsFromFakes.C)   
+  TFile fileNani("filesNew/probePF/myFileFromNani.root");                                  // Match to MC-truth                 (prepareInputsFromNaniInMc.C)
 
   // Histos
-  TH1F *mvaSignalData = (TH1F*)fileSPlotsData.Get("h1_probeMvaId_jpsi__probeMvaId");
+  TH1F *mvaSignalData;
+  if (isLowPt==1) mvaSignalData = (TH1F*)fileSPlotsData.Get("h1_probeMvaId_jpsi__probeMvaId");
+  if (isLowPt==0) mvaSignalData = (TH1F*)fileSPlotsData.Get("h1_probePfmvaId_jpsi__probePfmvaId");
   TH1F *mvaBkgData    = (TH1F*)fileFakeSelData.Get("mvaFakes"); 
   TH1F *mvaSignalMc   = (TH1F*)fileTnpMc.Get("probeMvaSignalMc");
   TH1F *mvaBkgMc      = (TH1F*)fileFakeSelMc.Get("mvaFakes"); 
@@ -43,37 +45,68 @@ void finalRocs()
   mvaBkgNani->Sumw2();
 
   // Histos in bin
-  TH1F *mvaBkgDataEB0  = (TH1F*)fileFakeSelData.Get("mvaFakeEB0"); 
-  TH1F *mvaBkgMcEB0    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB0"); 
-  TH1F *mvaSignalMcEB0 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc0");
-  TH1F *mvaBkgDataEB1  = (TH1F*)fileFakeSelData.Get("mvaFakeEB1"); 
-  TH1F *mvaBkgMcEB1    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB1"); 
-  TH1F *mvaSignalMcEB1 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc1");
-  TH1F *mvaBkgDataEB2  = (TH1F*)fileFakeSelData.Get("mvaFakeEB2"); 
-  TH1F *mvaBkgMcEB2    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB2"); 
-  TH1F *mvaSignalMcEB2 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc2");
-  TH1F *mvaBkgDataEB3  = (TH1F*)fileFakeSelData.Get("mvaFakeEB3"); 
-  TH1F *mvaBkgMcEB3    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB3"); 
-  TH1F *mvaSignalMcEB3 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc3");
-  TH1F *mvaBkgDataEB4  = (TH1F*)fileFakeSelData.Get("mvaFakeEB4"); 
-  TH1F *mvaBkgMcEB4    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB4"); 
-  TH1F *mvaSignalMcEB4 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc4");
-  //
-  TH1F *mvaBkgDataEE0  = (TH1F*)fileFakeSelData.Get("mvaFakeEE0"); 
-  TH1F *mvaBkgMcEE0    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE0"); 
-  TH1F *mvaSignalMcEE0 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc0");
-  TH1F *mvaBkgDataEE1  = (TH1F*)fileFakeSelData.Get("mvaFakeEE1"); 
-  TH1F *mvaBkgMcEE1    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE1"); 
-  TH1F *mvaSignalMcEE1 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc1");
-  TH1F *mvaBkgDataEE2  = (TH1F*)fileFakeSelData.Get("mvaFakeEE2"); 
-  TH1F *mvaBkgMcEE2    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE2"); 
-  TH1F *mvaSignalMcEE2 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc2");
-  TH1F *mvaBkgDataEE3  = (TH1F*)fileFakeSelData.Get("mvaFakeEE3"); 
-  TH1F *mvaBkgMcEE3    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE3"); 
-  TH1F *mvaSignalMcEE3 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc3");
-  TH1F *mvaBkgDataEE4  = (TH1F*)fileFakeSelData.Get("mvaFakeEE4"); 
-  TH1F *mvaBkgMcEE4    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE4"); 
-  TH1F *mvaSignalMcEE4 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc4");
+  TH1F *mvaBkgDataEB0;
+  TH1F *mvaBkgMcEB0;
+  TH1F *mvaSignalMcEB0;
+  TH1F *mvaBkgDataEB1;
+  TH1F *mvaBkgMcEB1;
+  TH1F *mvaSignalMcEB1;
+  TH1F *mvaBkgDataEB2;
+  TH1F *mvaBkgMcEB2;
+  TH1F *mvaSignalMcEB2;
+  TH1F *mvaBkgDataEB3;
+  TH1F *mvaBkgMcEB3;
+  TH1F *mvaSignalMcEB3;
+  TH1F *mvaBkgDataEB4;
+  TH1F *mvaBkgMcEB4;
+  TH1F *mvaSignalMcEB4;
+  TH1F *mvaBkgDataEE0;
+  TH1F *mvaBkgMcEE0;
+  TH1F *mvaSignalMcEE0;
+  TH1F *mvaBkgDataEE1;
+  TH1F *mvaBkgMcEE1;
+  TH1F *mvaSignalMcEE1;
+  TH1F *mvaBkgDataEE2;
+  TH1F *mvaBkgMcEE2;
+  TH1F *mvaSignalMcEE2;
+  TH1F *mvaBkgDataEE3;
+  TH1F *mvaBkgMcEE3;
+  TH1F *mvaSignalMcEE3;
+  TH1F *mvaBkgDataEE4;
+  TH1F *mvaBkgMcEE4;
+  TH1F *mvaSignalMcEE4;
+  if (isLowPt==1) {
+    mvaBkgDataEB0  = (TH1F*)fileFakeSelData.Get("mvaFakeEB0"); 
+    mvaBkgMcEB0    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB0"); 
+    mvaSignalMcEB0 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc0");
+    mvaBkgDataEB1  = (TH1F*)fileFakeSelData.Get("mvaFakeEB1"); 
+    mvaBkgMcEB1    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB1"); 
+    mvaSignalMcEB1 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc1");
+    mvaBkgDataEB2  = (TH1F*)fileFakeSelData.Get("mvaFakeEB2"); 
+    mvaBkgMcEB2    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB2"); 
+    mvaSignalMcEB2 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc2");
+    mvaBkgDataEB3  = (TH1F*)fileFakeSelData.Get("mvaFakeEB3"); 
+    mvaBkgMcEB3    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB3"); 
+    mvaSignalMcEB3 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc3");
+    mvaBkgDataEB4  = (TH1F*)fileFakeSelData.Get("mvaFakeEB4"); 
+    mvaBkgMcEB4    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB4"); 
+    mvaSignalMcEB4 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc4");
+    mvaBkgDataEE0  = (TH1F*)fileFakeSelData.Get("mvaFakeEE0"); 
+    mvaBkgMcEE0    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE0"); 
+    mvaSignalMcEE0 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc0");
+    mvaBkgDataEE1  = (TH1F*)fileFakeSelData.Get("mvaFakeEE1"); 
+    mvaBkgMcEE1    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE1"); 
+    mvaSignalMcEE1 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc1");
+    mvaBkgDataEE2  = (TH1F*)fileFakeSelData.Get("mvaFakeEE2"); 
+    mvaBkgMcEE2    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE2"); 
+    mvaSignalMcEE2 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc2");
+    mvaBkgDataEE3  = (TH1F*)fileFakeSelData.Get("mvaFakeEE3"); 
+    mvaBkgMcEE3    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE3"); 
+    mvaSignalMcEE3 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc3");
+    mvaBkgDataEE4  = (TH1F*)fileFakeSelData.Get("mvaFakeEE4"); 
+    mvaBkgMcEE4    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE4"); 
+    mvaSignalMcEE4 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc4");
+  }
 
   // Cosmetics
   mvaSignalData -> SetLineWidth(2);  
@@ -258,373 +291,374 @@ void finalRocs()
 
 
   // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEB0;
-  myRocBDTdataEB0.addSignal("BDT", mvaSignalMcEB0);      
-  myRocBDTdataEB0.addBackgrounds(mvaBkgDataEB0);
-  myRocBDTdataEB0.setCutDirection(">");
-  TGraph *myGraphBDTdataEB0 = myRocBDTdataEB0.getFOM("BDT",2);
-  myGraphBDTdataEB0->SetTitle("BDT");
-  myGraphBDTdataEB0->SetName("BDT");
-  myGraphBDTdataEB0->SetMarkerColor(1);
-  myGraphBDTdataEB0->SetMarkerStyle(20);
-  myGraphBDTdataEB0->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEB0;
-  myRocBDTmcEB0.addSignal("BDT", mvaSignalMcEB0);      
-  myRocBDTmcEB0.addBackgrounds(mvaBkgMcEB0);
-  myRocBDTmcEB0.setCutDirection(">");
-  TGraph *myGraphBDTmcEB0 = myRocBDTmcEB0.getFOM("BDT",2);
-  myGraphBDTmcEB0->SetTitle("BDT");
-  myGraphBDTmcEB0->SetName("BDT");
-  myGraphBDTmcEB0->SetMarkerColor(4);
-  myGraphBDTmcEB0->SetMarkerStyle(20);
-  myGraphBDTmcEB0->SetMarkerSize(1);
-  //
-  TCanvas croceb0("roc","",1);
-  croceb0.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEB0->Draw("sameP");
-  myGraphBDTmcEB0->Draw("sameP");
-  leg2->Draw();
-  croceb0.SaveAs("roc_EB0_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEB0->Draw("sameP");
-  myGraphBDTmcEB0->Draw("sameP");
-  leg2->Draw();
-  croceb0.SetLogx();
-  croceb0.SaveAs("roc_EB0_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEB1;
-  myRocBDTdataEB1.addSignal("BDT", mvaSignalMcEB1);      
-  myRocBDTdataEB1.addBackgrounds(mvaBkgDataEB1);
-  myRocBDTdataEB1.setCutDirection(">");
-  TGraph *myGraphBDTdataEB1 = myRocBDTdataEB1.getFOM("BDT",2);
-  myGraphBDTdataEB1->SetTitle("BDT");
-  myGraphBDTdataEB1->SetName("BDT");
-  myGraphBDTdataEB1->SetMarkerColor(1);
-  myGraphBDTdataEB1->SetMarkerStyle(20);
-  myGraphBDTdataEB1->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEB1;
-  myRocBDTmcEB1.addSignal("BDT", mvaSignalMcEB1);      
-  myRocBDTmcEB1.addBackgrounds(mvaBkgMcEB1);
-  myRocBDTmcEB1.setCutDirection(">");
-  TGraph *myGraphBDTmcEB1 = myRocBDTmcEB1.getFOM("BDT",2);
-  myGraphBDTmcEB1->SetTitle("BDT");
-  myGraphBDTmcEB1->SetName("BDT");
-  myGraphBDTmcEB1->SetMarkerColor(4);
-  myGraphBDTmcEB1->SetMarkerStyle(20);
-  myGraphBDTmcEB1->SetMarkerSize(1);
-  //
-  TCanvas croceb1("roc","",1);
-  croceb1.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEB1->Draw("sameP");
-  myGraphBDTmcEB1->Draw("sameP");
-  leg2->Draw();
-  croceb1.SaveAs("roc_EB1_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEB1->Draw("sameP");
-  myGraphBDTmcEB1->Draw("sameP");
-  leg2->Draw();
-  croceb1.SetLogx();
-  croceb1.SaveAs("roc_EB1_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEB2;
-  myRocBDTdataEB2.addSignal("BDT", mvaSignalMcEB1);      
-  myRocBDTdataEB2.addBackgrounds(mvaBkgDataEB2);
-  myRocBDTdataEB2.setCutDirection(">");
-  TGraph *myGraphBDTdataEB2 = myRocBDTdataEB2.getFOM("BDT",2);
-  myGraphBDTdataEB2->SetTitle("BDT");
-  myGraphBDTdataEB2->SetName("BDT");
-  myGraphBDTdataEB2->SetMarkerColor(1);
-  myGraphBDTdataEB2->SetMarkerStyle(20);
-  myGraphBDTdataEB2->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEB2;
-  myRocBDTmcEB2.addSignal("BDT", mvaSignalMcEB2);      
-  myRocBDTmcEB2.addBackgrounds(mvaBkgMcEB2);
-  myRocBDTmcEB2.setCutDirection(">");
-  TGraph *myGraphBDTmcEB2 = myRocBDTmcEB2.getFOM("BDT",2);
-  myGraphBDTmcEB2->SetTitle("BDT");
-  myGraphBDTmcEB2->SetName("BDT");
-  myGraphBDTmcEB2->SetMarkerColor(4);
-  myGraphBDTmcEB2->SetMarkerStyle(20);
-  myGraphBDTmcEB2->SetMarkerSize(1);
-  //
-  TCanvas croceb2("roc","",1);
-  croceb2.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEB2->Draw("sameP");
-  myGraphBDTmcEB2->Draw("sameP");
-  leg2->Draw();
-  croceb2.SaveAs("roc_EB2_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEB2->Draw("sameP");
-  myGraphBDTmcEB2->Draw("sameP");
-  leg2->Draw();
-  croceb2.SetLogx();
-  croceb2.SaveAs("roc_EB2_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEB3;
-  myRocBDTdataEB3.addSignal("BDT", mvaSignalMcEB3);      
-  myRocBDTdataEB3.addBackgrounds(mvaBkgDataEB3);
-  myRocBDTdataEB3.setCutDirection(">");
-  TGraph *myGraphBDTdataEB3 = myRocBDTdataEB3.getFOM("BDT",2);
-  myGraphBDTdataEB3->SetTitle("BDT");
-  myGraphBDTdataEB3->SetName("BDT");
-  myGraphBDTdataEB3->SetMarkerColor(1);
-  myGraphBDTdataEB3->SetMarkerStyle(20);
-  myGraphBDTdataEB3->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEB3;
-  myRocBDTmcEB3.addSignal("BDT", mvaSignalMcEB3);      
-  myRocBDTmcEB3.addBackgrounds(mvaBkgMcEB3);
-  myRocBDTmcEB3.setCutDirection(">");
-  TGraph *myGraphBDTmcEB3 = myRocBDTmcEB3.getFOM("BDT",2);
-  myGraphBDTmcEB3->SetTitle("BDT");
-  myGraphBDTmcEB3->SetName("BDT");
-  myGraphBDTmcEB3->SetMarkerColor(4);
-  myGraphBDTmcEB3->SetMarkerStyle(20);
-  myGraphBDTmcEB3->SetMarkerSize(1);
-  //
-  TCanvas croceb3("roc","",1);
-  croceb3.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEB3->Draw("sameP");
-  myGraphBDTmcEB3->Draw("sameP");
-  leg2->Draw();
-  croceb3.SaveAs("roc_EB3_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEB3->Draw("sameP");
-  myGraphBDTmcEB3->Draw("sameP");
-  leg2->Draw();
-  croceb3.SetLogx();
-  croceb3.SaveAs("roc_EB3_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEB4;
-  myRocBDTdataEB4.addSignal("BDT", mvaSignalMcEB4);      
-  myRocBDTdataEB4.addBackgrounds(mvaBkgDataEB4);
-  myRocBDTdataEB4.setCutDirection(">");
-  TGraph *myGraphBDTdataEB4 = myRocBDTdataEB4.getFOM("BDT",2);
-  myGraphBDTdataEB4->SetTitle("BDT");
-  myGraphBDTdataEB4->SetName("BDT");
-  myGraphBDTdataEB4->SetMarkerColor(1);
-  myGraphBDTdataEB4->SetMarkerStyle(20);
-  myGraphBDTdataEB4->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEB4;
-  myRocBDTmcEB4.addSignal("BDT", mvaSignalMcEB4);      
-  myRocBDTmcEB4.addBackgrounds(mvaBkgMcEB4);
-  myRocBDTmcEB4.setCutDirection(">");
-  TGraph *myGraphBDTmcEB4 = myRocBDTmcEB4.getFOM("BDT",2);
-  myGraphBDTmcEB4->SetTitle("BDT");
-  myGraphBDTmcEB4->SetName("BDT");
-  myGraphBDTmcEB4->SetMarkerColor(4);
-  myGraphBDTmcEB4->SetMarkerStyle(20);
-  myGraphBDTmcEB4->SetMarkerSize(1);
-  //
-  TCanvas croceb4("roc","",1);
-  croceb4.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEB4->Draw("sameP");
-  myGraphBDTmcEB4->Draw("sameP");
-  leg2->Draw();
-  croceb4.SaveAs("roc_EB4_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEB4->Draw("sameP");
-  myGraphBDTmcEB4->Draw("sameP");
-  leg2->Draw();
-  croceb4.SetLogx();
-  croceb4.SaveAs("roc_EB4_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEE0;
-  myRocBDTdataEE0.addSignal("BDT", mvaSignalMcEE0);      
-  myRocBDTdataEE0.addBackgrounds(mvaBkgDataEE0);
-  myRocBDTdataEE0.setCutDirection(">");
-  TGraph *myGraphBDTdataEE0 = myRocBDTdataEE0.getFOM("BDT",2);
-  myGraphBDTdataEE0->SetTitle("BDT");
-  myGraphBDTdataEE0->SetName("BDT");
-  myGraphBDTdataEE0->SetMarkerColor(1);
-  myGraphBDTdataEE0->SetMarkerStyle(20);
-  myGraphBDTdataEE0->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEE0;
-  myRocBDTmcEE0.addSignal("BDT", mvaSignalMcEE0);      
-  myRocBDTmcEE0.addBackgrounds(mvaBkgMcEE0);
-  myRocBDTmcEE0.setCutDirection(">");
-  TGraph *myGraphBDTmcEE0 = myRocBDTmcEE0.getFOM("BDT",2);
-  myGraphBDTmcEE0->SetTitle("BDT");
-  myGraphBDTmcEE0->SetName("BDT");
-  myGraphBDTmcEE0->SetMarkerColor(4);
-  myGraphBDTmcEE0->SetMarkerStyle(20);
-  myGraphBDTmcEE0->SetMarkerSize(1);
-  //
-  TCanvas crocee0("roc","",1);
-  crocee0.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEE0->Draw("sameP");
-  myGraphBDTmcEE0->Draw("sameP");
-  leg2->Draw();
-  crocee0.SaveAs("roc_EE0_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEE0->Draw("sameP");
-  myGraphBDTmcEE0->Draw("sameP");
-  leg2->Draw();
-  crocee0.SetLogx();
-  crocee0.SaveAs("roc_EE0_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEE1;
-  myRocBDTdataEE1.addSignal("BDT", mvaSignalMcEE1);      
-  myRocBDTdataEE1.addBackgrounds(mvaBkgDataEE1);
-  myRocBDTdataEE1.setCutDirection(">");
-  TGraph *myGraphBDTdataEE1 = myRocBDTdataEE1.getFOM("BDT",2);
-  myGraphBDTdataEE1->SetTitle("BDT");
-  myGraphBDTdataEE1->SetName("BDT");
-  myGraphBDTdataEE1->SetMarkerColor(1);
-  myGraphBDTdataEE1->SetMarkerStyle(20);
-  myGraphBDTdataEE1->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEE1;
-  myRocBDTmcEE1.addSignal("BDT", mvaSignalMcEE1);      
-  myRocBDTmcEE1.addBackgrounds(mvaBkgMcEE1);
-  myRocBDTmcEE1.setCutDirection(">");
-  TGraph *myGraphBDTmcEE1 = myRocBDTmcEE1.getFOM("BDT",2);
-  myGraphBDTmcEE1->SetTitle("BDT");
-  myGraphBDTmcEE1->SetName("BDT");
-  myGraphBDTmcEE1->SetMarkerColor(4);
-  myGraphBDTmcEE1->SetMarkerStyle(20);
-  myGraphBDTmcEE1->SetMarkerSize(1);
-  //
-  TCanvas crocee1("roc","",1);
-  crocee1.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEE1->Draw("sameP");
-  myGraphBDTmcEE1->Draw("sameP");
-  leg2->Draw();
-  crocee1.SaveAs("roc_EE1_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEE1->Draw("sameP");
-  myGraphBDTmcEE1->Draw("sameP");
-  leg2->Draw();
-  crocee1.SetLogx();
-  crocee1.SaveAs("roc_EE1_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEE2;
-  myRocBDTdataEE2.addSignal("BDT", mvaSignalMcEE1);      
-  myRocBDTdataEE2.addBackgrounds(mvaBkgDataEE2);
-  myRocBDTdataEE2.setCutDirection(">");
-  TGraph *myGraphBDTdataEE2 = myRocBDTdataEE2.getFOM("BDT",2);
-  myGraphBDTdataEE2->SetTitle("BDT");
-  myGraphBDTdataEE2->SetName("BDT");
-  myGraphBDTdataEE2->SetMarkerColor(1);
-  myGraphBDTdataEE2->SetMarkerStyle(20);
-  myGraphBDTdataEE2->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEE2;
-  myRocBDTmcEE2.addSignal("BDT", mvaSignalMcEE2);      
-  myRocBDTmcEE2.addBackgrounds(mvaBkgMcEE2);
-  myRocBDTmcEE2.setCutDirection(">");
-  TGraph *myGraphBDTmcEE2 = myRocBDTmcEE2.getFOM("BDT",2);
-  myGraphBDTmcEE2->SetTitle("BDT");
-  myGraphBDTmcEE2->SetName("BDT");
-  myGraphBDTmcEE2->SetMarkerColor(4);
-  myGraphBDTmcEE2->SetMarkerStyle(20);
-  myGraphBDTmcEE2->SetMarkerSize(1);
-  //
-  TCanvas crocee2("roc","",1);
-  crocee2.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEE2->Draw("sameP");
-  myGraphBDTmcEE2->Draw("sameP");
-  leg2->Draw();
-  crocee2.SaveAs("roc_EE2_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEE2->Draw("sameP");
-  myGraphBDTmcEE2->Draw("sameP");
-  leg2->Draw();
-  crocee2.SetLogx();
-  crocee2.SaveAs("roc_EE2_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEE3;
-  myRocBDTdataEE3.addSignal("BDT", mvaSignalMcEE3);      
-  myRocBDTdataEE3.addBackgrounds(mvaBkgDataEE3);
-  myRocBDTdataEE3.setCutDirection(">");
-  TGraph *myGraphBDTdataEE3 = myRocBDTdataEE3.getFOM("BDT",2);
-  myGraphBDTdataEE3->SetTitle("BDT");
-  myGraphBDTdataEE3->SetName("BDT");
-  myGraphBDTdataEE3->SetMarkerColor(1);
-  myGraphBDTdataEE3->SetMarkerStyle(20);
-  myGraphBDTdataEE3->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEE3;
-  myRocBDTmcEE3.addSignal("BDT", mvaSignalMcEE3);      
-  myRocBDTmcEE3.addBackgrounds(mvaBkgMcEE3);
-  myRocBDTmcEE3.setCutDirection(">");
-  TGraph *myGraphBDTmcEE3 = myRocBDTmcEE3.getFOM("BDT",2);
-  myGraphBDTmcEE3->SetTitle("BDT");
-  myGraphBDTmcEE3->SetName("BDT");
-  myGraphBDTmcEE3->SetMarkerColor(4);
-  myGraphBDTmcEE3->SetMarkerStyle(20);
-  myGraphBDTmcEE3->SetMarkerSize(1);
-  //
-  TCanvas crocee3("roc","",1);
-  crocee3.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEE3->Draw("sameP");
-  myGraphBDTmcEE3->Draw("sameP");
-  leg2->Draw();
-  crocee3.SaveAs("roc_EE3_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEE3->Draw("sameP");
-  myGraphBDTmcEE3->Draw("sameP");
-  leg2->Draw();
-  crocee3.SetLogx();
-  crocee3.SaveAs("roc_EE3_dataVsMc_log.png");  
-
-  // ---------------------------------------------------
-  FiguresOfMeritEvaluator myRocBDTdataEE4;
-  myRocBDTdataEE4.addSignal("BDT", mvaSignalMcEE4);      
-  myRocBDTdataEE4.addBackgrounds(mvaBkgDataEE4);
-  myRocBDTdataEE4.setCutDirection(">");
-  TGraph *myGraphBDTdataEE4 = myRocBDTdataEE4.getFOM("BDT",2);
-  myGraphBDTdataEE4->SetTitle("BDT");
-  myGraphBDTdataEE4->SetName("BDT");
-  myGraphBDTdataEE4->SetMarkerColor(1);
-  myGraphBDTdataEE4->SetMarkerStyle(20);
-  myGraphBDTdataEE4->SetMarkerSize(1);
-  //
-  FiguresOfMeritEvaluator myRocBDTmcEE4;
-  myRocBDTmcEE4.addSignal("BDT", mvaSignalMcEE4);      
-  myRocBDTmcEE4.addBackgrounds(mvaBkgMcEE4);
-  myRocBDTmcEE4.setCutDirection(">");
-  TGraph *myGraphBDTmcEE4 = myRocBDTmcEE4.getFOM("BDT",2);
-  myGraphBDTmcEE4->SetTitle("BDT");
-  myGraphBDTmcEE4->SetName("BDT");
-  myGraphBDTmcEE4->SetMarkerColor(4);
-  myGraphBDTmcEE4->SetMarkerStyle(20);
-  myGraphBDTmcEE4->SetMarkerSize(1);
-  //
-  TCanvas crocee4("roc","",1);
-  crocee4.SetGrid();
-  myH->Draw();
-  myGraphBDTdataEE4->Draw("sameP");
-  myGraphBDTmcEE4->Draw("sameP");
-  leg2->Draw();
-  crocee4.SaveAs("roc_EE4_dataVsMc.png");  
-  myH2->Draw();
-  myGraphBDTdataEE4->Draw("sameP");
-  myGraphBDTmcEE4->Draw("sameP");
-  leg2->Draw();
-  crocee4.SetLogx();
-  crocee4.SaveAs("roc_EE4_dataVsMc_log.png");  
-
+  if (isLowPt==1) {
+    FiguresOfMeritEvaluator myRocBDTdataEB0;
+    myRocBDTdataEB0.addSignal("BDT", mvaSignalMcEB0);      
+    myRocBDTdataEB0.addBackgrounds(mvaBkgDataEB0);
+    myRocBDTdataEB0.setCutDirection(">");
+    TGraph *myGraphBDTdataEB0 = myRocBDTdataEB0.getFOM("BDT",2);
+    myGraphBDTdataEB0->SetTitle("BDT");
+    myGraphBDTdataEB0->SetName("BDT");
+    myGraphBDTdataEB0->SetMarkerColor(1);
+    myGraphBDTdataEB0->SetMarkerStyle(20);
+    myGraphBDTdataEB0->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEB0;
+    myRocBDTmcEB0.addSignal("BDT", mvaSignalMcEB0);      
+    myRocBDTmcEB0.addBackgrounds(mvaBkgMcEB0);
+    myRocBDTmcEB0.setCutDirection(">");
+    TGraph *myGraphBDTmcEB0 = myRocBDTmcEB0.getFOM("BDT",2);
+    myGraphBDTmcEB0->SetTitle("BDT");
+    myGraphBDTmcEB0->SetName("BDT");
+    myGraphBDTmcEB0->SetMarkerColor(4);
+    myGraphBDTmcEB0->SetMarkerStyle(20);
+    myGraphBDTmcEB0->SetMarkerSize(1);
+    //
+    TCanvas croceb0("roc","",1);
+    croceb0.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEB0->Draw("sameP");
+    myGraphBDTmcEB0->Draw("sameP");
+    leg2->Draw();
+    croceb0.SaveAs("roc_EB0_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEB0->Draw("sameP");
+    myGraphBDTmcEB0->Draw("sameP");
+    leg2->Draw();
+    croceb0.SetLogx();
+    croceb0.SaveAs("roc_EB0_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEB1;
+    myRocBDTdataEB1.addSignal("BDT", mvaSignalMcEB1);      
+    myRocBDTdataEB1.addBackgrounds(mvaBkgDataEB1);
+    myRocBDTdataEB1.setCutDirection(">");
+    TGraph *myGraphBDTdataEB1 = myRocBDTdataEB1.getFOM("BDT",2);
+    myGraphBDTdataEB1->SetTitle("BDT");
+    myGraphBDTdataEB1->SetName("BDT");
+    myGraphBDTdataEB1->SetMarkerColor(1);
+    myGraphBDTdataEB1->SetMarkerStyle(20);
+    myGraphBDTdataEB1->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEB1;
+    myRocBDTmcEB1.addSignal("BDT", mvaSignalMcEB1);      
+    myRocBDTmcEB1.addBackgrounds(mvaBkgMcEB1);
+    myRocBDTmcEB1.setCutDirection(">");
+    TGraph *myGraphBDTmcEB1 = myRocBDTmcEB1.getFOM("BDT",2);
+    myGraphBDTmcEB1->SetTitle("BDT");
+    myGraphBDTmcEB1->SetName("BDT");
+    myGraphBDTmcEB1->SetMarkerColor(4);
+    myGraphBDTmcEB1->SetMarkerStyle(20);
+    myGraphBDTmcEB1->SetMarkerSize(1);
+    //
+    TCanvas croceb1("roc","",1);
+    croceb1.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEB1->Draw("sameP");
+    myGraphBDTmcEB1->Draw("sameP");
+    leg2->Draw();
+    croceb1.SaveAs("roc_EB1_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEB1->Draw("sameP");
+    myGraphBDTmcEB1->Draw("sameP");
+    leg2->Draw();
+    croceb1.SetLogx();
+    croceb1.SaveAs("roc_EB1_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEB2;
+    myRocBDTdataEB2.addSignal("BDT", mvaSignalMcEB1);      
+    myRocBDTdataEB2.addBackgrounds(mvaBkgDataEB2);
+    myRocBDTdataEB2.setCutDirection(">");
+    TGraph *myGraphBDTdataEB2 = myRocBDTdataEB2.getFOM("BDT",2);
+    myGraphBDTdataEB2->SetTitle("BDT");
+    myGraphBDTdataEB2->SetName("BDT");
+    myGraphBDTdataEB2->SetMarkerColor(1);
+    myGraphBDTdataEB2->SetMarkerStyle(20);
+    myGraphBDTdataEB2->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEB2;
+    myRocBDTmcEB2.addSignal("BDT", mvaSignalMcEB2);      
+    myRocBDTmcEB2.addBackgrounds(mvaBkgMcEB2);
+    myRocBDTmcEB2.setCutDirection(">");
+    TGraph *myGraphBDTmcEB2 = myRocBDTmcEB2.getFOM("BDT",2);
+    myGraphBDTmcEB2->SetTitle("BDT");
+    myGraphBDTmcEB2->SetName("BDT");
+    myGraphBDTmcEB2->SetMarkerColor(4);
+    myGraphBDTmcEB2->SetMarkerStyle(20);
+    myGraphBDTmcEB2->SetMarkerSize(1);
+    //
+    TCanvas croceb2("roc","",1);
+    croceb2.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEB2->Draw("sameP");
+    myGraphBDTmcEB2->Draw("sameP");
+    leg2->Draw();
+    croceb2.SaveAs("roc_EB2_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEB2->Draw("sameP");
+    myGraphBDTmcEB2->Draw("sameP");
+    leg2->Draw();
+    croceb2.SetLogx();
+    croceb2.SaveAs("roc_EB2_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEB3;
+    myRocBDTdataEB3.addSignal("BDT", mvaSignalMcEB3);      
+    myRocBDTdataEB3.addBackgrounds(mvaBkgDataEB3);
+    myRocBDTdataEB3.setCutDirection(">");
+    TGraph *myGraphBDTdataEB3 = myRocBDTdataEB3.getFOM("BDT",2);
+    myGraphBDTdataEB3->SetTitle("BDT");
+    myGraphBDTdataEB3->SetName("BDT");
+    myGraphBDTdataEB3->SetMarkerColor(1);
+    myGraphBDTdataEB3->SetMarkerStyle(20);
+    myGraphBDTdataEB3->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEB3;
+    myRocBDTmcEB3.addSignal("BDT", mvaSignalMcEB3);      
+    myRocBDTmcEB3.addBackgrounds(mvaBkgMcEB3);
+    myRocBDTmcEB3.setCutDirection(">");
+    TGraph *myGraphBDTmcEB3 = myRocBDTmcEB3.getFOM("BDT",2);
+    myGraphBDTmcEB3->SetTitle("BDT");
+    myGraphBDTmcEB3->SetName("BDT");
+    myGraphBDTmcEB3->SetMarkerColor(4);
+    myGraphBDTmcEB3->SetMarkerStyle(20);
+    myGraphBDTmcEB3->SetMarkerSize(1);
+    //
+    TCanvas croceb3("roc","",1);
+    croceb3.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEB3->Draw("sameP");
+    myGraphBDTmcEB3->Draw("sameP");
+    leg2->Draw();
+    croceb3.SaveAs("roc_EB3_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEB3->Draw("sameP");
+    myGraphBDTmcEB3->Draw("sameP");
+    leg2->Draw();
+    croceb3.SetLogx();
+    croceb3.SaveAs("roc_EB3_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEB4;
+    myRocBDTdataEB4.addSignal("BDT", mvaSignalMcEB4);      
+    myRocBDTdataEB4.addBackgrounds(mvaBkgDataEB4);
+    myRocBDTdataEB4.setCutDirection(">");
+    TGraph *myGraphBDTdataEB4 = myRocBDTdataEB4.getFOM("BDT",2);
+    myGraphBDTdataEB4->SetTitle("BDT");
+    myGraphBDTdataEB4->SetName("BDT");
+    myGraphBDTdataEB4->SetMarkerColor(1);
+    myGraphBDTdataEB4->SetMarkerStyle(20);
+    myGraphBDTdataEB4->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEB4;
+    myRocBDTmcEB4.addSignal("BDT", mvaSignalMcEB4);      
+    myRocBDTmcEB4.addBackgrounds(mvaBkgMcEB4);
+    myRocBDTmcEB4.setCutDirection(">");
+    TGraph *myGraphBDTmcEB4 = myRocBDTmcEB4.getFOM("BDT",2);
+    myGraphBDTmcEB4->SetTitle("BDT");
+    myGraphBDTmcEB4->SetName("BDT");
+    myGraphBDTmcEB4->SetMarkerColor(4);
+    myGraphBDTmcEB4->SetMarkerStyle(20);
+    myGraphBDTmcEB4->SetMarkerSize(1);
+    //
+    TCanvas croceb4("roc","",1);
+    croceb4.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEB4->Draw("sameP");
+    myGraphBDTmcEB4->Draw("sameP");
+    leg2->Draw();
+    croceb4.SaveAs("roc_EB4_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEB4->Draw("sameP");
+    myGraphBDTmcEB4->Draw("sameP");
+    leg2->Draw();
+    croceb4.SetLogx();
+    croceb4.SaveAs("roc_EB4_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEE0;
+    myRocBDTdataEE0.addSignal("BDT", mvaSignalMcEE0);      
+    myRocBDTdataEE0.addBackgrounds(mvaBkgDataEE0);
+    myRocBDTdataEE0.setCutDirection(">");
+    TGraph *myGraphBDTdataEE0 = myRocBDTdataEE0.getFOM("BDT",2);
+    myGraphBDTdataEE0->SetTitle("BDT");
+    myGraphBDTdataEE0->SetName("BDT");
+    myGraphBDTdataEE0->SetMarkerColor(1);
+    myGraphBDTdataEE0->SetMarkerStyle(20);
+    myGraphBDTdataEE0->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEE0;
+    myRocBDTmcEE0.addSignal("BDT", mvaSignalMcEE0);      
+    myRocBDTmcEE0.addBackgrounds(mvaBkgMcEE0);
+    myRocBDTmcEE0.setCutDirection(">");
+    TGraph *myGraphBDTmcEE0 = myRocBDTmcEE0.getFOM("BDT",2);
+    myGraphBDTmcEE0->SetTitle("BDT");
+    myGraphBDTmcEE0->SetName("BDT");
+    myGraphBDTmcEE0->SetMarkerColor(4);
+    myGraphBDTmcEE0->SetMarkerStyle(20);
+    myGraphBDTmcEE0->SetMarkerSize(1);
+    //
+    TCanvas crocee0("roc","",1);
+    crocee0.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEE0->Draw("sameP");
+    myGraphBDTmcEE0->Draw("sameP");
+    leg2->Draw();
+    crocee0.SaveAs("roc_EE0_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEE0->Draw("sameP");
+    myGraphBDTmcEE0->Draw("sameP");
+    leg2->Draw();
+    crocee0.SetLogx();
+    crocee0.SaveAs("roc_EE0_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEE1;
+    myRocBDTdataEE1.addSignal("BDT", mvaSignalMcEE1);      
+    myRocBDTdataEE1.addBackgrounds(mvaBkgDataEE1);
+    myRocBDTdataEE1.setCutDirection(">");
+    TGraph *myGraphBDTdataEE1 = myRocBDTdataEE1.getFOM("BDT",2);
+    myGraphBDTdataEE1->SetTitle("BDT");
+    myGraphBDTdataEE1->SetName("BDT");
+    myGraphBDTdataEE1->SetMarkerColor(1);
+    myGraphBDTdataEE1->SetMarkerStyle(20);
+    myGraphBDTdataEE1->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEE1;
+    myRocBDTmcEE1.addSignal("BDT", mvaSignalMcEE1);      
+    myRocBDTmcEE1.addBackgrounds(mvaBkgMcEE1);
+    myRocBDTmcEE1.setCutDirection(">");
+    TGraph *myGraphBDTmcEE1 = myRocBDTmcEE1.getFOM("BDT",2);
+    myGraphBDTmcEE1->SetTitle("BDT");
+    myGraphBDTmcEE1->SetName("BDT");
+    myGraphBDTmcEE1->SetMarkerColor(4);
+    myGraphBDTmcEE1->SetMarkerStyle(20);
+    myGraphBDTmcEE1->SetMarkerSize(1);
+    //
+    TCanvas crocee1("roc","",1);
+    crocee1.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEE1->Draw("sameP");
+    myGraphBDTmcEE1->Draw("sameP");
+    leg2->Draw();
+    crocee1.SaveAs("roc_EE1_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEE1->Draw("sameP");
+    myGraphBDTmcEE1->Draw("sameP");
+    leg2->Draw();
+    crocee1.SetLogx();
+    crocee1.SaveAs("roc_EE1_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEE2;
+    myRocBDTdataEE2.addSignal("BDT", mvaSignalMcEE1);      
+    myRocBDTdataEE2.addBackgrounds(mvaBkgDataEE2);
+    myRocBDTdataEE2.setCutDirection(">");
+    TGraph *myGraphBDTdataEE2 = myRocBDTdataEE2.getFOM("BDT",2);
+    myGraphBDTdataEE2->SetTitle("BDT");
+    myGraphBDTdataEE2->SetName("BDT");
+    myGraphBDTdataEE2->SetMarkerColor(1);
+    myGraphBDTdataEE2->SetMarkerStyle(20);
+    myGraphBDTdataEE2->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEE2;
+    myRocBDTmcEE2.addSignal("BDT", mvaSignalMcEE2);      
+    myRocBDTmcEE2.addBackgrounds(mvaBkgMcEE2);
+    myRocBDTmcEE2.setCutDirection(">");
+    TGraph *myGraphBDTmcEE2 = myRocBDTmcEE2.getFOM("BDT",2);
+    myGraphBDTmcEE2->SetTitle("BDT");
+    myGraphBDTmcEE2->SetName("BDT");
+    myGraphBDTmcEE2->SetMarkerColor(4);
+    myGraphBDTmcEE2->SetMarkerStyle(20);
+    myGraphBDTmcEE2->SetMarkerSize(1);
+    //
+    TCanvas crocee2("roc","",1);
+    crocee2.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEE2->Draw("sameP");
+    myGraphBDTmcEE2->Draw("sameP");
+    leg2->Draw();
+    crocee2.SaveAs("roc_EE2_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEE2->Draw("sameP");
+    myGraphBDTmcEE2->Draw("sameP");
+    leg2->Draw();
+    crocee2.SetLogx();
+    crocee2.SaveAs("roc_EE2_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEE3;
+    myRocBDTdataEE3.addSignal("BDT", mvaSignalMcEE3);      
+    myRocBDTdataEE3.addBackgrounds(mvaBkgDataEE3);
+    myRocBDTdataEE3.setCutDirection(">");
+    TGraph *myGraphBDTdataEE3 = myRocBDTdataEE3.getFOM("BDT",2);
+    myGraphBDTdataEE3->SetTitle("BDT");
+    myGraphBDTdataEE3->SetName("BDT");
+    myGraphBDTdataEE3->SetMarkerColor(1);
+    myGraphBDTdataEE3->SetMarkerStyle(20);
+    myGraphBDTdataEE3->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEE3;
+    myRocBDTmcEE3.addSignal("BDT", mvaSignalMcEE3);      
+    myRocBDTmcEE3.addBackgrounds(mvaBkgMcEE3);
+    myRocBDTmcEE3.setCutDirection(">");
+    TGraph *myGraphBDTmcEE3 = myRocBDTmcEE3.getFOM("BDT",2);
+    myGraphBDTmcEE3->SetTitle("BDT");
+    myGraphBDTmcEE3->SetName("BDT");
+    myGraphBDTmcEE3->SetMarkerColor(4);
+    myGraphBDTmcEE3->SetMarkerStyle(20);
+    myGraphBDTmcEE3->SetMarkerSize(1);
+    //
+    TCanvas crocee3("roc","",1);
+    crocee3.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEE3->Draw("sameP");
+    myGraphBDTmcEE3->Draw("sameP");
+    leg2->Draw();
+    crocee3.SaveAs("roc_EE3_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEE3->Draw("sameP");
+    myGraphBDTmcEE3->Draw("sameP");
+    leg2->Draw();
+    crocee3.SetLogx();
+    crocee3.SaveAs("roc_EE3_dataVsMc_log.png");  
+    
+    // ---------------------------------------------------
+    FiguresOfMeritEvaluator myRocBDTdataEE4;
+    myRocBDTdataEE4.addSignal("BDT", mvaSignalMcEE4);      
+    myRocBDTdataEE4.addBackgrounds(mvaBkgDataEE4);
+    myRocBDTdataEE4.setCutDirection(">");
+    TGraph *myGraphBDTdataEE4 = myRocBDTdataEE4.getFOM("BDT",2);
+    myGraphBDTdataEE4->SetTitle("BDT");
+    myGraphBDTdataEE4->SetName("BDT");
+    myGraphBDTdataEE4->SetMarkerColor(1);
+    myGraphBDTdataEE4->SetMarkerStyle(20);
+    myGraphBDTdataEE4->SetMarkerSize(1);
+    //
+    FiguresOfMeritEvaluator myRocBDTmcEE4;
+    myRocBDTmcEE4.addSignal("BDT", mvaSignalMcEE4);      
+    myRocBDTmcEE4.addBackgrounds(mvaBkgMcEE4);
+    myRocBDTmcEE4.setCutDirection(">");
+    TGraph *myGraphBDTmcEE4 = myRocBDTmcEE4.getFOM("BDT",2);
+    myGraphBDTmcEE4->SetTitle("BDT");
+    myGraphBDTmcEE4->SetName("BDT");
+    myGraphBDTmcEE4->SetMarkerColor(4);
+    myGraphBDTmcEE4->SetMarkerStyle(20);
+    myGraphBDTmcEE4->SetMarkerSize(1);
+    //
+    TCanvas crocee4("roc","",1);
+    crocee4.SetGrid();
+    myH->Draw();
+    myGraphBDTdataEE4->Draw("sameP");
+    myGraphBDTmcEE4->Draw("sameP");
+    leg2->Draw();
+    crocee4.SaveAs("roc_EE4_dataVsMc.png");  
+    myH2->Draw();
+    myGraphBDTdataEE4->Draw("sameP");
+    myGraphBDTmcEE4->Draw("sameP");
+    leg2->Draw();
+    crocee4.SetLogx();
+    crocee4.SaveAs("roc_EE4_dataVsMc_log.png");  
+  }
 }
