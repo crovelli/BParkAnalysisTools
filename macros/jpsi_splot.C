@@ -52,7 +52,9 @@ void jpsi_splot()
   
   // add dataset from converted root tree
   // getDataSet("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root", wspace, lowRange, highRange);
-  getDataSet("Formatted_ParkingRun2018DAll_probeLowPt.root", wspace, lowRange, highRange);
+  // getDataSet("Formatted_ParkingRun2018DAll_probeLowPt.root", wspace, lowRange, highRange);
+  // getDataSet("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root", wspace, lowRange, highRange);
+  getDataSet("Formatted_ParkingRun2018DAll_probePF.root", wspace, lowRange, highRange);
   
   // inspect the workspace if you wish
   wspace->Print();
@@ -80,10 +82,16 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   // 
   RooRealVar hlt_9("hlt_9", "hlt_9", -0.5, 1.5, "");
   // 
+  // comment for PF - init
   RooRealVar probeMvaId("probeMvaId", "probeMvaId", -10., 10., "");
+  RooRealVar probeFBrem("probeFBrem", "probeFBrem", 0., 1., "");
+  // comment for PF - end
+  //
+  // comment for LPT - init   
+  // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");
+  // comment for LPT - end
   RooRealVar probePt("probePt", "probePt", 0., 15., "");
   RooRealVar probeEta("probeEta", "probeEta", -2.4, 2.4, "");
-  RooRealVar probeFBrem("probeFBrem", "probeFBrem", 0., 1., "");
   RooRealVar probeDxySig("probeDxySig", "probeDxySig", -50., 50., "");
   RooRealVar probeDzSig("probeDzSig", "probeDzSig", -50., 50., "");
 
@@ -128,7 +136,8 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   // --------------------------------------
   // background model
   std::cout << "make background model" << std::endl;
-  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");    // Init MC: 0.6, 0, 1;  Init data: 0.5, 0.2, 0.8
+  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");    // Init MC: 0.6, 0, 1;  Init data: 0.5, 0.2, 0.8
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, -0.8, 0.8,"1/GeV");      // Init data PF: -0.8, 0.8, 0.8
   RooExponential bkgModel("bkgModel", "bkg Mass Model", pair_mass, alpha);
   
   // --------------------------------------
@@ -245,6 +254,8 @@ void MakePlots(RooWorkspace* ws){
   RooAbsPdf* bkgModel = ws->pdf("bkgModel");
   
   RooRealVar* probeMvaId = ws->var("probeMvaId");
+  // RooRealVar* probePfmvaId = ws->var("probePfmvaId");
+  RooRealVar* probePt = ws->var("probePt");
   RooRealVar* pair_mass = ws->var("pair_mass");
 
   // note, we get the dataset with sWeights
@@ -277,6 +288,7 @@ void MakePlots(RooWorkspace* ws){
   RooDataSet * dataw_jpsi = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"jpsiYield_sw") ;
   
   RooPlot* frame2 = probeMvaId->frame() ;
+  // RooPlot* frame2 = probePfmvaId->frame() ;
   dataw_jpsi->plotOn(frame2, DataError(RooAbsData::SumW2) ) ;
   frame2->SetTitle("ID distribution for JPsi");
   frame2->Draw() ;
@@ -285,6 +297,7 @@ void MakePlots(RooWorkspace* ws){
   cdata->cd(3);
   RooDataSet * dataw_bkg = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"bkgYield_sw") ;
   RooPlot* frame3 = probeMvaId->frame() ;
+  // RooPlot* frame3 = probePfmvaId->frame() ;
   dataw_bkg->plotOn(frame3,DataError(RooAbsData::SumW2) ) ;
   frame3->SetTitle("ID distribution for background");
   frame3->Draw() ;
@@ -312,11 +325,14 @@ void MakeHistos(RooWorkspace* ws){
   std::cout << std::endl;
   std::cout << "save histos" << std::endl;
 
+  // comment for PF case - init
+  RooRealVar* probeFBrem = ws->var("probeFBrem");
   RooRealVar* probeMvaId = ws->var("probeMvaId");
+  // comment for PF case - end
+  // RooRealVar* probePfmvaId = ws->var("probePfmvaId");
   RooRealVar* hlt_9 = ws->var("hlt_9");
   RooRealVar* probePt  = ws->var("probePt");
   RooRealVar* probeEta = ws->var("probeEta");
-  RooRealVar* probeFBrem = ws->var("probeFBrem");
   RooRealVar* probeDxySig = ws->var("probeDxySig");
   RooRealVar* probeDzSig = ws->var("probeDzSig");
   
@@ -328,14 +344,18 @@ void MakeHistos(RooWorkspace* ws){
   RooDataSet * dataw_bkg  = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"bkgYield_sw") ;
   
   // convert to TH1
+  // comment for PF case - init   
+  TH1 *h1_probeFBrem_jpsi  = dataw_jpsi->createHistogram("h1_probeFBrem_jpsi",*probeFBrem,Binning(50));
+  TH1 *h1_probeFBrem_bkg   = dataw_bkg->createHistogram("h1_probeFBrem_bkg",*probeFBrem,Binning(50));
   TH1 *h1_probeMvaId_jpsi  = dataw_jpsi->createHistogram("h1_probeMvaId_jpsi",*probeMvaId,Binning(60));
   TH1 *h1_probeMvaId_bkg   = dataw_bkg->createHistogram("h1_probeMvaId_bkg",*probeMvaId,Binning(60));
+  // comment for PF case - end  
+  // TH1 *h1_probePfmvaId_jpsi  = dataw_jpsi->createHistogram("h1_probePfmvaId_jpsi",*probePfmvaId,Binning(60));
+  // TH1 *h1_probePfmvaId_bkg   = dataw_bkg->createHistogram("h1_probePfmvaId_bkg",*probePfmvaId,Binning(60));
   TH1 *h1_probePt_jpsi     = dataw_jpsi->createHistogram("h1_probePt_jpsi",*probePt,Binning(60));
   TH1 *h1_probePt_bkg      = dataw_bkg->createHistogram("h1_probePt_bkg",*probePt,Binning(60));
   TH1 *h1_probeEta_jpsi    = dataw_jpsi->createHistogram("h1_probeEta_jpsi",*probeEta,Binning(40));
   TH1 *h1_probeEta_bkg     = dataw_bkg->createHistogram("h1_probeEta_bkg",*probeEta,Binning(40));
-  TH1 *h1_probeFBrem_jpsi  = dataw_jpsi->createHistogram("h1_probeFBrem_jpsi",*probeFBrem,Binning(50));
-  TH1 *h1_probeFBrem_bkg   = dataw_bkg->createHistogram("h1_probeFBrem_bkg",*probeFBrem,Binning(50));
   TH1 *h1_probeDxySig_jpsi = dataw_jpsi->createHistogram("h1_probeDxySig_jpsi",*probeDxySig,Binning(50));
   TH1 *h1_probeDxySig_bkg  = dataw_bkg->createHistogram("h1_probeDxySig_bkg",*probeDxySig,Binning(50));
   TH1 *h1_probeDzSig_jpsi  = dataw_jpsi->createHistogram("h1_probeDzSig_jpsi",*probeDzSig,Binning(50));
@@ -343,14 +363,18 @@ void MakeHistos(RooWorkspace* ws){
 
   TFile myFileSPlots("myFileSPlots.root","RECREATE");
   myFileSPlots.cd();
+  // comment for PF case - init        
+  h1_probeFBrem_jpsi->Write();
+  h1_probeFBrem_bkg->Write();
   h1_probeMvaId_jpsi->Write();
   h1_probeMvaId_bkg->Write();
+  // comment for PF case - end  
+  //  h1_probePfmvaId_jpsi->Write();
+  //  h1_probePfmvaId_bkg->Write();
   h1_probePt_jpsi->Write();
   h1_probePt_bkg->Write();
   h1_probeEta_jpsi->Write();
   h1_probeEta_bkg->Write();
-  h1_probeFBrem_jpsi->Write();
-  h1_probeFBrem_bkg->Write();
   h1_probeDxySig_jpsi->Write();
   h1_probeDxySig_bkg->Write();
   h1_probeDzSig_jpsi->Write();
@@ -366,6 +390,18 @@ void MakeHistos(RooWorkspace* ws){
   h1_probeMvaId_jpsi->DrawNormalized("hist");
   h1_probeMvaId_bkg->DrawNormalized("samehist");
   ch1->SaveAs("probeMvaIdH.png");
+  /*
+  TCanvas* ch1 = new TCanvas("ch1","ch1", 1);
+  h1_probePfmvaId_jpsi->SetLineWidth(2);
+  h1_probePfmvaId_bkg->SetLineWidth(2);
+  h1_probePfmvaId_jpsi->SetLineColor(6);
+  h1_probePfmvaId_bkg->SetLineColor(4);
+  h1_probePfmvaId_jpsi->SetTitle("");
+  h1_probePfmvaId_bkg->SetTitle("");
+  h1_probePfmvaId_jpsi->DrawNormalized("hist");
+  h1_probePfmvaId_bkg->DrawNormalized("samehist");
+  ch1->SaveAs("probePfmvaIdH.png");
+  */
 
   TCanvas* ch2 = new TCanvas("ch2","ch2", 1);
   h1_probePt_jpsi->SetLineWidth(2);
@@ -374,8 +410,8 @@ void MakeHistos(RooWorkspace* ws){
   h1_probePt_bkg->SetLineColor(4);
   h1_probePt_jpsi->SetTitle("");
   h1_probePt_bkg->SetTitle("");
-  h1_probePt_bkg->DrawNormalized("hist");
-  h1_probePt_jpsi->DrawNormalized("samehist");
+  h1_probePt_jpsi->DrawNormalized("hist");
+  h1_probePt_bkg->DrawNormalized("samehist");
   ch2->SaveAs("probePt.png");
 
   TCanvas* ch3 = new TCanvas("ch3","ch3", 1);
@@ -389,6 +425,7 @@ void MakeHistos(RooWorkspace* ws){
   h1_probeEta_bkg->DrawNormalized("samehist");
   ch3->SaveAs("probeEta.png");
 
+  // comment for PF case - init
   TCanvas* ch4 = new TCanvas("ch4","ch4", 1);
   h1_probeFBrem_jpsi->SetLineWidth(2);
   h1_probeFBrem_bkg->SetLineWidth(2);
@@ -399,6 +436,7 @@ void MakeHistos(RooWorkspace* ws){
   h1_probeFBrem_bkg->DrawNormalized("hist");
   h1_probeFBrem_jpsi->DrawNormalized("samehist");
   ch4->SaveAs("probeFBrem.png");
+  // comment for PF case - end  
 
   TCanvas* ch5 = new TCanvas("ch5","ch5", 1);
   h1_probeDxySig_jpsi->SetLineWidth(2);
@@ -433,20 +471,24 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   // trigger
   RooRealVar hlt_9("hlt_9", "hlt_9", -0.5, 1.5, "");
   // discriminating variables
+  // comment for PF case - init
+  RooRealVar probeFBrem("probeFBrem", "probeFBrem", 0., 1., "");
   RooRealVar probeMvaId("probeMvaId", "probeMvaId", -10., 10., "");
+  // comment for PF case - end
+  // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");
   RooRealVar probePt("probePt", "probePt", 0., 15., "");
   RooRealVar probeEta("probeEta", "probeEta", -2.5, 2.5, "");
-  RooRealVar probeFBrem("probeFBrem", "probeFBrem", 0., 1., "");
   RooRealVar probeDxySig("probeDxySig", "probeDxySig", -50., 50., "");
   RooRealVar probeDzSig("probeDzSig", "probeDzSig", -50., 50., "");
-
+  
+  // RooArgSet setall(pair_mass,hlt_9,probePfmvaId,probePt,probeEta,probeDxySig,probeDzSig);
   RooArgSet setall(pair_mass,hlt_9,probeMvaId,probePt,probeEta,probeFBrem,probeDxySig,probeDzSig);
 
   TFile *file = TFile::Open(rootfile);
   TTree *tree = (TTree*)file->Get("tnpAna/fitter_tree");
 
   RooDataSet *data = new RooDataSet("data","data",tree,setall,0); 
-  data = (RooDataSet*)data->reduce("hlt_9==1");
+  data = (RooDataSet*)data->reduce("hlt_9==1");        // data only
 
   // Barrel:
   // pt: 0.5-1.0 GeV 
@@ -470,7 +512,7 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   // pt: 2.0-5.0 GeV 
   // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>2.0 && probePt<5.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: >5.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");            
 
   data->Print();
 
