@@ -275,8 +275,8 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     if (i%10000 == 0) std::cout << ">>> Event # " << i << " / " << nentriesOrig << " entries" << std::endl; 
     treeOrig->GetEntry(i);
 
-    // further selection: trigger
-    if (hlt9==0) continue; 
+    // further selection: trigger on data
+    if (sampleID==0 && hlt9==0) continue; 
 
     for (unsigned int ii=0; ii<ele_pt->size(); ii++) {
       
