@@ -105,7 +105,7 @@ class prepareInputsFromFakes {
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop(bool applyWeight);
+   virtual void     Loop(bool applyWeight, bool isLowPt);
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 };
@@ -119,13 +119,19 @@ prepareInputsFromFakes::prepareInputsFromFakes(TTree *tree) : fChain(0)
   // used to generate this class and read the Tree.
   if (tree == 0) {
     // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___Run2018DAll__lowPt.root");
-    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root");
+    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___Run2018DAll__PF.root");
+    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root");
+    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root");
     if (!f || !f->IsOpen()) {
       // f = new TFile("Formatted_Fakes___Run2018DAll__lowPt.root");
-      f = new TFile("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root");
+      // f = new TFile("Formatted_Fakes___Run2018DAll__PF.root");
+      // f = new TFile("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root");
+      f = new TFile("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root");
     }
     // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___Run2018DAll__lowPt.root:/tnpAna");
-    TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root:/tnpAna");
+    // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root:/tnpAna");
+    // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___Run2018DAll__PF.root:/tnpAna");
+    TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root:/tnpAna");
     dir->GetObject("fitter_tree",tree);
     
   }

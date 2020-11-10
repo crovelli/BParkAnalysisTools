@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void prepareInputsFromFakes::Loop(bool applyWeight)
+void prepareInputsFromFakes::Loop(bool applyWeight, bool isLowPt)
 {
   if (fChain == 0) return;
   
@@ -188,31 +188,36 @@ void prepareInputsFromFakes::Loop(bool applyWeight)
       }
     }
 
+    // which id? Low Pt or PF
+    float eleId = -999.;
+    if (isLowPt==1) eleId = eleMvaId;
+    if (isLowPt==0) eleId = elePfmvaId;
+
     // Fakes - before weight
-    mvaFakes -> Fill(eleMvaId);
+    mvaFakes -> Fill(eleId);
     ptFakes  -> Fill(elePt);
     etaFakes -> Fill(eleEta);
     probePtVsEtaFakeMc -> Fill(eleEta, elePt); 
 
     // Fakes - with weight
-    mvaFakesWW -> Fill(eleMvaId, ptEtaFakeWeight);
+    mvaFakesWW -> Fill(eleId, ptEtaFakeWeight);
     ptFakesWW  -> Fill(elePt, ptEtaFakeWeight);
     etaFakesWW -> Fill(eleEta, ptEtaFakeWeight);
     probePtVsEtaFakeMcWW -> Fill(eleEta, elePt, ptEtaFakeWeight); 
 
     // Finer bins
     if (fabs(eleEta)<1.5) {
-      if (elePt>0.5 && elePt<1.0) mvaFakeEB0->Fill(eleMvaId);
-      if (elePt>1.0 && elePt<1.5) mvaFakeEB1->Fill(eleMvaId);
-      if (elePt>1.5 && elePt<2.0) mvaFakeEB2->Fill(eleMvaId);
-      if (elePt>2.0 && elePt<5.0) mvaFakeEB3->Fill(eleMvaId);
-      if (elePt>5.0) mvaFakeEB4->Fill(eleMvaId);
+      if (elePt>0.5 && elePt<1.0) mvaFakeEB0->Fill(eleId);
+      if (elePt>1.0 && elePt<1.5) mvaFakeEB1->Fill(eleId);
+      if (elePt>1.5 && elePt<2.0) mvaFakeEB2->Fill(eleId);
+      if (elePt>2.0 && elePt<5.0) mvaFakeEB3->Fill(eleId);
+      if (elePt>5.0) mvaFakeEB4->Fill(eleId);
     } else {
-      if (elePt>0.5 && elePt<1.0) mvaFakeEE0->Fill(eleMvaId);
-      if (elePt>1.0 && elePt<1.5) mvaFakeEE1->Fill(eleMvaId);
-      if (elePt>1.5 && elePt<2.0) mvaFakeEE2->Fill(eleMvaId);
-      if (elePt>2.0 && elePt<5.0) mvaFakeEE3->Fill(eleMvaId);
-      if (elePt>5.0) mvaFakeEE4->Fill(eleMvaId);
+      if (elePt>0.5 && elePt<1.0) mvaFakeEE0->Fill(eleId);
+      if (elePt>1.0 && elePt<1.5) mvaFakeEE1->Fill(eleId);
+      if (elePt>1.5 && elePt<2.0) mvaFakeEE2->Fill(eleId);
+      if (elePt>2.0 && elePt<5.0) mvaFakeEE3->Fill(eleId);
+      if (elePt>5.0) mvaFakeEE4->Fill(eleId);
     }
 
   } // loop over entries
