@@ -12,11 +12,11 @@
 
 using namespace std;
 
-void mcVsFakes()
+void mcVsFakes(int isLowPt)
 {
   // Files: 
-  TFile fileFakesData("filesNew/myFileFakesInData__weightsBasedOnMc.root");     // from fakes selection applied to data (prepareInputsFromFakes)
-  TFile fileFakesMc("filesNew/myFileFakesInMc__weightsBasedOnMc.root");         // from fakes selection applied to (B->KJPsi->Kmm) MC (prepareInputsFromFakes)
+  TFile fileFakesData("filesNew/probePF/myFileFakesInData__weightsBasedOnMc.root");     // from fakes selection applied to data (prepareInputsFromFakes)
+  TFile fileFakesMc("filesNew/probePF/myFileFakesInMc__weightsBasedOnMc.root");         // from fakes selection applied to (B->KJPsi->Kmm) MC (prepareInputsFromFakes)
 
   // ----------------------------------------------------
 
@@ -174,6 +174,10 @@ void mcVsFakes()
   mvaFakesMc->SetTitle("");
   mvaFakesData->GetXaxis()->SetTitle("Id BDT");
   mvaFakesMc->GetXaxis()->SetTitle("Id BDT");
+  if (isLowPt==0) {
+    mvaFakesData->Rebin(4);
+    mvaFakesMc->Rebin(4);
+  }
   mvaFakesMc->DrawNormalized("hist");
   mvaFakesData->DrawNormalized("samehist");
   legA->Draw();
@@ -184,6 +188,10 @@ void mcVsFakes()
   ptFakesMc->SetTitle("");
   ptFakesData->GetXaxis()->SetTitle("p_{T} [GeV]");
   ptFakesMc->GetXaxis()->SetTitle("p_{T} [GeV]");
+  if (isLowPt==0) {
+    ptFakesData->Rebin(4);
+    ptFakesMc->Rebin(4);
+  }
   ptFakesMc->DrawNormalized("hist");
   ptFakesData->DrawNormalized("samehist");
   legA->Draw();
@@ -194,6 +202,10 @@ void mcVsFakes()
   etaFakesMc->SetTitle("");
   etaFakesData->GetXaxis()->SetTitle("#eta");
   etaFakesMc->GetXaxis()->SetTitle("#eta");
+  if (isLowPt==0) {
+    etaFakesData->Rebin(4);
+    etaFakesMc->Rebin(4);
+  }
   etaFakesData->DrawNormalized("hist");
   etaFakesMc->DrawNormalized("samehist");
   legA2->Draw();
