@@ -222,6 +222,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   Float_t   probeAbsEta;
   Float_t   probeEta;
   Int_t     probeIsPF;
+  Int_t     probeIsPFOverlap;
   Int_t     probeIsLowPt;
   Float_t   probeMvaId;
   Float_t   probePfmvaId;
@@ -255,6 +256,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     theTreeNew->Branch("probeAbsEta",&probeAbsEta,"probeAbsEta/F");
     theTreeNew->Branch("probeEta",&probeEta,"probeEta/F");
     theTreeNew->Branch("probeIsPF",&probeIsPF,"probeIsPF/I");
+    theTreeNew->Branch("probeIsPFOverlap",&probeIsPFOverlap,"probeIsPFOverlap/I");
     theTreeNew->Branch("probeIsLowPt",&probeIsLowPt,"probeIsLowPt/I");
     theTreeNew->Branch("probeMvaId",&probeMvaId,"probeMvaId/F");
     theTreeNew->Branch("probePfmvaId",&probePfmvaId,"probePfmvaId/F");
@@ -321,6 +323,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       probeAbsEta = fabs(probe_eta->at(ii));
       probeEta = probe_eta->at(ii);
       probeIsPF = probe_isPF->at(ii);
+      probeIsPFOverlap = probe_isPFOverlap->at(ii);
       probeIsLowPt = probe_isLowPt->at(ii);
       probeMvaId = probe_mvaId->at(ii);
       probePfmvaId = probe_pfmvaId->at(ii);
