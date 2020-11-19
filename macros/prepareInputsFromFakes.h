@@ -49,6 +49,7 @@ class prepareInputsFromFakes {
    Float_t         eleEta;
    Float_t         elePhi;
    Int_t           eleIsPF;
+   Int_t           eleIsPFOverlap;
    Int_t           eleIsLowPt;
    Float_t         eleMvaId;
    Float_t         elePfmvaId;
@@ -59,7 +60,13 @@ class prepareInputsFromFakes {
    Float_t         eleDxySig;
    Float_t         eleDzSig;
    Float_t         weight;
-
+   Float_t         probeCloseToMu1Pt;
+   Float_t         probeCloseToMu1Eta;
+   Float_t         probeCloseToMu1Phi;
+   Float_t         probeCloseToMu2Pt;
+   Float_t         probeCloseToMu2Eta;
+   Float_t         probeCloseToMu2Phi;
+   
    // List of branches
    TBranch        *b_hlt_9;   //!
    TBranch        *b_hlt_12;   //!
@@ -88,6 +95,7 @@ class prepareInputsFromFakes {
    TBranch        *b_eleEta;   //!
    TBranch        *b_elePhi;   //!
    TBranch        *b_eleIsPF;   //!
+   TBranch        *b_eleIsPFOverlap;   //!
    TBranch        *b_eleIsLowPt;   //!
    TBranch        *b_eleMvaId;   //!
    TBranch        *b_elePfmvaId;   //!
@@ -98,6 +106,12 @@ class prepareInputsFromFakes {
    TBranch        *b_eleDxySig;   //!
    TBranch        *b_eleDzSig;   //!
    TBranch        *b_weight;   //!
+   TBranch        *b_probeCloseToMu1Pt;   //!
+   TBranch        *b_probeCloseToMu1Eta;   //!
+   TBranch        *b_probeCloseToMu1Phi;   //!
+   TBranch        *b_probeCloseToMu2Pt;   //!
+   TBranch        *b_probeCloseToMu2Eta;   //!
+   TBranch        *b_probeCloseToMu2Phi;   //!
 
    prepareInputsFromFakes(TTree *tree=0);
    virtual ~prepareInputsFromFakes();
@@ -105,7 +119,7 @@ class prepareInputsFromFakes {
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   virtual void     Loop(bool applyWeight, bool isLowPt);
+   virtual void     Loop(bool applyWeight, int isLowPt, bool studyOverlap, bool applyWeightOverlap);
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 };
@@ -120,18 +134,25 @@ prepareInputsFromFakes::prepareInputsFromFakes(TTree *tree) : fChain(0)
   if (tree == 0) {
     // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___Run2018DAll__lowPt.root");
     // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___Run2018DAll__PF.root");
+    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___Run2018DAll__both.root");
     // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root");
-    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root");
+    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root");
+    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__both.root");
     if (!f || !f->IsOpen()) {
       // f = new TFile("Formatted_Fakes___Run2018DAll__lowPt.root");
       // f = new TFile("Formatted_Fakes___Run2018DAll__PF.root");
+      // f = new TFile("Formatted_Fakes___Run2018DAll__both.root");
       // f = new TFile("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root");
-      f = new TFile("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root");
+      // f = new TFile("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root");
+      f = new TFile("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__both.root");
     }
     // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___Run2018DAll__lowPt.root:/tnpAna");
-    // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root:/tnpAna");
     // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___Run2018DAll__PF.root:/tnpAna");
-    TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root:/tnpAna");
+    // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___Run2018DAll__both.root:/tnpAna");
+    // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__lowPt.root:/tnpAna");
+    // TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__PF.root:/tnpAna");
+    TDirectory * dir = (TDirectory*)f->Get("Formatted_Fakes___BuToKJpsi_ToMuMu_BParkNANO_mc_2020Jan16__both.root:/tnpAna");
+
     dir->GetObject("fitter_tree",tree);
     
   }
@@ -207,6 +228,7 @@ void prepareInputsFromFakes::Init(TTree *tree)
   fChain->SetBranchAddress("eleEta", &eleEta, &b_eleEta);
   fChain->SetBranchAddress("elePhi", &elePhi, &b_elePhi);
   fChain->SetBranchAddress("eleIsPF", &eleIsPF, &b_eleIsPF);
+  fChain->SetBranchAddress("eleIsPFOverlap", &eleIsPFOverlap, &b_eleIsPFOverlap);
   fChain->SetBranchAddress("eleIsLowPt", &eleIsLowPt, &b_eleIsLowPt);
   fChain->SetBranchAddress("eleMvaId", &eleMvaId, &b_eleMvaId);
   fChain->SetBranchAddress("elePfmvaId", &elePfmvaId, &b_elePfmvaId);
@@ -217,6 +239,12 @@ void prepareInputsFromFakes::Init(TTree *tree)
   fChain->SetBranchAddress("eleDxySig", &eleDxySig, &b_eleDxySig);
   fChain->SetBranchAddress("eleDzSig", &eleDzSig, &b_eleDzSig);
   fChain->SetBranchAddress("weight", &weight, &b_weight);
+  fChain->SetBranchAddress("probeCloseToMu1Pt", &probeCloseToMu1Pt, &b_probeCloseToMu1Pt);
+  fChain->SetBranchAddress("probeCloseToMu1Eta",&probeCloseToMu1Eta,&b_probeCloseToMu1Eta);
+  fChain->SetBranchAddress("probeCloseToMu1Phi",&probeCloseToMu1Phi,&b_probeCloseToMu1Phi);
+  fChain->SetBranchAddress("probeCloseToMu2Pt", &probeCloseToMu2Pt, &b_probeCloseToMu2Pt);
+  fChain->SetBranchAddress("probeCloseToMu2Eta",&probeCloseToMu2Eta,&b_probeCloseToMu2Eta);
+  fChain->SetBranchAddress("probeCloseToMu2Phi",&probeCloseToMu2Phi,&b_probeCloseToMu2Phi);
   Notify();
 }
 
