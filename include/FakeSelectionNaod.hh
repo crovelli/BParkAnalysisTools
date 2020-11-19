@@ -92,6 +92,12 @@ private:
   vector <float> ele_unBiased={};
   vector <float> ele_ptBiased={};
   vector <bool> ele_convveto={};
+  vector <float> probe_closeToMu1_pt={};
+  vector <float> probe_closeToMu1_eta={};
+  vector <float> probe_closeToMu1_phi={};
+  vector <float> probe_closeToMu2_pt={};
+  vector <float> probe_closeToMu2_eta={};
+  vector <float> probe_closeToMu2_phi={};
 };
 
 #endif

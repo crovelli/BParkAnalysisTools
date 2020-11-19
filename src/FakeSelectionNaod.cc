@@ -85,7 +85,6 @@ void FakeSelectionNaod::Loop() {
     if (nBToKMuMu<=0) continue;
     h_selection->Fill(3.,perEveW);
 
-
     // Minimal Bcandidate requirements
     vector<int> goodBs;
     for (u_int iB=0; iB<nBToKMuMu; iB++) {
@@ -115,9 +114,6 @@ void FakeSelectionNaod::Loop() {
     
     // ------------------------------------------------------------------
     // Looking for electrons in B->Kmumu events
-    vector<int> cleanGoodBs;
-    if (goodBs.size()>0) cleanGoodBs.push_back(goodBs[0]);
-
     for (u_int iB=0; iB<goodBs.size(); iB++) {
 
       int thisB = goodBs[iB];
@@ -137,7 +133,7 @@ void FakeSelectionNaod::Loop() {
       float my_mu2_phi = Muon_phi[mu2_idx];          
       TLorentzVector mu2TLV(0,0,0,0);
       mu2TLV.SetPtEtaPhiM(my_mu2_pt,my_mu2_eta,my_mu2_phi,0);
-
+  
       float my_k_pt  = ProbeTracks_pt[k_idx];      
       float my_k_eta = ProbeTracks_eta[k_idx];   
       float my_k_phi = ProbeTracks_phi[k_idx];          
@@ -155,7 +151,6 @@ void FakeSelectionNaod::Loop() {
 	float my_deltaR_ele_mu1 = eleTLV.DeltaR(mu1TLV);
 	float my_deltaR_ele_mu2 = eleTLV.DeltaR(mu2TLV);
 	float my_deltaR_ele_k   = eleTLV.DeltaR(kTLV);
-
 
 	// Filling tree
 	Bmass.push_back(BToKMuMu_fit_mass[thisB]);
@@ -207,10 +202,49 @@ void FakeSelectionNaod::Loop() {
 	ele_unBiased.push_back(Electron_unBiased[iEle]);  
 	ele_ptBiased.push_back(Electron_ptBiased[iEle]);  
 	ele_convveto.push_back(Electron_convVeto[iEle]);
-      }
+
+	// probe track closest to electron in dR=0.8 wrt muons
+	float minProbeDrMu1 = 999.;
+	float minProbeDrMu2 = 999.;
+	float probeCloseToMu1_pt  = -999.;
+	float probeCloseToMu1_eta = -999.;
+	float probeCloseToMu1_phi = -999.;
+	float probeCloseToMu2_pt  = -999.;
+	float probeCloseToMu2_eta = -999.;
+	float probeCloseToMu2_phi = -999.;
+	for (int ipt=0; ipt<nProbeTracks; ipt++) {
+	  float pt_pt  = ProbeTracks_pt[ipt];
+	  float pt_eta = ProbeTracks_eta[ipt];   
+	  float pt_phi = ProbeTracks_phi[ipt];   
+	  TLorentzVector ptTLV(0,0,0,0);
+	  ptTLV.SetPtEtaPhiM(pt_pt,pt_eta,pt_phi,0);
+	  
+	  float dRmu1 = ptTLV.DeltaR(mu1TLV);
+	  float dRmu2 = ptTLV.DeltaR(mu2TLV);
+	  if ( dRmu1<0.8 && dRmu1<minProbeDrMu1 ) {
+	    minProbeDrMu1=dRmu1;
+	    probeCloseToMu1_pt=pt_pt;
+	    probeCloseToMu1_eta=pt_eta;
+	    probeCloseToMu1_phi=pt_phi;
+	  } 
+	  if ( dRmu2<0.8 && dRmu2<minProbeDrMu2 ) {
+	    minProbeDrMu2=dRmu2;
+	    probeCloseToMu2_pt=pt_pt;
+	    probeCloseToMu2_eta=pt_eta;
+	    probeCloseToMu2_phi=pt_phi;
+	  } 
+	}
+	probe_closeToMu1_pt.push_back(probeCloseToMu1_pt);
+	probe_closeToMu1_eta.push_back(probeCloseToMu1_eta);
+	probe_closeToMu1_phi.push_back(probeCloseToMu1_phi);
+	probe_closeToMu2_pt.push_back(probeCloseToMu2_pt);
+	probe_closeToMu2_eta.push_back(probeCloseToMu2_eta);
+	probe_closeToMu2_phi.push_back(probeCloseToMu2_phi);
+      
+      } // loop over electrons
 
     } // Loop over good Bs
-      
+
     // At least one tag and one probe
     selectedElesSize = deltaR_ele_mu1.size();
     if (selectedElesSize<=0) continue;
@@ -220,9 +254,6 @@ void FakeSelectionNaod::Loop() {
     outTree_->Fill();
 
 
-    // Cleaning all vectors used for the selection
-    cleanGoodBs.clear();
-    
     // Cleaning all vectors used for the output tree, ready for a new entry
     Bmass.clear();      
     BmatchMC.clear();      
@@ -259,6 +290,12 @@ void FakeSelectionNaod::Loop() {
     ele_unBiased.clear();
     ele_ptBiased.clear();
     ele_convveto.clear();
+    probe_closeToMu1_pt.clear();
+    probe_closeToMu1_eta.clear();
+    probe_closeToMu1_phi.clear();
+    probe_closeToMu2_pt.clear();
+    probe_closeToMu2_eta.clear();
+    probe_closeToMu2_phi.clear();
 
   } // loop over entries
 
@@ -332,6 +369,13 @@ void FakeSelectionNaod::bookOutputTree()
   outTree_->Branch("ele_unBiased",     "std::vector<float>",  &ele_unBiased);     
   outTree_->Branch("ele_ptBiased",     "std::vector<float>",  &ele_ptBiased);     
   outTree_->Branch("ele_convveto",     "std::vector<bool>",   &ele_convveto);   
+
+  outTree_->Branch("probe_closeToMu1_pt",  "std::vector<float>", &probe_closeToMu1_pt);
+  outTree_->Branch("probe_closeToMu1_eta", "std::vector<float>", &probe_closeToMu1_eta);
+  outTree_->Branch("probe_closeToMu1_phi", "std::vector<float>", &probe_closeToMu1_phi);
+  outTree_->Branch("probe_closeToMu2_pt",  "std::vector<float>", &probe_closeToMu2_pt);
+  outTree_->Branch("probe_closeToMu2_eta", "std::vector<float>", &probe_closeToMu2_eta);
+  outTree_->Branch("probe_closeToMu2_phi", "std::vector<float>", &probe_closeToMu2_phi);
 }
 
 void FakeSelectionNaod::bookOutputHistos() 
