@@ -12,6 +12,8 @@
 
 using namespace std;
 
+// data vs MC plot, splitting low pt electrons with/wo overlap with PF
+
 void mcVsFakes_pfOverlap()
 {
   // ----------------------------------------------------     
@@ -55,32 +57,32 @@ void mcVsFakes_pfOverlap()
 
   // Cosmetics
   mvaFakesWithOverlapData -> SetLineWidth(2);  
-  mvaFakesWithOverlapData -> SetLineColor(3);  
+  mvaFakesWithOverlapData -> SetLineColor(4);  
   ptFakesWithOverlapData  -> SetLineWidth(2);  
-  ptFakesWithOverlapData  -> SetLineColor(3);  
+  ptFakesWithOverlapData  -> SetLineColor(4);  
   etaFakesWithOverlapData -> SetLineWidth(2);  
-  etaFakesWithOverlapData -> SetLineColor(3);  
+  etaFakesWithOverlapData -> SetLineColor(4);  
   //
   mvaFakesNoOverlapData -> SetLineWidth(2);  
-  mvaFakesNoOverlapData -> SetLineColor(3);  
+  mvaFakesNoOverlapData -> SetLineColor(4);  
   ptFakesNoOverlapData  -> SetLineWidth(2);  
-  ptFakesNoOverlapData  -> SetLineColor(3);  
+  ptFakesNoOverlapData  -> SetLineColor(4);  
   etaFakesNoOverlapData -> SetLineWidth(2);  
-  etaFakesNoOverlapData -> SetLineColor(3);  
+  etaFakesNoOverlapData -> SetLineColor(4);  
   //
   mvaFakesNoOverlapMc -> SetLineWidth(2);  
-  mvaFakesNoOverlapMc -> SetLineColor(6);  
+  mvaFakesNoOverlapMc -> SetLineColor(2);  
   ptFakesNoOverlapMc  -> SetLineWidth(2);  
-  ptFakesNoOverlapMc  -> SetLineColor(6);  
+  ptFakesNoOverlapMc  -> SetLineColor(2);  
   etaFakesNoOverlapMc -> SetLineWidth(2);  
-  etaFakesNoOverlapMc -> SetLineColor(6);  
+  etaFakesNoOverlapMc -> SetLineColor(2);  
   //
   mvaFakesWithOverlapMc -> SetLineWidth(2);  
-  mvaFakesWithOverlapMc -> SetLineColor(6);  
+  mvaFakesWithOverlapMc -> SetLineColor(2);  
   ptFakesWithOverlapMc  -> SetLineWidth(2);  
-  ptFakesWithOverlapMc  -> SetLineColor(6);  
+  ptFakesWithOverlapMc  -> SetLineColor(2);  
   etaFakesWithOverlapMc -> SetLineWidth(2);  
-  etaFakesWithOverlapMc -> SetLineColor(6);  
+  etaFakesWithOverlapMc -> SetLineColor(2);  
 
   // ----------------------------------------------------  
   // Plots: with fake selection: data vs Mc 
@@ -88,46 +90,59 @@ void mcVsFakes_pfOverlap()
   gStyle->SetOptStat(0);
 
   TLegend *legA;
-  legA = new TLegend(0.55,0.65,0.85,0.90);
+  legA = new TLegend(0.65,0.65,0.90,0.90);
   legA->SetFillStyle(0);
   legA->SetBorderSize(0);
   legA->SetTextSize(0.05);
   legA->SetFillColor(0);
-  legA->AddEntry(mvaFakesNoOverlapData, "Fake sel., data", "lp");
-  legA->AddEntry(mvaFakesNoOverlapMc,   "Fake sel., MC", "lp");
+  legA->AddEntry(mvaFakesNoOverlapData, "Data", "lp");
+  legA->AddEntry(mvaFakesNoOverlapMc,   "MC", "lp");
   //
   TLegend *legA2;
-  legA2 = new TLegend(0.30,0.10,0.70,0.40);
+  legA2 = new TLegend(0.15,0.65,0.40,0.90);
   legA2->SetFillStyle(0);
   legA2->SetBorderSize(0);
   legA2->SetTextSize(0.05);
   legA2->SetFillColor(0);
-  legA2->AddEntry(mvaFakesNoOverlapData, "Fake sel., data", "lp");
-  legA2->AddEntry(mvaFakesNoOverlapMc,   "Fake sel., MC", "lp");
+  legA2->AddEntry(mvaFakesNoOverlapData, "Data", "lp");
+  legA2->AddEntry(mvaFakesNoOverlapMc,   "MC", "lp");
+  //
+  TLegend *legA3;
+  legA3 = new TLegend(0.35,0.11,0.65,0.35);
+  legA3->SetFillStyle(0);
+  legA3->SetBorderSize(0);
+  legA3->SetTextSize(0.05);
+  legA3->SetFillColor(0);
+  legA3->AddEntry(mvaFakesNoOverlapData, "Data", "lp");
+  legA3->AddEntry(mvaFakesNoOverlapMc,   "MC", "lp");
 
   TCanvas cmvaA("cmvaA","cmvaA",1);
+  mvaFakesNoOverlapData->Rebin(2);
+  mvaFakesNoOverlapMc->Rebin(2);
   mvaFakesNoOverlapData->SetTitle("");
   mvaFakesNoOverlapMc->SetTitle("");
   mvaFakesNoOverlapData->GetXaxis()->SetTitle("Id BDT");
   mvaFakesNoOverlapMc->GetXaxis()->SetTitle("Id BDT");
   mvaFakesNoOverlapMc->DrawNormalized("histE");
   mvaFakesNoOverlapData->DrawNormalized("samehistE");
-  legA->Draw();
+  legA2->Draw();
   cmvaA.SaveAs("outputBDT_noOverlap_dataVsMc.png");
   //
   TCanvas cmvaA1("cmvaA1","cmvaA1",1); 
   mvaFakesWithOverlapData->Rebin(4);
   mvaFakesWithOverlapMc->Rebin(4);
- mvaFakesWithOverlapData->SetTitle("");
+  mvaFakesWithOverlapData->SetTitle("");
   mvaFakesWithOverlapMc->SetTitle("");
   mvaFakesWithOverlapData->GetXaxis()->SetTitle("Id BDT");
   mvaFakesWithOverlapMc->GetXaxis()->SetTitle("Id BDT");
   mvaFakesWithOverlapMc->DrawNormalized("histE");
   mvaFakesWithOverlapData->DrawNormalized("samehistE");
-  legA->Draw();
+  legA2->Draw();
   cmvaA1.SaveAs("outputBDT_withOverlap_dataVsMc.png");
 
   TCanvas cptA("cptA","cptA",1);
+  ptFakesNoOverlapData->Rebin(2);
+  ptFakesNoOverlapMc->Rebin(2);
   ptFakesNoOverlapData->SetTitle("");
   ptFakesNoOverlapMc->SetTitle("");
   ptFakesNoOverlapData->GetXaxis()->SetTitle("p_{T} [GeV]");
@@ -150,13 +165,15 @@ void mcVsFakes_pfOverlap()
   cptA1.SaveAs("pt_withOverlap_dataVsMc.png");
 
   TCanvas cetaA("cetaA","cetaA",1);
+  etaFakesNoOverlapData->Rebin(2);
+  etaFakesNoOverlapMc->Rebin(2);
   etaFakesNoOverlapData->SetTitle("");
   etaFakesNoOverlapMc->SetTitle("");
   etaFakesNoOverlapData->GetXaxis()->SetTitle("#eta");
   etaFakesNoOverlapMc->GetXaxis()->SetTitle("#eta");
-  etaFakesNoOverlapMc->DrawNormalized("histE");
-  etaFakesNoOverlapData->DrawNormalized("samehistE");
-  legA->Draw();
+  etaFakesNoOverlapData->DrawNormalized("histE");
+  etaFakesNoOverlapMc->DrawNormalized("samehistE");
+  legA3->Draw();
   cetaA.SaveAs("eta_noOverlap_dataVsMc.png");
   //
   TCanvas cetaA1("cetaA1","cetaA1",1);
