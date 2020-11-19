@@ -2,5 +2,6 @@
 // 
 //   1 = JPsi TnP analysis
 //   2 = Triplet selection
+//   3 = Fake selection
 
-#define Application 2
+#define Application 3
