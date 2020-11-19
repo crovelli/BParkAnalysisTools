@@ -16,6 +16,9 @@
 #if Application == 2
 #include "./TripletSelection.cc"
 #endif
+#if Application == 3
+#include "./FakeSelectionNaod.cc"
+#endif
 
 int main(int argc, char* argv[]) {
 
@@ -77,6 +80,17 @@ int main(int argc, char* argv[]) {
   triplet.Loop();
 
 #endif
+
+#if Application == 3
+
+  FakeSelectionNaod fake(theChain);
+
+  fake.PrepareOutputs(outputFileName);   
+
+  fake.Loop();
+
+#endif
+
 
   return 0;
 
