@@ -8,7 +8,7 @@
 
 using namespace std;
 
-void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
+void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
 
   cout << "Formatting " << filename << endl;  
 
@@ -95,6 +95,14 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   vector<float>   *ele_unBiased = nullptr;
   vector<float>   *ele_ptBiased = nullptr;
   vector<int>     *ele_convveto = nullptr;
+  /*
+  vector<float>   *probe_closeToMu1_pt = nullptr;
+  vector<float>   *probe_closeToMu1_eta = nullptr;
+  vector<float>   *probe_closeToMu1_phi = nullptr;
+  vector<float>   *probe_closeToMu2_pt = nullptr;
+  vector<float>   *probe_closeToMu2_eta = nullptr;
+  vector<float>   *probe_closeToMu2_phi = nullptr;
+  */
 
   // List of branches - original tree
   TBranch        *b_theRun;   //!
@@ -141,6 +149,14 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   TBranch        *b_ele_unBiased;   //!
   TBranch        *b_ele_ptBiased;   //!
   TBranch        *b_ele_convveto;   //!
+  /*
+  TBranch        *b_probe_closeToMu1_pt;   //!
+  TBranch        *b_probe_closeToMu1_eta;   //!
+  TBranch        *b_probe_closeToMu1_phi;   //!
+  TBranch        *b_probe_closeToMu2_pt;   //!
+  TBranch        *b_probe_closeToMu2_eta;   //!
+  TBranch        *b_probe_closeToMu2_phi;   //!
+  */
 
   // Set branch addresses and branch pointers 
   treeOrig->SetBranchAddress("theRun", &theRun, &b_theRun);
@@ -187,6 +203,14 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   treeOrig->SetBranchAddress("ele_unBiased", &ele_unBiased, &b_ele_unBiased);
   treeOrig->SetBranchAddress("ele_ptBiased", &ele_ptBiased, &b_ele_ptBiased);
   treeOrig->SetBranchAddress("ele_convveto", &ele_convveto, &b_ele_convveto);
+  /*
+  treeOrig->SetBranchAddress("probe_closeToMu1_pt",  &probe_closeToMu1_pt,  &b_probe_closeToMu1_pt);
+  treeOrig->SetBranchAddress("probe_closeToMu1_eta", &probe_closeToMu1_eta, &b_probe_closeToMu1_eta);
+  treeOrig->SetBranchAddress("probe_closeToMu1_phi", &probe_closeToMu1_phi, &b_probe_closeToMu1_phi);
+  treeOrig->SetBranchAddress("probe_closeToMu2_pt",  &probe_closeToMu2_pt,  &b_probe_closeToMu2_pt);
+  treeOrig->SetBranchAddress("probe_closeToMu2_eta", &probe_closeToMu2_eta, &b_probe_closeToMu2_eta);
+  treeOrig->SetBranchAddress("probe_closeToMu2_phi", &probe_closeToMu2_phi, &b_probe_closeToMu2_phi);
+  */
 
   // New variables
   Int_t     hlt_9;
@@ -216,6 +240,7 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   Float_t   eleEta;
   Float_t   elePhi;
   Int_t     eleIsPF;
+  Int_t     eleIsPFOverlap;
   Int_t     eleIsLowPt;
   Float_t   eleMvaId;
   Float_t   elePfmvaId;
@@ -226,6 +251,14 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   Float_t   eleDxySig;
   Float_t   eleDzSig;
   Float_t   weight;
+  /*
+  Float_t   probeCloseToMu1Pt;
+  Float_t   probeCloseToMu1Eta;
+  Float_t   probeCloseToMu1Phi;
+  Float_t   probeCloseToMu2Pt;
+  Float_t   probeCloseToMu2Eta;
+  Float_t   probeCloseToMu2Phi;
+  */
 
   // New branches
   for(int i=0; i<(int)trees.size();i++) {
@@ -257,6 +290,7 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     theTreeNew->Branch("eleEta",&eleEta,"eleEta/F");
     theTreeNew->Branch("elePhi",&elePhi,"elePhi/F");
     theTreeNew->Branch("eleIsPF",&eleIsPF,"eleIsPF/I");
+    theTreeNew->Branch("eleIsPFOverlap",&eleIsPFOverlap,"eleIsPFOverlap/I");
     theTreeNew->Branch("eleIsLowPt",&eleIsLowPt,"eleIsLowPt/I");
     theTreeNew->Branch("eleMvaId",&eleMvaId,"eleMvaId/F");
     theTreeNew->Branch("elePfmvaId",&elePfmvaId,"elePfmvaId/F");
@@ -267,6 +301,14 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     theTreeNew->Branch("eleDxySig",&eleDxySig,"eleDxySig/F");
     theTreeNew->Branch("eleDzSig",&eleDzSig,"eleDzSig/F");
     theTreeNew->Branch("weight", &weight, "weight/F");
+    /*
+    theTreeNew->Branch("probeCloseToMu1Pt",  &probeCloseToMu1Pt,  "probeCloseToMu1Pt/F");
+    theTreeNew->Branch("probeCloseToMu1Eta", &probeCloseToMu1Eta, "probeCloseToMu1Eta/F");
+    theTreeNew->Branch("probeCloseToMu1Phi", &probeCloseToMu1Phi, "probeCloseToMu1Phi/F");
+    theTreeNew->Branch("probeCloseToMu2Pt",  &probeCloseToMu2Pt,  "probeCloseToMu2Pt/F");
+    theTreeNew->Branch("probeCloseToMu2Eta", &probeCloseToMu2Eta, "probeCloseToMu2Eta/F");
+    theTreeNew->Branch("probeCloseToMu2Phi", &probeCloseToMu2Phi, "probeCloseToMu2Phi/F");
+    */
   }
 
   cout << "Now preparing the new tree" << endl;
@@ -278,6 +320,7 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     // further selection: trigger on data
     if (sampleID==0 && hlt9==0) continue; 
 
+    // Loop on electrons
     for (unsigned int ii=0; ii<ele_pt->size(); ii++) {
       
       // further selection: remove tag side
@@ -339,6 +382,7 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       elePhi = ele_phi->at(ii);
       eleIsPF = ele_isPF->at(ii);
       eleIsLowPt = ele_isLowPt->at(ii);
+      eleIsPFOverlap = ele_isPFOverlap->at(ii);
       eleMvaId = ele_mvaId->at(ii);
       elePfmvaId = ele_pfmvaId->at(ii);
       eleConvVeto = (int)ele_convveto->at(ii);
@@ -348,12 +392,21 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       eleDxySig = ele_dxySig->at(ii);
       eleDzSig = ele_dzSig->at(ii);
 
+      /*
+      probeCloseToMu1Pt  = probe_closeToMu1_pt->at(ii);
+      probeCloseToMu1Eta = probe_closeToMu1_eta->at(ii);
+      probeCloseToMu1Phi = probe_closeToMu1_phi->at(ii);
+      probeCloseToMu2Pt  = probe_closeToMu2_pt->at(ii);
+      probeCloseToMu2Eta = probe_closeToMu2_eta->at(ii);
+      probeCloseToMu2Phi = probe_closeToMu2_phi->at(ii);
+      */
+
       // weights
       if (theRun==1) {   // MC                                                                                                                   
 	//weight = perEveW * lumiForW * lumiWeight;     // chiara
 	weight = perEveW;
       } else {
-	weight     = 1.;
+	weight = 1.;
       }
 
       treeNew->Fill();
