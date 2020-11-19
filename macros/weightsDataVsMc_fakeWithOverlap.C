@@ -184,14 +184,14 @@ void weightsDataVsMc_fakeWithOverlap()
   ptFakesWithOverlapData->DrawNormalized("histe");
   ptFakesWithOverlapMc->DrawNormalized("samehiste");
   leg->Draw();
-  cs1.SaveAs("ptSignal_lowPtWithPfPverlap_dataVsMc.png");
+  cs1.SaveAs("pt_withOverlap_dataVsMc.png");
 
   TCanvas cs2("cs2","cs2",1);
   ptFakesWithOverlapMcWW->Rebin(4);
   ptFakesWithOverlapMcWW->DrawNormalized("histe");
   ptFakesWithOverlapData->DrawNormalized("samehiste");
   legww->Draw();
-  cs2.SaveAs("ptSignal_lowPtWithPfPverlap_dataVsMc_withWeight.png");
+  cs2.SaveAs("pt_withOverlap_dataVsMc_withWeights.png");
   
   // -----------
 
@@ -201,14 +201,14 @@ void weightsDataVsMc_fakeWithOverlap()
   etaFakesWithOverlapData->DrawNormalized("histe");
   etaFakesWithOverlapMc->DrawNormalized("samehiste");
   leg3->Draw();
-  cs3.SaveAs("etaSignal_lowPtWithPfPverlap_dataVsMc.png");
+  cs3.SaveAs("eta_withOverlap_dataVsMc.png");
 
   TCanvas cs4("cs4","cs4",1);
   etaFakesWithOverlapMcWW->Rebin(4);
   etaFakesWithOverlapMcWW->DrawNormalized("histe");
   etaFakesWithOverlapData->DrawNormalized("samehiste");
   leg3ww->Draw();
-  cs4.SaveAs("etaSignal_lowPtWithPfPverlap_dataVsMc_withWeight.png");
+  cs4.SaveAs("eta_withOverlap_dataVsMc_withWeights.png");
 
   // -----------
 
@@ -218,14 +218,14 @@ void weightsDataVsMc_fakeWithOverlap()
   mvaFakesWithOverlapData->DrawNormalized("histe");
   mvaFakesWithOverlapMc->DrawNormalized("samehiste");
   leg2->Draw();
-  cs5.SaveAs("mvaSignal_lowPtWithPfPverlap_dataVsMc.png");
+  cs5.SaveAs("mva_withOverlap_dataVsMc.png");
 
   TCanvas cs6("cs6","cs6",1);
   mvaFakesWithOverlapMcWW->Rebin(4);
   mvaFakesWithOverlapMcWW->DrawNormalized("histe");
   mvaFakesWithOverlapData->DrawNormalized("samehiste");
   leg2ww->Draw();
-  cs6.SaveAs("mvaSignal_lowPtWithPfPverlap_dataVsMc_withWeight.png");
+  cs6.SaveAs("mva_withOverlap_dataVsMc_withWeights.png");
 
   // -----------
 
