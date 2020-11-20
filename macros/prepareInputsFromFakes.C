@@ -462,6 +462,57 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
   } // loop over entries
 
 
+
+  // ---------------------------------------------------------
+  // Save histos
+  TFile filefakes("myFileFakes.root","RECREATE");
+  // 
+  dREleK        -> Write(); 
+  dREleMu1      -> Write(); 
+  dREleMu2      -> Write(); 
+  dREleMuMu     -> Write(); 
+  dREleKzoom    -> Write(); 
+  dREleMu1zoom  -> Write(); 
+  dREleMin      -> Write();
+  // 
+  mvaFakes -> Write();
+  ptFakes  -> Write();
+  etaFakes -> Write();
+  // 
+  mvaFakesWW -> Write();
+  ptFakesWW  -> Write();
+  etaFakesWW -> Write();
+  //
+  probePtVsEtaFakeMc -> Write();
+  probePtVsEtaFakeMcWW -> Write();
+  //
+  mvaFakeEB0 -> Write();
+  mvaFakeEB1 -> Write();
+  mvaFakeEB2 -> Write();
+  mvaFakeEB3 -> Write();
+  mvaFakeEB4 -> Write();
+  mvaFakeEE0 -> Write();
+  mvaFakeEE1 -> Write();
+  mvaFakeEE2 -> Write();
+  mvaFakeEE3 -> Write();
+  mvaFakeEE4 -> Write();
+  //
+  mvaFakes_LptNotPfOverlap -> Write();
+  ptFakes_LptNotPfOverlap -> Write();
+  etaFakes_LptNotPfOverlap -> Write();
+  mvaFakes_LptPfOverlap -> Write();
+  ptFakes_LptPfOverlap -> Write();
+  etaFakes_LptPfOverlap -> Write();
+  //
+  mvaFakes_LptPfOverlapWW -> Write();
+  ptFakes_LptPfOverlapWW -> Write();
+  etaFakes_LptPfOverlapWW -> Write();
+  //
+  ptVsEtaFakes_LptPfOverlap->Write();
+  ptVsEtaFakes_LptPfOverlapWW->Write();
+  // ---------------------------------------------------------
+
+
   // Plots
   gStyle->SetOptStat(0);
 
@@ -789,7 +840,7 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
     etaFakes_LptNotPfOverlap -> SetLineColor(4);      
     
     TLegend *legA1;
-    legA1 = new TLegend(0.10,0.65,0.45,0.90);
+    legA1 = new TLegend(0.60,0.65,0.90,0.90);
     legA1->SetFillStyle(0);
     legA1->SetBorderSize(0);
     legA1->SetTextSize(0.05);
@@ -798,7 +849,7 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
     legA1->AddEntry(mvaFakes_LptPfOverlap,    "PF overlap", "lp");
     //
     TLegend *legB1;
-    legB1 = new TLegend(0.40,0.65,0.75,0.90);
+    legB1 = new TLegend(0.60,0.65,0.90,0.90);
     legB1->SetFillStyle(0);
     legB1->SetBorderSize(0);
     legB1->SetTextSize(0.05);
@@ -807,7 +858,7 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
     legB1->AddEntry(mvaFakes_LptPfOverlap,    "PF overlap", "lp");
     //
     TLegend *legC1;
-    legC1 = new TLegend(0.25,0.15,0.65,0.30);
+    legC1 = new TLegend(0.20,0.10,0.60,0.25);
     legC1->SetFillStyle(0);
     legC1->SetBorderSize(0);
     legC1->SetTextSize(0.05);
@@ -816,81 +867,40 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
     legC1->AddEntry(mvaFakes_LptPfOverlap,    "PF overlap", "lp");
 
     TCanvas ca1("ca1","ca1",1);
+    mvaFakes_LptNotPfOverlap -> Rebin(4);
+    mvaFakes_LptPfOverlap    -> Rebin(4);
     mvaFakes_LptNotPfOverlap -> SetTitle(""); 
     mvaFakes_LptPfOverlap    -> SetTitle(""); 
     mvaFakes_LptNotPfOverlap -> GetXaxis()->SetTitle("Id BDT");
     mvaFakes_LptPfOverlap    -> GetXaxis()->SetTitle("Id BDT");
-    mvaFakes_LptNotPfOverlap -> DrawNormalized("hist");
-    mvaFakes_LptPfOverlap    -> DrawNormalized("samehist");
+    mvaFakes_LptNotPfOverlap -> DrawNormalized("histe");
+    mvaFakes_LptPfOverlap    -> DrawNormalized("samehiste");
     legA1->Draw();
     ca1.SaveAs("outputBDT_fakes_w-wo-overlap.png");
     //
     TCanvas ca2("ca2","ca2",1);
+    ptFakes_LptNotPfOverlap -> Rebin(4);
+    ptFakes_LptPfOverlap    -> Rebin(4);
     ptFakes_LptNotPfOverlap -> SetTitle(""); 
     ptFakes_LptPfOverlap    -> SetTitle(""); 
     ptFakes_LptNotPfOverlap -> GetXaxis()->SetTitle("pt [GeV]");
     ptFakes_LptPfOverlap    -> GetXaxis()->SetTitle("pt [GeV]");
-    ptFakes_LptNotPfOverlap -> DrawNormalized("hist");
-    ptFakes_LptPfOverlap    -> DrawNormalized("samehist");
+    ptFakes_LptNotPfOverlap -> DrawNormalized("histe");
+    ptFakes_LptPfOverlap    -> DrawNormalized("samehiste");
     legB1->Draw();
     ca2.SaveAs("pt_fakes_w-wo-overlap.png");
     //
     TCanvas ca3("ca3","ca3",1);
+    etaFakes_LptNotPfOverlap -> Rebin(4);
+    etaFakes_LptPfOverlap    -> Rebin(4);
     etaFakes_LptNotPfOverlap -> SetTitle(""); 
     etaFakes_LptPfOverlap    -> SetTitle(""); 
     etaFakes_LptNotPfOverlap -> GetXaxis()->SetTitle("#eta");
     etaFakes_LptPfOverlap    -> GetXaxis()->SetTitle("#eta");
-    etaFakes_LptNotPfOverlap -> DrawNormalized("hist");
-    etaFakes_LptPfOverlap    -> DrawNormalized("samehist");
+    etaFakes_LptPfOverlap    -> DrawNormalized("histe");
+    etaFakes_LptNotPfOverlap -> DrawNormalized("samehiste");
     legC1->Draw();
     ca3.SaveAs("eta_fakes_w-wo-overlap.png");
   }    
-  
-
-  // Save histos
-  TFile filefakes("myFileFakes.root","RECREATE");
-  // 
-  dREleK        -> Write(); 
-  dREleMu1      -> Write(); 
-  dREleMu2      -> Write(); 
-  dREleMuMu     -> Write(); 
-  dREleKzoom    -> Write(); 
-  dREleMu1zoom  -> Write(); 
-  dREleMin      -> Write();
-  // 
-  mvaFakes -> Write();
-  ptFakes  -> Write();
-  etaFakes -> Write();
-  // 
-  mvaFakesWW -> Write();
-  ptFakesWW  -> Write();
-  etaFakesWW -> Write();
-  //
-  probePtVsEtaFakeMc -> Write();
-  probePtVsEtaFakeMcWW -> Write();
-  //
-  mvaFakeEB0 -> Write();
-  mvaFakeEB1 -> Write();
-  mvaFakeEB2 -> Write();
-  mvaFakeEB3 -> Write();
-  mvaFakeEB4 -> Write();
-  mvaFakeEE0 -> Write();
-  mvaFakeEE1 -> Write();
-  mvaFakeEE2 -> Write();
-  mvaFakeEE3 -> Write();
-  mvaFakeEE4 -> Write();
-  //
-  mvaFakes_LptNotPfOverlap -> Write();
-  ptFakes_LptNotPfOverlap -> Write();
-  etaFakes_LptNotPfOverlap -> Write();
-  mvaFakes_LptPfOverlap -> Write();
-  ptFakes_LptPfOverlap -> Write();
-  etaFakes_LptPfOverlap -> Write();
-  //
-  mvaFakes_LptPfOverlapWW -> Write();
-  ptFakes_LptPfOverlapWW -> Write();
-  etaFakes_LptPfOverlapWW -> Write();
-  //
-  ptVsEtaFakes_LptPfOverlap->Write();
-  ptVsEtaFakes_LptPfOverlapWW->Write();
+ 
 }
