@@ -691,6 +691,8 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
     ca2b.SaveAs("pt_matchMC_w-wo-overlap.png");
 
     TCanvas ca3("ca3","ca3",1);
+    etaFakeMc_LptNotPfOverlap -> Rebin();
+    etaFakeMc_LptPfOverlap    -> Rebin();
     etaFakeMc_LptNotPfOverlap -> SetTitle(""); 
     etaFakeMc_LptPfOverlap    -> SetTitle(""); 
     etaFakeMc_LptNotPfOverlap -> GetXaxis()->SetTitle("#eta");
@@ -701,6 +703,8 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
     ca3.SaveAs("eta_fakeMC_w-wo-overlap.png");
     //
     TCanvas ca3b("ca3b","ca3b",1);
+    etaSignalMc_LptNotPfOverlap -> Rebin();
+    etaSignalMc_LptPfOverlap    -> Rebin();
     etaSignalMc_LptNotPfOverlap -> SetTitle(""); 
     etaSignalMc_LptPfOverlap    -> SetTitle(""); 
     etaSignalMc_LptNotPfOverlap -> GetXaxis()->SetTitle("#eta");
