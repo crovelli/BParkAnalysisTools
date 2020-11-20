@@ -14,7 +14,7 @@
 
 using namespace std;
 
-void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
+void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool studyOverlap=0)
 {
   if (fChain == 0) return;
 
@@ -301,6 +301,22 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
 
 
   // --------------------------
+  // Full pT range: distributions for data/MC checking overlap between LPT and PF
+  TH1F *probePtSignalMc_LptPfOverlap  = new TH1F("probePtSignalMc_LptPfOverlap",  "probePtSignalMc_LptPfOverlap",  60,  0.,  15.);
+  TH1F *probeEtaSignalMc_LptPfOverlap = new TH1F("probeEtaSignalMc_LptPfOverlap", "probeEtaSignalMc_LptPfOverlap", 40, -2.4, 2.4);
+  TH1F *probeMvaSignalMc_LptPfOverlap = new TH1F("probeMvaSignalMc_LptPfOverlap", "probeMvaSignalMc_LptPfOverlap", 60, -10., 10.); 
+  probePtSignalMc_LptPfOverlap->Sumw2();
+  probeEtaSignalMc_LptPfOverlap->Sumw2();
+  probeMvaSignalMc_LptPfOverlap->Sumw2(); 
+
+  TH1F *probePtSignalMc_LptNotPfOverlap  = new TH1F("probePtSignalMc_LptNotPfOverlap",  "probePtSignalMc_LptNotPfOverlap",  60,  0.,  15.);
+  TH1F *probeEtaSignalMc_LptNotPfOverlap = new TH1F("probeEtaSignalMc_LptNotPfOverlap", "probeEtaSignalMc_LptNotPfOverlap", 40, -2.4, 2.4);
+  TH1F *probeMvaSignalMc_LptNotPfOverlap = new TH1F("probeMvaSignalMc_LptNotPfOverlap", "probeMvaSignalMc_LptNotPfOverlap", 60, -10., 10.); 
+  probePtSignalMc_LptNotPfOverlap->Sumw2();
+  probeEtaSignalMc_LptNotPfOverlap->Sumw2();
+  probeMvaSignalMc_LptNotPfOverlap->Sumw2(); 
+
+  // --------------------------
   // weights (pt vs eta)
   float minBPt[100], maxBPt[100], minBEta[100], maxBEta[100];      
   int nBinsWPt  = -999;
@@ -353,6 +369,9 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
 
+    // Sanity check 
+    if (studyOverlap==1 && testLPT!=1) { cout << "should not happen!" << endl; continue; }
+
     // HLT - not needed in MC
     // if (hlt_9==0) continue;
     
@@ -388,7 +407,19 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
       if (probeFBrem>=0 && probeFBrem<=1) probeFBremSignalMc->Fill(probeFBrem);
       probeDxySigSignalMc->Fill(probeDxySig);
       probeDzSigSignalMc->Fill(probeDzSig);
+      if (studyOverlap==1) {
+	if (probeIsPFOverlap==1) {
+	  probePtSignalMc_LptPfOverlap->Fill(probePt);
+	  probeEtaSignalMc_LptPfOverlap->Fill(probeEta);
+	  probeMvaSignalMc_LptPfOverlap->Fill(probeMvaId);
+	} else {
+	  probePtSignalMc_LptNotPfOverlap->Fill(probePt);
+	  probeEtaSignalMc_LptNotPfOverlap->Fill(probeEta);
+	  probeMvaSignalMc_LptNotPfOverlap->Fill(probeMvaId);
+	}
+      }
     }
+    
     // splitting in pT bins to check eta
     if (probeMatchMc==1) {
       if (probePt<1.0) probeEtaSignalMc0->Fill(probeEta);
@@ -690,6 +721,15 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
   probeMvaSignalMc->Write(); 
   probeMvaFakeMc->Write();  
   numVtxMc->Write();     
+  //
+  if (studyOverlap==1) {
+    probePtSignalMc_LptNotPfOverlap->Write();
+    probeEtaSignalMc_LptNotPfOverlap->Write();
+    probeMvaSignalMc_LptNotPfOverlap->Write();
+    probePtSignalMc_LptPfOverlap->Write();
+    probeEtaSignalMc_LptPfOverlap->Write();
+    probeMvaSignalMc_LptPfOverlap->Write();
+  }
   //
   probeEtaSignalMc0->Write();
   probeEtaFakeMc0->Write();

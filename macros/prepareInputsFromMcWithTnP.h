@@ -34,6 +34,7 @@ class prepareInputsFromMcWithTnP {
   Float_t         probeAbsEta;
   Float_t         probeEta;
   Int_t           probeIsPF;
+  Int_t           probeIsPFOverlap;
   Int_t           probeIsLowPt;
   Float_t         probeMvaId;
   Float_t         probePfmvaId;
@@ -65,6 +66,7 @@ class prepareInputsFromMcWithTnP {
   TBranch        *b_probeAbsEta;   //!
   TBranch        *b_probeEta;   //!
   TBranch        *b_probeIsPF;   //!
+  TBranch        *b_probeIsPFOverlap;   //!
   TBranch        *b_probeIsLowPt;   //!
   TBranch        *b_probeMvaId;   //!
   TBranch        *b_probePfmvaId;   //!
@@ -89,7 +91,7 @@ class prepareInputsFromMcWithTnP {
   virtual Int_t    GetEntry(Long64_t entry);
   virtual Long64_t LoadTree(Long64_t entry);
   virtual void     Init(TTree *tree);
-  virtual void     Loop(bool applyWeight, bool testLPT);
+  virtual void     Loop(bool applyWeight, bool testLPT, bool studyOverlap);
   virtual Bool_t   Notify();
   virtual void     Show(Long64_t entry = -1);
 };
@@ -102,14 +104,14 @@ prepareInputsFromMcWithTnP::prepareInputsFromMcWithTnP(TTree *tree) : fChain(0)
   // if parameter tree is not specified (or zero), connect the file
   // used to generate this class and read the Tree.
   if (tree == 0) {
-    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root");
-    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root");
+    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root");
+    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root");
     if (!f || !f->IsOpen()) {
-      // f = new TFile("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root");
-      f = new TFile("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root");
+      f = new TFile("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root");
+      // f = new TFile("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root");
     }
-    // TDirectory * dir = (TDirectory*)f->Get("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root:/tnpAna");
-    TDirectory * dir = (TDirectory*)f->Get("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root:/tnpAna");
+    TDirectory * dir = (TDirectory*)f->Get("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root:/tnpAna");
+    // TDirectory * dir = (TDirectory*)f->Get("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root:/tnpAna");
     dir->GetObject("fitter_tree",tree);
     
   }
@@ -170,6 +172,7 @@ void prepareInputsFromMcWithTnP::Init(TTree *tree)
   fChain->SetBranchAddress("probeAbsEta", &probeAbsEta, &b_probeAbsEta);
   fChain->SetBranchAddress("probeEta", &probeEta, &b_probeEta);
   fChain->SetBranchAddress("probeIsPF", &probeIsPF, &b_probeIsPF);
+  fChain->SetBranchAddress("probeIsPFOverlap", &probeIsPFOverlap, &b_probeIsPFOverlap);
   fChain->SetBranchAddress("probeIsLowPt", &probeIsLowPt, &b_probeIsLowPt);
   fChain->SetBranchAddress("probeMvaId", &probeMvaId, &b_probeMvaId);
   fChain->SetBranchAddress("probePfmvaId", &probePfmvaId, &b_probePfmvaId);
