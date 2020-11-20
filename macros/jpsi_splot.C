@@ -52,9 +52,9 @@ void jpsi_splot()
   
   // add dataset from converted root tree
   // getDataSet("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root", wspace, lowRange, highRange);
-  // getDataSet("Formatted_ParkingRun2018DAll_probeLowPt.root", wspace, lowRange, highRange);
+  getDataSet("Formatted_ParkingRun2018DAll_probeLowPt.root", wspace, lowRange, highRange);
   // getDataSet("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root", wspace, lowRange, highRange);
-  getDataSet("Formatted_ParkingRun2018DAll_probePF.root", wspace, lowRange, highRange);
+  // getDataSet("Formatted_ParkingRun2018DAll_probePF.root", wspace, lowRange, highRange);
   
   // inspect the workspace if you wish
   wspace->Print();
@@ -81,6 +81,7 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   RooRealVar pair_mass("pair_mass", "M_{inv}", lowRange, highRange,"GeV");
   // 
   RooRealVar hlt_9("hlt_9", "hlt_9", -0.5, 1.5, "");
+  RooRealVar probeIsPFOverlap("probeIsPFOverlap", "probeIsPFOverlap", -0.5, 1.5, "");
   // 
   // comment for PF - init
   RooRealVar probeMvaId("probeMvaId", "probeMvaId", -10., 10., "");
@@ -331,6 +332,7 @@ void MakeHistos(RooWorkspace* ws){
   // comment for PF case - end
   // RooRealVar* probePfmvaId = ws->var("probePfmvaId");
   RooRealVar* hlt_9 = ws->var("hlt_9");
+  RooRealVar* probeIsPFOverlap = ws->var("probeIsPFOverlap"); 
   RooRealVar* probePt  = ws->var("probePt");
   RooRealVar* probeEta = ws->var("probeEta");
   RooRealVar* probeDxySig = ws->var("probeDxySig");
@@ -468,8 +470,12 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   
   // fit variables
   RooRealVar pair_mass("pair_mass", "M_{inv}", lowRange, highRange,"GeV");
+  // 
   // trigger
   RooRealVar hlt_9("hlt_9", "hlt_9", -0.5, 1.5, "");
+  // LPT / PF overlap
+  RooRealVar probeIsPFOverlap("probeIsPFOverlap", "probeIsPFOverlap", -0.5, 1.5, "");
+  //
   // discriminating variables
   // comment for PF case - init
   RooRealVar probeFBrem("probeFBrem", "probeFBrem", 0., 1., "");
@@ -477,18 +483,22 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   // comment for PF case - end
   // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");
   RooRealVar probePt("probePt", "probePt", 0., 15., "");
-  RooRealVar probeEta("probeEta", "probeEta", -2.5, 2.5, "");
+  RooRealVar probeEta("probeEta", "probeEta", -2.4, 2.4, "");
   RooRealVar probeDxySig("probeDxySig", "probeDxySig", -50., 50., "");
   RooRealVar probeDzSig("probeDzSig", "probeDzSig", -50., 50., "");
   
   // RooArgSet setall(pair_mass,hlt_9,probePfmvaId,probePt,probeEta,probeDxySig,probeDzSig);
-  RooArgSet setall(pair_mass,hlt_9,probeMvaId,probePt,probeEta,probeFBrem,probeDxySig,probeDzSig);
+  RooArgSet setall(pair_mass,hlt_9,probeIsPFOverlap,probeMvaId,probePt,probeEta,probeFBrem,probeDxySig,probeDzSig);
 
   TFile *file = TFile::Open(rootfile);
   TTree *tree = (TTree*)file->Get("tnpAna/fitter_tree");
 
   RooDataSet *data = new RooDataSet("data","data",tree,setall,0); 
-  data = (RooDataSet*)data->reduce("hlt_9==1");        // data only
+  // data = (RooDataSet*)data->reduce("hlt_9==1");        // data only
+
+  // PF overlap 
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probeIsPFOverlap==1");
+  data = (RooDataSet*)data->reduce("hlt_9==1 && probeIsPFOverlap==0");
 
   // Barrel:
   // pt: 0.5-1.0 GeV 
