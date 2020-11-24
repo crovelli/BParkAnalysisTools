@@ -372,8 +372,8 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
     // Sanity check 
     if (studyOverlap==1 && testLPT!=1) { cout << "should not happen!" << endl; continue; }
 
-    // HLT - not needed in MC
-    // if (hlt_9==0) continue;
+    // HLT
+    if (hlt_9==0) continue;
     
     // Acceptance
     if (fabs(probeEta)>2.4) continue;
