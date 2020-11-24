@@ -51,18 +51,18 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
   dREleMinzoom->Sumw2();
 
   // Closest particle to
-  TH1F *dRMinParticleCutGt005 = new TH1F("dRMinParticleCutGt005", "dRMinParticleCutGt005", 3, 0.5, 3.5);
-  TH1F *dRMinParticleCutLt005 = new TH1F("dRMinParticleCutLt005", "dRMinParticleCutLt005", 3, 0.5, 3.5);
-  dRMinParticleCutGt005->Sumw2();
-  dRMinParticleCutLt005->Sumw2();
-  TH1F *mu1WithDRMinTrueCutGt005 = new TH1F("mu1WithDRMinTrueCutGt005", "mu1WithDRMinTrueCutGt005", 2, -0.5, 1.5);
-  TH1F *mu2WithDRMinTrueCutGt005 = new TH1F("mu2WithDRMinTrueCutGt005", "mu2WithDRMinTrueCutGt005", 2, -0.5, 1.5);
-  TH1F *mu1WithDRMinTrueCutLt005 = new TH1F("mu1WithDRMinTrueCutLt005", "mu1WithDRMinTrueCutLt005", 2, -0.5, 1.5);
-  TH1F *mu2WithDRMinTrueCutLt005 = new TH1F("mu2WithDRMinTrueCutLt005", "mu2WithDRMinTrueCutLt005", 2, -0.5, 1.5);
-  mu1WithDRMinTrueCutGt005->Sumw2();     
-  mu2WithDRMinTrueCutGt005->Sumw2();     
-  mu1WithDRMinTrueCutLt005->Sumw2();     
-  mu2WithDRMinTrueCutLt005->Sumw2();     
+  TH1F *dRMinParticleCutGt002 = new TH1F("dRMinParticleCutGt002", "dRMinParticleCutGt002", 3, 0.5, 3.5);
+  TH1F *dRMinParticleCutLt002 = new TH1F("dRMinParticleCutLt002", "dRMinParticleCutLt002", 3, 0.5, 3.5);
+  dRMinParticleCutGt002->Sumw2();
+  dRMinParticleCutLt002->Sumw2();
+  TH1F *mu1WithDRMinTrueCutGt002 = new TH1F("mu1WithDRMinTrueCutGt002", "mu1WithDRMinTrueCutGt002", 2, -0.5, 1.5);
+  TH1F *mu2WithDRMinTrueCutGt002 = new TH1F("mu2WithDRMinTrueCutGt002", "mu2WithDRMinTrueCutGt002", 2, -0.5, 1.5);
+  TH1F *mu1WithDRMinTrueCutLt002 = new TH1F("mu1WithDRMinTrueCutLt002", "mu1WithDRMinTrueCutLt002", 2, -0.5, 1.5);
+  TH1F *mu2WithDRMinTrueCutLt002 = new TH1F("mu2WithDRMinTrueCutLt002", "mu2WithDRMinTrueCutLt002", 2, -0.5, 1.5);
+  mu1WithDRMinTrueCutGt002->Sumw2();     
+  mu2WithDRMinTrueCutGt002->Sumw2();     
+  mu1WithDRMinTrueCutLt002->Sumw2();     
+  mu2WithDRMinTrueCutLt002->Sumw2();     
 
   // Isolation cone around muons 
   TH1F *dRMinProbeIso0d3aroundMu1 = new TH1F("dRMinProbeIso0d3aroundMu1", "dRMinProbeIso0d3aroundMu1", 50, 0., 2.);
@@ -259,7 +259,7 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
     nb = fChain->GetEntry(jentry);   nbytes += nb;
 
     // Trigger - already applied to data only when formatting
-    // if (hlt_9==0) continue;
+    if (hlt_9==0) continue;
 
     // Acceptance - should already be applied
     if (fabs(eleEta)>2.4 || (elePt<0.5)) cout << "problems with acceptance" << endl;
@@ -314,22 +314,22 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
     // closest particle
     float dR_min = 999.;
     int p_drmin  = -999;
+    
     if (dR_ele_k<dR_ele_mu1 && dR_ele_k<dR_ele_mu2)   { dR_min = dR_ele_k;   p_drmin = 1; }
     if (dR_ele_mu1<dR_ele_k && dR_ele_mu1<dR_ele_mu2) { dR_min = dR_ele_mu1; p_drmin = 2; }
     if (dR_ele_mu2<dR_ele_k && dR_ele_mu2<dR_ele_mu1) { dR_min = dR_ele_mu2; p_drmin = 3; }
     dREleMin     -> Fill(dR_min);
     dREleMinzoom -> Fill(dR_min);
-    if (dR_min>0.05) dRMinParticleCutGt005 -> Fill(p_drmin);
-    if (dR_min<0.05) dRMinParticleCutLt005 -> Fill(p_drmin);
+    if (dR_min>0.02) dRMinParticleCutGt002 -> Fill(p_drmin);
+    if (dR_min<0.02) dRMinParticleCutLt002 -> Fill(p_drmin);
 
     // if closest particle is mu
     if(p_drmin==2) {
-      if (dR_min>0.05) mu1WithDRMinTrueCutGt005->Fill(mu1MatchMcFromJPsi);
-      if (dR_min<0.05) mu1WithDRMinTrueCutLt005->Fill(mu1MatchMcFromJPsi);    
+      if (dR_min>0.02) mu1WithDRMinTrueCutGt002->Fill(mu1MatchMcFromJPsi);
+      if (dR_min<0.02) mu1WithDRMinTrueCutLt002->Fill(mu1MatchMcFromJPsi);    
 
-      /*
       // probe closest to electron in the isolation cone around mu1 
-      if (dR_min>0.05) {
+      if (dR_min>0.02) {
 	if (probeCloseToMu1Pt>=0) {
 	  TLorentzVector mu1probeTLV(0,0,0,0);     
 	  mu1probeTLV.SetPtEtaPhiM(probeCloseToMu1Pt, probeCloseToMu1Eta, probeCloseToMu1Phi, 0);
@@ -341,15 +341,14 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
 	  if (dRmu1probe<0.3) dRMinProbeIso0d3aroundMu1->Fill(dReleprobe);
 	}
       }
-      */
+
     }
     if(p_drmin==3) {
-      if (dR_min>0.05) mu2WithDRMinTrueCutGt005->Fill(mu2MatchMcFromJPsi);
-      if (dR_min<0.05) mu2WithDRMinTrueCutLt005->Fill(mu2MatchMcFromJPsi);    
+      if (dR_min>0.02) mu2WithDRMinTrueCutGt002->Fill(mu2MatchMcFromJPsi);
+      if (dR_min<0.02) mu2WithDRMinTrueCutLt002->Fill(mu2MatchMcFromJPsi);    
 
-      /*
       // probe closest to electron in the isolation cone around mu2
-      if (dR_min>0.05) {
+      if (dR_min>0.02) {
 	if (probeCloseToMu2Pt>=0) {
 	  TLorentzVector mu2probeTLV(0,0,0,0);     
 	  mu2probeTLV.SetPtEtaPhiM(probeCloseToMu2Pt, probeCloseToMu2Eta, probeCloseToMu2Phi, 0);
@@ -361,7 +360,7 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
 	  if (dRmu2probe<0.3) dRMinProbeIso0d3aroundMu2->Fill(dReleprobe);
 	}
       }
-      */
+
     }
 
     // pT vs eta weight   
@@ -400,7 +399,7 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
     probePtVsEtaFakeMc -> Fill(eleEta, elePt); 
 
     // Fakes before weight: split FR from K wrt muons
-    if (dR_min<0.05) {   // electron matching k or mu
+    if (dR_min<0.02) {   // electron matching k or mu
       if(p_drmin==2) {                 // leading mu
 	mvaFakesMu1 -> Fill(eleId);
 	ptFakesMu1  -> Fill(elePt);
@@ -462,6 +461,11 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
   } // loop over entries
 
 
+  // Summary
+  cout << "1bin: k = "   << dREleKzoom->GetBinContent(1) << ", mu1 = " << dREleMu1zoom->GetBinContent(1) << ", mu2 = " << dREleMu2zoom->GetBinContent(1) << endl;
+  cout << "tot:  k = "   << dREleKzoom->GetEntries()     << ", mu1 = " << dREleMu1zoom->GetEntries()     << ", mu2 = " << dREleMu2zoom->GetEntries() << endl;
+  cout << "min: 1bin = " << dREleMinzoom->GetBinContent(1) << ", tot = " << dREleMinzoom->GetEntries() << endl;
+  cout << "dRMinParticleCutLt002: 1bin = " << dRMinParticleCutLt002->GetBinContent(1) << ", 2 = " << dRMinParticleCutLt002->GetBinContent(2) << ", 3 = " << dRMinParticleCutLt002->GetBinContent(3) << ", tot = " << dRMinParticleCutLt002->GetEntries() << endl;
 
   // ---------------------------------------------------------
   // Save histos
@@ -629,54 +633,53 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
   c1ee.SaveAs("deltaR_eleMinzoom.png");
 
   TCanvas c1f("c1f","",1);
-  dRMinParticleCutGt005->SetLineColor(1);
-  dRMinParticleCutGt005->SetLineWidth(2);
-  dRMinParticleCutGt005->SetTitle("");
-  dRMinParticleCutGt005->GetXaxis()->SetTitle("min #Delta R");
-  dRMinParticleCutGt005->DrawNormalized("hist");
-  c1f.SaveAs("minDrParticle_DrMinGt0d05.png");
+  dRMinParticleCutGt002->SetLineColor(1);
+  dRMinParticleCutGt002->SetLineWidth(2);
+  dRMinParticleCutGt002->SetTitle("");
+  dRMinParticleCutGt002->GetXaxis()->SetTitle("min #Delta R");
+  dRMinParticleCutGt002->DrawNormalized("hist");
+  c1f.SaveAs("minDrParticle_DrMinGt0d02.png");
 
   TCanvas c1ff("c1ff","",1);
-  dRMinParticleCutLt005->SetLineColor(1);
-  dRMinParticleCutLt005->SetLineWidth(2);
-  dRMinParticleCutLt005->SetTitle("");
-  dRMinParticleCutLt005->GetXaxis()->SetTitle("min #Delta R");
-  dRMinParticleCutLt005->DrawNormalized("hist");
-  c1ff.SaveAs("minDrParticle_DrMinLt0d05.png");
+  dRMinParticleCutLt002->SetLineColor(1);
+  dRMinParticleCutLt002->SetLineWidth(2);
+  dRMinParticleCutLt002->SetTitle("");
+  dRMinParticleCutLt002->GetXaxis()->SetTitle("min #Delta R");
+  dRMinParticleCutLt002->DrawNormalized("hist");
+  c1ff.SaveAs("minDrParticle_DrMinLt0d02.png");
 
   TCanvas c1g1("c1g1","",1);
-  mu1WithDRMinTrueCutGt005->SetLineColor(1);
-  mu1WithDRMinTrueCutGt005->SetLineWidth(2);
-  mu1WithDRMinTrueCutGt005->SetTitle("");
-  mu1WithDRMinTrueCutGt005->GetXaxis()->SetTitle("#mu1 match MC-truth");
-  mu1WithDRMinTrueCutGt005->DrawNormalized("hist");
-  c1g1.SaveAs("mu1MatchMcTruth_DrMinGt0d05.png");
+  mu1WithDRMinTrueCutGt002->SetLineColor(1);
+  mu1WithDRMinTrueCutGt002->SetLineWidth(2);
+  mu1WithDRMinTrueCutGt002->SetTitle("");
+  mu1WithDRMinTrueCutGt002->GetXaxis()->SetTitle("#mu1 match MC-truth");
+  mu1WithDRMinTrueCutGt002->DrawNormalized("hist");
+  c1g1.SaveAs("mu1MatchMcTruth_DrMinGt0d02.png");
 
   TCanvas c1gg1("c1gg1","",1);
-  mu1WithDRMinTrueCutLt005->SetLineColor(1);
-  mu1WithDRMinTrueCutLt005->SetLineWidth(2);
-  mu1WithDRMinTrueCutLt005->SetTitle("");
-  mu1WithDRMinTrueCutLt005->GetXaxis()->SetTitle("#mu1 match MC-truth");
-  mu1WithDRMinTrueCutLt005->DrawNormalized("hist");
-  c1gg1.SaveAs("mu1MatchMcTruth_DrMinLt0d05.png");
+  mu1WithDRMinTrueCutLt002->SetLineColor(1);
+  mu1WithDRMinTrueCutLt002->SetLineWidth(2);
+  mu1WithDRMinTrueCutLt002->SetTitle("");
+  mu1WithDRMinTrueCutLt002->GetXaxis()->SetTitle("#mu1 match MC-truth");
+  mu1WithDRMinTrueCutLt002->DrawNormalized("hist");
+  c1gg1.SaveAs("mu1MatchMcTruth_DrMinLt0d02.png");
 
   TCanvas c1g2("c1g2","",1);
-  mu2WithDRMinTrueCutGt005->SetLineColor(1);
-  mu2WithDRMinTrueCutGt005->SetLineWidth(2);
-  mu2WithDRMinTrueCutGt005->SetTitle("");
-  mu2WithDRMinTrueCutGt005->GetXaxis()->SetTitle("#mu2 match MC-truth");
-  mu2WithDRMinTrueCutGt005->DrawNormalized("hist");
-  c1g2.SaveAs("mu2MatchMcTruth_DrMinGt0d05.png");
+  mu2WithDRMinTrueCutGt002->SetLineColor(1);
+  mu2WithDRMinTrueCutGt002->SetLineWidth(2);
+  mu2WithDRMinTrueCutGt002->SetTitle("");
+  mu2WithDRMinTrueCutGt002->GetXaxis()->SetTitle("#mu2 match MC-truth");
+  mu2WithDRMinTrueCutGt002->DrawNormalized("hist");
+  c1g2.SaveAs("mu2MatchMcTruth_DrMinGt0d02.png");
 
   TCanvas c1gg2("c1gg2","",1);
-  mu2WithDRMinTrueCutLt005->SetLineColor(1);
-  mu2WithDRMinTrueCutLt005->SetLineWidth(2);
-  mu2WithDRMinTrueCutLt005->SetTitle("");
-  mu2WithDRMinTrueCutLt005->GetXaxis()->SetTitle("#mu2 match MC-truth");
-  mu2WithDRMinTrueCutLt005->DrawNormalized("hist");
-  c1gg2.SaveAs("mu2MatchMcTruth_DrMinLt0d05.png");
+  mu2WithDRMinTrueCutLt002->SetLineColor(1);
+  mu2WithDRMinTrueCutLt002->SetLineWidth(2);
+  mu2WithDRMinTrueCutLt002->SetTitle("");
+  mu2WithDRMinTrueCutLt002->GetXaxis()->SetTitle("#mu2 match MC-truth");
+  mu2WithDRMinTrueCutLt002->DrawNormalized("hist");
+  c1gg2.SaveAs("mu2MatchMcTruth_DrMinLt0d02.png");
 
-  /*
   TCanvas c1f1("c1f1","",1);
   dRMinProbeIso0d3aroundMu1->SetLineColor(1);
   dRMinProbeIso0d3aroundMu1->SetLineWidth(2);
@@ -740,7 +743,7 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
   dRMinProbeIso0d8aroundMu2->GetXaxis()->SetTitle("#DeltaR(ele, probe), #mu2 isol");
   dRMinProbeIso0d8aroundMu2->DrawNormalized("hist");
   c1ff4.SaveAs("dRMinProbeIso0d8aroundMu2.png");
-  */
+
 
   // ----------------------------------
   // Splitting fake rates
@@ -805,8 +808,8 @@ void prepareInputsFromFakes::Loop(bool applyWeight, int isLowPt=-1, bool studyOv
   ptFakesMu1 -> Rebin();
   ptFakesMu2 -> Rebin();
   ptFakesK   -> Rebin();
-  ptFakesMu1 -> DrawNormalized("hist");
-  ptFakesMu2 -> DrawNormalized("samehist");
+  ptFakesMu2 -> DrawNormalized("hist");
+  ptFakesMu1 -> DrawNormalized("samehist");
   ptFakesK   -> DrawNormalized("samehist");
   leg->Draw();
   c1h2.SaveAs("pt_KvsMu.png");
