@@ -19,6 +19,9 @@
 #if Application == 3
 #include "./FakeSelectionNaod.cc"
 #endif
+#if Application == 4
+#include "./Vertices.cc"
+#endif
 
 int main(int argc, char* argv[]) {
 
@@ -91,6 +94,15 @@ int main(int argc, char* argv[]) {
 
 #endif
 
+#if Application == 4
+
+  Vertices vtx(theChain);
+
+  vtx.PrepareOutputs(outputFileName);   
+
+  vtx.Loop();
+
+#endif
 
   return 0;
 
