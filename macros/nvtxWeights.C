@@ -10,7 +10,7 @@
 void nvtxWeights() {
 
   TFile fileData("fileNumberVtx_2018D1_upto37.root");    
-  // TFile fileMC("fileNumberMC_.root");
+  // TFile fileMC("fileNumberMC.root");
   TFile fileMC("fileNumberMC_withWeights.root");
   
   TH1F *mcNvtx = (TH1F*)fileMC.Get("H_nvtx");
