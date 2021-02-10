@@ -218,6 +218,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   Float_t   tagPt;
   Float_t   tagEta;
   Float_t   tagRelIso;
+  Float_t   tagPfmvaId;
   Float_t   probePt;
   Float_t   probeAbsEta;
   Float_t   probeEta;
@@ -252,6 +253,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     theTreeNew->Branch("tagPt",&tagPt,"tagPt/F");
     theTreeNew->Branch("tagEta",&tagEta,"tagEta/F");
     theTreeNew->Branch("tagRelIso",&tagRelIso,"tagRelIso/F");
+    theTreeNew->Branch("tagPfmvaId",&tagPfmvaId,"tagPfmvaId/F");
     theTreeNew->Branch("probePt",&probePt,"probePt/F");
     theTreeNew->Branch("probeAbsEta",&probeAbsEta,"probeAbsEta/F");
     theTreeNew->Branch("probeEta",&probeEta,"probeEta/F");
@@ -290,20 +292,19 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       // further selection on tag and probe
       if (isProbeLpt==1) { // probe=lowPT; tag=PF
 	if ( tag_isPF->at(ii)==0 ) continue;
-	if ( tag_pt->at(ii)<5 && tag_pfmvaId->at(ii)<1. )  continue;
-	if ( tag_pt->at(ii)>=5 && tag_pfmvaId->at(ii)<2. ) continue;
 	if ( probe_isLowPt->at(ii)==0) continue;                   
+	///////////if ( tag_pt->at(ii)<5 && tag_pfmvaId->at(ii)<1. )  continue;
+	///////////if ( tag_pt->at(ii)>=5 && tag_pfmvaId->at(ii)<2. ) continue;
+	if ( tag_pfmvaId->at(ii)<0. )  continue;
       }
 
       if (isProbeLpt==0) { // probe=PF; tag=PF or good lowPT
 	if ( probe_isPF->at(ii)==0) continue;  
 	if ( tag_isPF->at(ii)==0 && tag_mvaId->at(ii)<2) continue;
-	// TaPtree->Draw("probe_mvaId","probe_isPF==1 && ((tag_isPF==0 && tag_mvaId<20 && tag_mvaId>5) || (tag_isPF==1 && tag_pfmvaId>1))")
       }
 
       // e+e- invariant mass selection
       ////////////// if (probe_invMass->at(ii)<2 || probe_invMass->at(ii)>4) continue;  // comment for ROCs, uncomment for TnP
-
 
       // save new variables, making flat tree
       hlt_9  = hlt9;
@@ -319,6 +320,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       tagPt  = tag_pt->at(ii);
       tagEta = tag_eta->at(ii);
       tagRelIso = tag_pfRelIso->at(ii);
+      tagPfmvaId = tag_pfmvaId->at(ii);
       probePt = probe_pt->at(ii);
       probeAbsEta = fabs(probe_eta->at(ii));
       probeEta = probe_eta->at(ii);
@@ -342,9 +344,10 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       // weights
       if (theRun==1) {   // MC                                                                                                                   
 	//weight = perEveW * lumiForW * lumiWeight;     // chiara
-	weight = perEveW;
+	//weight = perEveW;
+	weight = perEveW*pu_weight;
       } else {
-	weight     = 1.;
+	weight = 1.;
       }
 
       treeNew->Fill();
