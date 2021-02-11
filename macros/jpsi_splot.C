@@ -40,8 +40,8 @@ void getDataSet(const char *, RooWorkspace*, float, float);
 void jpsi_splot()
 {
   // set range of observable
-  Float_t lowRange  = 2.; 
-  Float_t highRange = 4.;  
+  Float_t lowRange  = 2.3; 
+  Float_t highRange = 3.6;  
 
   // Create a new workspace to manage the project.
   RooWorkspace* wspace = new RooWorkspace("myWS");
@@ -51,10 +51,7 @@ void jpsi_splot()
   AddModel(wspace, lowRange, highRange);
   
   // add dataset from converted root tree
-  // getDataSet("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root", wspace, lowRange, highRange);
-  getDataSet("Formatted_ParkingRun2018DAll_probeLowPt.root", wspace, lowRange, highRange);
-  // getDataSet("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root", wspace, lowRange, highRange);
-  // getDataSet("Formatted_ParkingRun2018DAll_probePF.root", wspace, lowRange, highRange);
+  getDataSet("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_Parking_Run2018ALL_probeLowPt__tagIdCutsAt0.root", wspace, lowRange, highRange);
   
   // inspect the workspace if you wish
   wspace->Print();
@@ -100,54 +97,45 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   // signal model
   std::cout << "make JPsi model" << std::endl;
   //
-  RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.09, 3.10);                 // Init MC: 3.09, 3.07, 3.11;    Init data: 3.0969, 3.09, 3.10
-  RooRealVar sigma("sigma", "sigma",  0.05, 0.03, 0.1);                 // Init MC: 0.05, 0.01, 0.1;     Init data: 0.05, 0.03, 0.1
-  RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.5, 0.7);            // Init MC: 0.5,  0.1,  0.9;     Init data: 0.6, 0.5, 0.7
-  RooRealVar alphaR("alphaR", "alpha right", 1.2, 1.1, 1.3);            // Init MC: 1.2,  0.8,  1.6;     Init data: 1.2, 1.1, 1.3  
-  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);                      // Init MC: 3.5, 2, 5;           Init data: 3.6, 3.56, 3.64
-  RooRealVar nR("nR", "N right", 1.85, 1.80, 1.95);                     // Init MC: 2, 1, 3;             Init data: 1.85, 1.80, 1.95  
+  RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.095, 3.098);               // EB: 0.5-1.5; all EE
+  // RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.09, 3.10);                    // EB: pT>1.5 
+
+  RooRealVar alphaL("alphaL", "alpha left",  0.2, 0.01, 0.3);           // EB: 0.5-1.5; all EE          
+  // RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.2, 0.7);               // EB: pT>1.5
+
+  RooRealVar alphaR("alphaR", "alpha right", 0.6, 0.4, 0.8);            // EB: 0.5-1.5; all EE         
+  // RooRealVar alphaR("alphaR", "alpha right", 1.0, 0.8, 1.2);            // EB: 1.5-2
+  // RooRealVar alphaR("alphaR", "alpha right", 1.2, 1.0, 1.4);               // EB: pT>2
+
+  // all EB and EE
+  RooRealVar sigma("sigma", "sigma",  0.05, 0.03, 0.1);                 
+  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);                     
+  RooRealVar nR("nR", "N right", 1.85, 1.80, 1.95);                    
+
   RooDoubleCB jpsiModel("jpsiModel", "JPsi Model", pair_mass, m0, sigma, alphaL, alphaR, nL, nR);
 
-  // Successful fit to MC only 
-  // 1  alpha        9.99999e-01   1.24767e-01   5.00000e-01  -4.71072e+00
-  // 2  alphaL       5.06119e-01   1.40426e-02   7.66633e-04   1.52980e-02
-  // 3  alphaR       1.13909e+00   4.14844e-02   1.98050e-03  -1.52874e-01
-  // 4  bkgYield     4.18975e+02   1.60700e+02   3.37642e-04  -1.39173e+00
-  // 5  jpsiYield    5.01047e+04   2.74905e+02   2.00192e-04   7.33677e-01
-  // 6  m0           3.09223e+00   6.70656e-04   2.13518e-03   1.11760e-01
-  // 7  nL           3.64837e+00   1.17983e-01   6.26960e-04   9.90746e-02
-  // 8  nR           2.23064e+00   1.54501e-01   3.03268e-03   2.32739e-01
-  // 9  sigma        4.83608e-02   1.13788e-03   6.75603e-04  -1.48078e-01
-  //
-  //
-  // Successful fit to data
-  //1  alpha        4.53409e-01   4.62169e-03   1.40754e-02  -1.55934e-01
-  //2  alphaL       5.95870e-01   2.54297e-02   1.89544e-01  -4.13119e-02
-  //3  alphaR       1.10001e+00   1.31155e-01   5.00000e-01  -1.58137e+00
-  //4  bkgYield     1.70276e+05   5.59852e+02   1.75545e-03  -3.27354e-01
-  //5  jpsiYield    1.69462e+04   4.01390e+02   2.68122e-03  -1.21134e+00
-  //6  m0           3.09558e+00   5.04847e-04   2.53231e-01  -3.25763e+00
-  //7  nL           3.56000e+00   6.22620e-03   5.00000e-01  -1.56681e+00
-  //8  nR           1.84336e+00   3.70475e-02   5.00000e-01  -4.35559e-01
-  //9  sigma        4.84558e-02   1.88821e-03   3.44988e-02   3.63393e+00
-
   // we know JPsi mass
-  // m0.setConstant();
+  // m0.setConstant();        // EB: 0.5-2.0
   
   // --------------------------------------
   // background model
   std::cout << "make background model" << std::endl;
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");    // Init MC: 0.6, 0, 1;  Init data: 0.5, 0.2, 0.8
-  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, -0.8, 0.8,"1/GeV");      // Init data PF: -0.8, 0.8, 0.8
+  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");        // EB: 0.5-1.5
+  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");       // EB: 1.5-2
+  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.1, 0.1,"1/GeV");       // EB: 2-5
+  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", -0.1, -0.3, 0.,"1/GeV");       // EB: pT> 5
+  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");        // EE: pT<5
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");          // EE: pT>5
+
+  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, -0.8, 0.8,"1/GeV");      // Init data PF: -0.8, 0.8, 0.8
   RooExponential bkgModel("bkgModel", "bkg Mass Model", pair_mass, alpha);
   
   // --------------------------------------
   // combined model
   
   // These variables represent the number of JPsi or background events to be fitted
-  //RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",     500 ,1.,500000) ;      // Init MC: 500 ,100.,60000; Init Data: 500 ,1000.,500000
-  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",     500 ,1000.,500000) ;      // Init MC: 500 ,100.,60000; Init Data: 500 ,1000.,500000
-  RooRealVar bkgYield("bkgYield","fitted yield for background", 500 ,1000.,500000) ;      // Init MC: 500 ,100.,40000; Init Data: 500 ,1000.,500000
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 500., 50000) ;      
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 500., 500000) ;      
   
   // now make the combined model
   std::cout << "make full model" << std::endl; 
@@ -494,17 +482,21 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   TTree *tree = (TTree*)file->Get("tnpAna/fitter_tree");
 
   RooDataSet *data = new RooDataSet("data","data",tree,setall,0); 
-  // data = (RooDataSet*)data->reduce("hlt_9==1");        // data only
+
+  // Inclusive
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probeEta>-2.4 && probeEta<2.4");        
+
+  // EB / EE
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probeEta>-1.5 && probeEta<1.5");          
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && (probeEta<-1.5 || probeEta>1.5)");    
 
   // PF overlap 
   // data = (RooDataSet*)data->reduce("hlt_9==1 && probeIsPFOverlap==1");
-  data = (RooDataSet*)data->reduce("hlt_9==1 && probeIsPFOverlap==0");
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probeIsPFOverlap==0");
 
   // Barrel:
-  // pt: 0.5-1.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<1.0 && probeEta<1.5 && probeEta>-1.5");    
-  // pt: 1.0-1.5 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.0 && probePt<1.5 && probeEta<1.5 && probeEta>-1.5");    
+  // pt: 0.5-1.5 GeV 
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<1.5 && probeEta<1.5 && probeEta>-1.5");    
   // pt: 1.5-2.0 GeV 
   // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.5 && probePt<2.0 && probeEta<1.5 && probeEta>-1.5");    
   // pt: 2.0-5.0 GeV 
@@ -513,16 +505,12 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && probeEta<1.5 && probeEta>-1.5");    
   //
   // Endcap:
-  // pt: 0.5-1.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<1.0 && (probeEta<-1.5 || probeEta>1.5)");    
-  // pt: 1.0-1.5 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.0 && probePt<1.5 && (probeEta<-1.5 || probeEta>1.5)");    
-  // pt: 1.5-2.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.5 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // pt: 0.5-2.0 GeV 
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: 2.0-5.0 GeV 
   // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>2.0 && probePt<5.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: >5.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");            
+  data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");            
 
   data->Print();
 
