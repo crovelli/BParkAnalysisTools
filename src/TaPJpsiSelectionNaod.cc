@@ -6,17 +6,15 @@
 
 #include "../include/TaPJpsiSelectionNaod.hh"    
 
-#define MAX_PU_REWEIGHT 60
-
 using namespace std;
 
 TaPJpsiSelectionNaod::TaPJpsiSelectionNaod(TTree *tree)     
   : BParkBase(tree) {        
 
   // Chiara: to be set by hand   
-  sampleID = 0;         // 0 = data, >=1 MC
-  dopureweight_ = 0;    // chiara: eventualmente da fare con numero di vertici    
-  puWFileName_ = "";
+  sampleID = 0;           // 0 = data, >=1 MC
+  donvtxreweight_ = 0;    // 
+  nvtxWFileName_ = "/afs/cern.ch/user/c/crovelli/public/bphys/nvtxWeights__bin1.root"; 
 }
 
 TaPJpsiSelectionNaod::~TaPJpsiSelectionNaod() {
@@ -42,7 +40,7 @@ void TaPJpsiSelectionNaod::Loop() {
     Long64_t ientry = LoadTree(jentry);
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
-    if (jentry%10000==0) cout << jentry << endl;
+    if (jentry%50000==0) cout << jentry << endl;
 
     // To keep track of the total number of events 
     h_entries->Fill(5);
@@ -60,10 +58,8 @@ void TaPJpsiSelectionNaod::Loop() {
     
     // PU weight (for MC only and if requested)
     pu_weight = 1.;
-    pu_n = -1.;
-    if (sampleID>0) {     // MC
-      pu_n = Pileup_nTrueInt;           
-      if (dopureweight_) pu_weight = GetPUWeight(pu_n);         
+    if (sampleID>0 && donvtxreweight_==1) {     // MC
+      pu_weight = GetNvtxWeight(nvtx);         
     }
 
     // other weights for the dataset
@@ -415,46 +411,60 @@ void TaPJpsiSelectionNaod::Loop() {
   }
 }
 
-void TaPJpsiSelectionNaod::SetPuWeights(std::string puWeightFile) {
+void TaPJpsiSelectionNaod::SetNvtxWeights(std::string nvtxWeightFile) {
 
-  if (puWeightFile == "") {
+  if (nvtxWeightFile == "") {
     std::cout << "you need a weights file to use this function" << std::endl;
     return;
   }
-  std::cout << "PU REWEIGHTING:: Using file " << puWeightFile << std::endl;
+  std::cout << "PU REWEIGHTING Based on #vertices:: Using file " << nvtxWeightFile << std::endl;
   
-  TFile *f_pu  = new TFile(puWeightFile.c_str(),"READ");
-  f_pu->cd();
+  TFile *f_nvtx = new TFile(nvtxWeightFile.c_str(),"READ");
+  f_nvtx->cd();
   
-  TH1D *puweights = 0;
-  TH1D *gen_pu = 0;
-  gen_pu    = (TH1D*) f_pu->Get("generated_pu");
-  puweights = (TH1D*) f_pu->Get("weights");
+  TH1F *nvtxweights = 0;
+  TH1F *mc_nvtx = 0;
+  mc_nvtx     = (TH1F*) f_nvtx->Get("mcNvtx");
+  nvtxweights = (TH1F*) f_nvtx->Get("weights");
   
-  if (!puweights || !gen_pu) {
-    std::cout << "weights histograms  not found in file " << puWeightFile << std::endl;
+  if (!nvtxweights || !mc_nvtx) {
+    std::cout << "weights histograms not found in file " << nvtxWeightFile << std::endl;
     return;
   }
-  TH1D* weightedPU= (TH1D*)gen_pu->Clone("weightedPU");
-  weightedPU->Multiply(puweights);
+  TH1F* weightedNvtx= (TH1F*)mc_nvtx->Clone("weightedNvtx");
+  weightedNvtx->Multiply(nvtxweights);
   
-  // Rescaling weights in order to preserve same integral of events                               
-  TH1D* weights = (TH1D*)puweights->Clone("rescaledWeights");
-  weights->Scale( gen_pu->Integral(1,MAX_PU_REWEIGHT) / weightedPU->Integral(1,MAX_PU_REWEIGHT) );
+  // Rescaling weights in order to preserve same integral of events     
+  TH1F* weights = (TH1F*)nvtxweights->Clone("rescaledWeights");
+  weights->Scale( mc_nvtx->Integral() / weightedNvtx->Integral() );
   
-  float sumPuWeights=0.;
-  for (int i = 0; i<MAX_PU_REWEIGHT; i++) {
+  float sumNvtxweights=0.;
+  for (int i = 0; i<nvtxweights->GetNbinsX(); i++) {
     float weight=1.;
     weight=weights->GetBinContent(i+1);
-    sumPuWeights+=weight;
-    puweights_.push_back(weight);
+    sumNvtxweights+=weight;
+    nvtxweights_.push_back(weight);
+    float lowedge=weights->GetBinLowEdge(i+1);
+    nvtxlowedge_.push_back(lowedge);
   }
 }
 
-float TaPJpsiSelectionNaod::GetPUWeight(float pun) {
-  
+float TaPJpsiSelectionNaod::GetNvtxWeight(float nvtx) {
+
+  int thesize   = nvtxlowedge_.size();
+  int thesizem1 = nvtxlowedge_.size()-1;
   float weight=1;
-  if (sampleID!=0 && pun<MAX_PU_REWEIGHT && puweights_.size()>0 && dopureweight_) weight = puweights_[pun];
+
+  if (sampleID!=0 && thesize>0 && donvtxreweight_) {
+    for (int i = 0; i<thesizem1; i++) {   
+      if (nvtxlowedge_[i]<=nvtx && nvtxlowedge_[i+1]>nvtx) { 
+	weight = nvtxweights_[i];
+      }
+    }
+    if (nvtxlowedge_[thesizem1]<=nvtx) { 
+      weight = nvtxweights_[thesizem1];
+    }
+  }
 
   return weight;
 }
@@ -543,7 +553,7 @@ void TaPJpsiSelectionNaod::PrepareOutputs(std::string filename)
   bookOutputHistos();
 
   // loading weights for pileup if needed
-  if (dopureweight_) SetPuWeights(puWFileName_);
+  if (donvtxreweight_) SetNvtxWeights(nvtxWFileName_);
 };
 
 

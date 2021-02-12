@@ -33,16 +33,17 @@ private:
   bool isProbe( int myEle );     
   void bookOutputTree();
   void bookOutputHistos();
-  void SetPuWeights(std::string puWeightFile);
-  float GetPUWeight(float pun);
+  void SetNvtxWeights(std::string nvtxWeightFile);
+  float GetNvtxWeight(float nvtx);
 
   // to compute weights for pileup
-  std::vector<Double_t> puweights_;
+  std::vector<Double_t> nvtxweights_;
+  std::vector<Double_t> nvtxlowedge_;
 
   // settings
-  bool dopureweight_;
+  bool donvtxreweight_;
   int sampleID;
-  string puWFileName_;
+  string nvtxWFileName_;
   float lumiWeight_;
 
   // ---- outputs
