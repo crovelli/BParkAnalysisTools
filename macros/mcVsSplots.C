@@ -5,7 +5,7 @@
 // ROOT includes 
 #include <TROOT.h>
 #include <TStyle.h>
-#include <TH1.h>
+#include <TF1.h>
 #include <TH2.h>
 #include <TFile.h>
 #include <TLegend.h>
@@ -14,41 +14,183 @@
 
 using namespace std;
 
+float drawTH1pair(TH1* h1, TH1* h2, 
+		  const string& xAxisNameTmp = "", const string& yAxisName = "Events", 
+		  float lumi=-1, const string& canvasName = "default", 
+		  const string& outputDIR = "./", int mycolor=2,
+		  const string& legEntry1 = "data", const string& legEntry2 = "MC", const string& ratioPadYaxisName = "data/MC") 
+{
+  string xAxisName = "";
+  string separator = "::";
+  Bool_t setXAxisRangeFromUser = false;
+  Double_t xmin = 0;
+  Double_t xmax = 0;
+
+  size_t pos = xAxisNameTmp.find(separator);
+  if (pos != string::npos) {
+    string xrange = "";
+    setXAxisRangeFromUser = true;
+    xAxisName.assign(xAxisNameTmp, 0, pos); 
+    xrange.assign(xAxisNameTmp, pos + separator.size(), string::npos);
+    separator = ",";
+    pos = xrange.find(separator);
+    string numString = ""; 
+    numString.assign(xrange,0,pos);
+    xmin = std::stod(numString);
+    numString.assign(xrange,pos + separator.size(), string::npos);
+    xmax = std::stod(numString);
+  } else {
+    xAxisName = xAxisNameTmp;
+  }
+
+  if (yAxisName == "a.u.") {
+    h1->Scale(1./h1->Integral());
+    h2->Scale(1./h2->Integral());
+  }
+  else if (lumi>-1) {
+    h1->Scale(lumi/h1->Integral());
+    h2->Scale(lumi/h2->Integral());
+  }
+
+  // To deal with splots
+  for (int ii=0; ii<h1->GetNbinsX(); ii++){
+    int iip1 = ii+1;
+    if (h1->GetBinContent(iip1)<=0) { 
+      h1->SetBinContent(iip1,0);
+      h1->SetBinError(iip1,0);
+    } 
+    if (h2->GetBinContent(iip1)<=0) {
+      h2->SetBinContent(iip1,0);
+      h2->SetBinError(iip1,0);
+    } 
+  }
+  
+  h1->SetStats(0);
+  h2->SetStats(0);
+
+  TCanvas* canvas = new TCanvas("canvas","",600,700);
+  canvas->cd();
+  canvas->SetTickx(1);
+  canvas->SetTicky(1);
+  canvas->cd();
+  canvas->SetBottomMargin(0.3);
+  canvas->SetRightMargin(0.06);
+
+  TPad *pad2 = new TPad("pad2","pad2",0,0.,1,0.9);
+  pad2->SetTopMargin(0.7);
+  pad2->SetRightMargin(0.06);
+  pad2->SetFillColor(0);
+  pad2->SetGridy(1);
+  pad2->SetFillStyle(0);
+
+  TH1* frame =  (TH1*) h1->Clone("frame");
+  frame->SetTitle("");
+  frame->GetXaxis()->SetLabelSize(0.04);
+  frame->SetStats(0);
+
+  h1->SetLineColor(kBlack);
+  h1->SetMarkerColor(kBlack);
+  h1->SetMarkerStyle(20);
+  h1->SetMarkerSize(1);
+
+  h1->SetTitle("");
+  h1->GetXaxis()->SetLabelSize(0);
+  h1->GetYaxis()->SetTitle(yAxisName.c_str());
+  h1->GetYaxis()->SetTitleOffset(1.1);
+  h1->GetYaxis()->SetTitleSize(0.05);
+  h1->GetYaxis()->SetRangeUser(0.0, max(h1->GetMaximum(),h2->GetMaximum()) * 1.2);
+  if (setXAxisRangeFromUser) h1->GetXaxis()->SetRangeUser(xmin,xmax);
+  h1->Draw("EP");
+
+  h2->SetTitle("");
+  h2->SetLineColor(mycolor);
+  h2->SetLineWidth(2);
+  h2->Draw("hist E same");
+
+  TLegend leg (0.15,0.65,0.45,0.85);
+  leg.SetFillColor(0);
+  leg.SetFillStyle(0);
+  leg.SetBorderSize(0);
+  leg.AddEntry(h1,legEntry1.c_str(),"PLE");
+  leg.AddEntry(h2,legEntry2.c_str(),"L");
+  leg.Draw("same");
+  canvas->RedrawAxis("sameaxis");
+
+  pad2->Draw();
+  pad2->cd();
+
+  frame->Reset("ICES");
+  frame->GetYaxis()->SetRangeUser(0.,4.);
+  frame->GetYaxis()->SetNdivisions(5);
+  frame->GetYaxis()->SetTitle(ratioPadYaxisName.c_str());
+  frame->GetYaxis()->SetTitleOffset(1.2);
+  frame->GetYaxis()->CenterTitle();
+  frame->GetXaxis()->SetTitle(xAxisName.c_str());
+  if (setXAxisRangeFromUser) frame->GetXaxis()->SetRangeUser(xmin,xmax);
+  frame->GetXaxis()->SetTitleSize(0.05);
+  
+  TH1D* ratio = (TH1D*) h1->Clone("ratio");
+  ratio->Sumw2();
+  TH1D* den_noerr = (TH1D*) h2->Clone("den_noerr");
+  den_noerr->Sumw2();
+  TH1D* den = (TH1D*) h2->Clone("den");
+  den->Sumw2();
+  for(int iBin = 1; iBin < den->GetNbinsX()+1; iBin++) den_noerr->SetBinError(iBin,0.);
+
+  ratio->Divide(den_noerr);
+  den->Divide(den_noerr);
+  den->SetFillColor(kGray);
+  frame->Draw();
+  ratio->SetMarkerSize(0.85);
+  ratio->Draw("EPsame");
+  den->Draw("E2same");
+
+  TF1* line = new TF1("horiz_line","1",ratio->GetXaxis()->GetBinLowEdge(1),ratio->GetXaxis()->GetBinLowEdge(ratio->GetNbinsX()+1));
+  line->SetLineColor(mycolor);
+  line->SetLineWidth(2);
+  line->Draw("Lsame");
+  ratio->Draw("EPsame");
+  pad2->RedrawAxis("sameaxis");
+
+  canvas->SaveAs((outputDIR + canvasName + ".png").c_str());
+
+  if (yAxisName == "a.u.") h1->GetYaxis()->SetRangeUser(max(0.0001,min(h1->GetMinimum(),h2->GetMinimum())*0.8),max(h1->GetMaximum(),h2->GetMaximum())*100);
+  else h1->GetYaxis()->SetRangeUser(max(0.001,min(h1->GetMinimum(),h2->GetMinimum())*0.8),max(h1->GetMaximum(),h2->GetMaximum())*100);
+  canvas->SetLogy(0);
+
+  delete canvas;
+  frame->Reset("ICES");
+}
+
 void mcVsSplots(int doLowPt)
 {
   // Input files (after TnP selection)
   TFile *fileMC;
   TFile *fileSPlotsInclusive;
   if (doLowPt==1) {
-    fileMC = new TFile("filesNew/probeLowPt/myFileMcAfterTnp.root");                            // from prepareInputsFromMcWithTnP
-    fileSPlotsInclusive = new TFile("filesNew/probeLowPt/fileSPlots_inclusive.root");           // from jpsi_splot.C 
+    fileMC = new TFile("files_v2/probeLowPt/myFileMcAfterTnp__withPUweight.root");                  // from prepareInputsFromMcWithTnP
+    fileSPlotsInclusive = new TFile("files_v2/probeLowPt/myFileSPlots_fullRange.root");             // from jpsi_splot.C 
   }
   if (doLowPt==0) {
-    fileMC = new TFile("filesNew/probePF/myFileMcAfterTnp.root");                               // from prepareInputsFromMcWithTnP
-    fileSPlotsInclusive = new TFile("filesNew/probePF/fileSPlots_inclusive.root");              // from jpsi_splot.C 
+    fileMC = new TFile("files_v2/probePF/myFileMcAfterTnp.root");                               // from prepareInputsFromMcWithTnP
+    fileSPlotsInclusive = new TFile("files_v2/probePF/fileSPlots_inclusive.root");              // from jpsi_splot.C 
   }
 
   TFile *fileSPlotsEB0;
   TFile *fileSPlotsEB1;
   TFile *fileSPlotsEB2;
   TFile *fileSPlotsEB3;
-  TFile *fileSPlotsEB4;
   TFile *fileSPlotsEE0;
   TFile *fileSPlotsEE1;
   TFile *fileSPlotsEE2;
-  TFile *fileSPlotsEE3;
-  TFile *fileSPlotsEE4;
   if (doLowPt==1) {
-    fileSPlotsEB0 = new TFile("filesNew/probeLowPt/fileSPlots_EB_0d5-to-1d0.root");       
-    fileSPlotsEB1 = new TFile("filesNew/probeLowPt/fileSPlots_EB_1d0-to-1d5.root");        
-    fileSPlotsEB2 = new TFile("filesNew/probeLowPt/fileSPlots_EB_1d5-to-2d0.root");        
-    fileSPlotsEB3 = new TFile("filesNew/probeLowPt/fileSPlots_EB_2d0-to-5d0.root");        
-    fileSPlotsEB4 = new TFile("filesNew/probeLowPt/fileSPlots_EB_gt5d0.root");             
-    fileSPlotsEE0 = new TFile("filesNew/probeLowPt/fileSPlots_EE_0d5-to-1d0.root");        
-    fileSPlotsEE1 = new TFile("filesNew/probeLowPt/fileSPlots_EE_1d0-to-1d5.root");        
-    fileSPlotsEE2 = new TFile("filesNew/probeLowPt/fileSPlots_EE_1d5-to-2d0.root");        
-    fileSPlotsEE3 = new TFile("filesNew/probeLowPt/fileSPlots_EE_2d0-to-5d0.root");        
-    fileSPlotsEE4 = new TFile("filesNew/probeLowPt/fileSPlots_EE_gt5d0.root");            
+    fileSPlotsEB0 = new TFile("files_v2/probeLowPt/myFileSPlots_EB_0d5-to-1d5.root");       
+    fileSPlotsEB1 = new TFile("files_v2/probeLowPt/myFileSPlots_EB_1d5-to-2d0.root");        
+    fileSPlotsEB2 = new TFile("files_v2/probeLowPt/myFileSPlots_EB_2d0-to-5d0.root");        
+    fileSPlotsEB3 = new TFile("files_v2/probeLowPt/myFileSPlots_EB_5d0-up.root");                 
+    fileSPlotsEE0 = new TFile("files_v2/probeLowPt/myFileSPlots_EE_0d5-to-2d0.root");       
+    fileSPlotsEE1 = new TFile("files_v2/probeLowPt/myFileSPlots_EE_2d0-to-5d0.root");        
+    fileSPlotsEE2 = new TFile("files_v2/probeLowPt/myFileSPlots_EE_5d0-up.root");             
   }
   
   // MC histos
@@ -64,58 +206,24 @@ void mcVsSplots(int doLowPt)
   TH1F *probePtFakeMc       = (TH1F*)fileMC->Get("probePtFakeMc");
   TH1F *probeEtaSignalMc    = (TH1F*)fileMC->Get("probeEtaSignalMc");
   TH1F *probeEtaFakeMc      = (TH1F*)fileMC->Get("probeEtaFakeMc");
-  TH1F *probeDxySigSignalMc = (TH1F*)fileMC->Get("probeDxySigSignalMc");
-  TH1F *probeDxySigFakeMc   = (TH1F*)fileMC->Get("probeDxySigFakeMc");
-  TH1F *probeDzSigSignalMc  = (TH1F*)fileMC->Get("probeDzSigSignalMc");
-  TH1F *probeDzSigFakeMc    = (TH1F*)fileMC->Get("probeDzSigFakeMc");
-  if (doLowPt==1) {
-    probeFBremSignalMc->Sumw2(); 
-    probeFBremFakeMc->Sumw2(); 
-  }
-  probeMvaSignalMc->Sumw2();   
-  probeMvaFakeMc->Sumw2();   
-  probePtSignalMc->Sumw2(); 
-  probePtFakeMc->Sumw2(); 
-  probeEtaSignalMc->Sumw2(); 
-  probeEtaFakeMc->Sumw2(); 
-  probeDxySigSignalMc->Sumw2(); 
-  probeDxySigFakeMc->Sumw2(); 
-  probeDzSigSignalMc->Sumw2(); 
-  probeDzSigFakeMc->Sumw2(); 
 
   // MC histos in eta/pT bins
   TH1F *probeMvaSignalMcEB0;
   TH1F *probeMvaSignalMcEB1;
   TH1F *probeMvaSignalMcEB2;
   TH1F *probeMvaSignalMcEB3;
-  TH1F *probeMvaSignalMcEB4;
   TH1F *probeMvaSignalMcEE0;
   TH1F *probeMvaSignalMcEE1;
   TH1F *probeMvaSignalMcEE2;
-  TH1F *probeMvaSignalMcEE3;
-  TH1F *probeMvaSignalMcEE4;
   if (doLowPt==1) {
     // MC histos in eta/pT bins
     probeMvaSignalMcEB0 = (TH1F*)fileMC->Get("mvaSignalEBMc0");
     probeMvaSignalMcEB1 = (TH1F*)fileMC->Get("mvaSignalEBMc1");
     probeMvaSignalMcEB2 = (TH1F*)fileMC->Get("mvaSignalEBMc2");
     probeMvaSignalMcEB3 = (TH1F*)fileMC->Get("mvaSignalEBMc3");
-    probeMvaSignalMcEB4 = (TH1F*)fileMC->Get("mvaSignalEBMc4");
     probeMvaSignalMcEE0 = (TH1F*)fileMC->Get("mvaSignalEEMc0");
     probeMvaSignalMcEE1 = (TH1F*)fileMC->Get("mvaSignalEEMc1");
     probeMvaSignalMcEE2 = (TH1F*)fileMC->Get("mvaSignalEEMc2");
-    probeMvaSignalMcEE3 = (TH1F*)fileMC->Get("mvaSignalEEMc3");
-    probeMvaSignalMcEE4 = (TH1F*)fileMC->Get("mvaSignalEEMc4");
-    probeMvaSignalMcEB0->Sumw2();  
-    probeMvaSignalMcEB1->Sumw2();  
-    probeMvaSignalMcEB2->Sumw2();  
-    probeMvaSignalMcEB3->Sumw2();  
-    probeMvaSignalMcEB4->Sumw2();  
-    probeMvaSignalMcEE0->Sumw2();  
-    probeMvaSignalMcEE1->Sumw2();  
-    probeMvaSignalMcEE2->Sumw2();  
-    probeMvaSignalMcEE3->Sumw2();  
-    probeMvaSignalMcEE4->Sumw2();  
   }
 
   // s-Plots output
@@ -127,65 +235,33 @@ void mcVsSplots(int doLowPt)
   TH1F *probePtBkgData        = (TH1F*)fileSPlotsInclusive->Get("h1_probePt_bkg__probePt");
   TH1F *probeEtaSignalData    = (TH1F*)fileSPlotsInclusive->Get("h1_probeEta_jpsi__probeEta");
   TH1F *probeEtaBkgData       = (TH1F*)fileSPlotsInclusive->Get("h1_probeEta_bkg__probeEta");
-  TH1F *probeDxySigSignalData = (TH1F*)fileSPlotsInclusive->Get("h1_probeDxySig_jpsi__probeDxySig");
-  TH1F *probeDxySigBkgData    = (TH1F*)fileSPlotsInclusive->Get("h1_probeDxySig_bkg__probeDxySig");
-  TH1F *probeDzSigSignalData  = (TH1F*)fileSPlotsInclusive->Get("h1_probeDzSig_jpsi__probeDzSig");
-  TH1F *probeDzSigBkgData     = (TH1F*)fileSPlotsInclusive->Get("h1_probeDzSig_bkg__probeDzSig");
   if (doLowPt==1) {
     probeMvaSignalData   = (TH1F*)fileSPlotsInclusive->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaBkgData      = (TH1F*)fileSPlotsInclusive->Get("h1_probeMvaId_bkg__probeMvaId");
     probeFBremSignalData = (TH1F*)fileSPlotsInclusive->Get("h1_probeFBrem_jpsi__probeFBrem");
     probeFBremBkgData    = (TH1F*)fileSPlotsInclusive->Get("h1_probeFBrem_bkg__probeFBrem");
-    probeFBremSignalData->Sumw2(); 
-    probeFBremBkgData->Sumw2(); 
   } else {
     probeMvaSignalData = (TH1F*)fileSPlotsInclusive->Get("h1_probePfmvaId_jpsi__probePfmvaId");
     probeMvaBkgData    = (TH1F*)fileSPlotsInclusive->Get("h1_probePfmvaId_bkg__probePfmvaId");
   }
-  probeMvaSignalData->Sumw2();   
-  probeMvaBkgData->Sumw2();   
-  probePtSignalData->Sumw2(); 
-  probePtBkgData->Sumw2(); 
-  probeEtaSignalData->Sumw2(); 
-  probeEtaBkgData->Sumw2(); 
-  probeDxySigSignalData->Sumw2(); 
-  probeDxySigBkgData->Sumw2(); 
-  probeDzSigSignalData->Sumw2(); 
-  probeDzSigBkgData->Sumw2(); 
 
   // s-Plots output in eta/pT bins
   TH1F *probeMvaSignalDataEB0;
   TH1F *probeMvaSignalDataEB1;
   TH1F *probeMvaSignalDataEB2;
   TH1F *probeMvaSignalDataEB3;
-  TH1F *probeMvaSignalDataEB4;
   TH1F *probeMvaSignalDataEE0;
   TH1F *probeMvaSignalDataEE1;
   TH1F *probeMvaSignalDataEE2;
-  TH1F *probeMvaSignalDataEE3;
-  TH1F *probeMvaSignalDataEE4;
   if (doLowPt==1) {
     // s-Plots output in eta/pT bins
     probeMvaSignalDataEB0 = (TH1F*)fileSPlotsEB0->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEB1 = (TH1F*)fileSPlotsEB1->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEB2 = (TH1F*)fileSPlotsEB2->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEB3 = (TH1F*)fileSPlotsEB3->Get("h1_probeMvaId_jpsi__probeMvaId");
-    probeMvaSignalDataEB4 = (TH1F*)fileSPlotsEB4->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEE0 = (TH1F*)fileSPlotsEE0->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEE1 = (TH1F*)fileSPlotsEE1->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEE2 = (TH1F*)fileSPlotsEE2->Get("h1_probeMvaId_jpsi__probeMvaId");
-    probeMvaSignalDataEE3 = (TH1F*)fileSPlotsEE3->Get("h1_probeMvaId_jpsi__probeMvaId");
-    probeMvaSignalDataEE4 = (TH1F*)fileSPlotsEE4->Get("h1_probeMvaId_jpsi__probeMvaId");
-    probeMvaSignalDataEB0->Sumw2();   
-    probeMvaSignalDataEB1->Sumw2();   
-    probeMvaSignalDataEB2->Sumw2();   
-    probeMvaSignalDataEB3->Sumw2();   
-    probeMvaSignalDataEB4->Sumw2();   
-    probeMvaSignalDataEE0->Sumw2();   
-    probeMvaSignalDataEE1->Sumw2();   
-    probeMvaSignalDataEE2->Sumw2();   
-    probeMvaSignalDataEE3->Sumw2();   
-    probeMvaSignalDataEE4->Sumw2();   
   }
 
   // Cosmetics
@@ -201,14 +277,6 @@ void mcVsSplots(int doLowPt)
   probeEtaFakeMc      -> SetLineWidth(2);  
   probeEtaSignalMc    -> SetLineColor(6);  
   probeEtaFakeMc      -> SetLineColor(4);  
-  probeDxySigSignalMc -> SetLineWidth(2);
-  probeDxySigFakeMc   -> SetLineWidth(2);
-  probeDxySigSignalMc -> SetLineColor(6);
-  probeDxySigFakeMc   -> SetLineColor(4);
-  probeDzSigSignalMc  -> SetLineWidth(2);
-  probeDzSigFakeMc    -> SetLineWidth(2);
-  probeDzSigSignalMc  -> SetLineColor(6);
-  probeDzSigFakeMc    -> SetLineColor(4);
   if (doLowPt==1) {
     probeFBremSignalMc  -> SetLineWidth(2);  
     probeFBremFakeMc    -> SetLineWidth(2);  
@@ -225,18 +293,12 @@ void mcVsSplots(int doLowPt)
     probeMvaSignalMcEB2->SetLineColor(6);  
     probeMvaSignalMcEB3->SetLineWidth(2);  
     probeMvaSignalMcEB3->SetLineColor(6);  
-    probeMvaSignalMcEB4->SetLineWidth(2);  
-    probeMvaSignalMcEB4->SetLineColor(6);  
     probeMvaSignalMcEE0->SetLineWidth(2);  
     probeMvaSignalMcEE0->SetLineColor(6);  
     probeMvaSignalMcEE1->SetLineWidth(2);  
     probeMvaSignalMcEE1->SetLineColor(6);  
     probeMvaSignalMcEE2->SetLineWidth(2);  
     probeMvaSignalMcEE2->SetLineColor(6);  
-    probeMvaSignalMcEE3->SetLineWidth(2);  
-    probeMvaSignalMcEE3->SetLineColor(6);  
-    probeMvaSignalMcEE4->SetLineWidth(2);  
-    probeMvaSignalMcEE4->SetLineColor(6); 
   } 
   //
   probeMvaSignalData    -> SetLineWidth(2);  
@@ -251,14 +313,6 @@ void mcVsSplots(int doLowPt)
   probeEtaBkgData       -> SetLineWidth(2);  
   probeEtaSignalData    -> SetLineColor(3);  
   probeEtaBkgData       -> SetLineColor(2);  
-  probeDxySigSignalData -> SetLineWidth(2);
-  probeDxySigBkgData    -> SetLineWidth(2);
-  probeDxySigSignalData -> SetLineColor(3);
-  probeDxySigBkgData    -> SetLineColor(2);
-  probeDzSigSignalData  -> SetLineWidth(2);
-  probeDzSigBkgData     -> SetLineWidth(2);
-  probeDzSigSignalData  -> SetLineColor(3);
-  probeDzSigBkgData     -> SetLineColor(2);
   if (doLowPt==1) {
     probeFBremSignalData  -> SetLineWidth(2);  
     probeFBremBkgData     -> SetLineWidth(2);  
@@ -275,18 +329,12 @@ void mcVsSplots(int doLowPt)
     probeMvaSignalDataEB2 -> SetLineColor(3);
     probeMvaSignalDataEB3 -> SetLineWidth(2);
     probeMvaSignalDataEB3 -> SetLineColor(3);
-    probeMvaSignalDataEB4 -> SetLineWidth(2);
-    probeMvaSignalDataEB4 -> SetLineColor(3);
     probeMvaSignalDataEE0 -> SetLineWidth(2);
     probeMvaSignalDataEE0 -> SetLineColor(3);
     probeMvaSignalDataEE1 -> SetLineWidth(2);
     probeMvaSignalDataEE1 -> SetLineColor(3);
     probeMvaSignalDataEE2 -> SetLineWidth(2);
     probeMvaSignalDataEE2 -> SetLineColor(3);
-    probeMvaSignalDataEE3 -> SetLineWidth(2);
-    probeMvaSignalDataEE3 -> SetLineColor(3);
-    probeMvaSignalDataEE4 -> SetLineWidth(2);
-    probeMvaSignalDataEE4 -> SetLineColor(3);
   }
 
   // Plots
@@ -514,133 +562,32 @@ void mcVsSplots(int doLowPt)
   leg4B->AddEntry(probeMvaFakeMc,  "Fake, from MC", "lp");
   leg4B->AddEntry(probeMvaBkgData, "Bkg, from sPlot", "lp");
 
-  TCanvas cprobeDxySigs("cprobeDxySigs","cprobeDxySigs",1);
-  probeDxySigSignalData->DrawNormalized("hist");
-  probeDxySigSignalMc->DrawNormalized("samehist");
-  leg4S->Draw();
-  cprobeDxySigs.SaveAs("probeDxySig_signal.png");
-
-  TCanvas cprobeDxySigb("cprobeDxySigb","cprobeDxySigb",1);
-  probeDxySigBkgData->DrawNormalized("hist");
-  probeDxySigFakeMc->DrawNormalized("samehist");
-  leg4B->Draw();
-  cprobeDxySigb.SaveAs("probeDxySig_back.png");
-
-
-  // -----------------------------------------------
-  TCanvas cprobeDzSigs("cprobeDzSigs","cprobeDzSigs",1);
-  probeDzSigSignalMc->DrawNormalized("hist");
-  probeDzSigSignalData->DrawNormalized("samehist");
-  leg4S->Draw();
-  cprobeDzSigs.SaveAs("probeDzSig_signal.png");
-
-  TCanvas cprobeDzSigb("cprobeDzSigb","cprobeDzSigb",1);
-  probeDzSigBkgData->DrawNormalized("hist");
-  probeDzSigFakeMc->DrawNormalized("samehist");
-  leg4B->Draw();
-  cprobeDzSigb.SaveAs("probeDzSig_back.png");
-
-
   // -----------------------------------------------
   if (doLowPt==1) {
-    TCanvas cmvaseb0("cmvaseb0","cmvaseb0",1);
-    probeMvaSignalDataEB0->Rebin();
-    probeMvaSignalMcEB0->Rebin();
-    probeMvaSignalDataEB0->SetTitle("EB, 0.5 < pT < 1");
-    probeMvaSignalMcEB0->SetTitle("EB, 0.5 < pT < 1");
-    probeMvaSignalDataEB0->DrawNormalized("hist");
-    probeMvaSignalMcEB0->DrawNormalized("samehist");
-    legS->Draw();
-    cmvaseb0.SaveAs("outputBDT_EB0_signal.png");
+    probeMvaSignalDataEB0->Rebin(2);
+    probeMvaSignalDataEB1->Rebin(2);
+    probeMvaSignalDataEB2->Rebin(2);
+    probeMvaSignalDataEB3->Rebin(2);
+    probeMvaSignalDataEE0->Rebin(2);
+    probeMvaSignalDataEE1->Rebin(2);
+    probeMvaSignalDataEE2->Rebin(2);
     //
-    TCanvas cmvaseb1("cmvaseb1","cmvaseb1",1);
-    probeMvaSignalMcEB1->Rebin();
-    probeMvaSignalDataEB1->Rebin();
-    probeMvaSignalDataEB1->SetTitle("EB, 1.0 < pT < 1.5");
-    probeMvaSignalMcEB1->SetTitle("EB, 1.0 < pT < 1.5");
-    probeMvaSignalDataEB1->DrawNormalized("hist");
-    probeMvaSignalMcEB1->DrawNormalized("samehist");
-    legS->Draw();
-    cmvaseb1.SaveAs("outputBDT_EB1_signal.png");
+    probeMvaSignalMcEB0->Rebin(2);
+    probeMvaSignalMcEB1->Rebin(2);
+    probeMvaSignalMcEB2->Rebin(2);
+    probeMvaSignalMcEB3->Rebin(2);
+    probeMvaSignalMcEE0->Rebin(2);
+    probeMvaSignalMcEE1->Rebin(2);
+    probeMvaSignalMcEE2->Rebin(2);
+    // 
+    drawTH1pair(probeMvaSignalDataEB0, probeMvaSignalMcEB0,  "ele ID BDT","a.u.",1.,"EB-0d5-1d5","./",2,"Data","MC");
+    drawTH1pair(probeMvaSignalDataEB1, probeMvaSignalMcEB1,  "ele ID BDT","a.u.",1.,"EB-1d5-2d0","./",2,"Data","MC");
+    drawTH1pair(probeMvaSignalDataEB2, probeMvaSignalMcEB2,  "ele ID BDT","a.u.",1.,"EB-2d0-5d0","./",2,"Data","MC");
+    drawTH1pair(probeMvaSignalDataEB3, probeMvaSignalMcEB3,  "ele ID BDT","a.u.",1.,"EB-gt5","./",2,"Data","MC");
     //
-    TCanvas cmvaseb2("cmvaseb2","cmvaseb2",1);
-    probeMvaSignalMcEB2->Rebin();
-    probeMvaSignalDataEB2->Rebin();
-    probeMvaSignalDataEB2->SetTitle("EB, 1.5 < pT < 2.0");
-    probeMvaSignalMcEB2->SetTitle("EB, 1.5 < pT < 2.0");
-    probeMvaSignalMcEB2->DrawNormalized("hist");
-    probeMvaSignalDataEB2->DrawNormalized("samehist");
-    legS->Draw();
-    cmvaseb2.SaveAs("outputBDT_EB2_signal.png");
-    //
-    TCanvas cmvaseb3("cmvaseb3","cmvaseb3",1);
-    probeMvaSignalMcEB3->Rebin();
-    probeMvaSignalDataEB3->Rebin();
-    probeMvaSignalDataEB3->SetTitle("EB, 2.0 < pT < 5.0");
-    probeMvaSignalMcEB3->SetTitle("EB, 2.0 < pT < 5.0");
-    probeMvaSignalMcEB3->DrawNormalized("hist");
-    probeMvaSignalDataEB3->DrawNormalized("samehist");
-    legS->Draw();
-    cmvaseb3.SaveAs("outputBDT_EB3_signal.png");
-    //
-    TCanvas cmvaseb4("cmvaseb4","cmvaseb4",1);
-    probeMvaSignalMcEB4->Rebin();
-    probeMvaSignalDataEB4->Rebin();
-    probeMvaSignalDataEB4->SetTitle("EB, pT > 5.0");
-    probeMvaSignalMcEB4->SetTitle("EB, pT > 5.0");
-    probeMvaSignalMcEB4->DrawNormalized("hist");
-    probeMvaSignalDataEB4->DrawNormalized("samehist");
-    legS->Draw();
-    cmvaseb4.SaveAs("outputBDT_EB4_signal.png");
-    //
-    TCanvas cmvasee0("cmvasee0","cmvasee0",1);
-    probeMvaSignalMcEE0->Rebin();
-    probeMvaSignalDataEE0->Rebin();
-    probeMvaSignalDataEE0->SetTitle("EE, 0.5 < pT < 1.0");
-    probeMvaSignalMcEE0->SetTitle("EE, 0.5 < pT < 1.0");
-    probeMvaSignalDataEE0->DrawNormalized("hist");
-    probeMvaSignalMcEE0->DrawNormalized("samehist");
-    legS->Draw();
-    cmvasee0.SaveAs("outputBDT_EE0_signal.png");
-    //
-    TCanvas cmvasee1("cmvasee1","cmvasee1",1);
-    probeMvaSignalMcEE1->Rebin();
-    probeMvaSignalDataEE1->Rebin();
-    probeMvaSignalDataEE1->SetTitle("EE, 1.0 < pT < 1.5");
-    probeMvaSignalMcEE1->SetTitle("EE, 1.0 < pT < 1.5");
-    probeMvaSignalDataEE1->DrawNormalized("hist");
-    probeMvaSignalMcEE1->DrawNormalized("samehist");
-    legS->Draw();
-    cmvasee1.SaveAs("outputBDT_EE1_signal.png");
-    //
-    TCanvas cmvasee2("cmvasee2","cmvasee2",1);
-    probeMvaSignalMcEE2->Rebin();
-    probeMvaSignalDataEE2->Rebin();
-    probeMvaSignalDataEE2->SetTitle("EE, 1.5 < pT < 2.0");
-    probeMvaSignalMcEE2->SetTitle("EE, 1.5 < pT < 2.0");
-    probeMvaSignalDataEE2->DrawNormalized("hist");
-    probeMvaSignalMcEE2->DrawNormalized("samehist");
-    legS->Draw();
-    cmvasee2.SaveAs("outputBDT_EE2_signal.png");
-    //
-    TCanvas cmvasee3("cmvasee3","cmvasee3",1);
-    probeMvaSignalMcEE3->Rebin();
-    probeMvaSignalDataEE3->Rebin();
-    probeMvaSignalDataEE3->SetTitle("EE, 2.0 < pT < 5.0");
-    probeMvaSignalMcEE3->SetTitle("EE, 2.0 < pT < 5.0");
-    probeMvaSignalMcEE3->DrawNormalized("hist");
-    probeMvaSignalDataEE3->DrawNormalized("samehist");
-    legS->Draw();
-    cmvasee3.SaveAs("outputBDT_EE3_signal.png");
-    //
-    TCanvas cmvasee4("cmvasee4","cmvasee4",1);
-    probeMvaSignalMcEE4->Rebin();
-    probeMvaSignalDataEE4->Rebin();
-    probeMvaSignalDataEE3->SetTitle("EE, pT > 5.0");
-    probeMvaSignalMcEE3->SetTitle("EE, pT > 5.0");
-    probeMvaSignalMcEE4->DrawNormalized("hist");
-    probeMvaSignalDataEE4->DrawNormalized("samehist");
-    legS->Draw();
-    cmvasee4.SaveAs("outputBDT_EE4_signal.png");
+    drawTH1pair(probeMvaSignalDataEE0, probeMvaSignalMcEE0,  "ele ID BDT","a.u.",1.,"EE-0g5-2d0","./",4,"Data","MC");
+    drawTH1pair(probeMvaSignalDataEE1, probeMvaSignalMcEE1,  "ele ID BDT","a.u.",1.,"EE-2d0-5d0","./",4,"Data","MC");
+    drawTH1pair(probeMvaSignalDataEE2, probeMvaSignalMcEE2,  "ele ID BDT","a.u.",1.,"EE-gt5","./",4,"Data","MC");
   }
+
 }
