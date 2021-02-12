@@ -97,35 +97,65 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   // signal model
   std::cout << "make JPsi model" << std::endl;
   //
-  RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.095, 3.098);               // EB: 0.5-1.5; all EE
+  // RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.095, 3.098);                  // all EE
   // RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.09, 3.10);                    // EB: pT>1.5 
+  // m0.setConstant();                                                        // EB: 1.5-2.0
 
-  RooRealVar alphaL("alphaL", "alpha left",  0.2, 0.01, 0.3);           // EB: 0.5-1.5; all EE          
+  // RooRealVar alphaL("alphaL", "alpha left",  0.2, 0.01, 0.3);              // all EE          
   // RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.2, 0.7);               // EB: pT>1.5
-
-  RooRealVar alphaR("alphaR", "alpha right", 0.6, 0.4, 0.8);            // EB: 0.5-1.5; all EE         
-  // RooRealVar alphaR("alphaR", "alpha right", 1.0, 0.8, 1.2);            // EB: 1.5-2
+  
+  // RooRealVar alphaR("alphaR", "alpha right", 0.6, 0.4, 0.8);               // all EE         
+  // RooRealVar alphaR("alphaR", "alpha right", 1.0, 0.8, 1.2);               // EB: 1.5-2
   // RooRealVar alphaR("alphaR", "alpha right", 1.2, 1.0, 1.4);               // EB: pT>2
 
   // all EB and EE
-  RooRealVar sigma("sigma", "sigma",  0.05, 0.03, 0.1);                 
-  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);                     
-  RooRealVar nR("nR", "N right", 1.85, 1.80, 1.95);                    
+  // RooRealVar sigma("sigma", "sigma",  0.05, 0.03, 0.1);                 
+  // RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);                     
+  // RooRealVar nR("nR", "N right", 1.85, 1.80, 1.95);                    
+
+  /*
+  // For EB with pT 0.5-1.5 better to fix all signal shape. Here it is fixing to the shape for pT: 1.5-2. 
+  RooRealVar m0("m0", "JPsi Mass", 3.09135, 3.09, 3.10);         
+  RooRealVar alphaL("alphaL", "alpha left",  0.7, 0.6, 0.8);     
+  RooRealVar alphaR("alphaR", "alpha right", 0.8, 0.7, 0.9); 
+  RooRealVar sigma("sigma", "sigma",  0.044, 0.03, 0.05);                 
+  RooRealVar nL("nL", "N left",  3.64, 3.5, 3.7);                     
+  RooRealVar nR("nR", "N right", 1.80, 1.7, 1.9);                    
+  m0.setConstant();  
+  alphaL.setConstant();
+  alphaR.setConstant();
+  sigma.setConstant();
+  nL.setConstant();
+  nR.setConstant();
+  */
+
+  // For EE with pT 0.5-2.0 better to fix all signal shape. Here it is fixing to the shape for pT: 2-5. 
+  RooRealVar m0("m0", "JPsi Mass", 3.0980);         
+  RooRealVar alphaL("alphaL", "alpha left",  0.3);     
+  RooRealVar alphaR("alphaR", "alpha right", 0.51); 
+  RooRealVar sigma("sigma", "sigma",  0.068);                 
+  RooRealVar nL("nL", "N left",  3.56);                     
+  RooRealVar nR("nR", "N right", 1.95);                    
+  m0.setConstant();  
+  alphaL.setConstant();
+  alphaR.setConstant();
+  sigma.setConstant();
+  nL.setConstant();
+  nR.setConstant();
+
 
   RooDoubleCB jpsiModel("jpsiModel", "JPsi Model", pair_mass, m0, sigma, alphaL, alphaR, nL, nR);
 
-  // we know JPsi mass
-  // m0.setConstant();        // EB: 0.5-2.0
   
   // --------------------------------------
   // background model
   std::cout << "make background model" << std::endl;
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");        // EB: 0.5-1.5
+  //   RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");        // EB: 0.5-1.5
   // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");       // EB: 1.5-2
   // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.1, 0.1,"1/GeV");       // EB: 2-5
   // RooRealVar alpha("alpha", "Decay const for background mass spectrum", -0.1, -0.3, 0.,"1/GeV");       // EB: pT> 5
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");        // EE: pT<5
-  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");          // EE: pT>5
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");        // EE: pT<5
+  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");          // EE: pT>5
 
   // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, -0.8, 0.8,"1/GeV");      // Init data PF: -0.8, 0.8, 0.8
   RooExponential bkgModel("bkgModel", "bkg Mass Model", pair_mass, alpha);
@@ -506,11 +536,11 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   //
   // Endcap:
   // pt: 0.5-2.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: 2.0-5.0 GeV 
   // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>2.0 && probePt<5.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: >5.0 GeV 
-  data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");            
+  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");            
 
   data->Print();
 
