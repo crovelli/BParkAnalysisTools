@@ -104,13 +104,16 @@ prepareInputsFromMcWithTnP::prepareInputsFromMcWithTnP(TTree *tree) : fChain(0)
   // if parameter tree is not specified (or zero), connect the file
   // used to generate this class and read the Tree.
   if (tree == 0) {
-    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root");
+    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0__withNvtxWeights.root");
+    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0.root");
     // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root");
     if (!f || !f->IsOpen()) {
-      f = new TFile("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root");
+      //f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0__withNvtxWeights.root");
+      f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0.root");
       // f = new TFile("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root");
     }
-    TDirectory * dir = (TDirectory*)f->Get("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt.root:/tnpAna");
+    //TDirectory * dir = (TDirectory*)f->Get("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0__withNvtxWeights.root:/tnpAna");
+    TDirectory * dir = (TDirectory*)f->Get("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0.root:/tnpAna");
     // TDirectory * dir = (TDirectory*)f->Get("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root:/tnpAna");
     dir->GetObject("fitter_tree",tree);
     
