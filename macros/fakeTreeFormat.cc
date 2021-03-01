@@ -55,6 +55,7 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   Int_t           nvtx = 0;
   Int_t           sampleID = 0;
   Float_t         rho = 0;
+  Float_t         pu_weight;  
   Float_t         perEveW = 0;
   Int_t           hlt9 = 0;
   Int_t           hlt12 = 0;
@@ -106,6 +107,7 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   TBranch        *b_nvtx;   //!
   TBranch        *b_sampleID;   //!
   TBranch        *b_rho;   //!
+  TBranch        *b_pu_weight;   //!    
   TBranch        *b_perEveW;   //!
   TBranch        *b_hlt9;   //!
   TBranch        *b_hlt12;   //!
@@ -157,6 +159,7 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   treeOrig->SetBranchAddress("nvtx", &nvtx, &b_nvtx);
   treeOrig->SetBranchAddress("sampleID", &sampleID, &b_sampleID);
   treeOrig->SetBranchAddress("rho", &rho, &b_rho);
+  treeOrig->SetBranchAddress("pu_weight", &pu_weight, &b_pu_weight);  
   treeOrig->SetBranchAddress("perEveW", &perEveW, &b_perEveW);
   treeOrig->SetBranchAddress("hlt9", &hlt9, &b_hlt9);
   treeOrig->SetBranchAddress("hlt12", &hlt12, &b_hlt12);
@@ -384,9 +387,8 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
       probeCloseToEleForMu2Phi = probe_closeToEleForMu2_phi->at(ii);
 
       // weights
-      if (theRun==1) {   // MC                                                                                                                   
-	//weight = perEveW * lumiForW * lumiWeight;     // chiara
-	weight = perEveW;
+      if (theRun==1) {   // MC                                                                           
+	weight = perEveW*pu_weight;
       } else {
 	weight = 1.;
       }
