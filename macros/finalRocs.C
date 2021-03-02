@@ -18,11 +18,11 @@ using namespace std;
 void finalRocs(bool isLowPt)
 {
   // Files
-  TFile fileSPlotsData("filesNew/probePF/fileSPlots_inclusive.root");                      // TnP selection, sPlots             (jpsi_splot.C)
-  TFile fileTnpMc("filesNew/probePF/myFileMcAfterTnp.root");                               // TnP selection, match to MC-truth  (prepareInputsFromMcWithTnP.C)
-  TFile fileFakeSelData("filesNew/probePF/myFileFakesInData__weightsBasedOnMc.root");      // Fakes selection applied to data   (prepareInputsFromFakes.C)
-  TFile fileFakeSelMc("filesNew/probePF/myFileFakesInMc__weightsBasedOnMc.root");          // Fakes selection applied to MC     (prepareInputsFromFakes.C)   
-  TFile fileNani("filesNew/probePF/myFileFromNani.root");                                  // Match to MC-truth                 (prepareInputsFromNaniInMc.C)
+  TFile fileSPlotsData("files_v2/probeLowPt/myFileSPlots_fullRange.root");                           // TnP selection, sPlots             (jpsi_splot.C)
+  TFile fileTnpMc("files_v2/probeLowPt/myFileMcAfterTnp__noPUweight__withTnpVsNaniWeight.root");     // TnP selection, match to MC-truth  (prepareInputsFromMcWithTnP.C)
+  TFile fileFakeSelData("files_v2/probeLowPt/myFileFakesDataFull2018.root");                         // Fakes selection applied to data   (prepareInputsFromFakes.C)
+  TFile fileFakeSelMc("files_v2/probeLowPt/myFileFakesMC_noPuWeight__withFakeVsNaniWeight.root");    // Fakes selection applied to MC     (prepareInputsFromFakes.C)   
+  TFile fileNani("files_v2/probeLowPt/myFileFromNani__noPUweight.root");                             // Match to MC-truth                 (prepareInputsFromNaniInMc.C)
 
   // Histos
   TH1F *mvaSignalData;
@@ -57,9 +57,6 @@ void finalRocs(bool isLowPt)
   TH1F *mvaBkgDataEB3;
   TH1F *mvaBkgMcEB3;
   TH1F *mvaSignalMcEB3;
-  TH1F *mvaBkgDataEB4;
-  TH1F *mvaBkgMcEB4;
-  TH1F *mvaSignalMcEB4;
   TH1F *mvaBkgDataEE0;
   TH1F *mvaBkgMcEE0;
   TH1F *mvaSignalMcEE0;
@@ -69,12 +66,6 @@ void finalRocs(bool isLowPt)
   TH1F *mvaBkgDataEE2;
   TH1F *mvaBkgMcEE2;
   TH1F *mvaSignalMcEE2;
-  TH1F *mvaBkgDataEE3;
-  TH1F *mvaBkgMcEE3;
-  TH1F *mvaSignalMcEE3;
-  TH1F *mvaBkgDataEE4;
-  TH1F *mvaBkgMcEE4;
-  TH1F *mvaSignalMcEE4;
   if (isLowPt==1) {
     mvaBkgDataEB0  = (TH1F*)fileFakeSelData.Get("mvaFakeEB0"); 
     mvaBkgMcEB0    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB0"); 
@@ -88,9 +79,6 @@ void finalRocs(bool isLowPt)
     mvaBkgDataEB3  = (TH1F*)fileFakeSelData.Get("mvaFakeEB3"); 
     mvaBkgMcEB3    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB3"); 
     mvaSignalMcEB3 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc3");
-    mvaBkgDataEB4  = (TH1F*)fileFakeSelData.Get("mvaFakeEB4"); 
-    mvaBkgMcEB4    = (TH1F*)fileFakeSelMc.Get("mvaFakeEB4"); 
-    mvaSignalMcEB4 = (TH1F*)fileTnpMc.Get("mvaSignalEBMc4");
     mvaBkgDataEE0  = (TH1F*)fileFakeSelData.Get("mvaFakeEE0"); 
     mvaBkgMcEE0    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE0"); 
     mvaSignalMcEE0 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc0");
@@ -100,12 +88,6 @@ void finalRocs(bool isLowPt)
     mvaBkgDataEE2  = (TH1F*)fileFakeSelData.Get("mvaFakeEE2"); 
     mvaBkgMcEE2    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE2"); 
     mvaSignalMcEE2 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc2");
-    mvaBkgDataEE3  = (TH1F*)fileFakeSelData.Get("mvaFakeEE3"); 
-    mvaBkgMcEE3    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE3"); 
-    mvaSignalMcEE3 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc3");
-    mvaBkgDataEE4  = (TH1F*)fileFakeSelData.Get("mvaFakeEE4"); 
-    mvaBkgMcEE4    = (TH1F*)fileFakeSelMc.Get("mvaFakeEE4"); 
-    mvaSignalMcEE4 = (TH1F*)fileTnpMc.Get("mvaSignalEEMc4");
   }
 
   // Cosmetics
@@ -152,6 +134,11 @@ void finalRocs(bool isLowPt)
   legb->Draw();
   cmvab.SaveAs("bkgCheck.png");
 
+
+  // ----------------------------------------------------  
+  // Output file with ROCs
+  TFile fileROC("outputROCs.root","RECREATE");  
+  fileROC.cd();
 
   // ----------------------------------------------------
   // FOMs
@@ -237,6 +224,10 @@ void finalRocs(bool isLowPt)
   leg2->Draw();
   croc.SetLogx();
   croc.SaveAs("roc_dataVsMc_log.png");  
+
+
+  fileROC.cd();
+  myGraphBDTdata->Write("myGraphBDTdata");
 
   // -----------------------------------
   // MC after selection vs Mc-from-nani
@@ -327,6 +318,9 @@ void finalRocs(bool isLowPt)
     leg2->Draw();
     croceb0.SetLogx();
     croceb0.SaveAs("roc_EB0_dataVsMc_log.png");  
+
+    fileROC.cd();
+    myGraphBDTdataEB0->Write("myGraphBDTdataEB0");
     
     // ---------------------------------------------------
     FiguresOfMeritEvaluator myRocBDTdataEB1;
@@ -364,6 +358,9 @@ void finalRocs(bool isLowPt)
     leg2->Draw();
     croceb1.SetLogx();
     croceb1.SaveAs("roc_EB1_dataVsMc_log.png");  
+
+    fileROC.cd();
+    myGraphBDTdataEB1->Write("myGraphBDTdataEB1");
     
     // ---------------------------------------------------
     FiguresOfMeritEvaluator myRocBDTdataEB2;
@@ -401,6 +398,9 @@ void finalRocs(bool isLowPt)
     leg2->Draw();
     croceb2.SetLogx();
     croceb2.SaveAs("roc_EB2_dataVsMc_log.png");  
+
+    fileROC.cd();
+    myGraphBDTdataEB2->Write("myGraphBDTdataEB2");
     
     // ---------------------------------------------------
     FiguresOfMeritEvaluator myRocBDTdataEB3;
@@ -438,43 +438,9 @@ void finalRocs(bool isLowPt)
     leg2->Draw();
     croceb3.SetLogx();
     croceb3.SaveAs("roc_EB3_dataVsMc_log.png");  
-    
-    // ---------------------------------------------------
-    FiguresOfMeritEvaluator myRocBDTdataEB4;
-    myRocBDTdataEB4.addSignal("BDT", mvaSignalMcEB4);      
-    myRocBDTdataEB4.addBackgrounds(mvaBkgDataEB4);
-    myRocBDTdataEB4.setCutDirection(">");
-    TGraph *myGraphBDTdataEB4 = myRocBDTdataEB4.getFOM("BDT",2);
-    myGraphBDTdataEB4->SetTitle("BDT");
-    myGraphBDTdataEB4->SetName("BDT");
-    myGraphBDTdataEB4->SetMarkerColor(1);
-    myGraphBDTdataEB4->SetMarkerStyle(20);
-    myGraphBDTdataEB4->SetMarkerSize(1);
-    //
-    FiguresOfMeritEvaluator myRocBDTmcEB4;
-    myRocBDTmcEB4.addSignal("BDT", mvaSignalMcEB4);      
-    myRocBDTmcEB4.addBackgrounds(mvaBkgMcEB4);
-    myRocBDTmcEB4.setCutDirection(">");
-    TGraph *myGraphBDTmcEB4 = myRocBDTmcEB4.getFOM("BDT",2);
-    myGraphBDTmcEB4->SetTitle("BDT");
-    myGraphBDTmcEB4->SetName("BDT");
-    myGraphBDTmcEB4->SetMarkerColor(4);
-    myGraphBDTmcEB4->SetMarkerStyle(20);
-    myGraphBDTmcEB4->SetMarkerSize(1);
-    //
-    TCanvas croceb4("roc","",1);
-    croceb4.SetGrid();
-    myH->Draw();
-    myGraphBDTdataEB4->Draw("sameP");
-    myGraphBDTmcEB4->Draw("sameP");
-    leg2->Draw();
-    croceb4.SaveAs("roc_EB4_dataVsMc.png");  
-    myH2->Draw();
-    myGraphBDTdataEB4->Draw("sameP");
-    myGraphBDTmcEB4->Draw("sameP");
-    leg2->Draw();
-    croceb4.SetLogx();
-    croceb4.SaveAs("roc_EB4_dataVsMc_log.png");  
+
+    fileROC.cd();
+    myGraphBDTdataEB3->Write("myGraphBDTdataEB3");
     
     // ---------------------------------------------------
     FiguresOfMeritEvaluator myRocBDTdataEE0;
@@ -512,6 +478,9 @@ void finalRocs(bool isLowPt)
     leg2->Draw();
     crocee0.SetLogx();
     crocee0.SaveAs("roc_EE0_dataVsMc_log.png");  
+
+    fileROC.cd();
+    myGraphBDTdataEE0->Write("myGraphBDTdataEE0");
     
     // ---------------------------------------------------
     FiguresOfMeritEvaluator myRocBDTdataEE1;
@@ -549,6 +518,9 @@ void finalRocs(bool isLowPt)
     leg2->Draw();
     crocee1.SetLogx();
     crocee1.SaveAs("roc_EE1_dataVsMc_log.png");  
+
+    fileROC.cd();
+    myGraphBDTdataEE1->Write("myGraphBDTdataEE1");
     
     // ---------------------------------------------------
     FiguresOfMeritEvaluator myRocBDTdataEE2;
@@ -586,79 +558,8 @@ void finalRocs(bool isLowPt)
     leg2->Draw();
     crocee2.SetLogx();
     crocee2.SaveAs("roc_EE2_dataVsMc_log.png");  
-    
-    // ---------------------------------------------------
-    FiguresOfMeritEvaluator myRocBDTdataEE3;
-    myRocBDTdataEE3.addSignal("BDT", mvaSignalMcEE3);      
-    myRocBDTdataEE3.addBackgrounds(mvaBkgDataEE3);
-    myRocBDTdataEE3.setCutDirection(">");
-    TGraph *myGraphBDTdataEE3 = myRocBDTdataEE3.getFOM("BDT",2);
-    myGraphBDTdataEE3->SetTitle("BDT");
-    myGraphBDTdataEE3->SetName("BDT");
-    myGraphBDTdataEE3->SetMarkerColor(1);
-    myGraphBDTdataEE3->SetMarkerStyle(20);
-    myGraphBDTdataEE3->SetMarkerSize(1);
-    //
-    FiguresOfMeritEvaluator myRocBDTmcEE3;
-    myRocBDTmcEE3.addSignal("BDT", mvaSignalMcEE3);      
-    myRocBDTmcEE3.addBackgrounds(mvaBkgMcEE3);
-    myRocBDTmcEE3.setCutDirection(">");
-    TGraph *myGraphBDTmcEE3 = myRocBDTmcEE3.getFOM("BDT",2);
-    myGraphBDTmcEE3->SetTitle("BDT");
-    myGraphBDTmcEE3->SetName("BDT");
-    myGraphBDTmcEE3->SetMarkerColor(4);
-    myGraphBDTmcEE3->SetMarkerStyle(20);
-    myGraphBDTmcEE3->SetMarkerSize(1);
-    //
-    TCanvas crocee3("roc","",1);
-    crocee3.SetGrid();
-    myH->Draw();
-    myGraphBDTdataEE3->Draw("sameP");
-    myGraphBDTmcEE3->Draw("sameP");
-    leg2->Draw();
-    crocee3.SaveAs("roc_EE3_dataVsMc.png");  
-    myH2->Draw();
-    myGraphBDTdataEE3->Draw("sameP");
-    myGraphBDTmcEE3->Draw("sameP");
-    leg2->Draw();
-    crocee3.SetLogx();
-    crocee3.SaveAs("roc_EE3_dataVsMc_log.png");  
-    
-    // ---------------------------------------------------
-    FiguresOfMeritEvaluator myRocBDTdataEE4;
-    myRocBDTdataEE4.addSignal("BDT", mvaSignalMcEE4);      
-    myRocBDTdataEE4.addBackgrounds(mvaBkgDataEE4);
-    myRocBDTdataEE4.setCutDirection(">");
-    TGraph *myGraphBDTdataEE4 = myRocBDTdataEE4.getFOM("BDT",2);
-    myGraphBDTdataEE4->SetTitle("BDT");
-    myGraphBDTdataEE4->SetName("BDT");
-    myGraphBDTdataEE4->SetMarkerColor(1);
-    myGraphBDTdataEE4->SetMarkerStyle(20);
-    myGraphBDTdataEE4->SetMarkerSize(1);
-    //
-    FiguresOfMeritEvaluator myRocBDTmcEE4;
-    myRocBDTmcEE4.addSignal("BDT", mvaSignalMcEE4);      
-    myRocBDTmcEE4.addBackgrounds(mvaBkgMcEE4);
-    myRocBDTmcEE4.setCutDirection(">");
-    TGraph *myGraphBDTmcEE4 = myRocBDTmcEE4.getFOM("BDT",2);
-    myGraphBDTmcEE4->SetTitle("BDT");
-    myGraphBDTmcEE4->SetName("BDT");
-    myGraphBDTmcEE4->SetMarkerColor(4);
-    myGraphBDTmcEE4->SetMarkerStyle(20);
-    myGraphBDTmcEE4->SetMarkerSize(1);
-    //
-    TCanvas crocee4("roc","",1);
-    crocee4.SetGrid();
-    myH->Draw();
-    myGraphBDTdataEE4->Draw("sameP");
-    myGraphBDTmcEE4->Draw("sameP");
-    leg2->Draw();
-    crocee4.SaveAs("roc_EE4_dataVsMc.png");  
-    myH2->Draw();
-    myGraphBDTdataEE4->Draw("sameP");
-    myGraphBDTmcEE4->Draw("sameP");
-    leg2->Draw();
-    crocee4.SetLogx();
-    crocee4.SaveAs("roc_EE4_dataVsMc_log.png");  
+
+    fileROC.cd();
+    myGraphBDTdataEE2->Write("myGraphBDTdataEE2");
   }
 }
