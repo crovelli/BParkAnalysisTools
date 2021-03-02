@@ -15,8 +15,8 @@ using namespace std;
 void mcVsFakes(int isLowPt)
 {
   // Files: 
-  TFile fileFakesData("filesNew/probePF/myFileFakesInData__weightsBasedOnMc.root");     // from fakes selection applied to data (prepareInputsFromFakes)
-  TFile fileFakesMc("filesNew/probePF/myFileFakesInMc__weightsBasedOnMc.root");         // from fakes selection applied to (B->KJPsi->Kmm) MC (prepareInputsFromFakes)
+  TFile fileFakesData("files_v2/probeLowPt/myFileFakesDataFull2018.root");          // from fakes selection applied to data (prepareInputsFromFakes)
+  TFile fileFakesMc("files_v2/probeLowPt/myFileFakesMC_noPuWeight.root");           // from fakes selection applied to (B->KJPsi->Kmm) MC (prepareInputsFromFakes)
 
   // ----------------------------------------------------
 
@@ -43,24 +43,18 @@ void mcVsFakes(int isLowPt)
   TH1F *mvaFakesData_EB1 = (TH1F*)fileFakesData.Get("mvaFakeEB1");
   TH1F *mvaFakesData_EB2 = (TH1F*)fileFakesData.Get("mvaFakeEB2");
   TH1F *mvaFakesData_EB3 = (TH1F*)fileFakesData.Get("mvaFakeEB3");
-  TH1F *mvaFakesData_EB4 = (TH1F*)fileFakesData.Get("mvaFakeEB4");
   TH1F *mvaFakesData_EE0 = (TH1F*)fileFakesData.Get("mvaFakeEE0");
   TH1F *mvaFakesData_EE1 = (TH1F*)fileFakesData.Get("mvaFakeEE1");
   TH1F *mvaFakesData_EE2 = (TH1F*)fileFakesData.Get("mvaFakeEE2");
-  TH1F *mvaFakesData_EE3 = (TH1F*)fileFakesData.Get("mvaFakeEE3");
-  TH1F *mvaFakesData_EE4 = (TH1F*)fileFakesData.Get("mvaFakeEE4");
 
   // Small eta/pt bins: MC histos, fake selection 
   TH1F *mvaFakesMc_EB0 = (TH1F*)fileFakesMc.Get("mvaFakeEB0");
   TH1F *mvaFakesMc_EB1 = (TH1F*)fileFakesMc.Get("mvaFakeEB1");
   TH1F *mvaFakesMc_EB2 = (TH1F*)fileFakesMc.Get("mvaFakeEB2");
   TH1F *mvaFakesMc_EB3 = (TH1F*)fileFakesMc.Get("mvaFakeEB3");
-  TH1F *mvaFakesMc_EB4 = (TH1F*)fileFakesMc.Get("mvaFakeEB4");
   TH1F *mvaFakesMc_EE0 = (TH1F*)fileFakesMc.Get("mvaFakeEE0");
   TH1F *mvaFakesMc_EE1 = (TH1F*)fileFakesMc.Get("mvaFakeEE1");
   TH1F *mvaFakesMc_EE2 = (TH1F*)fileFakesMc.Get("mvaFakeEE2");
-  TH1F *mvaFakesMc_EE3 = (TH1F*)fileFakesMc.Get("mvaFakeEE3");
-  TH1F *mvaFakesMc_EE4 = (TH1F*)fileFakesMc.Get("mvaFakeEE4");
 
   // ----------------------------------------------------
 
@@ -87,8 +81,6 @@ void mcVsFakes(int isLowPt)
   mvaFakesData_EB2 -> SetLineColor(3);
   mvaFakesData_EB3 -> SetLineWidth(2);
   mvaFakesData_EB3 -> SetLineColor(3);
-  mvaFakesData_EB4 -> SetLineWidth(2);
-  mvaFakesData_EB4 -> SetLineColor(3);
   //
   mvaFakesData_EE0 -> SetLineWidth(2);
   mvaFakesData_EE0 -> SetLineColor(3);
@@ -96,10 +88,6 @@ void mcVsFakes(int isLowPt)
   mvaFakesData_EE1 -> SetLineColor(3);
   mvaFakesData_EE2 -> SetLineWidth(2);
   mvaFakesData_EE2 -> SetLineColor(3);
-  mvaFakesData_EE3 -> SetLineWidth(2);
-  mvaFakesData_EE3 -> SetLineColor(3);
-  mvaFakesData_EE4 -> SetLineWidth(2);
-  mvaFakesData_EE4 -> SetLineColor(3);
   //
   mvaFakesMc_EB0 -> SetLineWidth(2);
   mvaFakesMc_EB0 -> SetLineColor(6);
@@ -109,8 +97,6 @@ void mcVsFakes(int isLowPt)
   mvaFakesMc_EB2 -> SetLineColor(6);
   mvaFakesMc_EB3 -> SetLineWidth(2);
   mvaFakesMc_EB3 -> SetLineColor(6);
-  mvaFakesMc_EB4 -> SetLineWidth(2);
-  mvaFakesMc_EB4 -> SetLineColor(6);
   //
   mvaFakesMc_EE0 -> SetLineWidth(2);
   mvaFakesMc_EE0 -> SetLineColor(6);
@@ -118,32 +104,22 @@ void mcVsFakes(int isLowPt)
   mvaFakesMc_EE1 -> SetLineColor(6);
   mvaFakesMc_EE2 -> SetLineWidth(2);
   mvaFakesMc_EE2 -> SetLineColor(6);
-  mvaFakesMc_EE3 -> SetLineWidth(2);
-  mvaFakesMc_EE3 -> SetLineColor(6);
-  mvaFakesMc_EE4 -> SetLineWidth(2);
-  mvaFakesMc_EE4 -> SetLineColor(6);
 
   // Rebinning
   mvaFakesData_EB0 -> Rebin();
   mvaFakesData_EB1 -> Rebin();
   mvaFakesData_EB2 -> Rebin();
   mvaFakesData_EB3 -> Rebin();
-  mvaFakesData_EB4 -> Rebin();
   mvaFakesData_EE0 -> Rebin();
   mvaFakesData_EE1 -> Rebin();
   mvaFakesData_EE2 -> Rebin();
-  mvaFakesData_EE3 -> Rebin();
-  mvaFakesData_EE4 -> Rebin();
   mvaFakesMc_EB0 -> Rebin();
   mvaFakesMc_EB1 -> Rebin();
   mvaFakesMc_EB2 -> Rebin();
   mvaFakesMc_EB3 -> Rebin();
-  mvaFakesMc_EB4 -> Rebin();
   mvaFakesMc_EE0 -> Rebin();
   mvaFakesMc_EE1 -> Rebin();
   mvaFakesMc_EE2 -> Rebin();
-  mvaFakesMc_EE3 -> Rebin();
-  mvaFakesMc_EE4 -> Rebin();
 
 
   // --------------------------------------------------  
@@ -251,16 +227,6 @@ void mcVsFakes(int isLowPt)
   legA->Draw();
   cmvaeb3.SaveAs("outputBDT_dataVsMc_EB3.png");
 
-  TCanvas cmvaeb4("cmvaeb4","cmvaeb4",1);
-  mvaFakesData_EB4->SetTitle("EB, pT > 5 GeV");
-  mvaFakesMc_EB4->SetTitle("EB, pT > 5 GeV");
-  mvaFakesData_EB4->GetXaxis()->SetTitle("Id BDT");
-  mvaFakesMc_EB4->GetXaxis()->SetTitle("Id BDT");
-  mvaFakesMc_EB4->DrawNormalized("hist");
-  mvaFakesData_EB4->DrawNormalized("samehist");
-  legA->Draw();
-  cmvaeb4.SaveAs("outputBDT_dataVsMc_EB4.png");
-
   TCanvas cmvaee0("cmvaee0","cmvaee0",1);
   mvaFakesData_EE0->SetTitle("EE, 0.5 < pT < 1.0 GeV");
   mvaFakesMc_EE0->SetTitle("EE, 0.5 < pT < 1.0 GeV");
@@ -290,24 +256,4 @@ void mcVsFakes(int isLowPt)
   mvaFakesData_EE2->DrawNormalized("samehist");
   legA->Draw();
   cmvaee2.SaveAs("outputBDT_dataVsMc_EE2.png");
-
-  TCanvas cmvaee3("cmvaee3","cmvaee3",1);
-  mvaFakesData_EE3->SetTitle("EE, 2.0 < pT < 5.0 GeV");
-  mvaFakesMc_EE3->SetTitle("EE, 2.0 < pT < 5.0 GeV");
-  mvaFakesData_EE3->GetXaxis()->SetTitle("Id BDT");
-  mvaFakesMc_EE3->GetXaxis()->SetTitle("Id BDT");
-  mvaFakesMc_EE3->DrawNormalized("hist");
-  mvaFakesData_EE3->DrawNormalized("samehist");
-  legA->Draw();
-  cmvaee3.SaveAs("outputBDT_dataVsMc_EE3.png");
-
-  TCanvas cmvaee4("cmvaee4","cmvaee4",1);
-  mvaFakesData_EE4->SetTitle("EE, pT > 5 GeV");
-  mvaFakesMc_EE4->SetTitle("EE, pT > 5 GeV");
-  mvaFakesData_EE4->GetXaxis()->SetTitle("Id BDT");
-  mvaFakesMc_EE4->GetXaxis()->SetTitle("Id BDT");
-  mvaFakesMc_EE4->DrawNormalized("hist");
-  mvaFakesData_EE4->DrawNormalized("samehist");
-  legA->Draw();
-  cmvaee4.SaveAs("outputBDT_dataVsMc_EE4.png");
 }
