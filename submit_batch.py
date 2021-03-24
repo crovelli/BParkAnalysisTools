@@ -38,7 +38,7 @@ Output     = {jd}/$(ProcId).out
 Error      = {jd}/$(ProcId).error
 getenv      = True
 environment = "LS_SUBCWD={here}"
-request_memory = 2000
+request_memory = 1000
 +MaxRuntime = {rt}\n
 '''.format(de=os.path.abspath(dummy_exec.name), jd=os.path.abspath(jobdir), rt=int(options.runtime*3600), here=os.environ['PWD'] ) )
     for sf in srcFiles:
