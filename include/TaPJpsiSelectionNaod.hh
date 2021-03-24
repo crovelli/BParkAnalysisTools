@@ -29,8 +29,6 @@ private:
   // Analysis methods
   bool isMcB( int myB );
   bool isMcEleFromJPsi (int myEle );
-  bool isTag( int myEle );     
-  bool isProbe( int myEle );     
   void bookOutputTree();
   void bookOutputHistos();
   void SetNvtxWeights(std::string nvtxWeightFile);
@@ -106,7 +104,6 @@ private:
   vector <float> probe_unBiased ={};
   vector <float> probe_ptBiased ={};
   vector <bool> probe_convveto={};
-  vector <bool> probe_isTag ={};
   vector <float> probe_invMass={};
   vector <bool>  probe_matchMcFromJPsi={};
   vector <bool>  probe_matchMc={};
