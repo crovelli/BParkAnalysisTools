@@ -81,17 +81,12 @@ void TaPJpsiSelectionNaod::Loop() {
     // Trigger 
     int iHLT_Mu12_IP6 = (int)HLT_Mu12_IP6;
     int iHLT_Mu9_IP6  = (int)HLT_Mu9_IP6;
-    ////////////////////////////if (iHLT_Mu12_IP6==0 && iHLT_Mu9_IP6==0) continue;         
     hlt9  = iHLT_Mu9_IP6;
     hlt12 = iHLT_Mu12_IP6;
     
-    // Triggering muons
-    if (nTriggerMuon<=0) continue;
-    h_selection->Fill(2.,perEveW);
-
     // B candidates
     if (nBToKEE<=0) continue;
-    h_selection->Fill(3.,perEveW);
+    h_selection->Fill(2.,perEveW);
 
 
     // Minimal Bcandidate requirements
@@ -118,30 +113,25 @@ void TaPJpsiSelectionNaod::Loop() {
       float b_xySig = BToKEE_l_xy[iB]/BToKEE_l_xy_unc[iB];
 
       // B selection (standard cut)
-      bool vtxFitSel = BToKEE_fit_pt[iB]>10.0 && b_xySig>6.0 && BToKEE_svprob[iB]>0.1 && BToKEE_fit_cos2D[iB]>0.999;
-      //bool ele1Sel = ele1_convveto && ele1_pt>1.5 && fabs(ele1_eta)<2.4;  
-      //bool ele2Sel = ele2_convveto && ele2_pt>0.5 && fabs(ele2_eta)<2.4;  
-      //bool kSel = k_pt>0.8 && fabs(k_eta)<2.4; 
-      bool ele1Sel = ele1_pt>1.5 && fabs(ele1_eta)<2.4;  
-      bool ele2Sel = ele2_pt>0.5 && fabs(ele2_eta)<2.4;  
+      // bool vtxFitSel = BToKEE_fit_pt[iB]>10.0 && b_xySig>6.0 && BToKEE_svprob[iB]>0.1 && BToKEE_fit_cos2D[iB]>0.999;
+      // bool ele1Sel = ele1_pt>1.5 && fabs(ele1_eta)<2.4;  
+      // bool ele2Sel = ele2_pt>0.5 && fabs(ele2_eta)<2.4;  
+      // bool kSel = k_pt>0.7 && fabs(k_eta)<2.4; 
+
+      // B selection (relaxed) 
+      bool vtxFitSel = BToKEE_fit_pt[iB]>5.0 && BToKEE_svprob[iB]>0.1 && BToKEE_fit_cos2D[iB]>0.99;
+      bool ele1Sel = fabs(ele1_eta)<2.4;  
+      bool ele2Sel = fabs(ele2_eta)<2.4;  
       bool kSel = k_pt>0.7 && fabs(k_eta)<2.4; 
 
       bool additionalSel = BToKEE_fit_mass[iB]>4.5 && BToKEE_fit_mass[iB]<6.0;
       bool isBsel = vtxFitSel && ele1Sel && ele2Sel && kSel && additionalSel;
 
-      // JPsi selection
-      // TLorentzVector ele1TLV(0,0,0,0);
-      // ele1TLV.SetPtEtaPhiM(ele1_pt,ele1_eta,ele1_phi,0);
-      // TLorentzVector ele2TLV(0,0,0,0);
-      // ele2TLV.SetPtEtaPhiM(ele2_pt,ele2_eta,ele2_phi,0);
-      // float mee = (ele1TLV+ele2TLV).M();
-      // if (mee>3.6 || mee<2.6) continue; 
-
       if (!isBsel) continue;
 
       goodBs.push_back(iB);
     }
-    if (goodBs.size()>0) h_selection->Fill(4.,perEveW);
+    if (goodBs.size()>0) h_selection->Fill(3.,perEveW);
 
     
     // ------------------------------------------------------------------
@@ -194,7 +184,7 @@ void TaPJpsiSelectionNaod::Loop() {
     // ------------------------------------------------------------------
     // At least one good B candidate
     if (cleanGoodBs.size()<=0) continue;
-    h_selection->Fill(5.,perEveW);
+    h_selection->Fill(4.,perEveW);
 
 
     // ------------------------------------------------------------------
@@ -219,12 +209,12 @@ void TaPJpsiSelectionNaod::Loop() {
       int ele1_idx = BToKEE_l1Idx[thisB];
       int ele2_idx = BToKEE_l2Idx[thisB];
 
-      float ele1_pt  = Electron_pt[ele1_idx];      
-      float ele2_pt  = Electron_pt[ele2_idx];   
-      float ele1_eta = Electron_eta[ele1_idx];   
-      float ele2_eta = Electron_eta[ele2_idx];          
-      float ele1_phi = Electron_phi[ele1_idx];          
-      float ele2_phi = Electron_phi[ele2_idx];    
+      float ele1_pt  = BToKEE_fit_l1_pt[thisB];    
+      float ele2_pt  = BToKEE_fit_l2_pt[thisB];      
+      float ele1_eta = BToKEE_fit_l1_eta[thisB]; 
+      float ele2_eta = BToKEE_fit_l2_eta[thisB];     
+      float ele1_phi = BToKEE_fit_l1_phi[thisB];     
+      float ele2_phi = BToKEE_fit_l2_phi[thisB]; 
 
       TLorentzVector ele1TLV(0,0,0,0);
       ele1TLV.SetPtEtaPhiM(ele1_pt,ele1_eta,ele1_phi,0);
@@ -232,16 +222,11 @@ void TaPJpsiSelectionNaod::Loop() {
       ele2TLV.SetPtEtaPhiM(ele2_pt,ele2_eta,ele2_phi,0);
       float mee = (ele1TLV+ele2TLV).M();
 
-      bool is1tag   = isTag(ele1_idx);
-      bool is2tag   = isTag(ele2_idx);
-      bool is1probe = isProbe(ele1_idx);
-      bool is2probe = isProbe(ele2_idx);
-
-      if ( is1tag && is2probe ) { 
+      if ( 1 ) { 
 	//
-	tag_pt.push_back(Electron_pt[ele1_idx]);
-	tag_eta.push_back(Electron_eta[ele1_idx]);
-	tag_phi.push_back(Electron_phi[ele1_idx]);
+	tag_pt.push_back(ele1_pt);
+	tag_eta.push_back(ele1_eta);
+	tag_phi.push_back(ele1_phi);
 	tag_isPF.push_back(Electron_isPF[ele1_idx]);           
 	tag_isPFOverlap.push_back(Electron_isPFoverlap[ele1_idx]); 
 	tag_isLowPt.push_back(Electron_isLowPt[ele1_idx]);
@@ -250,16 +235,9 @@ void TaPJpsiSelectionNaod::Loop() {
 	tag_convveto.push_back(Electron_convVeto[ele1_idx]);
 	tag_pfRelIso.push_back(Electron_pfRelIso[ele1_idx]);  
 	//
-	probe_Bmass.push_back(thisBmass);
-	probe_Bpt.push_back(thisBpt);
-	probe_Bcos2D.push_back(thisBcos);
-	probe_Bsvprob.push_back(thisBsvprob);
-	probe_Bxysig.push_back(thisBxysig);
-	probe_BmatchMC.push_back(isThisAMcB);
-	probe_Kpt.push_back(thisKpt);
-	probe_pt.push_back(Electron_pt[ele2_idx]);
-	probe_eta.push_back(Electron_eta[ele2_idx]);
-	probe_phi.push_back(Electron_phi[ele2_idx]);
+	probe_pt.push_back(ele2_pt);
+	probe_eta.push_back(ele2_eta);
+	probe_phi.push_back(ele2_phi);
 	probe_isPF.push_back(Electron_isPF[ele2_idx]);
 	probe_isPFOverlap.push_back(Electron_isPFoverlap[ele2_idx]); 
 	probe_isLowPt.push_back(Electron_isLowPt[ele2_idx]); 
@@ -273,7 +251,15 @@ void TaPJpsiSelectionNaod::Loop() {
 	probe_unBiased.push_back(Electron_unBiased[ele2_idx]);  
 	probe_ptBiased.push_back(Electron_ptBiased[ele2_idx]);  
 	probe_convveto.push_back(Electron_convVeto[ele2_idx]);
-	probe_isTag.push_back( is2tag );
+	// 
+	probe_Bmass.push_back(thisBmass);
+	probe_Bpt.push_back(thisBpt);
+	probe_Bcos2D.push_back(thisBcos);
+	probe_Bsvprob.push_back(thisBsvprob);
+	probe_Bxysig.push_back(thisBxysig);
+	probe_BmatchMC.push_back(isThisAMcB);
+	probe_Kpt.push_back(thisKpt);
+	//
 	probe_invMass.push_back(mee);  
 	//
 	if (sampleID>0) {     // MC      
@@ -296,11 +282,11 @@ void TaPJpsiSelectionNaod::Loop() {
       }
       //
       //
-      if ( is2tag && is1probe ) { 
+      if ( 1 ) { 
 	//
-	tag_pt.push_back(Electron_pt[ele2_idx]);
-	tag_eta.push_back(Electron_eta[ele2_idx]);
-	tag_phi.push_back(Electron_phi[ele2_idx]);
+	tag_pt.push_back(ele2_pt);
+	tag_eta.push_back(ele2_eta);
+	tag_phi.push_back(ele2_phi);
 	tag_isPF.push_back(Electron_isPF[ele2_idx]);
 	tag_isPFOverlap.push_back(Electron_isPFoverlap[ele2_idx]); 
 	tag_isLowPt.push_back(Electron_isLowPt[ele2_idx]);
@@ -309,16 +295,9 @@ void TaPJpsiSelectionNaod::Loop() {
 	tag_convveto.push_back(Electron_convVeto[ele2_idx]);
 	tag_pfRelIso.push_back(Electron_pfRelIso[ele2_idx]);  
 	//
-	probe_Bmass.push_back(thisBmass);
-	probe_Bpt.push_back(thisBpt);
-	probe_Bcos2D.push_back(thisBcos);
-	probe_Bsvprob.push_back(thisBsvprob);
-	probe_Bxysig.push_back(thisBxysig);
-	probe_BmatchMC.push_back(isThisAMcB);
-	probe_Kpt.push_back(thisKpt);
-	probe_pt.push_back(Electron_pt[ele1_idx]);
-	probe_eta.push_back(Electron_eta[ele1_idx]);
-	probe_phi.push_back(Electron_phi[ele1_idx]);
+	probe_pt.push_back(ele1_pt);    
+	probe_eta.push_back(ele1_eta); 
+	probe_phi.push_back(ele1_phi);    
 	probe_isPF.push_back(Electron_isPF[ele1_idx]);
 	probe_isPFOverlap.push_back(Electron_isPFoverlap[ele1_idx]); 
 	probe_isLowPt.push_back(Electron_isLowPt[ele1_idx]);
@@ -332,7 +311,15 @@ void TaPJpsiSelectionNaod::Loop() {
 	probe_unBiased.push_back(Electron_unBiased[ele1_idx]);  
 	probe_ptBiased.push_back(Electron_ptBiased[ele1_idx]);  
 	probe_convveto.push_back(Electron_convVeto[ele1_idx]);
-	probe_isTag.push_back( is1tag );
+	//
+	probe_Bmass.push_back(thisBmass);
+	probe_Bpt.push_back(thisBpt);
+	probe_Bcos2D.push_back(thisBcos);
+	probe_Bsvprob.push_back(thisBsvprob);
+	probe_Bxysig.push_back(thisBxysig);
+	probe_BmatchMC.push_back(isThisAMcB);
+	probe_Kpt.push_back(thisKpt);
+	//
 	probe_invMass.push_back(mee);  
 	//
 	if (sampleID>0) {     // MC      
@@ -358,7 +345,7 @@ void TaPJpsiSelectionNaod::Loop() {
     // At least one tag and one probe
     selectedPairsSize = tag_pt.size();
     if (selectedPairsSize<=0) continue;
-    h_selection->Fill(6.,perEveW);
+    h_selection->Fill(5.,perEveW);
 
     // Filling the output tree
     outTree_->Fill();
@@ -381,13 +368,6 @@ void TaPJpsiSelectionNaod::Loop() {
     tag_matchMcFromJPsi.clear();  
     tag_matchMc.clear();  
     //
-    probe_Bmass.clear();
-    probe_Bpt.clear();
-    probe_Bcos2D.clear();
-    probe_Bsvprob.clear();    
-    probe_Bxysig.clear();    
-    probe_BmatchMC.clear();
-    probe_Kpt.clear();
     probe_pt.clear();  
     probe_eta.clear();  
     probe_phi.clear();  
@@ -404,10 +384,19 @@ void TaPJpsiSelectionNaod::Loop() {
     probe_unBiased.clear();  
     probe_ptBiased.clear();  
     probe_convveto.clear();
-    probe_isTag.clear();  
-    probe_invMass.clear();  
     probe_matchMcFromJPsi.clear();  
     probe_matchMc.clear();  
+    //
+    probe_Bmass.clear();
+    probe_Bpt.clear();
+    probe_Bcos2D.clear();
+    probe_Bsvprob.clear();    
+    probe_Bxysig.clear();    
+    probe_BmatchMC.clear();
+    probe_Kpt.clear();
+    //
+    probe_invMass.clear();  
+    //
   }
 }
 
@@ -523,24 +512,6 @@ bool TaPJpsiSelectionNaod::isMcEleFromJPsi( int ele_idx ) {
   return okMatch;
 }
 
-bool TaPJpsiSelectionNaod::isTag( int theEle ) {
-
-  bool isTag = true;
-  
-  // chiara
-
-  return isTag;  
-}
-
-bool TaPJpsiSelectionNaod::isProbe( int theEle ) {
-
-  bool isProbe = true;
-  
-  // chiara
-
-  return isProbe;  
-}
-
 void TaPJpsiSelectionNaod::PrepareOutputs(std::string filename) 
 {
   _datasetName=filename;
@@ -590,13 +561,6 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("tag_matchMcFromJPsi", "std::vector<bool>", &tag_matchMcFromJPsi);  
   outTree_->Branch("tag_matchMc", "std::vector<bool>", &tag_matchMc);  
 
-  outTree_->Branch("probe_Bmass",   "std::vector<float>", &probe_Bmass);  
-  outTree_->Branch("probe_Bpt",     "std::vector<float>", &probe_Bpt);  
-  outTree_->Branch("probe_Bcos2D",  "std::vector<float>", &probe_Bcos2D);  
-  outTree_->Branch("probe_Bsvprob", "std::vector<float>", &probe_Bsvprob);  
-  outTree_->Branch("probe_Bxysig",  "std::vector<float>", &probe_Bxysig);  
-  outTree_->Branch("probe_BmatchMC", "std::vector<bool>", &probe_BmatchMC);  
-  outTree_->Branch("probe_Kpt", "std::vector<float>", &probe_Kpt);  
   outTree_->Branch("probe_pt", "std::vector<float>", &probe_pt);  
   outTree_->Branch("probe_eta", "std::vector<float>", &probe_eta);  
   outTree_->Branch("probe_phi", "std::vector<float>", &probe_phi);  
@@ -613,10 +577,17 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("probe_unBiased", "std::vector<float>", &probe_unBiased);  
   outTree_->Branch("probe_ptBiased", "std::vector<float>", &probe_ptBiased);  
   outTree_->Branch("probe_convveto", "std::vector<bool>", &probe_convveto);  
-  outTree_->Branch("probe_isTag", "std::vector<bool>", &probe_isTag);  
   outTree_->Branch("probe_invMass", "std::vector<float>", &probe_invMass);  
   outTree_->Branch("probe_matchMcFromJPsi", "std::vector<bool>", &probe_matchMcFromJPsi);  
   outTree_->Branch("probe_matchMc", "std::vector<bool>", &probe_matchMc);  
+
+  outTree_->Branch("probe_Bmass",   "std::vector<float>", &probe_Bmass);  
+  outTree_->Branch("probe_Bpt",     "std::vector<float>", &probe_Bpt);  
+  outTree_->Branch("probe_Bcos2D",  "std::vector<float>", &probe_Bcos2D);  
+  outTree_->Branch("probe_Bsvprob", "std::vector<float>", &probe_Bsvprob);  
+  outTree_->Branch("probe_Bxysig",  "std::vector<float>", &probe_Bxysig);  
+  outTree_->Branch("probe_BmatchMC", "std::vector<bool>", &probe_BmatchMC);  
+  outTree_->Branch("probe_Kpt", "std::vector<float>", &probe_Kpt);  
 
   outTree_->Branch("selectedPairsSize",  &selectedPairsSize,  "selectedPairsSize/I");   
 }
