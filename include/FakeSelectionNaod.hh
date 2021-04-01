@@ -31,9 +31,17 @@ private:
   void bookOutputHistos();
   bool isMcB(int theB);
   bool isMcMuFromJPsi(int mu_idx);
+  void SetNvtxWeights(std::string nvtxWeightFile);
+  float GetNvtxWeight(float nvtx);
   
   // settings
+  bool donvtxreweight_;
   int sampleID;
+  string nvtxWFileName_;
+
+  // to compute weights for pileup   
+  std::vector<Double_t> nvtxweights_;
+  std::vector<Double_t> nvtxlowedge_;
 
   // ---- outputs
   TFile* outFile_;
@@ -50,6 +58,7 @@ private:
   int    nvtx;
   int    theSampleID;
   float  rho;
+  float  pu_weight;
   float perEveW;
   //
   int hlt9;
@@ -58,6 +67,10 @@ private:
   int selectedElesSize;
   //
   vector <float> Bmass={};
+  vector <float> Bpt={};
+  vector <float> Bcos2D={};
+  vector <float> Bsvprob={};
+  vector <float> Bxysig={};
   vector <int> BmatchMC={};
   vector <float> deltaR_ele_mu1={};   
   vector <float> deltaR_ele_mu2={};   
@@ -65,7 +78,6 @@ private:
   vector <float> k_pt={};
   vector <float> k_eta={};
   vector <float> k_phi={};
-  vector <int> k_matchToEle={};
   vector <float> mu1_pt={};
   vector <float> mu1_eta={};
   vector <float> mu1_phi={};
@@ -92,12 +104,9 @@ private:
   vector <float> ele_unBiased={};
   vector <float> ele_ptBiased={};
   vector <bool> ele_convveto={};
-  vector <float> probe_closeToMu1_pt={};
-  vector <float> probe_closeToMu1_eta={};
-  vector <float> probe_closeToMu1_phi={};
-  vector <float> probe_closeToMu2_pt={};
-  vector <float> probe_closeToMu2_eta={};
-  vector <float> probe_closeToMu2_phi={};
+  vector <float> probe_closeToEle_pt={};
+  vector <float> probe_closeToEle_eta={};
+  vector <float> probe_closeToEle_phi={};
 };
 
 #endif
