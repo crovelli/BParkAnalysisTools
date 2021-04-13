@@ -96,7 +96,6 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   vector<float>   *probe_fBrem = nullptr;
   vector<float>   *probe_unBiased = nullptr;
   vector<float>   *probe_ptBiased = nullptr;
-  vector<bool>    *probe_isTag = nullptr;
   vector<float>   *probe_invMass = nullptr;
   vector<int>     *probe_convveto = nullptr;
   vector<bool>    *probe_matchMc = nullptr;
@@ -149,7 +148,6 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   TBranch        *b_probe_fBrem;   //!
   TBranch        *b_probe_unBiased;   //!
   TBranch        *b_probe_ptBiased;   //!
-  TBranch        *b_probe_isTag;   //!
   TBranch        *b_probe_invMass;   //!
   TBranch        *b_probe_convveto;   //!
   TBranch        *b_probe_matchMc;   //!
@@ -202,7 +200,6 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   treeOrig->SetBranchAddress("probe_fBrem", &probe_fBrem, &b_probe_fBrem);
   treeOrig->SetBranchAddress("probe_unBiased", &probe_unBiased, &b_probe_unBiased);
   treeOrig->SetBranchAddress("probe_ptBiased", &probe_ptBiased, &b_probe_ptBiased);
-  treeOrig->SetBranchAddress("probe_isTag", &probe_isTag, &b_probe_isTag);
   treeOrig->SetBranchAddress("probe_invMass", &probe_invMass, &b_probe_invMass);
   treeOrig->SetBranchAddress("probe_convveto", &probe_convveto, &b_probe_convveto);
   treeOrig->SetBranchAddress("probe_matchMc", &probe_matchMc, &b_probe_matchMc);
@@ -239,6 +236,10 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   Float_t   probeDzSig;
   Float_t   K_pt;
   Float_t   B_mass;
+  Float_t   B_pt;
+  Float_t   B_cos2d;
+  Float_t   B_svprob;
+  Float_t   B_xysig;
   Float_t   pair_mass;
   Float_t   weight;
 
@@ -274,6 +275,10 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     theTreeNew->Branch("probeDzSig",&probeDzSig,"probeDzSig/F");
     theTreeNew->Branch("K_pt",&K_pt,"K_pt/F");
     theTreeNew->Branch("B_mass", &B_mass, "B_mass/F");
+    theTreeNew->Branch("B_pt", &B_pt, "B_pt/F");
+    theTreeNew->Branch("B_cos2d", &B_cos2d, "B_cos2d/F");
+    theTreeNew->Branch("B_svprob", &B_svprob, "B_svprob/F");
+    theTreeNew->Branch("B_xysig", &B_xysig, "B_xysig/F");
     theTreeNew->Branch("pair_mass", &pair_mass, "pair_mass/F");
     theTreeNew->Branch("weight", &weight, "weight/F");
   }
@@ -284,27 +289,31 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     if (i%10000 == 0) std::cout << ">>> Event # " << i << " / " << nentriesOrig << " entries" << std::endl; 
     treeOrig->GetEntry(i);
 
+    // Trigger
+    if (hlt9==0) continue;
+
+    // Loop over electrons
     for (unsigned int ii=0; ii<probe_Bmass->size(); ii++) {
 
+      // conversion veto
       if ( tag_convveto->at(ii)==0)   continue;      
       if ( probe_convveto->at(ii)==0) continue;      
-
-      // further selection on tag and probe
-      if (isProbeLpt==1) { // probe=lowPT; tag=PF
+      
+      // further selection on tag: low pt probes
+      if (isProbeLpt==1) { 
 	if ( tag_isPF->at(ii)==0 ) continue;
 	if ( probe_isLowPt->at(ii)==0) continue;                   
-	///////////if ( tag_pt->at(ii)<5 && tag_pfmvaId->at(ii)<1. )  continue;
-	///////////if ( tag_pt->at(ii)>=5 && tag_pfmvaId->at(ii)<2. ) continue;
-	if ( tag_pfmvaId->at(ii)<0. )  continue;
+	if ( tag_pfmvaId->at(ii)<-1. ) continue;  
       }
 
-      if (isProbeLpt==0) { // probe=PF; tag=PF or good lowPT
+      // further selection on tag: low pt probes
+      if (isProbeLpt==0) { 
 	if ( probe_isPF->at(ii)==0) continue;  
 	if ( tag_isPF->at(ii)==0 && tag_mvaId->at(ii)<2) continue;
       }
 
       // e+e- invariant mass selection
-      ////////////// if (probe_invMass->at(ii)<2 || probe_invMass->at(ii)>4) continue;  // comment for ROCs, uncomment for TnP
+      if (probe_invMass->at(ii)<2 || probe_invMass->at(ii)>4) continue;  
 
       // save new variables, making flat tree
       hlt_9  = hlt9;
@@ -313,6 +322,11 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       numvtx = nvtx;     
 
       B_mass = probe_Bmass->at(ii);
+      B_pt   = probe_Bpt->at(ii);
+      B_cos2d = probe_Bcos2D->at(ii);
+      B_svprob = probe_Bsvprob->at(ii);
+      B_xysig = probe_Bxysig->at(ii);
+
       pair_mass = probe_invMass->at(ii);
       
       tagMatchMc = tag_matchMc->at(ii);
@@ -343,8 +357,6 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
 
       // weights
       if (theRun==1) {   // MC                                                                                                                   
-	//weight = perEveW * lumiForW * lumiWeight;     // chiara
-	//weight = perEveW;
 	weight = perEveW*pu_weight;
       } else {
 	weight = 1.;
