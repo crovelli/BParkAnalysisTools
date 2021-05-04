@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Mon Feb  3 14:02:00 2020 by ROOT version 6.18/04
+// Wed Apr 21 18:04:21 2021 by ROOT version 6.12/07
 // from TTree Events/Events
-// found on file: /eos/cms/store/group/cmst3/group/bpark/BParkingNANO_2020Jan16/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee/200116_215618/0000/BParkNANO_mc_2020Jan16_1.root
+// found on file: /eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021Mar07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210307_020844/0000/BParkNANO_mc_2021Mar07_203.root
 //////////////////////////////////////////////////////////
 
 #ifndef BParkBase_h
@@ -26,148 +26,239 @@ public :
    UInt_t          luminosityBlock;
    ULong64_t       event;
    UInt_t          nBToKEE;
-   Float_t         BToKEE_b_iso03[700];   //[nBToKEE]
-   Float_t         BToKEE_b_iso04[700];   //[nBToKEE]
-   Float_t         BToKEE_cos2D[700];   //[nBToKEE]
-   Float_t         BToKEE_eta[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_cos2D[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_eta[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_k_eta[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_k_phi[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_k_pt[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_l1_eta[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_l1_phi[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_l1_pt[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_l2_eta[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_l2_phi[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_l2_pt[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_mass[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_massErr[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_phi[700];   //[nBToKEE]
-   Float_t         BToKEE_fit_pt[700];   //[nBToKEE]
-   Float_t         BToKEE_k_iso03[700];   //[nBToKEE]
-   Float_t         BToKEE_k_iso04[700];   //[nBToKEE]
-   Float_t         BToKEE_l1_iso03[700];   //[nBToKEE]
-   Float_t         BToKEE_l1_iso04[700];   //[nBToKEE]
-   Float_t         BToKEE_l2_iso03[700];   //[nBToKEE]
-   Float_t         BToKEE_l2_iso04[700];   //[nBToKEE]
-   Float_t         BToKEE_l_xy[700];   //[nBToKEE]
-   Float_t         BToKEE_l_xy_unc[700];   //[nBToKEE]
-   Float_t         BToKEE_mass[700];   //[nBToKEE]
-   Float_t         BToKEE_maxDR[700];   //[nBToKEE]
-   Float_t         BToKEE_minDR[700];   //[nBToKEE]
-   Float_t         BToKEE_mllErr_llfit[700];   //[nBToKEE]
-   Float_t         BToKEE_mll_fullfit[700];   //[nBToKEE]
-   Float_t         BToKEE_mll_llfit[700];   //[nBToKEE]
-   Float_t         BToKEE_mll_raw[700];   //[nBToKEE]
-   Float_t         BToKEE_phi[700];   //[nBToKEE]
-   Float_t         BToKEE_pt[700];   //[nBToKEE]
-   Float_t         BToKEE_svprob[700];   //[nBToKEE]
-   Float_t         BToKEE_vtx_ex[700];   //[nBToKEE]
-   Float_t         BToKEE_vtx_ey[700];   //[nBToKEE]
-   Float_t         BToKEE_vtx_ez[700];   //[nBToKEE]
-   Float_t         BToKEE_vtx_x[700];   //[nBToKEE]
-   Float_t         BToKEE_vtx_y[700];   //[nBToKEE]
-   Float_t         BToKEE_vtx_z[700];   //[nBToKEE]
-   Int_t           BToKEE_charge[700];   //[nBToKEE]
-   Int_t           BToKEE_kIdx[700];   //[nBToKEE]
-   Int_t           BToKEE_l1Idx[700];   //[nBToKEE]
-   Int_t           BToKEE_l2Idx[700];   //[nBToKEE]
-   Int_t           BToKEE_n_k_used[700];   //[nBToKEE]
-   Int_t           BToKEE_n_l1_used[700];   //[nBToKEE]
-   Int_t           BToKEE_n_l2_used[700];   //[nBToKEE]
-   Int_t           BToKEE_pdgId[700];   //[nBToKEE]
+   Float_t         BToKEE_b_iso03[4000];   //[nBToKEE]
+   Float_t         BToKEE_b_iso03_dca[4000];   //[nBToKEE]
+   Float_t         BToKEE_b_iso03_dca_tight[4000];   //[nBToKEE]
+   Float_t         BToKEE_b_iso04[4000];   //[nBToKEE]
+   Float_t         BToKEE_b_iso04_dca[4000];   //[nBToKEE]
+   Float_t         BToKEE_b_iso04_dca_tight[4000];   //[nBToKEE]
+   Float_t         BToKEE_cos2D[4000];   //[nBToKEE]
+   Float_t         BToKEE_eta[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_cos2D[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_eta[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_k_eta[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_k_phi[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_k_pt[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_l1_eta[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_l1_phi[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_l1_pt[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_l2_eta[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_l2_phi[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_l2_pt[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_mass[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_massErr[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_phi[4000];   //[nBToKEE]
+   Float_t         BToKEE_fit_pt[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_iso03[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_iso03_dca[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_iso03_dca_tight[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_iso04[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_iso04_dca[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_iso04_dca_tight[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_svip2d[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_svip2d_err[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_svip3d[4000];   //[nBToKEE]
+   Float_t         BToKEE_k_svip3d_err[4000];   //[nBToKEE]
+   Float_t         BToKEE_l1_iso03[4000];   //[nBToKEE]
+   Float_t         BToKEE_l1_iso03_dca[4000];   //[nBToKEE]
+   Float_t         BToKEE_l1_iso03_dca_tight[4000];   //[nBToKEE]
+   Float_t         BToKEE_l1_iso04[4000];   //[nBToKEE]
+   Float_t         BToKEE_l1_iso04_dca[4000];   //[nBToKEE]
+   Float_t         BToKEE_l1_iso04_dca_tight[4000];   //[nBToKEE]
+   Float_t         BToKEE_l2_iso03[4000];   //[nBToKEE]
+   Float_t         BToKEE_l2_iso03_dca[4000];   //[nBToKEE]
+   Float_t         BToKEE_l2_iso03_dca_tight[4000];   //[nBToKEE]
+   Float_t         BToKEE_l2_iso04[4000];   //[nBToKEE]
+   Float_t         BToKEE_l2_iso04_dca[4000];   //[nBToKEE]
+   Float_t         BToKEE_l2_iso04_dca_tight[4000];   //[nBToKEE]
+   Float_t         BToKEE_l_xy[4000];   //[nBToKEE]
+   Float_t         BToKEE_l_xy_unc[4000];   //[nBToKEE]
+   Float_t         BToKEE_mass[4000];   //[nBToKEE]
+   Float_t         BToKEE_maxDR[4000];   //[nBToKEE]
+   Float_t         BToKEE_minDR[4000];   //[nBToKEE]
+   Float_t         BToKEE_mllErr_llfit[4000];   //[nBToKEE]
+   Float_t         BToKEE_mll_fullfit[4000];   //[nBToKEE]
+   Float_t         BToKEE_mll_llfit[4000];   //[nBToKEE]
+   Float_t         BToKEE_mll_raw[4000];   //[nBToKEE]
+   Float_t         BToKEE_phi[4000];   //[nBToKEE]
+   Float_t         BToKEE_pt[4000];   //[nBToKEE]
+   Float_t         BToKEE_svprob[4000];   //[nBToKEE]
+   Float_t         BToKEE_vtx_ex[4000];   //[nBToKEE]
+   Float_t         BToKEE_vtx_ey[4000];   //[nBToKEE]
+   Float_t         BToKEE_vtx_ez[4000];   //[nBToKEE]
+   Float_t         BToKEE_vtx_x[4000];   //[nBToKEE]
+   Float_t         BToKEE_vtx_y[4000];   //[nBToKEE]
+   Float_t         BToKEE_vtx_z[4000];   //[nBToKEE]
+   Int_t           BToKEE_b_n_isotrk[4000];   //[nBToKEE]
+   Int_t           BToKEE_b_n_isotrk_dca[4000];   //[nBToKEE]
+   Int_t           BToKEE_b_n_isotrk_dca_tight[4000];   //[nBToKEE]
+   Int_t           BToKEE_charge[4000];   //[nBToKEE]
+   Int_t           BToKEE_kIdx[4000];   //[nBToKEE]
+   Int_t           BToKEE_k_n_isotrk[4000];   //[nBToKEE]
+   Int_t           BToKEE_k_n_isotrk_dca[4000];   //[nBToKEE]
+   Int_t           BToKEE_k_n_isotrk_dca_tight[4000];   //[nBToKEE]
+   Int_t           BToKEE_l1Idx[4000];   //[nBToKEE]
+   Int_t           BToKEE_l1_n_isotrk[4000];   //[nBToKEE]
+   Int_t           BToKEE_l1_n_isotrk_dca[4000];   //[nBToKEE]
+   Int_t           BToKEE_l1_n_isotrk_dca_tight[4000];   //[nBToKEE]
+   Int_t           BToKEE_l2Idx[4000];   //[nBToKEE]
+   Int_t           BToKEE_l2_n_isotrk[4000];   //[nBToKEE]
+   Int_t           BToKEE_l2_n_isotrk_dca[4000];   //[nBToKEE]
+   Int_t           BToKEE_l2_n_isotrk_dca_tight[4000];   //[nBToKEE]
+   Int_t           BToKEE_n_k_used[4000];   //[nBToKEE]
+   Int_t           BToKEE_n_l1_used[4000];   //[nBToKEE]
+   Int_t           BToKEE_n_l2_used[4000];   //[nBToKEE]
+   Int_t           BToKEE_pdgId[4000];   //[nBToKEE]
    UInt_t          nBToKMuMu;
-   Float_t         BToKMuMu_b_iso03[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_b_iso04[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_cos2D[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_eta[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_cos2D[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_eta[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_k_eta[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_k_phi[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_k_pt[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_l1_eta[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_l1_phi[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_l1_pt[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_l2_eta[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_l2_phi[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_l2_pt[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_mass[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_massErr[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_phi[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_fit_pt[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_k_iso03[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_k_iso04[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_l1_iso03[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_l1_iso04[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_l2_iso03[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_l2_iso04[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_l_xy[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_l_xy_unc[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_mass[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_maxDR[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_minDR[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_mllErr_llfit[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_mll_fullfit[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_mll_llfit[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_mll_raw[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_phi[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_pt[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_svprob[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_vtx_ex[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_vtx_ey[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_vtx_ez[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_vtx_x[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_vtx_y[100];   //[nBToKMuMu]
-   Float_t         BToKMuMu_vtx_z[100];   //[nBToKMuMu]
-   Int_t           BToKMuMu_charge[100];   //[nBToKMuMu]
-   Int_t           BToKMuMu_kIdx[100];   //[nBToKMuMu]
-   Int_t           BToKMuMu_l1Idx[100];   //[nBToKMuMu]
-   Int_t           BToKMuMu_l2Idx[100];   //[nBToKMuMu]
-   Int_t           BToKMuMu_n_k_used[100];   //[nBToKMuMu]
-   Int_t           BToKMuMu_n_l1_used[100];   //[nBToKMuMu]
-   Int_t           BToKMuMu_n_l2_used[100];   //[nBToKMuMu]
-   Int_t           BToKMuMu_pdgId[100];   //[nBToKMuMu]
-   UInt_t          nElectron;
-   Float_t         Electron_dxy[500];   //[nElectron]
-   Float_t         Electron_dxyErr[500];   //[nElectron]
-   Float_t         Electron_dz[500];   //[nElectron]
-   Float_t         Electron_dzErr[500];   //[nElectron]
-   Float_t         Electron_eta[500];   //[nElectron]
-   Float_t         Electron_fBrem[500];   //[nElectron]
-   Float_t         Electron_ip3d[500];   //[nElectron]
-   Float_t         Electron_mass[500];   //[nElectron]
-   Float_t         Electron_mvaId[500];   //[nElectron]
-   Float_t         Electron_pfRelIso[500];   //[nElectron]
-   Float_t         Electron_pfmvaId[500];   //[nElectron]
-   Float_t         Electron_phi[500];   //[nElectron]
-   Float_t         Electron_pt[500];   //[nElectron]
-   Float_t         Electron_ptBiased[500];   //[nElectron]
-   Float_t         Electron_sip3d[500];   //[nElectron]
-   Float_t         Electron_trkRelIso[500];   //[nElectron]
-   Float_t         Electron_unBiased[500];   //[nElectron]
-   Float_t         Electron_vx[500];   //[nElectron]
-   Float_t         Electron_vy[500];   //[nElectron]
-   Float_t         Electron_vz[500];   //[nElectron]
-   Int_t           Electron_charge[500];   //[nElectron]
-   Int_t           Electron_pdgId[500];   //[nElectron]
-   Bool_t          Electron_convVeto[500];   //[nElectron]
-   Bool_t          Electron_isLowPt[500];   //[nElectron]
-   Bool_t          Electron_isPF[500];   //[nElectron]
-   Bool_t          Electron_isPFoverlap[500];   //[nElectron]
+   Float_t         BToKMuMu_b_iso03[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_b_iso03_dca[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_b_iso03_dca_tight[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_b_iso04[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_b_iso04_dca[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_b_iso04_dca_tight[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_cos2D[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_eta[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_cos2D[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_eta[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_k_eta[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_k_phi[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_k_pt[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_l1_eta[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_l1_phi[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_l1_pt[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_l2_eta[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_l2_phi[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_l2_pt[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_mass[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_massErr[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_phi[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_fit_pt[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_iso03[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_iso03_dca[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_iso03_dca_tight[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_iso04[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_iso04_dca[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_iso04_dca_tight[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_svip2d[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_svip2d_err[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_svip3d[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_k_svip3d_err[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l1_iso03[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l1_iso03_dca[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l1_iso03_dca_tight[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l1_iso04[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l1_iso04_dca[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l1_iso04_dca_tight[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l2_iso03[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l2_iso03_dca[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l2_iso03_dca_tight[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l2_iso04[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l2_iso04_dca[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l2_iso04_dca_tight[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l_xy[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_l_xy_unc[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_mass[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_maxDR[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_minDR[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_mllErr_llfit[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_mll_fullfit[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_mll_llfit[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_mll_raw[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_phi[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_pt[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_svprob[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_vtx_ex[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_vtx_ey[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_vtx_ez[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_vtx_x[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_vtx_y[3500];   //[nBToKMuMu]
+   Float_t         BToKMuMu_vtx_z[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_b_n_isotrk[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_b_n_isotrk_dca[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_b_n_isotrk_dca_tight[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_charge[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_kIdx[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_k_n_isotrk[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_k_n_isotrk_dca[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_k_n_isotrk_dca_tight[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_l1Idx[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_l1_n_isotrk[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_l1_n_isotrk_dca[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_l1_n_isotrk_dca_tight[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_l2Idx[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_l2_n_isotrk[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_l2_n_isotrk_dca[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_l2_n_isotrk_dca_tight[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_n_k_used[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_n_l1_used[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_n_l2_used[3500];   //[nBToKMuMu]
+   Int_t           BToKMuMu_pdgId[3500];   //[nBToKMuMu]
+   UInt_t          nElectron; 
+   Float_t         Electron_convChi2Prob[1500];   //[nElectron]
+   Float_t         Electron_convDeltaCotFromPin[1500];   //[nElectron]
+   Float_t         Electron_convLxy[1500];   //[nElectron]
+   Float_t         Electron_convMass[1500];   //[nElectron]
+   Float_t         Electron_convMassAfterFit[1500];   //[nElectron]
+   Float_t         Electron_convMassBeforeFit[1500];   //[nElectron]
+   Float_t         Electron_convMassFromPin[1500];   //[nElectron]
+   Float_t         Electron_convMinTrkPt[1500];   //[nElectron]
+   Float_t         Electron_convVtxRadius[1500];   //[nElectron]
+   Float_t         Electron_dxy[1500];   //[nElectron]
+   Float_t         Electron_dxyErr[1500];   //[nElectron]
+   Float_t         Electron_dz[1500];   //[nElectron]
+   Float_t         Electron_dzErr[1500];   //[nElectron]
+   Float_t         Electron_dzTrg[1500];   //[nElectron]
+   Float_t         Electron_eta[1500];   //[nElectron]
+   Float_t         Electron_fBrem[1500];   //[nElectron]
+   Float_t         Electron_ip3d[1500];   //[nElectron]
+   Float_t         Electron_mass[1500];   //[nElectron]
+   Float_t         Electron_mvaId[1500];   //[nElectron]
+   Float_t         Electron_pfRelIso[1500];   //[nElectron]
+   Float_t         Electron_pfmvaId[1500];   //[nElectron]
+   Float_t         Electron_phi[1500];   //[nElectron]
+   Float_t         Electron_pt[1500];   //[nElectron]
+   Float_t         Electron_ptBiased[1500];   //[nElectron]
+   Float_t         Electron_sip3d[1500];   //[nElectron]
+   Float_t         Electron_trkRelIso[1500];   //[nElectron]
+   Float_t         Electron_unBiased[1500];   //[nElectron]
+   Float_t         Electron_vx[1500];   //[nElectron]
+   Float_t         Electron_vy[1500];   //[nElectron]
+   Float_t         Electron_vz[1500];   //[nElectron]
+   Int_t           Electron_charge[1500];   //[nElectron]
+   Int_t           Electron_convDeltaExpectedNHitsInner[1500];   //[nElectron]
+   Int_t           Electron_convLeadIdx[1500];   //[nElectron]
+   Int_t           Electron_convLeadNHitsBeforeVtx[1500];   //[nElectron]
+   Int_t           Electron_convMaxNHitsBeforeVtx[1500];   //[nElectron]
+   Int_t           Electron_convSumNHitsBeforeVtx[1500];   //[nElectron]
+   Int_t           Electron_convTracksN[1500];   //[nElectron]
+   Int_t           Electron_convTrailIdx[1500];   //[nElectron]
+   Int_t           Electron_convTrailNHitsBeforeVtx[1500];   //[nElectron]
+   Int_t           Electron_pdgId[1500];   //[nElectron]
+   Bool_t          Electron_convExtra[1500];   //[nElectron]
+   Bool_t          Electron_convLead[1500];   //[nElectron]
+   Bool_t          Electron_convLoose[1500];   //[nElectron]
+   Bool_t          Electron_convOpen[1500];   //[nElectron]
+   Bool_t          Electron_convQualityHighEff[1500];   //[nElectron]
+   Bool_t          Electron_convQualityHighPurity[1500];   //[nElectron]
+   Bool_t          Electron_convTight[1500];   //[nElectron]
+   Bool_t          Electron_convTrail[1500];   //[nElectron]
+   Bool_t          Electron_convValid[1500];   //[nElectron]
+   Bool_t          Electron_convVeto[1500];   //[nElectron]
+   Bool_t          Electron_isLowPt[1500];   //[nElectron]
+   Bool_t          Electron_isPF[1500];   //[nElectron]
+   Bool_t          Electron_isPFoverlap[1500];   //[nElectron]
    UInt_t          nGenPart;
-   Float_t         GenPart_eta[600];   //[nGenPart]
-   Float_t         GenPart_mass[600];   //[nGenPart]
-   Float_t         GenPart_phi[600];   //[nGenPart]
-   Float_t         GenPart_pt[600];   //[nGenPart]
-   Float_t         GenPart_vx[600];   //[nGenPart]
-   Float_t         GenPart_vy[600];   //[nGenPart]
-   Float_t         GenPart_vz[600];   //[nGenPart]
-   Int_t           GenPart_genPartIdxMother[600];   //[nGenPart]
-   Int_t           GenPart_pdgId[600];   //[nGenPart]
-   Int_t           GenPart_status[600];   //[nGenPart]
-   Int_t           GenPart_statusFlags[600];   //[nGenPart]
+   Float_t         GenPart_eta[1500];   //[nGenPart]
+   Float_t         GenPart_mass[1500];   //[nGenPart]
+   Float_t         GenPart_phi[1500];   //[nGenPart]
+   Float_t         GenPart_pt[1500];   //[nGenPart]
+   Float_t         GenPart_vx[1500];   //[nGenPart]
+   Float_t         GenPart_vy[1500];   //[nGenPart]
+   Float_t         GenPart_vz[1500];   //[nGenPart]
+   Int_t           GenPart_genPartIdxMother[1500];   //[nGenPart]
+   Int_t           GenPart_pdgId[1500];   //[nGenPart]
+   Int_t           GenPart_status[1500];   //[nGenPart]
+   Int_t           GenPart_statusFlags[1500];   //[nGenPart]
    Float_t         Generator_binvar;
    Float_t         Generator_scalePDF;
    Float_t         Generator_weight;
@@ -181,45 +272,47 @@ public :
    UInt_t          nPSWeight;
    Float_t         PSWeight[1];   //[nPSWeight]
    UInt_t          nMuon;
-   Float_t         Muon_dxy[100];   //[nMuon]
-   Float_t         Muon_dxyErr[100];   //[nMuon]
-   Float_t         Muon_dz[100];   //[nMuon]
-   Float_t         Muon_dzErr[100];   //[nMuon]
-   Float_t         Muon_eta[100];   //[nMuon]
-   Float_t         Muon_ip3d[100];   //[nMuon]
-   Float_t         Muon_mass[100];   //[nMuon]
-   Float_t         Muon_pfRelIso03_all[100];   //[nMuon]
-   Float_t         Muon_pfRelIso04_all[100];   //[nMuon]
-   Float_t         Muon_phi[100];   //[nMuon]
-   Float_t         Muon_pt[100];   //[nMuon]
-   Float_t         Muon_ptErr[100];   //[nMuon]
-   Float_t         Muon_sip3d[100];   //[nMuon]
-   Float_t         Muon_vx[100];   //[nMuon]
-   Float_t         Muon_vy[100];   //[nMuon]
-   Float_t         Muon_vz[100];   //[nMuon]
-   Int_t           Muon_charge[100];   //[nMuon]
-   Int_t           Muon_isTriggering[100];   //[nMuon]
-   Int_t           Muon_pdgId[100];   //[nMuon]
-   Bool_t          Muon_isGlobal[100];   //[nMuon]
-   Bool_t          Muon_isPFcand[100];   //[nMuon]
-   Bool_t          Muon_isTracker[100];   //[nMuon]
-   Bool_t          Muon_mediumId[100];   //[nMuon]
-   UChar_t         Muon_pfIsoId[100];   //[nMuon]
-   Bool_t          Muon_softId[100];   //[nMuon]
-   Bool_t          Muon_tightId[100];   //[nMuon]
-   UChar_t         Muon_tkIsoId[100];   //[nMuon]
-   Bool_t          Muon_triggerIdLoose[100];   //[nMuon]
-   UInt_t          nTriggerMuon;
-   Float_t         TriggerMuon_eta[20];   //[nTriggerMuon]
-   Float_t         TriggerMuon_mass[20];   //[nTriggerMuon]
-   Float_t         TriggerMuon_phi[20];   //[nTriggerMuon]
-   Float_t         TriggerMuon_pt[20];   //[nTriggerMuon]
-   Float_t         TriggerMuon_vx[20];   //[nTriggerMuon]
-   Float_t         TriggerMuon_vy[20];   //[nTriggerMuon]
-   Float_t         TriggerMuon_vz[20];   //[nTriggerMuon]
-   Int_t           TriggerMuon_charge[20];   //[nTriggerMuon]
-   Int_t           TriggerMuon_pdgId[20];   //[nTriggerMuon]
-   Int_t           TriggerMuon_trgMuonIndex[20];   //[nTriggerMuon]
+   Float_t         Muon_dxy[1500];   //[nMuon]
+   Float_t         Muon_dxyErr[1500];   //[nMuon]
+   Float_t         Muon_dz[1500];   //[nMuon]
+   Float_t         Muon_dzErr[1500];   //[nMuon]
+   Float_t         Muon_eta[1500];   //[nMuon]
+   Float_t         Muon_ip3d[1500];   //[nMuon]
+   Float_t         Muon_mass[1500];   //[nMuon]
+   Float_t         Muon_matched_dpt[1500];   //[nMuon]
+   Float_t         Muon_matched_dr[1500];   //[nMuon]
+   Float_t         Muon_pfRelIso03_all[1500];   //[nMuon]
+   Float_t         Muon_pfRelIso04_all[1500];   //[nMuon]
+   Float_t         Muon_phi[1500];   //[nMuon]
+   Float_t         Muon_pt[1500];   //[nMuon]
+   Float_t         Muon_ptErr[1500];   //[nMuon]
+   Float_t         Muon_sip3d[1500];   //[nMuon]
+   Float_t         Muon_vx[1500];   //[nMuon]
+   Float_t         Muon_vy[1500];   //[nMuon]
+   Float_t         Muon_vz[1500];   //[nMuon]
+   Int_t           Muon_charge[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu10p5_IP3p5[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu12_IP6[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu7_IP4[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu8_IP3[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu8_IP5[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu8_IP6[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu8p5_IP3p5[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu9_IP4[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu9_IP5[1500];   //[nMuon]
+   Int_t           Muon_fired_HLT_Mu9_IP6[1500];   //[nMuon]
+   Int_t           Muon_isTriggering[1500];   //[nMuon]
+   Int_t           Muon_looseId[1500];   //[nMuon]
+   Int_t           Muon_pdgId[1500];   //[nMuon]
+   Bool_t          Muon_isGlobal[1500];   //[nMuon]
+   Bool_t          Muon_isPFcand[1500];   //[nMuon]
+   Bool_t          Muon_isTracker[1500];   //[nMuon]
+   Bool_t          Muon_mediumId[1500];   //[nMuon]
+   UChar_t         Muon_pfIsoId[1500];   //[nMuon]
+   Bool_t          Muon_softId[1500];   //[nMuon]
+   Bool_t          Muon_tightId[1500];   //[nMuon]
+   UChar_t         Muon_tkIsoId[1500];   //[nMuon]
+   Bool_t          Muon_triggerIdLoose[1500];   //[nMuon]
    Float_t         Pileup_nTrueInt;
    Float_t         Pileup_pudensity;
    Float_t         Pileup_gpudensity;
@@ -232,28 +325,30 @@ public :
    Float_t         fixedGridRhoFastjetCentralChargedPileUp;
    Float_t         fixedGridRhoFastjetCentralNeutral;
    UInt_t          nProbeTracks;
-   Float_t         ProbeTracks_DCASig[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_dxy[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_dxyS[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_dz[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_dzS[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_eta[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_mass[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_phi[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_pt[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_vx[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_vy[1000];   //[nProbeTracks]
-   Float_t         ProbeTracks_vz[1000];   //[nProbeTracks]
-   Int_t           ProbeTracks_charge[1000];   //[nProbeTracks]
-   Int_t           ProbeTracks_isLostTrk[1000];   //[nProbeTracks]
-   Int_t           ProbeTracks_isPacked[1000];   //[nProbeTracks]
-   Int_t           ProbeTracks_nValidHits[1000];   //[nProbeTracks]
-   Int_t           ProbeTracks_pdgId[1000];   //[nProbeTracks]
-   Bool_t          ProbeTracks_isMatchedToEle[1000];   //[nProbeTracks]
-   Bool_t          ProbeTracks_isMatchedToLooseMuon[1000];   //[nProbeTracks]
-   Bool_t          ProbeTracks_isMatchedToMediumMuon[1000];   //[nProbeTracks]
-   Bool_t          ProbeTracks_isMatchedToMuon[1000];   //[nProbeTracks]
-   Bool_t          ProbeTracks_isMatchedToSoftMuon[1000];   //[nProbeTracks]
+   Float_t         ProbeTracks_DCASig[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_dxy[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_dxyS[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_dz[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_dzS[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_dzTrg[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_eta[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_mass[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_phi[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_pt[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_vx[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_vy[3500];   //[nProbeTracks]
+   Float_t         ProbeTracks_vz[3500];   //[nProbeTracks]
+   Int_t           ProbeTracks_charge[3500];   //[nProbeTracks]
+   Int_t           ProbeTracks_isLostTrk[3500];   //[nProbeTracks]
+   Int_t           ProbeTracks_isPacked[3500];   //[nProbeTracks]
+   Int_t           ProbeTracks_nValidHits[3500];   //[nProbeTracks]
+   Int_t           ProbeTracks_pdgId[3500];   //[nProbeTracks]
+   Bool_t          ProbeTracks_isMatchedToEle[3500];   //[nProbeTracks]
+   Bool_t          ProbeTracks_isMatchedToLooseMuon[3500];   //[nProbeTracks]
+   Bool_t          ProbeTracks_isMatchedToLowPtEle[3500];   //[nProbeTracks]
+   Bool_t          ProbeTracks_isMatchedToMediumMuon[3500];   //[nProbeTracks]
+   Bool_t          ProbeTracks_isMatchedToMuon[3500];   //[nProbeTracks]
+   Bool_t          ProbeTracks_isMatchedToSoftMuon[3500];   //[nProbeTracks]
    UChar_t         HLT_Mu7_IP4;
    UChar_t         HLT_Mu8_IP6;
    UChar_t         HLT_Mu8_IP5;
@@ -271,18 +366,18 @@ public :
    UChar_t         L1_SingleMu12er1p5;
    UChar_t         L1_SingleMu22;
    UInt_t          nTrigObj;
-   Float_t         TrigObj_pt[20];   //[nTrigObj]
-   Float_t         TrigObj_eta[20];   //[nTrigObj]
-   Float_t         TrigObj_phi[20];   //[nTrigObj]
-   Float_t         TrigObj_l1pt[20];   //[nTrigObj]
-   Float_t         TrigObj_l1pt_2[20];   //[nTrigObj]
-   Float_t         TrigObj_l2pt[20];   //[nTrigObj]
-   Int_t           TrigObj_id[20];   //[nTrigObj]
-   Int_t           TrigObj_l1iso[20];   //[nTrigObj]
-   Int_t           TrigObj_l1charge[20];   //[nTrigObj]
-   Int_t           TrigObj_filterBits[20];   //[nTrigObj]
+   Float_t         TrigObj_pt[300];   //[nTrigObj]
+   Float_t         TrigObj_eta[300];   //[nTrigObj]
+   Float_t         TrigObj_phi[300];   //[nTrigObj]
+   Float_t         TrigObj_l1pt[300];   //[nTrigObj]
+   Float_t         TrigObj_l1pt_2[300];   //[nTrigObj]
+   Float_t         TrigObj_l2pt[300];   //[nTrigObj]
+   Int_t           TrigObj_id[300];   //[nTrigObj]
+   Int_t           TrigObj_l1iso[300];   //[nTrigObj]
+   Int_t           TrigObj_l1charge[300];   //[nTrigObj]
+   Int_t           TrigObj_filterBits[300];   //[nTrigObj]
    UInt_t          nOtherPV;
-   Float_t         OtherPV_z[3];   //[nOtherPV]
+   Float_t         OtherPV_z[300];   //[nOtherPV]
    Float_t         PV_ndof;
    Float_t         PV_x;
    Float_t         PV_y;
@@ -292,24 +387,24 @@ public :
    Int_t           PV_npvs;
    Int_t           PV_npvsGood;
    UInt_t          nSV;
-   Float_t         SV_dlen[30];   //[nSV]
-   Float_t         SV_dlenSig[30];   //[nSV]
-   Float_t         SV_pAngle[30];   //[nSV]
-   Int_t           Electron_genPartIdx[500];   //[nElectron]
-   Int_t           Electron_genPartFlav[500];   //[nElectron]
-   Int_t           Muon_genPartIdx[30];   //[nMuon]
-   Int_t           Muon_genPartFlav[30];   //[nMuon]
-   Float_t         SV_chi2[30];   //[nSV]
-   Float_t         SV_eta[30];   //[nSV]
-   Float_t         SV_mass[30];   //[nSV]
-   Float_t         SV_ndof[30];   //[nSV]
-   Float_t         SV_phi[30];   //[nSV]
-   Float_t         SV_pt[30];   //[nSV]
-   Float_t         SV_x[30];   //[nSV]
-   Float_t         SV_y[30];   //[nSV]
-   Float_t         SV_z[30];   //[nSV]
-   Int_t           ProbeTracks_genPartIdx[1000];   //[nProbeTracks]
-   Int_t           ProbeTracks_genPartFlav[1000];   //[nProbeTracks]
+   Float_t         SV_dlen[700];   //[nSV]
+   Float_t         SV_dlenSig[700];   //[nSV]
+   Float_t         SV_pAngle[700];   //[nSV]
+   Int_t           Electron_genPartIdx[1500];   //[nElectron]
+   Int_t           Electron_genPartFlav[1500];   //[nElectron]
+   Int_t           Muon_genPartIdx[1500];   //[nMuon]
+   Int_t           Muon_genPartFlav[1500];   //[nMuon]
+   Float_t         SV_chi2[700];   //[nSV]
+   Float_t         SV_eta[700];   //[nSV]
+   Float_t         SV_mass[700];   //[nSV]
+   Float_t         SV_ndof[700];   //[nSV]
+   Float_t         SV_phi[700];   //[nSV]
+   Float_t         SV_pt[700];   //[nSV]
+   Float_t         SV_x[700];   //[nSV]
+   Float_t         SV_y[700];   //[nSV]
+   Float_t         SV_z[700];   //[nSV]
+   Int_t           ProbeTracks_genPartIdx[3500];   //[nProbeTracks]
+   Int_t           ProbeTracks_genPartFlav[3500];   //[nProbeTracks]
 
    // List of branches
    TBranch        *b_run;   //!
@@ -317,7 +412,11 @@ public :
    TBranch        *b_event;   //!
    TBranch        *b_nBToKEE;   //!
    TBranch        *b_BToKEE_b_iso03;   //!
+   TBranch        *b_BToKEE_b_iso03_dca;   //!
+   TBranch        *b_BToKEE_b_iso03_dca_tight;   //!
    TBranch        *b_BToKEE_b_iso04;   //!
+   TBranch        *b_BToKEE_b_iso04_dca;   //!
+   TBranch        *b_BToKEE_b_iso04_dca_tight;   //!
    TBranch        *b_BToKEE_cos2D;   //!
    TBranch        *b_BToKEE_eta;   //!
    TBranch        *b_BToKEE_fit_cos2D;   //!
@@ -336,11 +435,27 @@ public :
    TBranch        *b_BToKEE_fit_phi;   //!
    TBranch        *b_BToKEE_fit_pt;   //!
    TBranch        *b_BToKEE_k_iso03;   //!
+   TBranch        *b_BToKEE_k_iso03_dca;   //!
+   TBranch        *b_BToKEE_k_iso03_dca_tight;   //!
    TBranch        *b_BToKEE_k_iso04;   //!
+   TBranch        *b_BToKEE_k_iso04_dca;   //!
+   TBranch        *b_BToKEE_k_iso04_dca_tight;   //!
+   TBranch        *b_BToKEE_k_svip2d;   //!
+   TBranch        *b_BToKEE_k_svip2d_err;   //!
+   TBranch        *b_BToKEE_k_svip3d;   //!
+   TBranch        *b_BToKEE_k_svip3d_err;   //!
    TBranch        *b_BToKEE_l1_iso03;   //!
+   TBranch        *b_BToKEE_l1_iso03_dca;   //!
+   TBranch        *b_BToKEE_l1_iso03_dca_tight;   //!
    TBranch        *b_BToKEE_l1_iso04;   //!
+   TBranch        *b_BToKEE_l1_iso04_dca;   //!
+   TBranch        *b_BToKEE_l1_iso04_dca_tight;   //!
    TBranch        *b_BToKEE_l2_iso03;   //!
+   TBranch        *b_BToKEE_l2_iso03_dca;   //!
+   TBranch        *b_BToKEE_l2_iso03_dca_tight;   //!
    TBranch        *b_BToKEE_l2_iso04;   //!
+   TBranch        *b_BToKEE_l2_iso04_dca;   //!
+   TBranch        *b_BToKEE_l2_iso04_dca_tight;   //!
    TBranch        *b_BToKEE_l_xy;   //!
    TBranch        *b_BToKEE_l_xy_unc;   //!
    TBranch        *b_BToKEE_mass;   //!
@@ -359,17 +474,33 @@ public :
    TBranch        *b_BToKEE_vtx_x;   //!
    TBranch        *b_BToKEE_vtx_y;   //!
    TBranch        *b_BToKEE_vtx_z;   //!
+   TBranch        *b_BToKEE_b_n_isotrk;   //!
+   TBranch        *b_BToKEE_b_n_isotrk_dca;   //!
+   TBranch        *b_BToKEE_b_n_isotrk_dca_tight;   //!
    TBranch        *b_BToKEE_charge;   //!
    TBranch        *b_BToKEE_kIdx;   //!
+   TBranch        *b_BToKEE_k_n_isotrk;   //!
+   TBranch        *b_BToKEE_k_n_isotrk_dca;   //!
+   TBranch        *b_BToKEE_k_n_isotrk_dca_tight;   //!
    TBranch        *b_BToKEE_l1Idx;   //!
+   TBranch        *b_BToKEE_l1_n_isotrk;   //!
+   TBranch        *b_BToKEE_l1_n_isotrk_dca;   //!
+   TBranch        *b_BToKEE_l1_n_isotrk_dca_tight;   //!
    TBranch        *b_BToKEE_l2Idx;   //!
+   TBranch        *b_BToKEE_l2_n_isotrk;   //!
+   TBranch        *b_BToKEE_l2_n_isotrk_dca;   //!
+   TBranch        *b_BToKEE_l2_n_isotrk_dca_tight;   //!
    TBranch        *b_BToKEE_n_k_used;   //!
    TBranch        *b_BToKEE_n_l1_used;   //!
    TBranch        *b_BToKEE_n_l2_used;   //!
    TBranch        *b_BToKEE_pdgId;   //!
    TBranch        *b_nBToKMuMu;   //!
    TBranch        *b_BToKMuMu_b_iso03;   //!
+   TBranch        *b_BToKMuMu_b_iso03_dca;   //!
+   TBranch        *b_BToKMuMu_b_iso03_dca_tight;   //!
    TBranch        *b_BToKMuMu_b_iso04;   //!
+   TBranch        *b_BToKMuMu_b_iso04_dca;   //!
+   TBranch        *b_BToKMuMu_b_iso04_dca_tight;   //!
    TBranch        *b_BToKMuMu_cos2D;   //!
    TBranch        *b_BToKMuMu_eta;   //!
    TBranch        *b_BToKMuMu_fit_cos2D;   //!
@@ -388,11 +519,27 @@ public :
    TBranch        *b_BToKMuMu_fit_phi;   //!
    TBranch        *b_BToKMuMu_fit_pt;   //!
    TBranch        *b_BToKMuMu_k_iso03;   //!
+   TBranch        *b_BToKMuMu_k_iso03_dca;   //!
+   TBranch        *b_BToKMuMu_k_iso03_dca_tight;   //!
    TBranch        *b_BToKMuMu_k_iso04;   //!
+   TBranch        *b_BToKMuMu_k_iso04_dca;   //!
+   TBranch        *b_BToKMuMu_k_iso04_dca_tight;   //!
+   TBranch        *b_BToKMuMu_k_svip2d;   //!
+   TBranch        *b_BToKMuMu_k_svip2d_err;   //!
+   TBranch        *b_BToKMuMu_k_svip3d;   //!
+   TBranch        *b_BToKMuMu_k_svip3d_err;   //!
    TBranch        *b_BToKMuMu_l1_iso03;   //!
+   TBranch        *b_BToKMuMu_l1_iso03_dca;   //!
+   TBranch        *b_BToKMuMu_l1_iso03_dca_tight;   //!
    TBranch        *b_BToKMuMu_l1_iso04;   //!
+   TBranch        *b_BToKMuMu_l1_iso04_dca;   //!
+   TBranch        *b_BToKMuMu_l1_iso04_dca_tight;   //!
    TBranch        *b_BToKMuMu_l2_iso03;   //!
+   TBranch        *b_BToKMuMu_l2_iso03_dca;   //!
+   TBranch        *b_BToKMuMu_l2_iso03_dca_tight;   //!
    TBranch        *b_BToKMuMu_l2_iso04;   //!
+   TBranch        *b_BToKMuMu_l2_iso04_dca;   //!
+   TBranch        *b_BToKMuMu_l2_iso04_dca_tight;   //!
    TBranch        *b_BToKMuMu_l_xy;   //!
    TBranch        *b_BToKMuMu_l_xy_unc;   //!
    TBranch        *b_BToKMuMu_mass;   //!
@@ -411,19 +558,41 @@ public :
    TBranch        *b_BToKMuMu_vtx_x;   //!
    TBranch        *b_BToKMuMu_vtx_y;   //!
    TBranch        *b_BToKMuMu_vtx_z;   //!
+   TBranch        *b_BToKMuMu_b_n_isotrk;   //!
+   TBranch        *b_BToKMuMu_b_n_isotrk_dca;   //!
+   TBranch        *b_BToKMuMu_b_n_isotrk_dca_tight;   //!
    TBranch        *b_BToKMuMu_charge;   //!
    TBranch        *b_BToKMuMu_kIdx;   //!
+   TBranch        *b_BToKMuMu_k_n_isotrk;   //!
+   TBranch        *b_BToKMuMu_k_n_isotrk_dca;   //!
+   TBranch        *b_BToKMuMu_k_n_isotrk_dca_tight;   //!
    TBranch        *b_BToKMuMu_l1Idx;   //!
+   TBranch        *b_BToKMuMu_l1_n_isotrk;   //!
+   TBranch        *b_BToKMuMu_l1_n_isotrk_dca;   //!
+   TBranch        *b_BToKMuMu_l1_n_isotrk_dca_tight;   //!
    TBranch        *b_BToKMuMu_l2Idx;   //!
+   TBranch        *b_BToKMuMu_l2_n_isotrk;   //!
+   TBranch        *b_BToKMuMu_l2_n_isotrk_dca;   //!
+   TBranch        *b_BToKMuMu_l2_n_isotrk_dca_tight;   //!
    TBranch        *b_BToKMuMu_n_k_used;   //!
    TBranch        *b_BToKMuMu_n_l1_used;   //!
    TBranch        *b_BToKMuMu_n_l2_used;   //!
    TBranch        *b_BToKMuMu_pdgId;   //!
    TBranch        *b_nElectron;   //!
+   TBranch        *b_Electron_convChi2Prob;   //!
+   TBranch        *b_Electron_convDeltaCotFromPin;   //!
+   TBranch        *b_Electron_convLxy;   //!
+   TBranch        *b_Electron_convMass;   //!
+   TBranch        *b_Electron_convMassAfterFit;   //!
+   TBranch        *b_Electron_convMassBeforeFit;   //!
+   TBranch        *b_Electron_convMassFromPin;   //!
+   TBranch        *b_Electron_convMinTrkPt;   //!
+   TBranch        *b_Electron_convVtxRadius;   //!
    TBranch        *b_Electron_dxy;   //!
    TBranch        *b_Electron_dxyErr;   //!
    TBranch        *b_Electron_dz;   //!
    TBranch        *b_Electron_dzErr;   //!
+   TBranch        *b_Electron_dzTrg;   //!
    TBranch        *b_Electron_eta;   //!
    TBranch        *b_Electron_fBrem;   //!
    TBranch        *b_Electron_ip3d;   //!
@@ -441,7 +610,24 @@ public :
    TBranch        *b_Electron_vy;   //!
    TBranch        *b_Electron_vz;   //!
    TBranch        *b_Electron_charge;   //!
+   TBranch        *b_Electron_convDeltaExpectedNHitsInner;   //!
+   TBranch        *b_Electron_convLeadIdx;   //!
+   TBranch        *b_Electron_convLeadNHitsBeforeVtx;   //!
+   TBranch        *b_Electron_convMaxNHitsBeforeVtx;   //!
+   TBranch        *b_Electron_convSumNHitsBeforeVtx;   //!
+   TBranch        *b_Electron_convTracksN;   //!
+   TBranch        *b_Electron_convTrailIdx;   //!
+   TBranch        *b_Electron_convTrailNHitsBeforeVtx;   //!
    TBranch        *b_Electron_pdgId;   //!
+   TBranch        *b_Electron_convExtra;   //!
+   TBranch        *b_Electron_convLead;   //!
+   TBranch        *b_Electron_convLoose;   //!
+   TBranch        *b_Electron_convOpen;   //!
+   TBranch        *b_Electron_convQualityHighEff;   //!
+   TBranch        *b_Electron_convQualityHighPurity;   //!
+   TBranch        *b_Electron_convTight;   //!
+   TBranch        *b_Electron_convTrail;   //!
+   TBranch        *b_Electron_convValid;   //!
    TBranch        *b_Electron_convVeto;   //!
    TBranch        *b_Electron_isLowPt;   //!
    TBranch        *b_Electron_isPF;   //!
@@ -478,6 +664,8 @@ public :
    TBranch        *b_Muon_eta;   //!
    TBranch        *b_Muon_ip3d;   //!
    TBranch        *b_Muon_mass;   //!
+   TBranch        *b_Muon_matched_dpt;   //!
+   TBranch        *b_Muon_matched_dr;   //!
    TBranch        *b_Muon_pfRelIso03_all;   //!
    TBranch        *b_Muon_pfRelIso04_all;   //!
    TBranch        *b_Muon_phi;   //!
@@ -488,7 +676,18 @@ public :
    TBranch        *b_Muon_vy;   //!
    TBranch        *b_Muon_vz;   //!
    TBranch        *b_Muon_charge;   //!
+   TBranch        *b_Muon_fired_HLT_Mu10p5_IP3p5;   //!
+   TBranch        *b_Muon_fired_HLT_Mu12_IP6;   //!
+   TBranch        *b_Muon_fired_HLT_Mu7_IP4;   //!
+   TBranch        *b_Muon_fired_HLT_Mu8_IP3;   //!
+   TBranch        *b_Muon_fired_HLT_Mu8_IP5;   //!
+   TBranch        *b_Muon_fired_HLT_Mu8_IP6;   //!
+   TBranch        *b_Muon_fired_HLT_Mu8p5_IP3p5;   //!
+   TBranch        *b_Muon_fired_HLT_Mu9_IP4;   //!
+   TBranch        *b_Muon_fired_HLT_Mu9_IP5;   //!
+   TBranch        *b_Muon_fired_HLT_Mu9_IP6;   //!
    TBranch        *b_Muon_isTriggering;   //!
+   TBranch        *b_Muon_looseId;   //!
    TBranch        *b_Muon_pdgId;   //!
    TBranch        *b_Muon_isGlobal;   //!
    TBranch        *b_Muon_isPFcand;   //!
@@ -499,17 +698,6 @@ public :
    TBranch        *b_Muon_tightId;   //!
    TBranch        *b_Muon_tkIsoId;   //!
    TBranch        *b_Muon_triggerIdLoose;   //!
-   TBranch        *b_nTriggerMuon;   //!
-   TBranch        *b_TriggerMuon_eta;   //!
-   TBranch        *b_TriggerMuon_mass;   //!
-   TBranch        *b_TriggerMuon_phi;   //!
-   TBranch        *b_TriggerMuon_pt;   //!
-   TBranch        *b_TriggerMuon_vx;   //!
-   TBranch        *b_TriggerMuon_vy;   //!
-   TBranch        *b_TriggerMuon_vz;   //!
-   TBranch        *b_TriggerMuon_charge;   //!
-   TBranch        *b_TriggerMuon_pdgId;   //!
-   TBranch        *b_TriggerMuon_trgMuonIndex;   //!
    TBranch        *b_Pileup_nTrueInt;   //!
    TBranch        *b_Pileup_pudensity;   //!
    TBranch        *b_Pileup_gpudensity;   //!
@@ -527,6 +715,7 @@ public :
    TBranch        *b_ProbeTracks_dxyS;   //!
    TBranch        *b_ProbeTracks_dz;   //!
    TBranch        *b_ProbeTracks_dzS;   //!
+   TBranch        *b_ProbeTracks_dzTrg;   //!
    TBranch        *b_ProbeTracks_eta;   //!
    TBranch        *b_ProbeTracks_mass;   //!
    TBranch        *b_ProbeTracks_phi;   //!
@@ -541,6 +730,7 @@ public :
    TBranch        *b_ProbeTracks_pdgId;   //!
    TBranch        *b_ProbeTracks_isMatchedToEle;   //!
    TBranch        *b_ProbeTracks_isMatchedToLooseMuon;   //!
+   TBranch        *b_ProbeTracks_isMatchedToLowPtEle;   //!
    TBranch        *b_ProbeTracks_isMatchedToMediumMuon;   //!
    TBranch        *b_ProbeTracks_isMatchedToMuon;   //!
    TBranch        *b_ProbeTracks_isMatchedToSoftMuon;   //!
@@ -620,9 +810,9 @@ BParkBase::BParkBase(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/group/cmst3/group/bpark/BParkingNANO_2020Jan16/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee/200116_215618/0000/BParkNANO_mc_2020Jan16_1.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021Mar07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210307_020844/0000/BParkNANO_mc_2021Mar07_203.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/eos/cms/store/group/cmst3/group/bpark/BParkingNANO_2020Jan16/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee/200116_215618/0000/BParkNANO_mc_2020Jan16_1.root");
+         f = new TFile("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021Mar07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210307_020844/0000/BParkNANO_mc_2021Mar07_203.root");
       }
       f->GetObject("Events",tree);
 
@@ -676,7 +866,11 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("event", &event, &b_event);
    fChain->SetBranchAddress("nBToKEE", &nBToKEE, &b_nBToKEE);
    fChain->SetBranchAddress("BToKEE_b_iso03", BToKEE_b_iso03, &b_BToKEE_b_iso03);
+   fChain->SetBranchAddress("BToKEE_b_iso03_dca", BToKEE_b_iso03_dca, &b_BToKEE_b_iso03_dca);
+   fChain->SetBranchAddress("BToKEE_b_iso03_dca_tight", BToKEE_b_iso03_dca_tight, &b_BToKEE_b_iso03_dca_tight);
    fChain->SetBranchAddress("BToKEE_b_iso04", BToKEE_b_iso04, &b_BToKEE_b_iso04);
+   fChain->SetBranchAddress("BToKEE_b_iso04_dca", BToKEE_b_iso04_dca, &b_BToKEE_b_iso04_dca);
+   fChain->SetBranchAddress("BToKEE_b_iso04_dca_tight", BToKEE_b_iso04_dca_tight, &b_BToKEE_b_iso04_dca_tight);
    fChain->SetBranchAddress("BToKEE_cos2D", BToKEE_cos2D, &b_BToKEE_cos2D);
    fChain->SetBranchAddress("BToKEE_eta", BToKEE_eta, &b_BToKEE_eta);
    fChain->SetBranchAddress("BToKEE_fit_cos2D", BToKEE_fit_cos2D, &b_BToKEE_fit_cos2D);
@@ -695,11 +889,27 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("BToKEE_fit_phi", BToKEE_fit_phi, &b_BToKEE_fit_phi);
    fChain->SetBranchAddress("BToKEE_fit_pt", BToKEE_fit_pt, &b_BToKEE_fit_pt);
    fChain->SetBranchAddress("BToKEE_k_iso03", BToKEE_k_iso03, &b_BToKEE_k_iso03);
+   fChain->SetBranchAddress("BToKEE_k_iso03_dca", BToKEE_k_iso03_dca, &b_BToKEE_k_iso03_dca);
+   fChain->SetBranchAddress("BToKEE_k_iso03_dca_tight", BToKEE_k_iso03_dca_tight, &b_BToKEE_k_iso03_dca_tight);
    fChain->SetBranchAddress("BToKEE_k_iso04", BToKEE_k_iso04, &b_BToKEE_k_iso04);
+   fChain->SetBranchAddress("BToKEE_k_iso04_dca", BToKEE_k_iso04_dca, &b_BToKEE_k_iso04_dca);
+   fChain->SetBranchAddress("BToKEE_k_iso04_dca_tight", BToKEE_k_iso04_dca_tight, &b_BToKEE_k_iso04_dca_tight);
+   fChain->SetBranchAddress("BToKEE_k_svip2d", BToKEE_k_svip2d, &b_BToKEE_k_svip2d);
+   fChain->SetBranchAddress("BToKEE_k_svip2d_err", BToKEE_k_svip2d_err, &b_BToKEE_k_svip2d_err);
+   fChain->SetBranchAddress("BToKEE_k_svip3d", BToKEE_k_svip3d, &b_BToKEE_k_svip3d);
+   fChain->SetBranchAddress("BToKEE_k_svip3d_err", BToKEE_k_svip3d_err, &b_BToKEE_k_svip3d_err);
    fChain->SetBranchAddress("BToKEE_l1_iso03", BToKEE_l1_iso03, &b_BToKEE_l1_iso03);
+   fChain->SetBranchAddress("BToKEE_l1_iso03_dca", BToKEE_l1_iso03_dca, &b_BToKEE_l1_iso03_dca);
+   fChain->SetBranchAddress("BToKEE_l1_iso03_dca_tight", BToKEE_l1_iso03_dca_tight, &b_BToKEE_l1_iso03_dca_tight);
    fChain->SetBranchAddress("BToKEE_l1_iso04", BToKEE_l1_iso04, &b_BToKEE_l1_iso04);
+   fChain->SetBranchAddress("BToKEE_l1_iso04_dca", BToKEE_l1_iso04_dca, &b_BToKEE_l1_iso04_dca);
+   fChain->SetBranchAddress("BToKEE_l1_iso04_dca_tight", BToKEE_l1_iso04_dca_tight, &b_BToKEE_l1_iso04_dca_tight);
    fChain->SetBranchAddress("BToKEE_l2_iso03", BToKEE_l2_iso03, &b_BToKEE_l2_iso03);
+   fChain->SetBranchAddress("BToKEE_l2_iso03_dca", BToKEE_l2_iso03_dca, &b_BToKEE_l2_iso03_dca);
+   fChain->SetBranchAddress("BToKEE_l2_iso03_dca_tight", BToKEE_l2_iso03_dca_tight, &b_BToKEE_l2_iso03_dca_tight);
    fChain->SetBranchAddress("BToKEE_l2_iso04", BToKEE_l2_iso04, &b_BToKEE_l2_iso04);
+   fChain->SetBranchAddress("BToKEE_l2_iso04_dca", BToKEE_l2_iso04_dca, &b_BToKEE_l2_iso04_dca);
+   fChain->SetBranchAddress("BToKEE_l2_iso04_dca_tight", BToKEE_l2_iso04_dca_tight, &b_BToKEE_l2_iso04_dca_tight);
    fChain->SetBranchAddress("BToKEE_l_xy", BToKEE_l_xy, &b_BToKEE_l_xy);
    fChain->SetBranchAddress("BToKEE_l_xy_unc", BToKEE_l_xy_unc, &b_BToKEE_l_xy_unc);
    fChain->SetBranchAddress("BToKEE_mass", BToKEE_mass, &b_BToKEE_mass);
@@ -718,17 +928,33 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("BToKEE_vtx_x", BToKEE_vtx_x, &b_BToKEE_vtx_x);
    fChain->SetBranchAddress("BToKEE_vtx_y", BToKEE_vtx_y, &b_BToKEE_vtx_y);
    fChain->SetBranchAddress("BToKEE_vtx_z", BToKEE_vtx_z, &b_BToKEE_vtx_z);
+   fChain->SetBranchAddress("BToKEE_b_n_isotrk", BToKEE_b_n_isotrk, &b_BToKEE_b_n_isotrk);
+   fChain->SetBranchAddress("BToKEE_b_n_isotrk_dca", BToKEE_b_n_isotrk_dca, &b_BToKEE_b_n_isotrk_dca);
+   fChain->SetBranchAddress("BToKEE_b_n_isotrk_dca_tight", BToKEE_b_n_isotrk_dca_tight, &b_BToKEE_b_n_isotrk_dca_tight);
    fChain->SetBranchAddress("BToKEE_charge", BToKEE_charge, &b_BToKEE_charge);
    fChain->SetBranchAddress("BToKEE_kIdx", BToKEE_kIdx, &b_BToKEE_kIdx);
+   fChain->SetBranchAddress("BToKEE_k_n_isotrk", BToKEE_k_n_isotrk, &b_BToKEE_k_n_isotrk);
+   fChain->SetBranchAddress("BToKEE_k_n_isotrk_dca", BToKEE_k_n_isotrk_dca, &b_BToKEE_k_n_isotrk_dca);
+   fChain->SetBranchAddress("BToKEE_k_n_isotrk_dca_tight", BToKEE_k_n_isotrk_dca_tight, &b_BToKEE_k_n_isotrk_dca_tight);
    fChain->SetBranchAddress("BToKEE_l1Idx", BToKEE_l1Idx, &b_BToKEE_l1Idx);
+   fChain->SetBranchAddress("BToKEE_l1_n_isotrk", BToKEE_l1_n_isotrk, &b_BToKEE_l1_n_isotrk);
+   fChain->SetBranchAddress("BToKEE_l1_n_isotrk_dca", BToKEE_l1_n_isotrk_dca, &b_BToKEE_l1_n_isotrk_dca);
+   fChain->SetBranchAddress("BToKEE_l1_n_isotrk_dca_tight", BToKEE_l1_n_isotrk_dca_tight, &b_BToKEE_l1_n_isotrk_dca_tight);
    fChain->SetBranchAddress("BToKEE_l2Idx", BToKEE_l2Idx, &b_BToKEE_l2Idx);
+   fChain->SetBranchAddress("BToKEE_l2_n_isotrk", BToKEE_l2_n_isotrk, &b_BToKEE_l2_n_isotrk);
+   fChain->SetBranchAddress("BToKEE_l2_n_isotrk_dca", BToKEE_l2_n_isotrk_dca, &b_BToKEE_l2_n_isotrk_dca);
+   fChain->SetBranchAddress("BToKEE_l2_n_isotrk_dca_tight", BToKEE_l2_n_isotrk_dca_tight, &b_BToKEE_l2_n_isotrk_dca_tight);
    fChain->SetBranchAddress("BToKEE_n_k_used", BToKEE_n_k_used, &b_BToKEE_n_k_used);
    fChain->SetBranchAddress("BToKEE_n_l1_used", BToKEE_n_l1_used, &b_BToKEE_n_l1_used);
    fChain->SetBranchAddress("BToKEE_n_l2_used", BToKEE_n_l2_used, &b_BToKEE_n_l2_used);
    fChain->SetBranchAddress("BToKEE_pdgId", BToKEE_pdgId, &b_BToKEE_pdgId);
    fChain->SetBranchAddress("nBToKMuMu", &nBToKMuMu, &b_nBToKMuMu);
    fChain->SetBranchAddress("BToKMuMu_b_iso03", BToKMuMu_b_iso03, &b_BToKMuMu_b_iso03);
+   fChain->SetBranchAddress("BToKMuMu_b_iso03_dca", BToKMuMu_b_iso03_dca, &b_BToKMuMu_b_iso03_dca);
+   fChain->SetBranchAddress("BToKMuMu_b_iso03_dca_tight", BToKMuMu_b_iso03_dca_tight, &b_BToKMuMu_b_iso03_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_b_iso04", BToKMuMu_b_iso04, &b_BToKMuMu_b_iso04);
+   fChain->SetBranchAddress("BToKMuMu_b_iso04_dca", BToKMuMu_b_iso04_dca, &b_BToKMuMu_b_iso04_dca);
+   fChain->SetBranchAddress("BToKMuMu_b_iso04_dca_tight", BToKMuMu_b_iso04_dca_tight, &b_BToKMuMu_b_iso04_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_cos2D", BToKMuMu_cos2D, &b_BToKMuMu_cos2D);
    fChain->SetBranchAddress("BToKMuMu_eta", BToKMuMu_eta, &b_BToKMuMu_eta);
    fChain->SetBranchAddress("BToKMuMu_fit_cos2D", BToKMuMu_fit_cos2D, &b_BToKMuMu_fit_cos2D);
@@ -747,11 +973,27 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("BToKMuMu_fit_phi", BToKMuMu_fit_phi, &b_BToKMuMu_fit_phi);
    fChain->SetBranchAddress("BToKMuMu_fit_pt", BToKMuMu_fit_pt, &b_BToKMuMu_fit_pt);
    fChain->SetBranchAddress("BToKMuMu_k_iso03", BToKMuMu_k_iso03, &b_BToKMuMu_k_iso03);
+   fChain->SetBranchAddress("BToKMuMu_k_iso03_dca", BToKMuMu_k_iso03_dca, &b_BToKMuMu_k_iso03_dca);
+   fChain->SetBranchAddress("BToKMuMu_k_iso03_dca_tight", BToKMuMu_k_iso03_dca_tight, &b_BToKMuMu_k_iso03_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_k_iso04", BToKMuMu_k_iso04, &b_BToKMuMu_k_iso04);
+   fChain->SetBranchAddress("BToKMuMu_k_iso04_dca", BToKMuMu_k_iso04_dca, &b_BToKMuMu_k_iso04_dca);
+   fChain->SetBranchAddress("BToKMuMu_k_iso04_dca_tight", BToKMuMu_k_iso04_dca_tight, &b_BToKMuMu_k_iso04_dca_tight);
+   fChain->SetBranchAddress("BToKMuMu_k_svip2d", BToKMuMu_k_svip2d, &b_BToKMuMu_k_svip2d);
+   fChain->SetBranchAddress("BToKMuMu_k_svip2d_err", BToKMuMu_k_svip2d_err, &b_BToKMuMu_k_svip2d_err);
+   fChain->SetBranchAddress("BToKMuMu_k_svip3d", BToKMuMu_k_svip3d, &b_BToKMuMu_k_svip3d);
+   fChain->SetBranchAddress("BToKMuMu_k_svip3d_err", BToKMuMu_k_svip3d_err, &b_BToKMuMu_k_svip3d_err);
    fChain->SetBranchAddress("BToKMuMu_l1_iso03", BToKMuMu_l1_iso03, &b_BToKMuMu_l1_iso03);
+   fChain->SetBranchAddress("BToKMuMu_l1_iso03_dca", BToKMuMu_l1_iso03_dca, &b_BToKMuMu_l1_iso03_dca);
+   fChain->SetBranchAddress("BToKMuMu_l1_iso03_dca_tight", BToKMuMu_l1_iso03_dca_tight, &b_BToKMuMu_l1_iso03_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_l1_iso04", BToKMuMu_l1_iso04, &b_BToKMuMu_l1_iso04);
+   fChain->SetBranchAddress("BToKMuMu_l1_iso04_dca", BToKMuMu_l1_iso04_dca, &b_BToKMuMu_l1_iso04_dca);
+   fChain->SetBranchAddress("BToKMuMu_l1_iso04_dca_tight", BToKMuMu_l1_iso04_dca_tight, &b_BToKMuMu_l1_iso04_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_l2_iso03", BToKMuMu_l2_iso03, &b_BToKMuMu_l2_iso03);
+   fChain->SetBranchAddress("BToKMuMu_l2_iso03_dca", BToKMuMu_l2_iso03_dca, &b_BToKMuMu_l2_iso03_dca);
+   fChain->SetBranchAddress("BToKMuMu_l2_iso03_dca_tight", BToKMuMu_l2_iso03_dca_tight, &b_BToKMuMu_l2_iso03_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_l2_iso04", BToKMuMu_l2_iso04, &b_BToKMuMu_l2_iso04);
+   fChain->SetBranchAddress("BToKMuMu_l2_iso04_dca", BToKMuMu_l2_iso04_dca, &b_BToKMuMu_l2_iso04_dca);
+   fChain->SetBranchAddress("BToKMuMu_l2_iso04_dca_tight", BToKMuMu_l2_iso04_dca_tight, &b_BToKMuMu_l2_iso04_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_l_xy", BToKMuMu_l_xy, &b_BToKMuMu_l_xy);
    fChain->SetBranchAddress("BToKMuMu_l_xy_unc", BToKMuMu_l_xy_unc, &b_BToKMuMu_l_xy_unc);
    fChain->SetBranchAddress("BToKMuMu_mass", BToKMuMu_mass, &b_BToKMuMu_mass);
@@ -770,19 +1012,41 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("BToKMuMu_vtx_x", BToKMuMu_vtx_x, &b_BToKMuMu_vtx_x);
    fChain->SetBranchAddress("BToKMuMu_vtx_y", BToKMuMu_vtx_y, &b_BToKMuMu_vtx_y);
    fChain->SetBranchAddress("BToKMuMu_vtx_z", BToKMuMu_vtx_z, &b_BToKMuMu_vtx_z);
+   fChain->SetBranchAddress("BToKMuMu_b_n_isotrk", BToKMuMu_b_n_isotrk, &b_BToKMuMu_b_n_isotrk);
+   fChain->SetBranchAddress("BToKMuMu_b_n_isotrk_dca", BToKMuMu_b_n_isotrk_dca, &b_BToKMuMu_b_n_isotrk_dca);
+   fChain->SetBranchAddress("BToKMuMu_b_n_isotrk_dca_tight", BToKMuMu_b_n_isotrk_dca_tight, &b_BToKMuMu_b_n_isotrk_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_charge", BToKMuMu_charge, &b_BToKMuMu_charge);
    fChain->SetBranchAddress("BToKMuMu_kIdx", BToKMuMu_kIdx, &b_BToKMuMu_kIdx);
+   fChain->SetBranchAddress("BToKMuMu_k_n_isotrk", BToKMuMu_k_n_isotrk, &b_BToKMuMu_k_n_isotrk);
+   fChain->SetBranchAddress("BToKMuMu_k_n_isotrk_dca", BToKMuMu_k_n_isotrk_dca, &b_BToKMuMu_k_n_isotrk_dca);
+   fChain->SetBranchAddress("BToKMuMu_k_n_isotrk_dca_tight", BToKMuMu_k_n_isotrk_dca_tight, &b_BToKMuMu_k_n_isotrk_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_l1Idx", BToKMuMu_l1Idx, &b_BToKMuMu_l1Idx);
+   fChain->SetBranchAddress("BToKMuMu_l1_n_isotrk", BToKMuMu_l1_n_isotrk, &b_BToKMuMu_l1_n_isotrk);
+   fChain->SetBranchAddress("BToKMuMu_l1_n_isotrk_dca", BToKMuMu_l1_n_isotrk_dca, &b_BToKMuMu_l1_n_isotrk_dca);
+   fChain->SetBranchAddress("BToKMuMu_l1_n_isotrk_dca_tight", BToKMuMu_l1_n_isotrk_dca_tight, &b_BToKMuMu_l1_n_isotrk_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_l2Idx", BToKMuMu_l2Idx, &b_BToKMuMu_l2Idx);
+   fChain->SetBranchAddress("BToKMuMu_l2_n_isotrk", BToKMuMu_l2_n_isotrk, &b_BToKMuMu_l2_n_isotrk);
+   fChain->SetBranchAddress("BToKMuMu_l2_n_isotrk_dca", BToKMuMu_l2_n_isotrk_dca, &b_BToKMuMu_l2_n_isotrk_dca);
+   fChain->SetBranchAddress("BToKMuMu_l2_n_isotrk_dca_tight", BToKMuMu_l2_n_isotrk_dca_tight, &b_BToKMuMu_l2_n_isotrk_dca_tight);
    fChain->SetBranchAddress("BToKMuMu_n_k_used", BToKMuMu_n_k_used, &b_BToKMuMu_n_k_used);
    fChain->SetBranchAddress("BToKMuMu_n_l1_used", BToKMuMu_n_l1_used, &b_BToKMuMu_n_l1_used);
    fChain->SetBranchAddress("BToKMuMu_n_l2_used", BToKMuMu_n_l2_used, &b_BToKMuMu_n_l2_used);
    fChain->SetBranchAddress("BToKMuMu_pdgId", BToKMuMu_pdgId, &b_BToKMuMu_pdgId);
    fChain->SetBranchAddress("nElectron", &nElectron, &b_nElectron);
+   fChain->SetBranchAddress("Electron_convChi2Prob", Electron_convChi2Prob, &b_Electron_convChi2Prob);
+   fChain->SetBranchAddress("Electron_convDeltaCotFromPin", Electron_convDeltaCotFromPin, &b_Electron_convDeltaCotFromPin);
+   fChain->SetBranchAddress("Electron_convLxy", Electron_convLxy, &b_Electron_convLxy);
+   fChain->SetBranchAddress("Electron_convMass", Electron_convMass, &b_Electron_convMass);
+   fChain->SetBranchAddress("Electron_convMassAfterFit", Electron_convMassAfterFit, &b_Electron_convMassAfterFit);
+   fChain->SetBranchAddress("Electron_convMassBeforeFit", Electron_convMassBeforeFit, &b_Electron_convMassBeforeFit);
+   fChain->SetBranchAddress("Electron_convMassFromPin", Electron_convMassFromPin, &b_Electron_convMassFromPin);
+   fChain->SetBranchAddress("Electron_convMinTrkPt", Electron_convMinTrkPt, &b_Electron_convMinTrkPt);
+   fChain->SetBranchAddress("Electron_convVtxRadius", Electron_convVtxRadius, &b_Electron_convVtxRadius);
    fChain->SetBranchAddress("Electron_dxy", Electron_dxy, &b_Electron_dxy);
    fChain->SetBranchAddress("Electron_dxyErr", Electron_dxyErr, &b_Electron_dxyErr);
    fChain->SetBranchAddress("Electron_dz", Electron_dz, &b_Electron_dz);
    fChain->SetBranchAddress("Electron_dzErr", Electron_dzErr, &b_Electron_dzErr);
+   fChain->SetBranchAddress("Electron_dzTrg", Electron_dzTrg, &b_Electron_dzTrg);
    fChain->SetBranchAddress("Electron_eta", Electron_eta, &b_Electron_eta);
    fChain->SetBranchAddress("Electron_fBrem", Electron_fBrem, &b_Electron_fBrem);
    fChain->SetBranchAddress("Electron_ip3d", Electron_ip3d, &b_Electron_ip3d);
@@ -800,7 +1064,24 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("Electron_vy", Electron_vy, &b_Electron_vy);
    fChain->SetBranchAddress("Electron_vz", Electron_vz, &b_Electron_vz);
    fChain->SetBranchAddress("Electron_charge", Electron_charge, &b_Electron_charge);
+   fChain->SetBranchAddress("Electron_convDeltaExpectedNHitsInner", Electron_convDeltaExpectedNHitsInner, &b_Electron_convDeltaExpectedNHitsInner);
+   fChain->SetBranchAddress("Electron_convLeadIdx", Electron_convLeadIdx, &b_Electron_convLeadIdx);
+   fChain->SetBranchAddress("Electron_convLeadNHitsBeforeVtx", Electron_convLeadNHitsBeforeVtx, &b_Electron_convLeadNHitsBeforeVtx);
+   fChain->SetBranchAddress("Electron_convMaxNHitsBeforeVtx", Electron_convMaxNHitsBeforeVtx, &b_Electron_convMaxNHitsBeforeVtx);
+   fChain->SetBranchAddress("Electron_convSumNHitsBeforeVtx", Electron_convSumNHitsBeforeVtx, &b_Electron_convSumNHitsBeforeVtx);
+   fChain->SetBranchAddress("Electron_convTracksN", Electron_convTracksN, &b_Electron_convTracksN);
+   fChain->SetBranchAddress("Electron_convTrailIdx", Electron_convTrailIdx, &b_Electron_convTrailIdx);
+   fChain->SetBranchAddress("Electron_convTrailNHitsBeforeVtx", Electron_convTrailNHitsBeforeVtx, &b_Electron_convTrailNHitsBeforeVtx);
    fChain->SetBranchAddress("Electron_pdgId", Electron_pdgId, &b_Electron_pdgId);
+   fChain->SetBranchAddress("Electron_convExtra", Electron_convExtra, &b_Electron_convExtra);
+   fChain->SetBranchAddress("Electron_convLead", Electron_convLead, &b_Electron_convLead);
+   fChain->SetBranchAddress("Electron_convLoose", Electron_convLoose, &b_Electron_convLoose);
+   fChain->SetBranchAddress("Electron_convOpen", Electron_convOpen, &b_Electron_convOpen);
+   fChain->SetBranchAddress("Electron_convQualityHighEff", Electron_convQualityHighEff, &b_Electron_convQualityHighEff);
+   fChain->SetBranchAddress("Electron_convQualityHighPurity", Electron_convQualityHighPurity, &b_Electron_convQualityHighPurity);
+   fChain->SetBranchAddress("Electron_convTight", Electron_convTight, &b_Electron_convTight);
+   fChain->SetBranchAddress("Electron_convTrail", Electron_convTrail, &b_Electron_convTrail);
+   fChain->SetBranchAddress("Electron_convValid", Electron_convValid, &b_Electron_convValid);
    fChain->SetBranchAddress("Electron_convVeto", Electron_convVeto, &b_Electron_convVeto);
    fChain->SetBranchAddress("Electron_isLowPt", Electron_isLowPt, &b_Electron_isLowPt);
    fChain->SetBranchAddress("Electron_isPF", Electron_isPF, &b_Electron_isPF);
@@ -837,6 +1118,8 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("Muon_eta", Muon_eta, &b_Muon_eta);
    fChain->SetBranchAddress("Muon_ip3d", Muon_ip3d, &b_Muon_ip3d);
    fChain->SetBranchAddress("Muon_mass", Muon_mass, &b_Muon_mass);
+   fChain->SetBranchAddress("Muon_matched_dpt", Muon_matched_dpt, &b_Muon_matched_dpt);
+   fChain->SetBranchAddress("Muon_matched_dr", Muon_matched_dr, &b_Muon_matched_dr);
    fChain->SetBranchAddress("Muon_pfRelIso03_all", Muon_pfRelIso03_all, &b_Muon_pfRelIso03_all);
    fChain->SetBranchAddress("Muon_pfRelIso04_all", Muon_pfRelIso04_all, &b_Muon_pfRelIso04_all);
    fChain->SetBranchAddress("Muon_phi", Muon_phi, &b_Muon_phi);
@@ -847,7 +1130,18 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("Muon_vy", Muon_vy, &b_Muon_vy);
    fChain->SetBranchAddress("Muon_vz", Muon_vz, &b_Muon_vz);
    fChain->SetBranchAddress("Muon_charge", Muon_charge, &b_Muon_charge);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu10p5_IP3p5", Muon_fired_HLT_Mu10p5_IP3p5, &b_Muon_fired_HLT_Mu10p5_IP3p5);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu12_IP6", Muon_fired_HLT_Mu12_IP6, &b_Muon_fired_HLT_Mu12_IP6);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu7_IP4", Muon_fired_HLT_Mu7_IP4, &b_Muon_fired_HLT_Mu7_IP4);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu8_IP3", Muon_fired_HLT_Mu8_IP3, &b_Muon_fired_HLT_Mu8_IP3);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu8_IP5", Muon_fired_HLT_Mu8_IP5, &b_Muon_fired_HLT_Mu8_IP5);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu8_IP6", Muon_fired_HLT_Mu8_IP6, &b_Muon_fired_HLT_Mu8_IP6);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu8p5_IP3p5", Muon_fired_HLT_Mu8p5_IP3p5, &b_Muon_fired_HLT_Mu8p5_IP3p5);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu9_IP4", Muon_fired_HLT_Mu9_IP4, &b_Muon_fired_HLT_Mu9_IP4);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu9_IP5", Muon_fired_HLT_Mu9_IP5, &b_Muon_fired_HLT_Mu9_IP5);
+   fChain->SetBranchAddress("Muon_fired_HLT_Mu9_IP6", Muon_fired_HLT_Mu9_IP6, &b_Muon_fired_HLT_Mu9_IP6);
    fChain->SetBranchAddress("Muon_isTriggering", Muon_isTriggering, &b_Muon_isTriggering);
+   fChain->SetBranchAddress("Muon_looseId", Muon_looseId, &b_Muon_looseId);
    fChain->SetBranchAddress("Muon_pdgId", Muon_pdgId, &b_Muon_pdgId);
    fChain->SetBranchAddress("Muon_isGlobal", Muon_isGlobal, &b_Muon_isGlobal);
    fChain->SetBranchAddress("Muon_isPFcand", Muon_isPFcand, &b_Muon_isPFcand);
@@ -858,17 +1152,6 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("Muon_tightId", Muon_tightId, &b_Muon_tightId);
    fChain->SetBranchAddress("Muon_tkIsoId", Muon_tkIsoId, &b_Muon_tkIsoId);
    fChain->SetBranchAddress("Muon_triggerIdLoose", Muon_triggerIdLoose, &b_Muon_triggerIdLoose);
-   fChain->SetBranchAddress("nTriggerMuon", &nTriggerMuon, &b_nTriggerMuon);
-   fChain->SetBranchAddress("TriggerMuon_eta", TriggerMuon_eta, &b_TriggerMuon_eta);
-   fChain->SetBranchAddress("TriggerMuon_mass", TriggerMuon_mass, &b_TriggerMuon_mass);
-   fChain->SetBranchAddress("TriggerMuon_phi", TriggerMuon_phi, &b_TriggerMuon_phi);
-   fChain->SetBranchAddress("TriggerMuon_pt", TriggerMuon_pt, &b_TriggerMuon_pt);
-   fChain->SetBranchAddress("TriggerMuon_vx", TriggerMuon_vx, &b_TriggerMuon_vx);
-   fChain->SetBranchAddress("TriggerMuon_vy", TriggerMuon_vy, &b_TriggerMuon_vy);
-   fChain->SetBranchAddress("TriggerMuon_vz", TriggerMuon_vz, &b_TriggerMuon_vz);
-   fChain->SetBranchAddress("TriggerMuon_charge", TriggerMuon_charge, &b_TriggerMuon_charge);
-   fChain->SetBranchAddress("TriggerMuon_pdgId", TriggerMuon_pdgId, &b_TriggerMuon_pdgId);
-   fChain->SetBranchAddress("TriggerMuon_trgMuonIndex", TriggerMuon_trgMuonIndex, &b_TriggerMuon_trgMuonIndex);
    fChain->SetBranchAddress("Pileup_nTrueInt", &Pileup_nTrueInt, &b_Pileup_nTrueInt);
    fChain->SetBranchAddress("Pileup_pudensity", &Pileup_pudensity, &b_Pileup_pudensity);
    fChain->SetBranchAddress("Pileup_gpudensity", &Pileup_gpudensity, &b_Pileup_gpudensity);
@@ -886,6 +1169,7 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("ProbeTracks_dxyS", ProbeTracks_dxyS, &b_ProbeTracks_dxyS);
    fChain->SetBranchAddress("ProbeTracks_dz", ProbeTracks_dz, &b_ProbeTracks_dz);
    fChain->SetBranchAddress("ProbeTracks_dzS", ProbeTracks_dzS, &b_ProbeTracks_dzS);
+   fChain->SetBranchAddress("ProbeTracks_dzTrg", ProbeTracks_dzTrg, &b_ProbeTracks_dzTrg);
    fChain->SetBranchAddress("ProbeTracks_eta", ProbeTracks_eta, &b_ProbeTracks_eta);
    fChain->SetBranchAddress("ProbeTracks_mass", ProbeTracks_mass, &b_ProbeTracks_mass);
    fChain->SetBranchAddress("ProbeTracks_phi", ProbeTracks_phi, &b_ProbeTracks_phi);
@@ -900,6 +1184,7 @@ void BParkBase::Init(TTree *tree)
    fChain->SetBranchAddress("ProbeTracks_pdgId", ProbeTracks_pdgId, &b_ProbeTracks_pdgId);
    fChain->SetBranchAddress("ProbeTracks_isMatchedToEle", ProbeTracks_isMatchedToEle, &b_ProbeTracks_isMatchedToEle);
    fChain->SetBranchAddress("ProbeTracks_isMatchedToLooseMuon", ProbeTracks_isMatchedToLooseMuon, &b_ProbeTracks_isMatchedToLooseMuon);
+   fChain->SetBranchAddress("ProbeTracks_isMatchedToLowPtEle", ProbeTracks_isMatchedToLowPtEle, &b_ProbeTracks_isMatchedToLowPtEle);
    fChain->SetBranchAddress("ProbeTracks_isMatchedToMediumMuon", ProbeTracks_isMatchedToMediumMuon, &b_ProbeTracks_isMatchedToMediumMuon);
    fChain->SetBranchAddress("ProbeTracks_isMatchedToMuon", ProbeTracks_isMatchedToMuon, &b_ProbeTracks_isMatchedToMuon);
    fChain->SetBranchAddress("ProbeTracks_isMatchedToSoftMuon", ProbeTracks_isMatchedToSoftMuon, &b_ProbeTracks_isMatchedToSoftMuon);
