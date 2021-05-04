@@ -12,9 +12,9 @@ TaPJpsiSelectionNaod::TaPJpsiSelectionNaod(TTree *tree)
   : BParkBase(tree) {        
 
   // Chiara: to be set by hand   
-  sampleID = 0;           // 0 = data, >=1 MC
+  sampleID = 1;           // 0 = data, >=1 MC
   donvtxreweight_ = 0;    // 
-  nvtxWFileName_ = "/afs/cern.ch/user/c/crovelli/public/bphys/nvtxWeights__bin1.root"; 
+  nvtxWFileName_ = "/afs/cern.ch/user/c/crovelli/public/bphys/march/nvtxWeights_run2018D.root"; 
 }
 
 TaPJpsiSelectionNaod::~TaPJpsiSelectionNaod() {
@@ -81,8 +81,24 @@ void TaPJpsiSelectionNaod::Loop() {
     // Trigger 
     int iHLT_Mu12_IP6 = (int)HLT_Mu12_IP6;
     int iHLT_Mu9_IP6  = (int)HLT_Mu9_IP6;
-    hlt9  = iHLT_Mu9_IP6;
-    hlt12 = iHLT_Mu12_IP6;
+    int iHLT_Mu9_IP5  = (int)HLT_Mu9_IP5;
+    int iHLT_Mu9_IP4  = (int)HLT_Mu9_IP4;
+    int iHLT_Mu7_IP4  = (int)HLT_Mu7_IP4;
+    int iHLT_Mu8_IP6  = (int)HLT_Mu8_IP6;
+    int iHLT_Mu8_IP5  = (int)HLT_Mu8_IP5;
+    int iHLT_Mu8_IP3  = (int)HLT_Mu8_IP3;
+    int iHLT_Mu8p5_IP3p5  = (int)HLT_Mu8p5_IP3p5;
+    int iHLT_Mu10p5_IP3p5 = (int)HLT_Mu10p5_IP3p5;
+    hlt12ip6 = iHLT_Mu12_IP6;
+    hlt9ip6  = iHLT_Mu9_IP6;
+    hlt9ip5  = iHLT_Mu9_IP5;
+    hlt9ip4  = iHLT_Mu9_IP4;
+    hlt7ip4  = iHLT_Mu7_IP4;
+    hlt8ip6  = iHLT_Mu8_IP6;
+    hlt8ip5  = iHLT_Mu8_IP5;
+    hlt8ip3  = iHLT_Mu8_IP3;
+    hlt8d5ip3d5  = iHLT_Mu8p5_IP3p5;
+    hlt10d5ip3d5 = iHLT_Mu10p5_IP3p5;
     
     // B candidates
     if (nBToKEE<=0) continue;
@@ -117,7 +133,7 @@ void TaPJpsiSelectionNaod::Loop() {
       // bool ele1Sel = ele1_pt>1.5 && fabs(ele1_eta)<2.4;  
       // bool ele2Sel = ele2_pt>0.5 && fabs(ele2_eta)<2.4;  
       // bool kSel = k_pt>0.7 && fabs(k_eta)<2.4; 
-
+      
       // B selection (relaxed) 
       bool vtxFitSel = BToKEE_fit_pt[iB]>5.0 && BToKEE_svprob[iB]>0.1 && BToKEE_fit_cos2D[iB]>0.99;
       bool ele1Sel = fabs(ele1_eta)<2.4;  
@@ -543,8 +559,16 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("pu_n", &pu_n, "pu_n/F");    
   outTree_->Branch("perEveW", &perEveW, "perEveW/F");    
 
-  outTree_->Branch("hlt9", &hlt9, "hlt9/I");
-  outTree_->Branch("hlt12", &hlt12, "hlt12/I");
+  outTree_->Branch("hlt12ip6", &hlt12ip6, "hlt12ip6/I");
+  outTree_->Branch("hlt9ip6", &hlt9ip6, "hlt9ip6/I");
+  outTree_->Branch("hlt9ip5", &hlt9ip5, "hlt9ip5/I");
+  outTree_->Branch("hlt9ip4", &hlt9ip4, "hlt9ip4/I");
+  outTree_->Branch("hlt7ip4", &hlt7ip4, "hlt7ip4/I");
+  outTree_->Branch("hlt8ip6", &hlt8ip6, "hlt8ip6/I");
+  outTree_->Branch("hlt8ip5", &hlt8ip5, "hlt8ip5/I");
+  outTree_->Branch("hlt8ip3", &hlt8ip3, "hlt8ip3/I");
+  outTree_->Branch("hlt8d5ip3d5", &hlt8d5ip3d5, "hlt8d5ip3d5/I");
+  outTree_->Branch("hlt10d5ip3d5", &hlt10d5ip3d5, "hlt10d5ip3d5/I");
 
   outTree_->Branch("selectedBSize",  &selectedBSize,  "selectedBSize/I");   
   

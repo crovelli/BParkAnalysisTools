@@ -63,8 +63,16 @@ private:
   float  pu_n;
   float perEveW;
   //
-  int hlt9;
-  int hlt12;
+  int hlt12ip6;
+  int hlt9ip6;
+  int hlt9ip5;
+  int hlt9ip4;
+  int hlt7ip4;
+  int hlt8ip6;
+  int hlt8ip5;
+  int hlt8ip3;
+  int hlt8d5ip3d5;
+  int hlt10d5ip3d5;
   // 
   int selectedBSize;
   //
