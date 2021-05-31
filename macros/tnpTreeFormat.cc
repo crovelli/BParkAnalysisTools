@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <TRandom.h>
+#include "TLorentzVector.h"
 
 using namespace std;
 
@@ -59,8 +60,16 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   Float_t         pu_weight = 0;
   Float_t         pu_n = 0;
   Float_t         perEveW = 0;
-  Int_t           hlt9 = 0;
-  Int_t           hlt12 = 0;
+  Int_t           hlt12ip6 = 0;
+  Int_t           hlt9ip6 = 0;
+  Int_t           hlt9ip5 = 0;
+  Int_t           hlt9ip4 = 0;
+  Int_t           hlt7ip4 = 0;
+  Int_t           hlt8ip6 = 0;
+  Int_t           hlt8ip5 = 0;
+  Int_t           hlt8ip3 = 0;
+  Int_t           hlt8d5ip3d5 = 0;
+  Int_t           hlt10d5ip3d5 = 0;
   Int_t           selectedBSize = 0;
   vector<float>   *tag_pt = nullptr;
   vector<float>   *tag_eta = nullptr;
@@ -111,8 +120,16 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   TBranch        *b_pu_weight;   //!
   TBranch        *b_pu_n;   //!
   TBranch        *b_perEveW;   //!
-  TBranch        *b_hlt9;   //!
-  TBranch        *b_hlt12;   //!
+  TBranch        *b_hlt12ip6;
+  TBranch        *b_hlt9ip6;
+  TBranch        *b_hlt9ip5;
+  TBranch        *b_hlt9ip4;
+  TBranch        *b_hlt7ip4;
+  TBranch        *b_hlt8ip6;
+  TBranch        *b_hlt8ip5;
+  TBranch        *b_hlt8ip3;
+  TBranch        *b_hlt8d5ip3d5;
+  TBranch        *b_hlt10d5ip3d5;
   TBranch        *b_selectedBSize;   //!
   TBranch        *b_tag_pt;   //!
   TBranch        *b_tag_eta;   //!
@@ -163,8 +180,16 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   treeOrig->SetBranchAddress("pu_weight", &pu_weight, &b_pu_weight);
   treeOrig->SetBranchAddress("pu_n", &pu_n, &b_pu_n);
   treeOrig->SetBranchAddress("perEveW", &perEveW, &b_perEveW);
-  treeOrig->SetBranchAddress("hlt9", &hlt9, &b_hlt9);
-  treeOrig->SetBranchAddress("hlt12", &hlt12, &b_hlt12);
+  treeOrig->SetBranchAddress("hlt12ip6", &hlt12ip6, &b_hlt12ip6);
+  treeOrig->SetBranchAddress("hlt9ip6", &hlt9ip6, &b_hlt9ip6);
+  treeOrig->SetBranchAddress("hlt9ip5", &hlt9ip5, &b_hlt9ip5);
+  treeOrig->SetBranchAddress("hlt9ip4", &hlt9ip4, &b_hlt9ip4);
+  treeOrig->SetBranchAddress("hlt7ip4", &hlt7ip4, &b_hlt7ip4);
+  treeOrig->SetBranchAddress("hlt8ip6", &hlt8ip6, &b_hlt8ip6);
+  treeOrig->SetBranchAddress("hlt8ip5", &hlt8ip5, &b_hlt8ip5);
+  treeOrig->SetBranchAddress("hlt8ip3", &hlt8ip3, &b_hlt8ip3);
+  treeOrig->SetBranchAddress("hlt8d5ip3d5", &hlt8d5ip3d5, &b_hlt8d5ip3d5);
+  treeOrig->SetBranchAddress("hlt10d5ip3d5", &hlt10d5ip3d5, &b_hlt10d5ip3d5);
   treeOrig->SetBranchAddress("selectedBSize", &selectedBSize, &b_selectedBSize);
   treeOrig->SetBranchAddress("tag_pt", &tag_pt, &b_tag_pt);
   treeOrig->SetBranchAddress("tag_eta", &tag_eta, &b_tag_eta);
@@ -207,8 +232,16 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   treeOrig->SetBranchAddress("selectedPairsSize", &selectedPairsSize, &b_selectedPairsSize);
 
   // New variables
-  Int_t     hlt_9;
-  Int_t     hlt_12;
+  Int_t     hlt_12ip6;
+  Int_t     hlt_9ip6;
+  Int_t     hlt_9ip5;
+  Int_t     hlt_9ip4;
+  Int_t     hlt_7ip4;
+  Int_t     hlt_8ip6;
+  Int_t     hlt_8ip5;
+  Int_t     hlt_8ip3;
+  Int_t     hlt_8d5ip3d5;
+  Int_t     hlt_10d5ip3d5;
   Int_t     numvtx;
   Int_t     tagMatchMc;
   Int_t     tagMatchMcFromJPsi;
@@ -234,20 +267,30 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   Float_t   probeFBrem;
   Float_t   probeDxySig;
   Float_t   probeDzSig;
+  Float_t   elesDr;
   Float_t   K_pt;
   Float_t   B_mass;
   Float_t   B_pt;
   Float_t   B_cos2d;
   Float_t   B_svprob;
   Float_t   B_xysig;
+  Int_t     B_matchMC;
   Float_t   pair_mass;
   Float_t   weight;
 
   // New branches
   for(int i=0; i<(int)trees.size();i++) {
     TTree *theTreeNew = trees[i];
-    theTreeNew->Branch("hlt_9", &hlt_9, "hlt_9/I");
-    theTreeNew->Branch("hlt_12", &hlt_12, "hlt_12/I");
+    theTreeNew->Branch("hlt_12ip6", &hlt_12ip6, "hlt_12ip6/I");
+    theTreeNew->Branch("hlt_9ip6", &hlt_9ip6, "hlt_9ip6/I");
+    theTreeNew->Branch("hlt_9ip5", &hlt_9ip5, "hlt_9ip5/I");
+    theTreeNew->Branch("hlt_9ip4", &hlt_9ip4, "hlt_9ip4/I");
+    theTreeNew->Branch("hlt_7ip4", &hlt_7ip4, "hlt_7ip4/I");
+    theTreeNew->Branch("hlt_8ip6", &hlt_8ip6, "hlt_8ip6/I");
+    theTreeNew->Branch("hlt_8ip5", &hlt_8ip5, "hlt_8ip5/I");
+    theTreeNew->Branch("hlt_8ip3", &hlt_8ip3, "hlt8ip3_/I");
+    theTreeNew->Branch("hlt_8d5ip3d5", &hlt_8d5ip3d5, "hlt_8d5ip3d5/I");
+    theTreeNew->Branch("hlt_10d5ip3d5", &hlt_10d5ip3d5, "hlt_10d5ip3d5/I");
     theTreeNew->Branch("numvtx", &numvtx, "numvtx/I");
     theTreeNew->Branch("tagMatchMc",&tagMatchMc,"tagMatchMc/I");
     theTreeNew->Branch("tagMatchMcFromJPsi",&tagMatchMcFromJPsi,"tagMatchMcFromJPsi/I");
@@ -273,12 +316,14 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     theTreeNew->Branch("probeFBrem",&probeFBrem,"probeFBrem/F");
     theTreeNew->Branch("probeDxySig",&probeDxySig,"probeDxySig/F");
     theTreeNew->Branch("probeDzSig",&probeDzSig,"probeDzSig/F");
+    theTreeNew->Branch("elesDr",&elesDr,"elesDr/F");
     theTreeNew->Branch("K_pt",&K_pt,"K_pt/F");
     theTreeNew->Branch("B_mass", &B_mass, "B_mass/F");
     theTreeNew->Branch("B_pt", &B_pt, "B_pt/F");
     theTreeNew->Branch("B_cos2d", &B_cos2d, "B_cos2d/F");
     theTreeNew->Branch("B_svprob", &B_svprob, "B_svprob/F");
     theTreeNew->Branch("B_xysig", &B_xysig, "B_xysig/F");
+    theTreeNew->Branch("B_matchMC", &B_matchMC, "B_matchMC/I");
     theTreeNew->Branch("pair_mass", &pair_mass, "pair_mass/F");
     theTreeNew->Branch("weight", &weight, "weight/F");
   }
@@ -290,7 +335,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     treeOrig->GetEntry(i);
 
     // Trigger
-    if (hlt9==0) continue;
+    // if (hlt9==0) continue;
 
     // Loop over electrons
     for (unsigned int ii=0; ii<probe_Bmass->size(); ii++) {
@@ -315,9 +360,24 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       // e+e- invariant mass selection
       if (probe_invMass->at(ii)<2 || probe_invMass->at(ii)>4) continue;  
 
+      // dR between electrons
+      TLorentzVector tagTLV(0,0,0,0);
+      tagTLV.SetPtEtaPhiM(tag_pt->at(ii),tag_eta->at(ii),tag_phi->at(ii),0.);
+      TLorentzVector probeTLV(0,0,0,0);
+      probeTLV.SetPtEtaPhiM(probe_pt->at(ii),probe_eta->at(ii),probe_phi->at(ii),0.);
+      float dRele = tagTLV.DeltaR(probeTLV);
+
       // save new variables, making flat tree
-      hlt_9  = hlt9;
-      hlt_12 = hlt12;
+      hlt_12ip6 = hlt12ip6;
+      hlt_9ip6 = hlt9ip6;
+      hlt_9ip5 = hlt9ip5;
+      hlt_9ip4 = hlt9ip4;
+      hlt_7ip4 = hlt7ip4;
+      hlt_8ip6 = hlt8ip6;
+      hlt_8ip5 = hlt8ip5;
+      hlt_8ip3 = hlt8ip3;
+      hlt_8d5ip3d5  = hlt8d5ip3d5;
+      hlt_10d5ip3d5 = hlt10d5ip3d5;
 
       numvtx = nvtx;     
 
@@ -326,6 +386,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       B_cos2d = probe_Bcos2D->at(ii);
       B_svprob = probe_Bsvprob->at(ii);
       B_xysig = probe_Bxysig->at(ii);
+      B_matchMC = probe_BmatchMC->at(ii); 
 
       pair_mass = probe_invMass->at(ii);
       
@@ -354,6 +415,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       probeDxySig = probe_dxySig->at(ii);
       probeDzSig = probe_dzSig->at(ii);
       K_pt = probe_Kpt->at(ii);
+      elesDr = dRele;
 
       // weights
       if (theRun==1) {   // MC                                                                                                                   
