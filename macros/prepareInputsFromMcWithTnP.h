@@ -22,14 +22,23 @@ class prepareInputsFromMcWithTnP {
   // Fixed size dimensions of array or collections stored in the TTree if any.
   
   // Declaration of leaf types
-  Int_t           hlt_9;
-  Int_t           hlt_12;
+  Int_t           hlt_12ip6;
+  Int_t           hlt_9ip6;
+  Int_t           hlt_9ip5;
+  Int_t           hlt_9ip4;
+  Int_t           hlt_7ip4;
+  Int_t           hlt_8ip6;
+  Int_t           hlt_8ip5;
+  Int_t           hlt_8ip3;
+  Int_t           hlt_8d5ip3d5;
+  Int_t           hlt_10d5ip3d5;
   Int_t           numvtx;
   Int_t           tagMatchMc;
   Int_t           tagMatchMcFromJPsi;
   Float_t         tagPt;
   Float_t         tagEta;
   Float_t         tagRelIso;
+  Float_t         tagPfmvaId; 
   Float_t         probePt;
   Float_t         probeAbsEta;
   Float_t         probeEta;
@@ -48,20 +57,34 @@ class prepareInputsFromMcWithTnP {
   Float_t         probeFBrem;
   Float_t         probeDxySig;
   Float_t         probeDzSig;
+  Float_t         elesDr; 
   Float_t         K_pt;
   Float_t         B_mass;
+  Float_t         B_pt;
+  Float_t         B_cos2d;
+  Float_t         B_svprob;
+  Float_t         B_xysig;
   Float_t         pair_mass;
   Float_t         weight;
   
   // List of branches
-  TBranch        *b_hlt_9;   //!
-  TBranch        *b_hlt_12;   //!
+  TBranch        *b_hlt_12ip6;   //!
+  TBranch        *b_hlt_9ip6;   //!
+  TBranch        *b_hlt_9ip5;   //!
+  TBranch        *b_hlt_9ip4;   //!
+  TBranch        *b_hlt_7ip4;   //!
+  TBranch        *b_hlt_8ip6;   //!
+  TBranch        *b_hlt_8ip5;   //!
+  TBranch        *b_hlt8ip3_;   //!
+  TBranch        *b_hlt_8d5ip3d5;   //!
+  TBranch        *b_hlt_10d5ip3d5;   //!
   TBranch        *b_numvtx;   //!
   TBranch        *b_tagMatchMc;   //!
   TBranch        *b_tagMatchMcFromJPsi;   //!
   TBranch        *b_tagPt;   //!
   TBranch        *b_tagEta;   //!
   TBranch        *b_tagRelIso;   //!
+  TBranch        *b_tagPfmvaId;
   TBranch        *b_probePt;   //!
   TBranch        *b_probeAbsEta;   //!
   TBranch        *b_probeEta;   //!
@@ -80,8 +103,13 @@ class prepareInputsFromMcWithTnP {
   TBranch        *b_probeFBrem;   //!
   TBranch        *b_probeDxySig;   //!
   TBranch        *b_probeDzSig;   //!
+  TBranch        *b_elesDr;   //!   
   TBranch        *b_K_pt;   //!
   TBranch        *b_B_mass;   //!
+  TBranch        *b_B_pt;   //!
+  TBranch        *b_B_cos2d;   //!
+  TBranch        *b_B_svprob;   //!
+  TBranch        *b_B_xysig;   //!
   TBranch        *b_pair_mass;   //!
   TBranch        *b_weight;   //!
   
@@ -104,19 +132,12 @@ prepareInputsFromMcWithTnP::prepareInputsFromMcWithTnP(TTree *tree) : fChain(0)
   // if parameter tree is not specified (or zero), connect the file
   // used to generate this class and read the Tree.
   if (tree == 0) {
-    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0__withNvtxWeights.root");
-    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0.root");
-    // TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root");
+    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21/production2/Formatted_March21_BuToKJpsi_Toee_v2__probeLowPt.root");
     if (!f || !f->IsOpen()) {
-      //f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0__withNvtxWeights.root");
-      f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0.root");
-      // f = new TFile("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root");
+      f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21/production2/Formatted_March21_BuToKJpsi_Toee_v2__probeLowPt.root");
     }
-    //TDirectory * dir = (TDirectory*)f->Get("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0__withNvtxWeights.root:/tnpAna");
-    TDirectory * dir = (TDirectory*)f->Get("/eos/cms/store/user/crovelli/LowPtEle/TnpData/Sept/Jan16/Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probeLowPt__tagIdCutsAt0.root:/tnpAna");
-    // TDirectory * dir = (TDirectory*)f->Get("Formatted_BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext_probePF.root:/tnpAna");
-    dir->GetObject("fitter_tree",tree);
-    
+    TDirectory * dir = (TDirectory*)f->Get("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21/production2/Formatted_March21_BuToKJpsi_Toee_v2__probeLowPt.root:/tnpAna");
+    dir->GetObject("fitter_tree",tree);    
   }
   Init(tree);
 }
@@ -163,14 +184,23 @@ void prepareInputsFromMcWithTnP::Init(TTree *tree)
   fCurrent = -1;
   fChain->SetMakeClass(1);
   
-  fChain->SetBranchAddress("hlt_9", &hlt_9, &b_hlt_9);
-  fChain->SetBranchAddress("hlt_12", &hlt_12, &b_hlt_12);
+  fChain->SetBranchAddress("hlt_12ip6", &hlt_12ip6, &b_hlt_12ip6);
+  fChain->SetBranchAddress("hlt_9ip6", &hlt_9ip6, &b_hlt_9ip6);
+  fChain->SetBranchAddress("hlt_9ip5", &hlt_9ip5, &b_hlt_9ip5);
+  fChain->SetBranchAddress("hlt_9ip4", &hlt_9ip4, &b_hlt_9ip4);
+  fChain->SetBranchAddress("hlt_7ip4", &hlt_7ip4, &b_hlt_7ip4);
+  fChain->SetBranchAddress("hlt_8ip6", &hlt_8ip6, &b_hlt_8ip6);
+  fChain->SetBranchAddress("hlt_8ip5", &hlt_8ip5, &b_hlt_8ip5);
+  fChain->SetBranchAddress("hlt_8ip3", &hlt_8ip3, &b_hlt8ip3_);
+  fChain->SetBranchAddress("hlt_8d5ip3d5", &hlt_8d5ip3d5, &b_hlt_8d5ip3d5);
+  fChain->SetBranchAddress("hlt_10d5ip3d5", &hlt_10d5ip3d5, &b_hlt_10d5ip3d5);
   fChain->SetBranchAddress("numvtx", &numvtx, &b_numvtx);
   fChain->SetBranchAddress("tagMatchMc", &tagMatchMc, &b_tagMatchMc);
   fChain->SetBranchAddress("tagMatchMcFromJPsi", &tagMatchMcFromJPsi, &b_tagMatchMcFromJPsi);
   fChain->SetBranchAddress("tagPt", &tagPt, &b_tagPt);
   fChain->SetBranchAddress("tagEta", &tagEta, &b_tagEta);
   fChain->SetBranchAddress("tagRelIso", &tagRelIso, &b_tagRelIso);
+  fChain->SetBranchAddress("tagPfmvaId", &tagPfmvaId, &b_tagPfmvaId);  
   fChain->SetBranchAddress("probePt", &probePt, &b_probePt);
   fChain->SetBranchAddress("probeAbsEta", &probeAbsEta, &b_probeAbsEta);
   fChain->SetBranchAddress("probeEta", &probeEta, &b_probeEta);
@@ -189,8 +219,13 @@ void prepareInputsFromMcWithTnP::Init(TTree *tree)
   fChain->SetBranchAddress("probeFBrem", &probeFBrem, &b_probeFBrem);
   fChain->SetBranchAddress("probeDxySig", &probeDxySig, &b_probeDxySig);
   fChain->SetBranchAddress("probeDzSig", &probeDzSig, &b_probeDzSig);
+  fChain->SetBranchAddress("elesDr", &elesDr, &b_elesDr);   
   fChain->SetBranchAddress("K_pt", &K_pt, &b_K_pt);
   fChain->SetBranchAddress("B_mass", &B_mass, &b_B_mass);
+  fChain->SetBranchAddress("B_pt", &B_pt, &b_B_pt);
+  fChain->SetBranchAddress("B_cos2d", &B_cos2d, &b_B_cos2d);
+  fChain->SetBranchAddress("B_svprob", &B_svprob, &b_B_svprob);
+  fChain->SetBranchAddress("B_xysig", &B_xysig, &b_B_xysig);
   fChain->SetBranchAddress("pair_mass", &pair_mass, &b_pair_mass);
   fChain->SetBranchAddress("weight", &weight, &b_weight);
   Notify();
@@ -198,28 +233,18 @@ void prepareInputsFromMcWithTnP::Init(TTree *tree)
 
 Bool_t prepareInputsFromMcWithTnP::Notify()
 {
-  // The Notify() function is called when a new file is opened. This
-  // can be either for a new TTree in a TChain or when when a new TTree
-  // is started when using PROOF. It is normally not necessary to make changes
-  // to the generated code, but the routine can be extended by the
-  // user if needed. The return value is currently not used.
-  
   return kTRUE;
 }
 
 void prepareInputsFromMcWithTnP::Show(Long64_t entry)
 {
-  // Print contents of entry.
-  // If entry is not specified, print current entry
   if (!fChain) return;
   fChain->Show(entry);
 }
 
 Int_t prepareInputsFromMcWithTnP::Cut(Long64_t entry)
 {
-  // This function may be called from Loop.
-  // returns  1 if entry is accepted.
-  // returns -1 otherwise.
   return 1;
 }
+
 #endif // #ifdef prepareInputsFromMcWithTnP_cxx

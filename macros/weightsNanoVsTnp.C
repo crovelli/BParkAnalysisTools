@@ -20,16 +20,14 @@ using namespace std;
 void weightsNanoVsTnp()
 {
   // Files
-  TFile fileTnP("myFileMcAfterTnp.root");          // using TnP selection applied to MC (prepareInputsFromMcWithTnP)
-  TFile fileNoTnP("myFileFromNani.root");          // without TnP selection, directy applied to nanpAODs (prepareInputsFromNaniInMc)
+  //TFile fileTnP("files_march_v2/probeLowPt/myFileMcAfterTnp_noWeights.root");   // using TnP selection applied to MC (prepareInputsFromMcWithTnP)
+  TFile fileTnP("files_march_v2/probeLowPt/myFileMcAfterTnp_withKineWeights.root");   
+  TFile fileNoTnP("files_march_v2/probeLowPt/myFileFromNani.root");             // without TnP selection, directy applied to nanpAODs (prepareInputsFromNaniInMc)
 
   // Histos: pT
   TH1F *ptSignalMcFromTnP   = (TH1F*)fileTnP.Get("probePtSignalMc");
   TH1F *ptSignalMcFromTnPWW = (TH1F*)fileTnP.Get("probePtSignalMcWW");
   TH1F *ptSignalMcNoTnP     = (TH1F*)fileNoTnP.Get("ptSignalMc");
-  ptSignalMcFromTnP   -> Sumw2();   
-  ptSignalMcFromTnPWW -> Sumw2();   
-  ptSignalMcNoTnP     -> Sumw2(); 
   ptSignalMcFromTnP   -> Scale(1./ptSignalMcFromTnP->Integral());   
   ptSignalMcFromTnPWW -> Scale(1./ptSignalMcFromTnPWW->Integral());   
   ptSignalMcNoTnP     -> Scale(1./ptSignalMcNoTnP->Integral());   
@@ -38,9 +36,6 @@ void weightsNanoVsTnp()
   TH1F *etaSignalMcFromTnP   = (TH1F*)fileTnP.Get("probeEtaSignalMc");
   TH1F *etaSignalMcFromTnPWW = (TH1F*)fileTnP.Get("probeEtaSignalMcWW");
   TH1F *etaSignalMcNoTnP     = (TH1F*)fileNoTnP.Get("etaSignalMc");
-  etaSignalMcFromTnP   -> Sumw2();   
-  etaSignalMcFromTnPWW -> Sumw2();   
-  etaSignalMcNoTnP     -> Sumw2(); 
   etaSignalMcFromTnP   -> Scale(1./etaSignalMcFromTnP->Integral());   
   etaSignalMcFromTnPWW -> Scale(1./etaSignalMcFromTnPWW->Integral());   
   etaSignalMcNoTnP     -> Scale(1./etaSignalMcNoTnP->Integral());   
@@ -49,9 +44,6 @@ void weightsNanoVsTnp()
   TH1F *mvaSignalMcFromTnP   = (TH1F*)fileTnP.Get("probeMvaSignalMc");
   TH1F *mvaSignalMcFromTnPWW = (TH1F*)fileTnP.Get("probeMvaSignalMcWW");
   TH1F *mvaSignalMcNoTnP     = (TH1F*)fileNoTnP.Get("mvaSignalMc");
-  mvaSignalMcFromTnP   -> Sumw2();   
-  mvaSignalMcFromTnPWW -> Sumw2();   
-  mvaSignalMcNoTnP     -> Sumw2(); 
   mvaSignalMcFromTnP   -> Scale(1./mvaSignalMcFromTnP->Integral());   
   mvaSignalMcFromTnPWW -> Scale(1./mvaSignalMcFromTnPWW->Integral());   
   mvaSignalMcNoTnP     -> Scale(1./mvaSignalMcNoTnP->Integral());   
@@ -65,7 +57,6 @@ void weightsNanoVsTnp()
   // --------------------------------------------------------
   // Compute weights
   TH2F *ptVsEtaSignalWeights = (TH2F*)ptVsEtaSignalMcNoTnP->Clone("ptVsEtaSignalWeights");
-  ptVsEtaSignalWeights->Sumw2(); 
   ptVsEtaSignalWeights->Divide(ptVsEtaSignalMcFromTnP);
   ptVsEtaSignalWeights->SetTitle("ptVsEtaSignalWeights");
   ptVsEtaSignalWeights->SetName("ptVsEtaSignalWeights");
@@ -226,7 +217,6 @@ void weightsNanoVsTnp()
   // -----------------------------------------------
   // Check weights 2dim
   TH2F *check2dSignal = (TH2F*)ptVsEtaSignalMcFromTnPWW->Clone("check2dSignal");  
-  check2dSignal->Sumw2();
   check2dSignal->Divide(ptVsEtaSignalMcNoTnP);
 
   // ----------------------------------------------  
