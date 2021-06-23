@@ -331,7 +331,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
     treeOrig->GetEntry(i);
 
     // Trigger
-    if (hlt_9ip6==0) continue;
+    if (hlt9ip6==0) continue;
 
     // Loop over electrons
     for (unsigned int ii=0; ii<probe_Bmass->size(); ii++) {
@@ -339,7 +339,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       // conversion veto
       if ( tag_convveto->at(ii)==0)   continue;      
       if ( probe_convveto->at(ii)==0) continue;      
-      
+
       // further selection on tag: low pt probes
       if (isProbeLpt==1) { 
 	if ( tag_isPF->at(ii)==0 ) continue;
