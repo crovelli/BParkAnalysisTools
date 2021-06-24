@@ -1,8 +1,7 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Sat Apr 17 07:02:31 2021 by ROOT version 6.12/07
-// from TTree Events/Events
-// found on file: naniMc_22_marchProd.root
+// Thu Jun 24 11:11:46 2021 by ROOT version 6.12/07
+// from TChain Events/
 //////////////////////////////////////////////////////////
 
 #ifndef prepareInputsFromNaniInMc_h
@@ -392,8 +391,8 @@ class prepareInputsFromNaniInMc {
   Float_t         SV_pAngle[50];   //[nSV]
   Int_t           Electron_genPartIdx[100];   //[nElectron]
   Int_t           Electron_genPartFlav[100];   //[nElectron]
-  Int_t           Muon_genPartIdx[8];   //[nMuon]
-  Int_t           Muon_genPartFlav[8];   //[nMuon]
+  Int_t           Muon_genPartIdx[100];   //[nMuon]
+  Int_t           Muon_genPartFlav[100];   //[nMuon]
   Float_t         SV_chi2[50];   //[nSV]
   Float_t         SV_eta[50];   //[nSV]
   Float_t         SV_mass[50];   //[nSV]
@@ -405,7 +404,7 @@ class prepareInputsFromNaniInMc {
   Float_t         SV_z[50];   //[nSV]
   Int_t           ProbeTracks_genPartIdx[700];   //[nProbeTracks]
   Int_t           ProbeTracks_genPartFlav[700];   //[nProbeTracks]
-  
+
   // List of branches
   TBranch        *b_run;   //!
   TBranch        *b_luminosityBlock;   //!
@@ -810,11 +809,73 @@ prepareInputsFromNaniInMc::prepareInputsFromNaniInMc(TTree *tree) : fChain(0)
   // if parameter tree is not specified (or zero), connect the file
   // used to generate this class and read the Tree.
   if (tree == 0) {
-    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("naniMc_22_marchProd.root");
+    
+#ifdef SINGLE_TREE
+    // The following code should be used if you want this class to access
+    // a single tree instead of a chain
+    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("Memory Directory");
     if (!f || !f->IsOpen()) {
-      f = new TFile("naniMc_22_marchProd.root");
+      f = new TFile("Memory Directory");
     }
     f->GetObject("Events",tree);
+    
+#else // SINGLE_TREE
+    
+      // The following code should be used if you want this class to access a chain
+      // of trees.
+    TChain * chain = new TChain("Events","");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_1.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_2.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_3.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_4.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_5.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_6.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_7.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_8.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_9.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_10.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_11.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_12.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_13.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_14.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_15.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_16.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_17.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_18.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_19.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_20.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_21.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_22.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_23.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_24.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_25.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_26.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_27.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_28.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_29.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_30.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_31.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_32.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_33.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_34.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_35.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_36.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_37.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_38.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_39.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_40.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_41.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_42.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_43.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_44.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_45.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_46.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_47.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_48.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_49.root/Events");
+    chain->Add("/eos/cms/store/group/phys_bphys/bpark/nanoaod_RK2021/BParkingNANO_2021May07/BuToKJpsi_Toee_Mufilter_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/crab_BuToKJpsi_Toee_v2/210507_134418/0000/BParkNANO_mc_2021May07_50.root/Events");
+    tree = chain;
+#endif // SINGLE_TREE
     
   }
   Init(tree);

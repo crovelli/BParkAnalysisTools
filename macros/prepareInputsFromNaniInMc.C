@@ -32,12 +32,20 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   TH1F *ptFakeMc    = new TH1F("ptFakeMc",    "ptFakeMc",    60,   0., 15.);
   TH1F *etaSignalMc = new TH1F("etaSignalMc", "etaSignalMc", 40, -2.4, 2.4);
   TH1F *etaFakeMc   = new TH1F("etaFakeMc",   "etaFakeMc",   40, -2.4, 2.4);
+  TH1F *dxysigSignalMc = new TH1F("dxysigSignalMc", "dxysigSignalMc", 50, -10., 10.);  
+  TH1F *dxysigFakeMc   = new TH1F("dxysigFakeMc",   "dxysigFakeMc",   50, -10., 10.);  
+  TH1F *dztrgSignalMc  = new TH1F("dztrgSignalMc",  "dztrgSignalMc",  50, -0.5, 0.5); 
+  TH1F *dztrgFakeMc    = new TH1F("dztrgFakeMc",    "dztrgFakeMc",    50, -0.5, 0.5);  
   mvaSignalMc -> Sumw2();
   mvaFakeMc   -> Sumw2();
   ptSignalMc  -> Sumw2();    
   ptFakeMc    -> Sumw2();    
   etaSignalMc -> Sumw2();    
   etaFakeMc   -> Sumw2();    
+  dxysigSignalMc -> Sumw2();
+  dxysigFakeMc   -> Sumw2();
+  dztrgSignalMc  -> Sumw2();
+  dztrgFakeMc    -> Sumw2();
   // 
   TH1F *mvaSignalMc_LptPfOverlap    = new TH1F("mvaSignalMc_LptPfOverlap",    "mvaSignalMc_LptPfOverlap",    72, -3., 15.); 
   TH1F *ptSignalMc_LptPfOverlap     = new TH1F("ptSignalMc_LptPfOverlap",     "ptSignalMc_LptPfOverlap",     60,   0., 15.);
@@ -166,6 +174,8 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
 	ptSignalMc->Fill(Electron_pt[iEle]);
 	etaSignalMc->Fill(Electron_eta[iEle]);
 	ptVsEtaSignalMc->Fill(Electron_eta[iEle],Electron_pt[iEle]);
+	dxysigSignalMc->Fill(Electron_dxy[iEle]/Electron_dxyErr[iEle]);
+	dztrgSignalMc->Fill(Electron_dzTrg[iEle]);
 	// 
 	// LPT / PF overlap study
 	if (studyOverlap==1) {
@@ -188,6 +198,8 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
 	ptFakeMc->Fill(Electron_pt[iEle]);
 	etaFakeMc->Fill(Electron_eta[iEle]);
 	ptVsEtaFakeMc->Fill(Electron_eta[iEle],Electron_pt[iEle]);
+	dxysigFakeMc->Fill(Electron_dxy[iEle]/Electron_dxyErr[iEle]);
+	dztrgFakeMc->Fill(Electron_dzTrg[iEle]);
 	//
 	// LPT / PF overlap study
 	if (studyOverlap==1) {
@@ -258,6 +270,14 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   etaSignalMc -> SetLineColor(6);
   etaFakeMc   -> SetLineWidth(2);
   etaFakeMc   -> SetLineColor(4);
+  dxysigSignalMc -> SetLineWidth(2); 
+  dxysigSignalMc -> SetLineColor(6); 
+  dxysigFakeMc   -> SetLineWidth(2); 
+  dxysigFakeMc   -> SetLineColor(4); 
+  dztrgSignalMc  -> SetLineWidth(2); 
+  dztrgSignalMc  -> SetLineColor(6); 
+  dztrgFakeMc    -> SetLineWidth(2); 
+  dztrgFakeMc    -> SetLineColor(4); 
   //
   mvaSignalMc_LptPfOverlap -> SetLineWidth(2);  
   mvaSignalMc_LptPfOverlap -> SetLineColor(6);  
@@ -327,6 +347,10 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   ptFakeMc       -> Write();    
   etaSignalMc    -> Write();    
   etaFakeMc      -> Write();    
+  dxysigSignalMc -> Write(); 
+  dxysigFakeMc   -> Write();
+  dztrgSignalMc  -> Write();
+  dztrgFakeMc    -> Write();
   ptVsEtaSignalMc -> Write();
   ptVsEtaFakeMc   -> Write();
   mvaSignalEBMc0 -> Write();
@@ -387,17 +411,17 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   leg->SetBorderSize(0);
   leg->SetTextSize(0.05);
   leg->SetFillColor(0);
-  leg->AddEntry(mvaSignalMc, "Matching truth", "lp");
-  leg->AddEntry(mvaFakeMc,   "Not matching truth", "lp");
+  leg->AddEntry(mvaSignalMc, "Matching", "lp");
+  leg->AddEntry(mvaFakeMc,   "Not matching", "lp");
   //
   TLegend *legB;
-  legB = new TLegend(0.40,0.65,0.75,0.90);
+  legB = new TLegend(0.60,0.65,0.95,0.90);
   legB->SetFillStyle(0);
   legB->SetBorderSize(0);
   legB->SetTextSize(0.05);
   legB->SetFillColor(0);
-  legB->AddEntry(mvaSignalMc, "Matching truth", "lp");
-  legB->AddEntry(mvaFakeMc,   "Not matching truth", "lp");
+  legB->AddEntry(mvaSignalMc, "Matching", "lp");
+  legB->AddEntry(mvaFakeMc,   "Not matching", "lp");
   //
   TLegend *legC;
   legC = new TLegend(0.25,0.15,0.65,0.30);
@@ -405,8 +429,8 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   legC->SetBorderSize(0);
   legC->SetTextSize(0.05);
   legC->SetFillColor(0);
-  legC->AddEntry(mvaSignalMc, "Matching truth", "lp");
-  legC->AddEntry(mvaFakeMc,   "Not matching truth", "lp");
+  legC->AddEntry(mvaSignalMc, "Matching", "lp");
+  legC->AddEntry(mvaFakeMc,   "Not matching", "lp");
 
   TCanvas cmvamc("cmvamc","cmvamc",1);
   mvaSignalMc->SetTitle("");
@@ -437,6 +461,26 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   etaFakeMc->DrawNormalized("samehist");
   legC->Draw();
   cetamc.SaveAs("eta_matchVsFake_noTnP.png");
+
+  TCanvas cdxymc("cdxymc","cdxymc",1);
+  dxysigSignalMc->SetTitle("");
+  dxysigFakeMc->SetTitle("");
+  dxysigSignalMc->GetXaxis()->SetTitle("dXY sig");
+  dxysigFakeMc->GetXaxis()->SetTitle("dXY sig");
+  dxysigFakeMc->DrawNormalized("hist");
+  dxysigSignalMc->DrawNormalized("samehist");
+  legB->Draw();
+  cdxymc.SaveAs("dxySig_matchVsFake_noTnP.png");
+
+  TCanvas cdztmc("cdztmc","cdztmc",1);
+  dztrgSignalMc->SetTitle("");
+  dztrgFakeMc->SetTitle("");
+  dztrgSignalMc->GetXaxis()->SetTitle("dz trg");
+  dztrgFakeMc->GetXaxis()->SetTitle("dz trg");
+  dztrgFakeMc->DrawNormalized("hist");
+  dztrgSignalMc->DrawNormalized("samehist");
+  legB->Draw();
+  cdztmc.SaveAs("dzTrg_matchVsFake_noTnP.png");
 
   TCanvas cmvaeb0("cmvaeb0","cmvaeb0",1);
   mvaSignalEBMc0 -> SetTitle("EB, 1.0 < pT < 1.5");
