@@ -20,9 +20,9 @@ using namespace std;
 void weightsNanoVsTnp()
 {
   // Files
-  //TFile fileTnP("files_march_v2/probeLowPt/myFileMcAfterTnp_noWeights.root");   // using TnP selection applied to MC (prepareInputsFromMcWithTnP)
-  TFile fileTnP("files_march_v2/probeLowPt/myFileMcAfterTnp_withKineWeights.root");   
-  TFile fileNoTnP("files_march_v2/probeLowPt/myFileFromNani.root");             // without TnP selection, directy applied to nanpAODs (prepareInputsFromNaniInMc)
+  TFile fileTnP("files_marchNoReg/probeLowPt/myFileMcAfterTnp_noKineWeights.root");   // using TnP selection applied to MC (prepareInputsFromMcWithTnP)
+  //TFile fileTnP("files_marchNoReg/probeLowPt/myFileMcAfterTnp_withKineWeights.root");   // ""
+  TFile fileNoTnP("files_marchNoReg/probeLowPt/myFileFromNani.root");                   // without TnP selection, directy applied to nanpAODs (prepareInputsFromNaniInMc)
 
   // Histos: pT
   TH1F *ptSignalMcFromTnP   = (TH1F*)fileTnP.Get("probePtSignalMc");
@@ -47,6 +47,22 @@ void weightsNanoVsTnp()
   mvaSignalMcFromTnP   -> Scale(1./mvaSignalMcFromTnP->Integral());   
   mvaSignalMcFromTnPWW -> Scale(1./mvaSignalMcFromTnPWW->Integral());   
   mvaSignalMcNoTnP     -> Scale(1./mvaSignalMcNoTnP->Integral());   
+
+  // dxy significance
+  TH1F *dxysigSignalMcFromTnP   = (TH1F*)fileTnP.Get("probeDxysigSignalMc");
+  TH1F *dxysigSignalMcFromTnPWW = (TH1F*)fileTnP.Get("probeDxysigSignalMcWW");
+  TH1F *dxysigSignalMcNoTnP     = (TH1F*)fileNoTnP.Get("dxysigSignalMc");
+  dxysigSignalMcFromTnP   -> Scale(1./dxysigSignalMcFromTnP->Integral());   
+  dxysigSignalMcFromTnPWW -> Scale(1./dxysigSignalMcFromTnPWW->Integral());   
+  dxysigSignalMcNoTnP     -> Scale(1./dxysigSignalMcNoTnP->Integral());   
+
+  // dz trg
+  TH1F *dztrgSignalMcFromTnP   = (TH1F*)fileTnP.Get("probeDztrgSignalMc");
+  TH1F *dztrgSignalMcFromTnPWW = (TH1F*)fileTnP.Get("probeDztrgSignalMcWW");
+  TH1F *dztrgSignalMcNoTnP     = (TH1F*)fileNoTnP.Get("dztrgSignalMc");
+  dztrgSignalMcFromTnP   -> Scale(1./dztrgSignalMcFromTnP->Integral());   
+  dztrgSignalMcFromTnPWW -> Scale(1./dztrgSignalMcFromTnPWW->Integral());   
+  dztrgSignalMcNoTnP     -> Scale(1./dztrgSignalMcNoTnP->Integral());   
 
   // 2Dim histos: pT vs eta
   TH2F *ptVsEtaSignalMcFromTnP = (TH2F*)fileTnP.Get("probePtVsEtaSignalMc");
@@ -111,6 +127,32 @@ void weightsNanoVsTnp()
   mvaSignalMcFromTnP   -> GetXaxis()->SetTitle("ID BDT output");
   mvaSignalMcFromTnPWW -> GetXaxis()->SetTitle("ID BDT output");
   mvaSignalMcNoTnP     -> GetXaxis()->SetTitle("ID BDT output");
+  //
+  dxysigSignalMcFromTnP   -> SetLineWidth(2);  
+  dxysigSignalMcFromTnPWW -> SetLineWidth(2);  
+  dxysigSignalMcNoTnP     -> SetLineWidth(2);  
+  dxysigSignalMcFromTnP   -> SetLineColor(2);  
+  dxysigSignalMcFromTnPWW -> SetLineColor(3);  
+  dxysigSignalMcNoTnP     -> SetLineColor(4);  
+  dxysigSignalMcFromTnP   -> SetTitle("");
+  dxysigSignalMcFromTnPWW -> SetTitle("");
+  dxysigSignalMcNoTnP     -> SetTitle("");
+  dxysigSignalMcFromTnP   -> GetXaxis()->SetTitle("dXY signif");
+  dxysigSignalMcFromTnPWW -> GetXaxis()->SetTitle("dXY signif");
+  dxysigSignalMcNoTnP     -> GetXaxis()->SetTitle("dXY signif");
+  //
+  dztrgSignalMcFromTnP   -> SetLineWidth(2);  
+  dztrgSignalMcFromTnPWW -> SetLineWidth(2);  
+  dztrgSignalMcNoTnP     -> SetLineWidth(2);  
+  dztrgSignalMcFromTnP   -> SetLineColor(2);  
+  dztrgSignalMcFromTnPWW -> SetLineColor(3);  
+  dztrgSignalMcNoTnP     -> SetLineColor(4);  
+  dztrgSignalMcFromTnP   -> SetTitle("");
+  dztrgSignalMcFromTnPWW -> SetTitle("");
+  dztrgSignalMcNoTnP     -> SetTitle("");
+  dztrgSignalMcFromTnP   -> GetXaxis()->SetTitle("dZ trg");
+  dztrgSignalMcFromTnPWW -> GetXaxis()->SetTitle("dZ trg");
+  dztrgSignalMcNoTnP     -> GetXaxis()->SetTitle("dZ trg");
 
 
   // -------------------------------------------------------------
@@ -209,6 +251,30 @@ void weightsNanoVsTnp()
   mvaSignalMcFromTnPWW->DrawNormalized("samehist");
   leg2ww->Draw();
   cs6.SaveAs("mvaSignal_naniVsTnp_withWeight.png");
+
+  TCanvas cs7("cs7","cs7",1);
+  dxysigSignalMcNoTnP->DrawNormalized("hist");
+  dxysigSignalMcFromTnP->DrawNormalized("samehist");
+  leg2->Draw();
+  cs7.SaveAs("dxysigSignal_naniVsTnp.png");
+
+  TCanvas cs8("cs8","cs8",1);
+  dxysigSignalMcNoTnP->DrawNormalized("hist");
+  dxysigSignalMcFromTnPWW->DrawNormalized("samehist");
+  leg2ww->Draw();
+  cs8.SaveAs("dxysigSignal_naniVsTnp_withWeight.png");
+
+  TCanvas cs9("cs9","cs9",1);
+  dztrgSignalMcNoTnP->DrawNormalized("hist");
+  dztrgSignalMcFromTnP->DrawNormalized("samehist");
+  leg2->Draw();
+  cs9.SaveAs("dztrgSignal_naniVsTnp.png");
+
+  TCanvas cs10("cs10","cs10",1);
+  dztrgSignalMcNoTnP->DrawNormalized("hist");
+  dztrgSignalMcFromTnPWW->DrawNormalized("samehist");
+  leg2ww->Draw();
+  cs10.SaveAs("dztrgSignal_naniVsTnp_withWeight.png");
 
   TCanvas csw("csw","cs",1);
   ptVsEtaSignalWeights->Draw("colz");
