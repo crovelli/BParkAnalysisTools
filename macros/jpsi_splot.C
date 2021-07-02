@@ -108,8 +108,7 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   */
 
   //
-  // EB: 1.5-2   
-  /*
+  // EB: 1.5-2 and inclusive allEB+EE
   RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
   RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
   RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.75, 1.0);         
@@ -120,7 +119,6 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
   m0.setConstant();            // not regression only
-  */
 
   //
   // EB: 2-5   
@@ -154,6 +152,7 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
 
   // 
   //  EE: 2-5 and inclusive EE     
+  /*
   RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
   RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
   RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.75, 1.0);         
@@ -164,6 +163,7 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
   m0.setConstant();           
+  */
 
   // 
   //  EE: pt>5      
@@ -521,11 +521,11 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   RooDataSet *data = new RooDataSet("data","data",tree,setall,0); 
 
   // Inclusive
-  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && ( (probePt>1.0 && probeEta>-1.5 && probeEta<1.5) || (probePt>2.0 && (probeEta<-1.5 || probeEta>1.5)) )");   
+  data = (RooDataSet*)data->reduce("hlt_9ip6==1 && ( (probePt>1.0 && probeEta>-1.5 && probeEta<1.5) || (probePt>2.0 && (probeEta<-1.5 || probeEta>1.5)) )");   
 
   // EB / EE
   // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>1.0 && probeEta>-1.5 && probeEta<1.5");          
-  data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>2.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>2.0 && (probeEta<-1.5 || probeEta>1.5)");    
 
   // PF overlap 
   // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probeIsPFOverlap==1");
