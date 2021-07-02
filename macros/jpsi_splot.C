@@ -40,8 +40,8 @@ void getDataSet(const char *, RooWorkspace*, float, float);
 void jpsi_splot()
 {
   // set range of observable
-  Float_t lowRange  = 2.3; 
-  Float_t highRange = 3.6;  
+  Float_t lowRange  = 2.6;   // tutto EB
+  Float_t highRange = 3.4;   // tutto EB
 
   // Create a new workspace to manage the project.
   RooWorkspace* wspace = new RooWorkspace("myWS");
@@ -51,8 +51,8 @@ void jpsi_splot()
   AddModel(wspace, lowRange, highRange);
   
   // add dataset from converted root tree
-  getDataSet("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21/production/Formatted_TnP_March21_Run2018ALL__probeLowPt.root", wspace, lowRange, highRange);
-  //getDataSet("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21/production/Formatted_TnP_March21_Run2018A__probeLowPt.root", wspace, lowRange, highRange);
+  getDataSet("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21noRegression/Formatted_March21_NoRegr_ParkingALL.root", wspace, lowRange, highRange);
+  // getDataSet("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21/production2/Formatted_TnP_March21_Run2018ALL__probeLowPt.root", wspace, lowRange, highRange);
   
   // inspect the workspace if you wish
   wspace->Print();
@@ -69,7 +69,6 @@ void jpsi_splot()
 
   // cleanup
   delete wspace;
-
 }
 
 // Signal and background fit models
@@ -78,81 +77,107 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   // make a RooRealVar for the observables
   RooRealVar pair_mass("pair_mass", "M_{inv}", lowRange, highRange,"GeV");
   // 
-  RooRealVar hlt_9("hlt_9", "hlt_9", -0.5, 1.5, "");
+  RooRealVar hlt_9ip6("hlt_9ip6", "hlt_9ip6", -0.5, 1.5, "");
   RooRealVar probeIsPFOverlap("probeIsPFOverlap", "probeIsPFOverlap", -0.5, 1.5, "");
-  // 
-  // comment for PF - init
-  // RooRealVar probeMvaId("probeMvaId", "probeMvaId", -10., 10., "");         // for Jan prod
-  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -3., 15., "");             // for 2021 prod
-  RooRealVar probeFBrem("probeFBrem", "probeFBrem", 0., 1., "");
-  // comment for PF - end
-  //
-  // comment for LPT - init   
-  // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");
-  // comment for LPT - end
   RooRealVar probePt("probePt", "probePt", 0., 15., "");
   RooRealVar probeEta("probeEta", "probeEta", -2.4, 2.4, "");
+  RooRealVar probeDxySig("probeDxySig", "probeDxySig", -10., 10., ""); 
+  RooRealVar probeDzTrg("probeDzTrg", "probeDzTrg", -0.5, 0.5, ""); 
+  RooRealVar probeIso04Rel("probeIso04Rel", "probeIso04Rel", 0., 10., "");
+  // 
+  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -3., 15., "");                   // comment for PF 
+  // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");         // comment for LPT  
 
-  // chiara, test
-  RooRealVar tagPfmvaId("tagPfmvaId", "tagPfmvaId", -15., 15., "");            // for 2021 prod
 
   // --------------------------------------
   // signal model
   std::cout << "make JPsi model" << std::endl;
+
+  // 
+  // EB: 1-1.5 and inclusive EB
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);         
+  RooRealVar alphaL("alphaL", "alpha left",  0.4, 0.2, 0.5);       
+  RooRealVar alphaR("alphaR", "alpha right", 0.8, 0.65, 1.0);      
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05); 
+  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);       
+  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.8,"1/GeV");       
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  */
+
   //
-  // RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.095, 3.098);                    // all EE - old
-  // RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.09, 3.10);                      // EB: pT>1.5 - old 
-  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.089, 3.089);                     // EB: 1-2 - new
-  // RooRealVar m0("m0", "JPsi Mass", 3.092, 3.092, 3.092);                     // EB: 2-5 - new
-  // RooRealVar m0("m0", "JPsi Mass", 3.093, 3.092, 3.094);                     // EB: pT>5 - new 
-  // RooRealVar m0("m0", "JPsi Mass", 3.0969, 3.0969, 3.0969);                  // EE: 2-5 new
-  // RooRealVar m0("m0", "JPsi Mass", 3.090, 3.090, 3.090);                     // EE: pT>5 new
-  // m0.setConstant();                                                          // EB old: 1.5-2
-  m0.setConstant();                                                          // EB new: 1.0-5
-  // m0.setConstant();                                                           // EE new: pT>2  (old: never)
+  // EB: 1.5-2   
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
+  RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.75, 1.0);         
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
+  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  m0.setConstant();            // not regression only
+  */
 
-  //RooRealVar alphaL("alphaL", "alpha left",  0.2, 0.01, 0.3);              // all EE          
-  //RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.2, 0.7);               // EB: pT>1.5 - old
-  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.2, 0.5);               // EB: 1-1.5 - new
-  //RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);               // EB: 1.5-5 - new
-  //RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.5, 0.8);               // EB: pT>5 - new 
-  
-  //RooRealVar alphaR("alphaR", "alpha right", 0.6, 0.4, 0.8);               // all EE - old        
-  //RooRealVar alphaR("alphaR", "alpha right", 0.6, 0.2, 0.8);               // EE: 2-5 - new        
-  //RooRealVar alphaR("alphaR", "alpha right", 0.6, 0.1, 0.8);                 // EE: pT>5 - new
-  //RooRealVar alphaR("alphaR", "alpha right", 1.0, 0.8, 1.2);               // EB: 1.5-2 - old
-  RooRealVar alphaR("alphaR", "alpha right", 0.8, 0.65, 1.0);              // EB: 1-1.5 - new
-  //RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.75, 1.0);              // EB: 1.5-2 - new
-  //RooRealVar alphaR("alphaR", "alpha right", 1.2, 1.0, 1.4);               // EB: pT>2 - new
-
-  // all EB and EE
-  // RooRealVar sigma("sigma", "sigma",  0.05, 0.03, 0.1);  // old               
-  // RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);       // old
-  // RooRealVar nR("nR", "N right", 1.85, 1.80, 1.95);      // old              
-
-  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  // new, all EB and EE with pT<5
-  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        // new, all EB and EE with pT<5             
-  RooRealVar nR("nR", "N right", 1.85, 1.80, 1.95);       // new, all EB and EE with pT<5              
-
-  // RooRealVar nL("nL", "N left",  3.6, 3.50, 3.64);        // new, EE pT>5
-  // RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.07);  // new, EE pT>5
-  // RooRealVar nR("nR", "N right", 1.85, 1.80, 1.95);       // new, EE pT>5
-
-
-  /* Jan16 production
-  // For EB with pT 0.5-1.5 better to fix all signal shape. Here it is fixing to the shape for pT: 1.5-2. 
-  RooRealVar m0("m0", "JPsi Mass", 3.09135, 3.09, 3.10);         
-  RooRealVar alphaL("alphaL", "alpha left",  0.7, 0.6, 0.8);     
-  RooRealVar alphaR("alphaR", "alpha right", 0.8, 0.7, 0.9); 
-  RooRealVar sigma("sigma", "sigma",  0.044, 0.03, 0.05);                 
-  RooRealVar nL("nL", "N left",  3.64, 3.5, 3.7);                     
-  RooRealVar nR("nR", "N right", 1.80, 1.7, 1.9);                    
+  //
+  // EB: 2-5   
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.090, 3.090, 3.090);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
+  RooRealVar alphaR("alphaR", "alpha right", 1.2, 1.0, 1.4); 
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
+  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.1, 0.1,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
   m0.setConstant();  
-  alphaL.setConstant();
-  alphaR.setConstant();
-  sigma.setConstant();
-  nL.setConstant();
-  nR.setConstant();
+  */
+
+  //
+  // EB: >5   
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.091, 3.091, 3.091);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.5, 0.8);
+  RooRealVar alphaR("alphaR", "alpha right", 1.2, 1.0, 1.4);  
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
+  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum",  -0.1, -0.5, 0.,"1/GeV"); 
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  m0.setConstant();  
+  */
+
+  // 
+  //  EE: 2-5 and inclusive EE     
+  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
+  RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.75, 1.0);         
+  RooRealVar sigma("sigma", "sigma",  0.05, 0.045, 0.06);  
+  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
+  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.8,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  m0.setConstant();           
+
+  // 
+  //  EE: pt>5      
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
+  RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.75, 1.0);         
+  RooRealVar sigma("sigma", "sigma",  0.06, 0.05, 0.07);  
+  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
+  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.8,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  m0.setConstant();
   */
 
   RooDoubleCB jpsiModel("jpsiModel", "JPsi Model", pair_mass, m0, sigma, alphaL, alphaR, nL, nR);
@@ -161,38 +186,11 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   // --------------------------------------
   // background model
   std::cout << "make background model" << std::endl;
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");        // EB: 0.5-1.5 - old
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.8,"1/GeV");       // EB: 1-1.5 - new
-  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");       // EB: 1.5-2 - new
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.1, 0.1,"1/GeV");       // EB: 2-5 - new
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", -0.1, -0.3, 0.,"1/GeV");       // EB: pT> 5 - new
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, 0.2, 0.8,"1/GeV");        // EE: pT<5
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");       // EE: pT>5
-  
-  // RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.5, -0.8, 0.8,"1/GeV");      // Init data PF: -0.8, 0.8, 0.8
+
   RooExponential bkgModel("bkgModel", "bkg Mass Model", pair_mass, alpha);
   
   // --------------------------------------
   // combined model
-  
-  // These variables represent the number of JPsi or background events to be fitted
-  // RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;      
-  // RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;      
-
-  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      35000 ,  20000., 50000) ;      // EB: 1-1.5
-  RooRealVar bkgYield("bkgYield","fitted yield for background", 1000000 , 900000., 5000000) ;   // EB: 1-1.5  
-  // RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      35000 ,  20000., 50000) ;      // EB: 1.5-2
-  // RooRealVar bkgYield("bkgYield","fitted yield for background", 400000 , 300000., 500000) ;     // EB: 1.5-2  
-  // RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      60000 ,  50000., 90000) ;      // EB: 2-5
-  // RooRealVar bkgYield("bkgYield","fitted yield for background", 500000 , 450000., 650000) ;     // EB: 2-5  
-  // RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      60000 ,  50000., 80000) ;      // EB: pT>5 
-  // RooRealVar bkgYield("bkgYield","fitted yield for background", 100000 ,  50000., 200000) ;     // EB: pT>5 
-  // RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      7000 ,  5000., 10000) ;        // EE: 2-5 
-  // RooRealVar bkgYield("bkgYield","fitted yield for background", 100000 ,  50000., 200000) ;     // EE: 2-5 
-  // RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",     10000 ,  5000., 30000) ;        // EE: pT>5
-  // RooRealVar bkgYield("bkgYield","fitted yield for background", 20000 ,  5000., 40000) ;        // EE: pT>5
-  
-  // now make the combined model
   std::cout << "make full model" << std::endl; 
   RooAddPdf model("model","jpsi+background models",
 		  RooArgList(jpsiModel, bkgModel),
@@ -215,17 +213,6 @@ void DoSPlot(RooWorkspace* ws){
 
   // fit the model to the data.
   model->fitTo(*data, Extended() );
-
-  //TCanvas* cdata = new TCanvas("cdata","data fit", 1);
-  //RooRealVar* pair_mass = ws->var("pair_mass");
-  //RooPlot* frame = pair_mass->frame() ;
-  //data->plotOn(frame) ;
-  //model->plotOn(frame) ;
-  //model->plotOn(frame,Components(*jpsiModel),LineStyle(kDashed), LineColor(kRed)) ;
-  //model->plotOn(frame4,Components(*bkgModel),LineStyle(kDashed),LineColor(kGreen)) ;
-  //frame->SetTitle("Fit of model to discriminating variable");
-  //frame->Draw() ;
-  //cdata->SaveAs("Fit.png");
 
   // The sPlot technique requires that we fix the parameters
   // of the model that are not yields after doing the fit.
@@ -297,16 +284,9 @@ void MakePlots(RooWorkspace* ws){
   RooAbsPdf* jpsiModel = ws->pdf("jpsiModel");
   RooAbsPdf* bkgModel = ws->pdf("bkgModel");
   
-  RooRealVar* probeMvaId = ws->var("probeMvaId");
-  // RooRealVar* probePfmvaId = ws->var("probePfmvaId");
-  RooRealVar* probePt = ws->var("probePt");
+  RooRealVar* probeMvaId = ws->var("probeMvaId");              // comment for PF case
+  // RooRealVar* probePfmvaId = ws->var("probePfmvaId");       // comment for LPT case
   RooRealVar* pair_mass = ws->var("pair_mass");
-
-  // chiara, test
-  RooRealVar* tagPfmvaId = ws->var("tagPfmvaId");
-
-
-
 
   // note, we get the dataset with sWeights
   RooDataSet* data = (RooDataSet*) ws->data("dataWithSWeights");
@@ -315,7 +295,7 @@ void MakePlots(RooWorkspace* ws){
   // do this to set parameters back to their fitted values.
   model->fitTo(*data, Extended() );
 
-  //plot pair_mass for data with full model and individual components overlaid
+  // Plot pair_mass for data with full model and individual components overlaid
   cdata->cd(1);
   RooPlot* frame = pair_mass->frame() ;
   data->plotOn(frame ) ;
@@ -325,7 +305,7 @@ void MakePlots(RooWorkspace* ws){
   frame->SetTitle("Fit of model to discriminating variable");
   frame->Draw() ;
 
-
+  // ------------------------------------------------------------
   // Now use the sWeights to show our variable distribution for JPsi and background.
   //
   // Plot our variable for JPsi component.
@@ -337,28 +317,27 @@ void MakePlots(RooWorkspace* ws){
   // create weighted data set
   RooDataSet * dataw_jpsi = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"jpsiYield_sw") ;
   
-  RooPlot* frame2 = probeMvaId->frame() ;
-  // RooPlot* frame2 = probePfmvaId->frame() ;
+  RooPlot* frame2 = probeMvaId->frame() ;              // comment for PF case
+  // RooPlot* frame2 = probePfmvaId->frame() ;         // comment for LPT case
   dataw_jpsi->plotOn(frame2, DataError(RooAbsData::SumW2) ) ;
   frame2->SetTitle("ID distribution for JPsi");
   frame2->Draw() ;
-
+  
   // Plot interesting variables for background
   cdata->cd(3);
   RooDataSet * dataw_bkg = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"bkgYield_sw") ;
-  RooPlot* frame3 = probeMvaId->frame() ;
-  // RooPlot* frame3 = probePfmvaId->frame() ;
+  RooPlot* frame3 = probeMvaId->frame() ;             // comment for PF case  
+  // RooPlot* frame3 = probePfmvaId->frame() ;        // comment for LPT case 
   dataw_bkg->plotOn(frame3,DataError(RooAbsData::SumW2) ) ;
   frame3->SetTitle("ID distribution for background");
   frame3->Draw() ;
   
   cdata->SaveAs("SPlot.png");
 
-
   // Fit variable
   TCanvas* cdata2 = new TCanvas("cdata2","data fit", 1);
   RooPlot* frame4 = pair_mass->frame() ;
-  data->plotOn(frame4 ) ;
+  data->plotOn(frame4, Binning(100) ) ;
   model->plotOn(frame4) ;
   model->plotOn(frame4,Components(*jpsiModel),LineStyle(kDashed), LineColor(kRed)) ;
   model->plotOn(frame4,Components(*bkgModel),LineStyle(kDashed),LineColor(kGreen)) ;
@@ -375,48 +354,55 @@ void MakeHistos(RooWorkspace* ws){
   std::cout << std::endl;
   std::cout << "save histos" << std::endl;
 
-  // comment for PF case - init
-  RooRealVar* probeFBrem = ws->var("probeFBrem");
-  RooRealVar* probeMvaId = ws->var("probeMvaId");
-  // comment for PF case - end
-  // RooRealVar* probePfmvaId = ws->var("probePfmvaId");
-  RooRealVar* hlt_9 = ws->var("hlt_9");
+  RooRealVar* probeMvaId = ws->var("probeMvaId");                      // comment for PF case
+  // RooRealVar* probePfmvaId = ws->var("probePfmvaId");               // comment for LPT case
+  RooRealVar* hlt_9ip6 = ws->var("hlt_9ip6");
   RooRealVar* probeIsPFOverlap = ws->var("probeIsPFOverlap"); 
   RooRealVar* probePt  = ws->var("probePt");
   RooRealVar* probeEta = ws->var("probeEta");
-  RooRealVar* tagPfmvaId = ws->var("tagPfmvaId");
-  
+  RooRealVar* probeDxySig = ws->var("probeDxySig");
+  RooRealVar* probeDzTrg = ws->var("probeDzTrg"); 
+  RooRealVar* probeIso04Rel = ws->var("probeIso04Rel"); 
+
   // note, we get the dataset with sWeights
   RooDataSet* data = (RooDataSet*) ws->data("dataWithSWeights");
-  
+
   // create weighted data set
   RooDataSet * dataw_jpsi = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"jpsiYield_sw") ;
   RooDataSet * dataw_bkg  = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"bkgYield_sw") ;
   
   // convert to TH1
-  // comment for PF case - init   
-  TH1 *h1_probeFBrem_jpsi  = dataw_jpsi->createHistogram("h1_probeFBrem_jpsi",*probeFBrem,Binning(50));
-  TH1 *h1_probeFBrem_bkg   = dataw_bkg->createHistogram("h1_probeFBrem_bkg",*probeFBrem,Binning(50));
-  TH1 *h1_probeMvaId_jpsi  = dataw_jpsi->createHistogram("h1_probeMvaId_jpsi",*probeMvaId,Binning(60));
-  TH1 *h1_probeMvaId_bkg   = dataw_bkg->createHistogram("h1_probeMvaId_bkg",*probeMvaId,Binning(60));
-  // comment for PF case - end  
-  // TH1 *h1_probePfmvaId_jpsi  = dataw_jpsi->createHistogram("h1_probePfmvaId_jpsi",*probePfmvaId,Binning(60));
-  // TH1 *h1_probePfmvaId_bkg   = dataw_bkg->createHistogram("h1_probePfmvaId_bkg",*probePfmvaId,Binning(60));
-  TH1 *h1_probePt_jpsi     = dataw_jpsi->createHistogram("h1_probePt_jpsi",*probePt,Binning(60));
-  TH1 *h1_probePt_bkg      = dataw_bkg->createHistogram("h1_probePt_bkg",*probePt,Binning(60));
-  TH1 *h1_probeEta_jpsi    = dataw_jpsi->createHistogram("h1_probeEta_jpsi",*probeEta,Binning(40));
-  TH1 *h1_probeEta_bkg     = dataw_bkg->createHistogram("h1_probeEta_bkg",*probeEta,Binning(40));
+  TH1 *h1_probeMvaId_jpsi  = dataw_jpsi->createHistogram("h1_probeMvaId_jpsi",*probeMvaId,Binning(54));             // comment for PF case  
+  TH1 *h1_probeMvaId_bkg   = dataw_bkg->createHistogram("h1_probeMvaId_bkg",*probeMvaId,Binning(54));               // comment for PF case  
+  // TH1 *h1_probePfmvaId_jpsi  = dataw_jpsi->createHistogram("h1_probePfmvaId_jpsi",*probePfmvaId,Binning(38));    // comment for LPT case    
+  // TH1 *h1_probePfmvaId_bkg   = dataw_bkg->createHistogram("h1_probePfmvaId_bkg",*probePfmvaId,Binning(38));      // comment for LPT case 
+
+  TH1 *h1_probeDxySig_jpsi   = dataw_jpsi->createHistogram("h1_probeDxySig_jpsi",*probeDxySig,Binning(50)); 
+  TH1 *h1_probeDxySig_bkg    = dataw_bkg->createHistogram("h1_probeDxySig_bkg",*probeDxySig,Binning(50)); 
+  TH1 *h1_probeDzTrg_jpsi    = dataw_jpsi->createHistogram("h1_probeDzTrg_jpsi",*probeDzTrg,Binning(50)); 
+  TH1 *h1_probeDzTrg_bkg     = dataw_bkg->createHistogram("h1_probeDzTrg_bkg",*probeDzTrg,Binning(50)); 
+  TH1 *h1_probeIso04Rel_jpsi = dataw_jpsi->createHistogram("h1_probeIso04Rel_jpsi",*probeIso04Rel,Binning(50)); 
+  TH1 *h1_probeIso04Rel_bkg  = dataw_bkg->createHistogram("h1_probeIso04Rel_bkg",*probeIso04Rel,Binning(50)); 
+
+  TH1 *h1_probePt_jpsi  = dataw_jpsi->createHistogram("h1_probePt_jpsi",*probePt,Binning(60));
+  TH1 *h1_probePt_bkg   = dataw_bkg->createHistogram("h1_probePt_bkg",*probePt,Binning(60));
+  TH1 *h1_probeEta_jpsi = dataw_jpsi->createHistogram("h1_probeEta_jpsi",*probeEta,Binning(40));
+  TH1 *h1_probeEta_bkg  = dataw_bkg->createHistogram("h1_probeEta_bkg",*probeEta,Binning(40));
 
   TFile myFileSPlots("myFileSPlots.root","RECREATE");
   myFileSPlots.cd();
-  // comment for PF case - init        
-  h1_probeFBrem_jpsi->Write();
-  h1_probeFBrem_bkg->Write();
-  h1_probeMvaId_jpsi->Write();
-  h1_probeMvaId_bkg->Write();
-  // comment for PF case - end  
-  //  h1_probePfmvaId_jpsi->Write();
-  //  h1_probePfmvaId_bkg->Write();
+
+  h1_probeDxySig_jpsi->Write();        
+  h1_probeDxySig_bkg->Write();        
+  h1_probeDzTrg_jpsi->Write();        
+  h1_probeDzTrg_bkg->Write();        
+  h1_probeIso04Rel_jpsi->Write();        
+  h1_probeIso04Rel_bkg->Write();        
+
+  h1_probeMvaId_jpsi->Write();                // comment for PF case
+  h1_probeMvaId_bkg->Write();                 // comment for PF case
+  //  h1_probePfmvaId_jpsi->Write();          // comment for LPT case
+  //  h1_probePfmvaId_bkg->Write();           // comment for LPT case
   h1_probePt_jpsi->Write();
   h1_probePt_bkg->Write();
   h1_probeEta_jpsi->Write();
@@ -467,18 +453,38 @@ void MakeHistos(RooWorkspace* ws){
   h1_probeEta_bkg->DrawNormalized("samehist");
   ch3->SaveAs("probeEta.png");
 
-  // comment for PF case - init
   TCanvas* ch4 = new TCanvas("ch4","ch4", 1);
-  h1_probeFBrem_jpsi->SetLineWidth(2);
-  h1_probeFBrem_bkg->SetLineWidth(2);
-  h1_probeFBrem_jpsi->SetLineColor(6);
-  h1_probeFBrem_bkg->SetLineColor(4);
-  h1_probeFBrem_jpsi->SetTitle("");
-  h1_probeFBrem_bkg->SetTitle("");
-  h1_probeFBrem_bkg->DrawNormalized("hist");
-  h1_probeFBrem_jpsi->DrawNormalized("samehist");
-  ch4->SaveAs("probeFBrem.png");
-  // comment for PF case - end  
+  h1_probeDxySig_jpsi->SetLineWidth(2);
+  h1_probeDxySig_bkg->SetLineWidth(2);
+  h1_probeDxySig_jpsi->SetLineColor(6);
+  h1_probeDxySig_bkg->SetLineColor(4);
+  h1_probeDxySig_jpsi->SetTitle("");
+  h1_probeDxySig_bkg->SetTitle("");
+  h1_probeDxySig_bkg->DrawNormalized("hist");
+  h1_probeDxySig_jpsi->DrawNormalized("samehist");
+  ch4->SaveAs("probeDxySig.png");
+
+  TCanvas* ch5 = new TCanvas("ch5","ch5", 1);
+  h1_probeDzTrg_jpsi->SetLineWidth(2);
+  h1_probeDzTrg_bkg->SetLineWidth(2);
+  h1_probeDzTrg_jpsi->SetLineColor(6);
+  h1_probeDzTrg_bkg->SetLineColor(4);
+  h1_probeDzTrg_jpsi->SetTitle("");
+  h1_probeDzTrg_bkg->SetTitle("");
+  h1_probeDzTrg_bkg->DrawNormalized("hist");
+  h1_probeDzTrg_jpsi->DrawNormalized("samehist");
+  ch5->SaveAs("probeDzTrg.png");
+
+  TCanvas* ch6 = new TCanvas("ch6","ch6", 1);
+  h1_probeIso04Rel_jpsi->SetLineWidth(2);
+  h1_probeIso04Rel_bkg->SetLineWidth(2);
+  h1_probeIso04Rel_jpsi->SetLineColor(6);
+  h1_probeIso04Rel_bkg->SetLineColor(4);
+  h1_probeIso04Rel_jpsi->SetTitle("");
+  h1_probeIso04Rel_bkg->SetTitle("");
+  h1_probeIso04Rel_bkg->DrawNormalized("hist");
+  h1_probeIso04Rel_jpsi->DrawNormalized("samehist");
+  ch6->SaveAs("probeDzTrg.png");
 }
 
 // Convert ROOT tree in RooDataset
@@ -490,26 +496,24 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   RooRealVar pair_mass("pair_mass", "M_{inv}", lowRange, highRange,"GeV");
   // 
   // trigger
-  RooRealVar hlt_9("hlt_9", "hlt_9", -0.5, 1.5, "");
+  RooRealVar hlt_9ip6("hlt_9ip6", "hlt_9ip6", -0.5, 1.5, "");
+  // 
   // LPT / PF overlap
   RooRealVar probeIsPFOverlap("probeIsPFOverlap", "probeIsPFOverlap", -0.5, 1.5, "");
   //
   // discriminating variables
-  // comment for PF case - init
-  RooRealVar probeFBrem("probeFBrem", "probeFBrem", 0., 1., "");
-  // RooRealVar probeMvaId("probeMvaId", "probeMvaId", -10., 10., "");
-  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -3., 15., "");
-  // comment for PF case - end
-  // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");
+  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -4., 15., "");                // comment for PF case 
+  // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");      // comment for LPT case  
   RooRealVar probePt("probePt", "probePt", 0., 15., "");
   RooRealVar probeEta("probeEta", "probeEta", -2.4, 2.4, "");
 
-  // chiara, test
-  RooRealVar tagPfmvaId("tagPfmvaId","tagPfmvaId",-15.,15.,"");
+  RooRealVar probeDxySig("probeDxySig", "probeDxySig", -10., 10., ""); 
+  RooRealVar probeDzTrg("probeDzTrg", "probeDzTrg", -0.5, 0.5, ""); 
+  RooRealVar probeIso04Rel("probeIso04Rel", "probeIso04Rel", 0., 10., "");
 
 
-  // RooArgSet setall(pair_mass,hlt_9,probePfmvaId,probePt,probeEta,probeDxySig,probeDzSig);
-  RooArgSet setall(pair_mass,hlt_9,probeIsPFOverlap,probeMvaId,probePt,probeEta,probeFBrem,tagPfmvaId);
+  // RooArgSet setall(pair_mass,hlt_9ip6,probeIsPFOverlap,probePfmvaId,probePt,probeEta);
+  RooArgSet setall(pair_mass,hlt_9ip6,probeIsPFOverlap,probeMvaId,probePt,probeEta,probeDxySig,probeDzTrg,probeIso04Rel);
 
   TFile *file = TFile::Open(rootfile);
   TTree *tree = (TTree*)file->Get("tnpAna/fitter_tree");
@@ -517,37 +521,33 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   RooDataSet *data = new RooDataSet("data","data",tree,setall,0); 
 
   // Inclusive
-  //data = (RooDataSet*)data->reduce("hlt_9==1 && tagPfmvaId>-1 && probePt>0.5 && probeEta>-2.4 && probeEta<2.4");        
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && ( (probePt>1.0 && probeEta>-1.5 && probeEta<1.5) || (probePt>2.0 && (probeEta<-1.5 || probeEta>1.5)) )");   
 
   // EB / EE
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probeEta>-1.5 && probeEta<1.5");          
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>1.0 && probeEta>-1.5 && probeEta<1.5");          
+  data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>2.0 && (probeEta<-1.5 || probeEta>1.5)");    
 
   // PF overlap 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probeIsPFOverlap==1");
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probeIsPFOverlap==0");
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probeIsPFOverlap==1");
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probeIsPFOverlap==0");
 
   // Barrel:
-  // pt: 0.5-1.5 GeV  - old
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<1.5 && probeEta<1.5 && probeEta>-1.5");    
   // pt: 1-1.5 GeV    
-  data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.0 && probePt<1.5 && probeEta<1.5 && probeEta>-1.5");     
-  // pt: 1.5-2.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.5 && probePt<2.0 && probeEta<1.5 && probeEta>-1.5");    
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>1.0 && probePt<1.5 && probeEta<1.5 && probeEta>-1.5");      
+  // pT: 1.5-2 GeV
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>1.5 && probePt<2.0 && probeEta<1.5 && probeEta>-1.5");    
   // pt: 2.0-5.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>2.0 && probePt<5.0 && probeEta<1.5 && probeEta>-1.5");    
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>2.0 && probePt<5.0 && probeEta<1.5 && probeEta>-1.5");    
   // pt: >5.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && probeEta<1.5 && probeEta>-1.5");    
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>5.0 && probeEta<1.5 && probeEta>-1.5");    
   //
   // Endcap:
-  // pt: 0.5-2.0 GeV - old
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>0.5 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: 1.0-2.0 GeV - test
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>1.0 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>1.0 && probePt<2.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: 2.0-5.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>2.0 && probePt<5.0 && (probeEta<-1.5 || probeEta>1.5)");    
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>2.0 && probePt<5.0 && (probeEta<-1.5 || probeEta>1.5)");    
   // pt: >5.0 GeV 
-  // data = (RooDataSet*)data->reduce("hlt_9==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5) && tagPfmvaId>-1");            
+  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>5.0 && (probeEta<-1.5 || probeEta>1.5)");            
 
   data->Print();
 
