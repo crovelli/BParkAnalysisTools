@@ -26,16 +26,16 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
 
   // -------------------------------------------------------------------------
   // Histos
-  TH1F *mvaSignalMc = new TH1F("mvaSignalMc", "mvaSignalMc", 54, -3., 15.);
-  TH1F *mvaFakeMc   = new TH1F("mvaFakeMc",   "mvaFakeMc",   54, -3., 15.);
-  TH1F *ptSignalMc  = new TH1F("ptSignalMc",  "ptSignalMc",  60,   0., 15.);
-  TH1F *ptFakeMc    = new TH1F("ptFakeMc",    "ptFakeMc",    60,   0., 15.);
+  TH1F *mvaSignalMc = new TH1F("mvaSignalMc", "mvaSignalMc", 40, -4., 16.);
+  TH1F *mvaFakeMc   = new TH1F("mvaFakeMc",   "mvaFakeMc",   40, -4., 16.);
+  TH1F *ptSignalMc  = new TH1F("ptSignalMc",  "ptSignalMc",  90,  0., 30.);
+  TH1F *ptFakeMc    = new TH1F("ptFakeMc",    "ptFakeMc",    90,  0., 30.);
   TH1F *etaSignalMc = new TH1F("etaSignalMc", "etaSignalMc", 40, -2.4, 2.4);
   TH1F *etaFakeMc   = new TH1F("etaFakeMc",   "etaFakeMc",   40, -2.4, 2.4);
-  TH1F *dxysigSignalMc = new TH1F("dxysigSignalMc", "dxysigSignalMc", 50, -10., 10.);  
-  TH1F *dxysigFakeMc   = new TH1F("dxysigFakeMc",   "dxysigFakeMc",   50, -10., 10.);  
-  TH1F *dztrgSignalMc  = new TH1F("dztrgSignalMc",  "dztrgSignalMc",  50, -0.5, 0.5); 
-  TH1F *dztrgFakeMc    = new TH1F("dztrgFakeMc",    "dztrgFakeMc",    50, -0.5, 0.5);  
+  TH1F *dxysigSignalMc = new TH1F("dxysigSignalMc", "dxysigSignalMc", 120, -30., 30.);  
+  TH1F *dxysigFakeMc   = new TH1F("dxysigFakeMc",   "dxysigFakeMc",   120, -30., 30.);  
+  TH1F *dztrgSignalMc  = new TH1F("dztrgSignalMc",  "dztrgSignalMc",  100, -1., 1.); 
+  TH1F *dztrgFakeMc    = new TH1F("dztrgFakeMc",    "dztrgFakeMc",    100, -1., 1.);  
   mvaSignalMc -> Sumw2();
   mvaFakeMc   -> Sumw2();
   ptSignalMc  -> Sumw2();    
@@ -47,17 +47,17 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   dztrgSignalMc  -> Sumw2();
   dztrgFakeMc    -> Sumw2();
   // 
-  TH1F *mvaSignalMc_LptPfOverlap    = new TH1F("mvaSignalMc_LptPfOverlap",    "mvaSignalMc_LptPfOverlap",    72, -3., 15.); 
-  TH1F *ptSignalMc_LptPfOverlap     = new TH1F("ptSignalMc_LptPfOverlap",     "ptSignalMc_LptPfOverlap",     60,   0., 15.);
+  TH1F *mvaSignalMc_LptPfOverlap    = new TH1F("mvaSignalMc_LptPfOverlap",    "mvaSignalMc_LptPfOverlap",    40, -4., 16.); 
+  TH1F *ptSignalMc_LptPfOverlap     = new TH1F("ptSignalMc_LptPfOverlap",     "ptSignalMc_LptPfOverlap",     90,  0., 30.);
   TH1F *etaSignalMc_LptPfOverlap    = new TH1F("etaSignalMc_LptPfOverlap",    "etaSignalMc_LptPfOverlap",    40, -2.4, 2.4);
-  TH1F *mvaSignalMc_LptNotPfOverlap = new TH1F("mvaSignalMc_LptNotPfOverlap", "mvaSignalMc_LptNotPfOverlap", 72, -3., 15.); 
-  TH1F *ptSignalMc_LptNotPfOverlap  = new TH1F("ptSignalMc_LptNotPfOverlap",  "ptSignalMc_LptNotPfOverlap",  60,   0., 15.);
+  TH1F *mvaSignalMc_LptNotPfOverlap = new TH1F("mvaSignalMc_LptNotPfOverlap", "mvaSignalMc_LptNotPfOverlap", 40, -4., 16.); 
+  TH1F *ptSignalMc_LptNotPfOverlap  = new TH1F("ptSignalMc_LptNotPfOverlap",  "ptSignalMc_LptNotPfOverlap",  90,  0., 30.);
   TH1F *etaSignalMc_LptNotPfOverlap = new TH1F("etaSignalMc_LptNotPfOverlap", "etaSignalMc_LptNotPfOverlap", 40, -2.4, 2.4);
-  TH1F *mvaFakeMc_LptPfOverlap      = new TH1F("mvaFakeMc_LptPfOverlap",      "mvaFakeMc_LptPfOverlap",      72, -3., 15.); 
-  TH1F *ptFakeMc_LptPfOverlap       = new TH1F("ptFakeMc_LptPfOverlap",       "ptFakeMc_LptPfOverlap",       60,   0., 15.);
+  TH1F *mvaFakeMc_LptPfOverlap      = new TH1F("mvaFakeMc_LptPfOverlap",      "mvaFakeMc_LptPfOverlap",      40, -4., 16.); 
+  TH1F *ptFakeMc_LptPfOverlap       = new TH1F("ptFakeMc_LptPfOverlap",       "ptFakeMc_LptPfOverlap",       90,  0., 30.);
   TH1F *etaFakeMc_LptPfOverlap      = new TH1F("etaFakeMc_LptPfOverlap",      "etaFakeMc_LptPfOverlap",      40, -2.4, 2.4);
-  TH1F *mvaFakeMc_LptNotPfOverlap   = new TH1F("mvaFakeMc_LptNotPfOverlap",   "mvaFakeMc_LptNotPfOverlap",   72, -3., 15.); 
-  TH1F *ptFakeMc_LptNotPfOverlap    = new TH1F("ptFakeMc_LptNotPfOverlap",    "ptFakeMc_LptNotPfOverlap",    60,   0., 15.);
+  TH1F *mvaFakeMc_LptNotPfOverlap   = new TH1F("mvaFakeMc_LptNotPfOverlap",   "mvaFakeMc_LptNotPfOverlap",   40, -4., 16.); 
+  TH1F *ptFakeMc_LptNotPfOverlap    = new TH1F("ptFakeMc_LptNotPfOverlap",    "ptFakeMc_LptNotPfOverlap",    90,  0., 30.);
   TH1F *etaFakeMc_LptNotPfOverlap   = new TH1F("etaFakeMc_LptNotPfOverlap",   "etaFakeMc_LptNotPfOverlap",   40, -2.4, 2.4);
   mvaSignalMc_LptPfOverlap->Sumw2();  
   ptSignalMc_LptPfOverlap->Sumw2();
@@ -78,13 +78,13 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   ptVsEtaFakeMc->Sumw2();
 
   // Many pT/eta bins
-  TH1F *mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 72, -3., 15.);  // 1.0-1.5
-  TH1F *mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 72, -3., 15.);  // 1.5-2.0
-  TH1F *mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 72, -3., 15.);  // 2.0-5.0
-  TH1F *mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 72, -3., 15.);  // >5
-  TH1F *mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 72, -3., 15.);  // 1.0-2.0
-  TH1F *mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 72, -3., 15.);  // 2.0-5.0
-  TH1F *mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 72, -3., 15.);  // >5
+  TH1F *mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 40, -4., 16.);  // 1.0-1.5
+  TH1F *mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 40, -4., 16.);  // 1.5-2.0
+  TH1F *mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 40, -4., 16.);  // 2.0-5.0
+  TH1F *mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 40, -4., 16.);  // >5
+  TH1F *mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 40, -4., 16.);  // 1.0-2.0
+  TH1F *mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 40, -4., 16.);  // 2.0-5.0
+  TH1F *mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 40, -4., 16.);  // >5
   mvaSignalEBMc0->Sumw2();
   mvaSignalEBMc1->Sumw2();
   mvaSignalEBMc2->Sumw2();
@@ -93,13 +93,13 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
   mvaSignalEEMc1->Sumw2();
   mvaSignalEEMc2->Sumw2();
   //
-  TH1F *mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 72, -3., 15.);  // 1.0-1.5
-  TH1F *mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 72, -3., 15.);  // 1.5-2.0
-  TH1F *mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 72, -3., 15.);  // 2.0-5.0
-  TH1F *mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 72, -3., 15.);  // >5
-  TH1F *mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 72, -3., 15.);  // pT: 1.0-2.0 
-  TH1F *mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 72, -3., 15.);  // pT: 2.0-5.0 
-  TH1F *mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 72, -3., 15.);  // >5
+  TH1F *mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 40, -4., 16.);  // 1.0-1.5
+  TH1F *mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 40, -4., 16.);  // 1.5-2.0
+  TH1F *mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 40, -4., 16.);  // 2.0-5.0
+  TH1F *mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 40, -4., 16.);  // >5
+  TH1F *mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 40, -4., 16.);  // pT: 1.0-2.0 
+  TH1F *mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 40, -4., 16.);  // pT: 2.0-5.0 
+  TH1F *mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 40, -4., 16.);  // >5
   mvaFakeEBMc0->Sumw2();
   mvaFakeEBMc1->Sumw2();
   mvaFakeEBMc2->Sumw2();
@@ -148,6 +148,17 @@ void prepareInputsFromNaniInMc::Loop(int testLowPt, bool studyOverlap)
       // Acceptance
       if (fabs(Electron_eta[iEle])>2.4) continue;
       if (Electron_pt[iEle]<1.0)        continue;
+
+      // Apply same loose cuts as done for data - chiara   
+      if (Electron_mvaId[iEle]<-4 || Electron_mvaId[iEle]>16) continue;  
+      if (Electron_pt[iEle]>1000) continue;
+      float dxysig = Electron_dxy[iEle]/Electron_dxyErr[iEle];
+      if (fabs(dxysig)>200) continue;   
+      if (fabs(Electron_dzTrg[iEle])>10) continue;   
+
+
+
+
 
       // Electron candidate
       TVector3 recoEleTV3(0,0,0); 
