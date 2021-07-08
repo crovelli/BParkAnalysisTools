@@ -28,18 +28,18 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   // Full pT range: distributions to compute/test weights and for data/MC
   // 
   // No weight
-  TH1F *probePtSignalMc  = new TH1F("probePtSignalMc",  "probePtSignalMc",  60,  0.,  15.);
-  TH1F *probePtFakeMc    = new TH1F("probePtFakeMc",    "probePtFakeMc",    60,  0.,  15.);
+  TH1F *probePtSignalMc  = new TH1F("probePtSignalMc",  "probePtSignalMc",  90,  0.,  30.);
+  TH1F *probePtFakeMc    = new TH1F("probePtFakeMc",    "probePtFakeMc",    90,  0.,  30.);
   TH1F *probeEtaSignalMc = new TH1F("probeEtaSignalMc", "probeEtaSignalMc", 40, -2.4, 2.4);
   TH1F *probeEtaFakeMc   = new TH1F("probeEtaFakeMc",   "probeEtaFakeMc",   40, -2.4, 2.4);
-  TH1F *probeMvaSignalMc = new TH1F("probeMvaSignalMc", "probeMvaSignalMc", 54, -3., 15.);           // 60, -10., 10. for january production
-  TH1F *probeMvaFakeMc   = new TH1F("probeMvaFakeMc",   "probeMvaFakeMc",   54, -3., 15.);
-  TH1F *probeDxysigSignalMc   = new TH1F("probeDxysigSignalMc",   "probeDxysigSignalMc",   50, -10., 10.);  
-  TH1F *probeDxysigFakeMc     = new TH1F("probeDxysigFakeMc",     "probeDxysigFakeMc",     50, -10., 10.);  
-  TH1F *probeDztrgSignalMc    = new TH1F("probeDztrgSignalMc",    "probeDztrgSignalMc",    50, -0.5, 0.5); 
-  TH1F *probeDztrgFakeMc      = new TH1F("probeDztrgFakeMc",      "probeDztrgFakeMc",      50, -0.5, 0.5);  
-  TH1F *probeIso04relSignalMc = new TH1F("probeIso04relSignalMc", "probeIso04relSignalMc", 50,  0.,  10.);  
-  TH1F *probeIso04relFakeMc   = new TH1F("probeIso04relFakeMc",   "probeIso04relFakeMc",   50,  0.,  10.);  
+  TH1F *probeMvaSignalMc = new TH1F("probeMvaSignalMc", "probeMvaSignalMc", 40, -4., 16.);    
+  TH1F *probeMvaFakeMc   = new TH1F("probeMvaFakeMc",   "probeMvaFakeMc",   40, -4., 16.);
+  TH1F *probeDxysigSignalMc   = new TH1F("probeDxysigSignalMc",   "probeDxysigSignalMc",   120, -30., 30.);  
+  TH1F *probeDxysigFakeMc     = new TH1F("probeDxysigFakeMc",     "probeDxysigFakeMc",     120, -30., 30.);  
+  TH1F *probeDztrgSignalMc    = new TH1F("probeDztrgSignalMc",    "probeDztrgSignalMc",    100, -1., 1.); 
+  TH1F *probeDztrgFakeMc      = new TH1F("probeDztrgFakeMc",      "probeDztrgFakeMc",      100, -1., 1.);  
+  TH1F *probeIso04relSignalMc = new TH1F("probeIso04relSignalMc", "probeIso04relSignalMc",  50,  0., 50.);  
+  TH1F *probeIso04relFakeMc   = new TH1F("probeIso04relFakeMc",   "probeIso04relFakeMc",    50,  0., 50.);  
   probePtSignalMc->Sumw2();
   probePtFakeMc->Sumw2();
   probeEtaSignalMc->Sumw2();
@@ -54,12 +54,12 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   probeIso04relFakeMc->Sumw2();
   //
   // With weight (kine only)
-  TH1F *probePtSignalMcWW  = new TH1F("probePtSignalMcWW",  "probePtSignalMcWW",  60,  0.,  15.);
+  TH1F *probePtSignalMcWW  = new TH1F("probePtSignalMcWW",  "probePtSignalMcWW",  90,  0.,  30.);
   TH1F *probeEtaSignalMcWW = new TH1F("probeEtaSignalMcWW", "probeEtaSignalMcWW", 40, -2.4, 2.4);
-  TH1F *probeMvaSignalMcWW = new TH1F("probeMvaSignalMcWW", "probeMvaSignalMcWW", 54, -3., 15.); 
-  TH1F *probeDxysigSignalMcWW   = new TH1F("probeDxysigSignalMcWW",   "probeDxysigSignalMcWW",   50, -10., 10.);  
-  TH1F *probeDztrgSignalMcWW    = new TH1F("probeDztrgSignalMcWW",    "probeDztrgSignalMcWW",    50, -0.5, 0.5); 
-  TH1F *probeIso04relSignalMcWW = new TH1F("probeIso04relSignalMcWW", "probeIso04relSignalMcWW", 50,  0.,  10.);  
+  TH1F *probeMvaSignalMcWW = new TH1F("probeMvaSignalMcWW", "probeMvaSignalMcWW", 40, -4., 16.); 
+  TH1F *probeDxysigSignalMcWW   = new TH1F("probeDxysigSignalMcWW",   "probeDxysigSignalMcWW",   120, -30., 30.);  
+  TH1F *probeDztrgSignalMcWW    = new TH1F("probeDztrgSignalMcWW",    "probeDztrgSignalMcWW",    100, -1., 1.); 
+  TH1F *probeIso04relSignalMcWW = new TH1F("probeIso04relSignalMcWW", "probeIso04relSignalMcWW",  50,  0., 50.);  
   probePtSignalMcWW->Sumw2();
   probeEtaSignalMcWW->Sumw2();
   probeMvaSignalMcWW->Sumw2(); 
@@ -69,14 +69,13 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
 
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): ID output
-  TH1F *mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 54, -3., 15.);  // pT: 1.0-1.5
-  TH1F *mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 54, -3., 15.);  // 1.5-2.0
-  TH1F *mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 54, -3., 15.);  // 2.0-5.0
-  TH1F *mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 54, -3., 15.);  // >5
-  //
-  TH1F *mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 54, -3., 15.);  // pT: 1.0-2.0  
-  TH1F *mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 54, -3., 15.);  // pT: 2.0-5.0  
-  TH1F *mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 54, -3., 15.);  // >5
+  TH1F *mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 40, -4., 16.);  // pT: 1.0-1.5
+  TH1F *mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 40, -4., 16.);  // 1.5-2.0
+  TH1F *mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 40, -4., 16.);  // 2.0-5.0
+  TH1F *mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 40, -4., 16.);  // >5
+  TH1F *mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 40, -4., 16.);  // pT: 1.0-2.0  
+  TH1F *mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 40, -4., 16.);  // pT: 2.0-5.0  
+  TH1F *mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 40, -4., 16.);  // >5
   mvaSignalEBMc0->Sumw2();
   mvaSignalEBMc1->Sumw2();
   mvaSignalEBMc2->Sumw2();
@@ -85,13 +84,13 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   mvaSignalEEMc1->Sumw2();
   mvaSignalEEMc2->Sumw2();
   //
-  TH1F *mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 54, -3., 15.);  // pT: 1.0-1.5
-  TH1F *mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 54, -3., 15.);  // 1.5-2.0
-  TH1F *mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 54, -3., 15.);  // 2.0-5.0
-  TH1F *mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 54, -3., 15.);  // >5
-  TH1F *mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 54, -3., 15.);  // pT: 1.0-2.0
-  TH1F *mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 54, -3., 15.);  // pT: 2.0-5.0
-  TH1F *mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 54, -3., 15.);  // >5
+  TH1F *mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 40, -4., 16.);  // pT: 1.0-1.5
+  TH1F *mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 40, -4., 16.);  // 1.5-2.0
+  TH1F *mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 40, -4., 16.);  // 2.0-5.0
+  TH1F *mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 40, -4., 16.);  // >5
+  TH1F *mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 40, -4., 16.);  // pT: 1.0-2.0
+  TH1F *mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 40, -4., 16.);  // pT: 2.0-5.0
+  TH1F *mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 40, -4., 16.);  // >5
   mvaFakeEBMc0->Sumw2();
   mvaFakeEBMc1->Sumw2();
   mvaFakeEBMc2->Sumw2();
@@ -102,13 +101,13 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   
   // -----------------------------------------------------------------------
   // Many pT/eta bins (with weight): ID output
-  TH1F *mvaSignalEBMc0WW = new TH1F("mvaSignalEBMc0WW", "mvaSignalEBMc0WW", 54, -3., 15.);  // pT: 1.0-1.5
-  TH1F *mvaSignalEBMc1WW = new TH1F("mvaSignalEBMc1WW", "mvaSignalEBMc1WW", 54, -3., 15.);  // 1.5-2.0
-  TH1F *mvaSignalEBMc2WW = new TH1F("mvaSignalEBMc2WW", "mvaSignalEBMc2WW", 54, -3., 15.);  // 2.0-5.0
-  TH1F *mvaSignalEBMc3WW = new TH1F("mvaSignalEBMc3WW", "mvaSignalEBMc3WW", 54, -3., 15.);  // >5
-  TH1F *mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 54, -3., 15.);  // pT: 1.0-2.0 
-  TH1F *mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 54, -3., 15.);  // pT: 2.0-5.0 
-  TH1F *mvaSignalEEMc2WW = new TH1F("mvaSignalEEMc2WW", "mvaSignalEEMc2WW", 54, -3., 15.);  // >5
+  TH1F *mvaSignalEBMc0WW = new TH1F("mvaSignalEBMc0WW", "mvaSignalEBMc0WW", 40, -4., 16.);  // pT: 1.0-1.5
+  TH1F *mvaSignalEBMc1WW = new TH1F("mvaSignalEBMc1WW", "mvaSignalEBMc1WW", 40, -4., 16.);  // 1.5-2.0
+  TH1F *mvaSignalEBMc2WW = new TH1F("mvaSignalEBMc2WW", "mvaSignalEBMc2WW", 40, -4., 16.);  // 2.0-5.0
+  TH1F *mvaSignalEBMc3WW = new TH1F("mvaSignalEBMc3WW", "mvaSignalEBMc3WW", 40, -4., 16.);  // >5
+  TH1F *mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 40, -4., 16.);  // pT: 1.0-2.0 
+  TH1F *mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 40, -4., 16.);  // pT: 2.0-5.0 
+  TH1F *mvaSignalEEMc2WW = new TH1F("mvaSignalEEMc2WW", "mvaSignalEEMc2WW", 40, -4., 16.);  // >5
   mvaSignalEBMc0WW->Sumw2();
   mvaSignalEBMc1WW->Sumw2();
   mvaSignalEBMc2WW->Sumw2();
@@ -119,13 +118,13 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
 
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): dxy significance
-  TH1F *dxysigSignalEBMc0 = new TH1F("dxysigSignalEBMc0", "dxysigSignalEBMc0", 50, -10., 10.);  // pT: 1.0-1.5
-  TH1F *dxysigSignalEBMc1 = new TH1F("dxysigSignalEBMc1", "dxysigSignalEBMc1", 50, -10., 10.);  // 1.5-2.0
-  TH1F *dxysigSignalEBMc2 = new TH1F("dxysigSignalEBMc2", "dxysigSignalEBMc2", 50, -10., 10.);  // 2.0-5.0
-  TH1F *dxysigSignalEBMc3 = new TH1F("dxysigSignalEBMc3", "dxysigSignalEBMc3", 50, -10., 10.);  // >5
-  TH1F *dxysigSignalEEMc0 = new TH1F("dxysigSignalEEMc0", "dxysigSignalEEMc0", 50, -10., 10.);  // pT: 1.0-2.0 
-  TH1F *dxysigSignalEEMc1 = new TH1F("dxysigSignalEEMc1", "dxysigSignalEEMc1", 50, -10., 10.);  // pT: 2.0-5.0 
-  TH1F *dxysigSignalEEMc2 = new TH1F("dxysigSignalEEMc2", "dxysigSignalEEMc2", 50, -10., 10.);  // >5
+  TH1F *dxysigSignalEBMc0 = new TH1F("dxysigSignalEBMc0", "dxysigSignalEBMc0", 120, -30., 30.);  // pT: 1.0-1.5
+  TH1F *dxysigSignalEBMc1 = new TH1F("dxysigSignalEBMc1", "dxysigSignalEBMc1", 120, -30., 30.);  // 1.5-2.0
+  TH1F *dxysigSignalEBMc2 = new TH1F("dxysigSignalEBMc2", "dxysigSignalEBMc2", 120, -30., 30.);  // 2.0-5.0
+  TH1F *dxysigSignalEBMc3 = new TH1F("dxysigSignalEBMc3", "dxysigSignalEBMc3", 120, -30., 30.);  // >5
+  TH1F *dxysigSignalEEMc0 = new TH1F("dxysigSignalEEMc0", "dxysigSignalEEMc0", 120, -30., 30.);  // pT: 1.0-2.0 
+  TH1F *dxysigSignalEEMc1 = new TH1F("dxysigSignalEEMc1", "dxysigSignalEEMc1", 120, -30., 30.);  // pT: 2.0-5.0 
+  TH1F *dxysigSignalEEMc2 = new TH1F("dxysigSignalEEMc2", "dxysigSignalEEMc2", 120, -30., 30.);  // >5
   dxysigSignalEBMc0->Sumw2();
   dxysigSignalEBMc1->Sumw2();
   dxysigSignalEBMc2->Sumw2();
@@ -136,13 +135,13 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
 
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): dzTrg
-  TH1F *dztrgSignalEBMc0 = new TH1F("dztrgSignalEBMc0", "dztrgSignalEBMc0", 50, -0.5, 0.5);  // pT: 1.0-1.5
-  TH1F *dztrgSignalEBMc1 = new TH1F("dztrgSignalEBMc1", "dztrgSignalEBMc1", 50, -0.5, 0.5);  // 1.5-2.0
-  TH1F *dztrgSignalEBMc2 = new TH1F("dztrgSignalEBMc2", "dztrgSignalEBMc2", 50, -0.5, 0.5);  // 2.0-5.0
-  TH1F *dztrgSignalEBMc3 = new TH1F("dztrgSignalEBMc3", "dztrgSignalEBMc3", 50, -0.5, 0.5);  // >5
-  TH1F *dztrgSignalEEMc0 = new TH1F("dztrgSignalEEMc0", "dztrgSignalEEMc0", 50, -0.5, 0.5);  // pT: 1.0-2.0 
-  TH1F *dztrgSignalEEMc1 = new TH1F("dztrgSignalEEMc1", "dztrgSignalEEMc1", 50, -0.5, 0.5);  // pT: 2.0-5.0 
-  TH1F *dztrgSignalEEMc2 = new TH1F("dztrgSignalEEMc2", "dztrgSignalEEMc2", 50, -0.5, 0.5);  // >5
+  TH1F *dztrgSignalEBMc0 = new TH1F("dztrgSignalEBMc0", "dztrgSignalEBMc0", 100, -1., 1.);  // pT: 1.0-1.5
+  TH1F *dztrgSignalEBMc1 = new TH1F("dztrgSignalEBMc1", "dztrgSignalEBMc1", 100, -1., 1.);  // 1.5-2.0
+  TH1F *dztrgSignalEBMc2 = new TH1F("dztrgSignalEBMc2", "dztrgSignalEBMc2", 100, -1., 1.);  // 2.0-5.0
+  TH1F *dztrgSignalEBMc3 = new TH1F("dztrgSignalEBMc3", "dztrgSignalEBMc3", 100, -1., 1.);  // >5
+  TH1F *dztrgSignalEEMc0 = new TH1F("dztrgSignalEEMc0", "dztrgSignalEEMc0", 100, -1., 1.);  // pT: 1.0-2.0 
+  TH1F *dztrgSignalEEMc1 = new TH1F("dztrgSignalEEMc1", "dztrgSignalEEMc1", 100, -1., 1.);  // pT: 2.0-5.0 
+  TH1F *dztrgSignalEEMc2 = new TH1F("dztrgSignalEEMc2", "dztrgSignalEEMc2", 100, -1., 1.);  // >5
   dztrgSignalEBMc0->Sumw2();
   dztrgSignalEBMc1->Sumw2();
   dztrgSignalEBMc2->Sumw2();
@@ -150,31 +149,16 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   dztrgSignalEEMc0->Sumw2();
   dztrgSignalEEMc1->Sumw2();
   dztrgSignalEEMc2->Sumw2();
-  //
-  TH1F *dztrgFakeEBMc0 = new TH1F("dztrgFakeEBMc0", "dztrgFakeEBMc0", 50, -0.5, 0.5);  // pT: 0.5-1.5
-  TH1F *dztrgFakeEBMc1 = new TH1F("dztrgFakeEBMc1", "dztrgFakeEBMc1", 50, -0.5, 0.5);  // 1.5-2.0
-  TH1F *dztrgFakeEBMc2 = new TH1F("dztrgFakeEBMc2", "dztrgFakeEBMc2", 50, -0.5, 0.5);  // 2.0-5.0
-  TH1F *dztrgFakeEBMc3 = new TH1F("dztrgFakeEBMc3", "dztrgFakeEBMc3", 50, -0.5, 0.5);  // >5
-  TH1F *dztrgFakeEEMc0 = new TH1F("dztrgFakeEEMc0", "dztrgFakeEEMc0", 50, -0.5, 0.5);  // pT: 1.0-2.0
-  TH1F *dztrgFakeEEMc1 = new TH1F("dztrgFakeEEMc1", "dztrgFakeEEMc1", 50, -0.5, 0.5);  // pT: 2.0-5.0
-  TH1F *dztrgFakeEEMc2 = new TH1F("dztrgFakeEEMc2", "dztrgFakeEEMc2", 50, -0.5, 0.5);  // >5
-  dztrgFakeEBMc0->Sumw2();
-  dztrgFakeEBMc1->Sumw2();
-  dztrgFakeEBMc2->Sumw2();
-  dztrgFakeEBMc3->Sumw2();
-  dztrgFakeEEMc0->Sumw2();
-  dztrgFakeEEMc1->Sumw2();
-  dztrgFakeEEMc2->Sumw2();
 
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): iso04rel
-  TH1F *iso04relSignalEBMc0 = new TH1F("iso04relSignalEBMc0", "iso04relSignalEBMc0", 50, 0., 10.);  // pT: 1.0-1.5
-  TH1F *iso04relSignalEBMc1 = new TH1F("iso04relSignalEBMc1", "iso04relSignalEBMc1", 50, 0., 10.);  // 1.5-2.0
-  TH1F *iso04relSignalEBMc2 = new TH1F("iso04relSignalEBMc2", "iso04relSignalEBMc2", 50, 0., 10.);  // 2.0-5.0
-  TH1F *iso04relSignalEBMc3 = new TH1F("iso04relSignalEBMc3", "iso04relSignalEBMc3", 50, 0., 10.);  // >5
-  TH1F *iso04relSignalEEMc0 = new TH1F("iso04relSignalEEMc0", "iso04relSignalEEMc0", 50, 0., 10.);  // pT: 1.0-2.0 
-  TH1F *iso04relSignalEEMc1 = new TH1F("iso04relSignalEEMc1", "iso04relSignalEEMc1", 50, 0., 10.);  // pT: 2.0-5.0 
-  TH1F *iso04relSignalEEMc2 = new TH1F("iso04relSignalEEMc2", "iso04relSignalEEMc2", 50, 0., 10.);  // >5
+  TH1F *iso04relSignalEBMc0 = new TH1F("iso04relSignalEBMc0", "iso04relSignalEBMc0", 50, 0., 50.); // pT: 1.0-1.5
+  TH1F *iso04relSignalEBMc1 = new TH1F("iso04relSignalEBMc1", "iso04relSignalEBMc1", 50, 0., 50.); // 1.5-2.0
+  TH1F *iso04relSignalEBMc2 = new TH1F("iso04relSignalEBMc2", "iso04relSignalEBMc2", 50, 0., 50.); // 2.0-5.0
+  TH1F *iso04relSignalEBMc3 = new TH1F("iso04relSignalEBMc3", "iso04relSignalEBMc3", 50, 0., 50.); // >5
+  TH1F *iso04relSignalEEMc0 = new TH1F("iso04relSignalEEMc0", "iso04relSignalEEMc0", 50, 0., 50.); // pT: 1.0-2.0
+  TH1F *iso04relSignalEEMc1 = new TH1F("iso04relSignalEEMc1", "iso04relSignalEEMc1", 50, 0., 50.); // pT: 2.0-5.0
+  TH1F *iso04relSignalEEMc2 = new TH1F("iso04relSignalEEMc2", "iso04relSignalEEMc2", 50, 0., 50.); // >5
   iso04relSignalEBMc0->Sumw2();
   iso04relSignalEBMc1->Sumw2();
   iso04relSignalEBMc2->Sumw2();
@@ -182,34 +166,19 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   iso04relSignalEEMc0->Sumw2();
   iso04relSignalEEMc1->Sumw2();
   iso04relSignalEEMc2->Sumw2();
-  //
-  TH1F *iso04relFakeEBMc0 = new TH1F("iso04relFakeEBMc0", "iso04relFakeEBMc0", 50, 0., 10.);  // pT: 0.5-1.5
-  TH1F *iso04relFakeEBMc1 = new TH1F("iso04relFakeEBMc1", "iso04relFakeEBMc1", 50, 0., 10.);  // 1.5-2.0
-  TH1F *iso04relFakeEBMc2 = new TH1F("iso04relFakeEBMc2", "iso04relFakeEBMc2", 50, 0., 10.);  // 2.0-5.0
-  TH1F *iso04relFakeEBMc3 = new TH1F("iso04relFakeEBMc3", "iso04relFakeEBMc3", 50, 0., 10.);  // >5
-  TH1F *iso04relFakeEEMc0 = new TH1F("iso04relFakeEEMc0", "iso04relFakeEEMc0", 50, 0., 10.);  // pT: 1.0-2.0
-  TH1F *iso04relFakeEEMc1 = new TH1F("iso04relFakeEEMc1", "iso04relFakeEEMc1", 50, 0., 10.);  // pT: 2.0-5.0
-  TH1F *iso04relFakeEEMc2 = new TH1F("iso04relFakeEEMc2", "iso04relFakeEEMc2", 50, 0., 10.);  // >5
-  iso04relFakeEBMc0->Sumw2();
-  iso04relFakeEBMc1->Sumw2();
-  iso04relFakeEBMc2->Sumw2();
-  iso04relFakeEBMc3->Sumw2();
-  iso04relFakeEEMc0->Sumw2();
-  iso04relFakeEEMc1->Sumw2();
-  iso04relFakeEEMc2->Sumw2();
 
   // --------------------------
   // Full pT range: distributions for data/MC checking overlap between LPT and PF
-  TH1F *probePtSignalMc_LptPfOverlap  = new TH1F("probePtSignalMc_LptPfOverlap",  "probePtSignalMc_LptPfOverlap",  60,  0.,  15.);
+  TH1F *probePtSignalMc_LptPfOverlap  = new TH1F("probePtSignalMc_LptPfOverlap",  "probePtSignalMc_LptPfOverlap",  90,  0.,  30.);
   TH1F *probeEtaSignalMc_LptPfOverlap = new TH1F("probeEtaSignalMc_LptPfOverlap", "probeEtaSignalMc_LptPfOverlap", 40, -2.4, 2.4);
-  TH1F *probeMvaSignalMc_LptPfOverlap = new TH1F("probeMvaSignalMc_LptPfOverlap", "probeMvaSignalMc_LptPfOverlap", 54, -3., 15.); 
+  TH1F *probeMvaSignalMc_LptPfOverlap = new TH1F("probeMvaSignalMc_LptPfOverlap", "probeMvaSignalMc_LptPfOverlap", 40, -4., 16.); 
   probePtSignalMc_LptPfOverlap->Sumw2();
   probeEtaSignalMc_LptPfOverlap->Sumw2();
   probeMvaSignalMc_LptPfOverlap->Sumw2(); 
 
-  TH1F *probePtSignalMc_LptNotPfOverlap  = new TH1F("probePtSignalMc_LptNotPfOverlap",  "probePtSignalMc_LptNotPfOverlap",  60,  0.,  15.);
+  TH1F *probePtSignalMc_LptNotPfOverlap  = new TH1F("probePtSignalMc_LptNotPfOverlap",  "probePtSignalMc_LptNotPfOverlap",  90,  0.,  30.);
   TH1F *probeEtaSignalMc_LptNotPfOverlap = new TH1F("probeEtaSignalMc_LptNotPfOverlap", "probeEtaSignalMc_LptNotPfOverlap", 40, -2.4, 2.4);
-  TH1F *probeMvaSignalMc_LptNotPfOverlap = new TH1F("probeMvaSignalMc_LptNotPfOverlap", "probeMvaSignalMc_LptNotPfOverlap", 54, -3., 15.); 
+  TH1F *probeMvaSignalMc_LptNotPfOverlap = new TH1F("probeMvaSignalMc_LptNotPfOverlap", "probeMvaSignalMc_LptNotPfOverlap", 40, -4., 16.); 
   probePtSignalMc_LptNotPfOverlap->Sumw2();
   probeEtaSignalMc_LptNotPfOverlap->Sumw2();
   probeMvaSignalMc_LptNotPfOverlap->Sumw2(); 
@@ -234,7 +203,7 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   }
 
   if (applyWeight) {
-    TFile fileWeight("files_marchNoReg/probeLowPt/weightFile_tnpVsNani.root"); 
+    TFile fileWeight("files_marchNoReg2/probeLowPt/weightFile_tnpVsNani.root"); 
     TH2F *signalWeights = (TH2F*)fileWeight.Get("ptVsEtaSignalWeights"); 
     nBinsWPt  = signalWeights->GetNbinsY(); 
     nBinsWEta = signalWeights->GetNbinsX(); 
@@ -279,6 +248,17 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
 
     // LowPt vs PF selection already applied in formatted-tnp ntuples
 
+    // Fitting range applied in data
+    if (pair_mass<2.6 || pair_mass>3.4) continue;
+
+    // Apply same loose cuts as done for data - chiara
+    if (probeMvaId<-4 || probeMvaId>16) continue;  
+    if (probePt>1000) continue;
+    if (fabs(probeEta)>2.4) continue;  
+    if (fabs(probeDxySig)>200) continue;   
+    if (fabs(probeDzTrg)>10) continue;   
+    if (probeIso04Rel<-1 || probeIso04Rel>5000) continue; 
+
     // pT vs eta weight
     float ptEtaSignalWeight=1.;
 
@@ -296,20 +276,20 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
     if (probeMatchMcFromJPsi==1) { 
       if (testLPT==1) probeMvaSignalMc->Fill(probeMvaId, weight);
       if (testLPT==0) probeMvaSignalMc->Fill(probePfmvaId, weight);
-      probePtSignalMc->Fill(probePt, weight);
+      probePtSignalMc -> Fill(probePt, weight);
       probeEtaSignalMc->Fill(probeEta, weight);
       probePtVsEtaSignalMc->Fill(probeEta,probePt, weight);
-      probeDxysigSignalMc   ->Fill(probeDxySig, weight);
-      probeDztrgSignalMc    ->Fill(probeDzTrg, weight);
-      probeIso04relSignalMc ->Fill(probeIso04Rel, weight);
+      probeDxysigSignalMc -> Fill(probeDxySig, weight);
+      probeDztrgSignalMc -> Fill(probeDzTrg, weight);
+      probeIso04relSignalMc -> Fill(probeIso04Rel, weight);
 
       if (studyOverlap==1) {
 	if (probeIsPFOverlap==1) {
-	  probePtSignalMc_LptPfOverlap->Fill(probePt, weight);
+	  probePtSignalMc_LptPfOverlap -> Fill(probePt, weight);
 	  probeEtaSignalMc_LptPfOverlap->Fill(probeEta, weight);
 	  probeMvaSignalMc_LptPfOverlap->Fill(probeMvaId, weight);
 	} else {
-	  probePtSignalMc_LptNotPfOverlap->Fill(probePt, weight);
+	  probePtSignalMc_LptNotPfOverlap -> Fill(probePt, weight);
 	  probeEtaSignalMc_LptNotPfOverlap->Fill(probeEta, weight);
 	  probeMvaSignalMc_LptNotPfOverlap->Fill(probeMvaId, weight);
 	}
@@ -320,23 +300,23 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
     if (probeMatchMcFromJPsi==1) { 
       if (testLPT==1) probeMvaSignalMcWW->Fill(probeMvaId, ptEtaSignalWeight*weight);       
       if (testLPT==0) probeMvaSignalMcWW->Fill(probePfmvaId, ptEtaSignalWeight*weight);       
-      probePtSignalMcWW->Fill(probePt, ptEtaSignalWeight*weight);
+      probePtSignalMcWW -> Fill(probePt, ptEtaSignalWeight*weight);
       probeEtaSignalMcWW->Fill(probeEta, ptEtaSignalWeight*weight);
       probePtVsEtaSignalMcWW->Fill(probeEta,probePt,ptEtaSignalWeight*weight);
-      probeDxysigSignalMcWW   ->Fill(probeDxySig, ptEtaSignalWeight*weight);
-      probeDztrgSignalMcWW    ->Fill(probeDzTrg, ptEtaSignalWeight*weight);
-      probeIso04relSignalMcWW ->Fill(probeIso04Rel, ptEtaSignalWeight*weight);
+      probeDxysigSignalMcWW -> Fill(probeDxySig, ptEtaSignalWeight*weight);
+      probeDztrgSignalMcWW -> Fill(probeDzTrg, ptEtaSignalWeight*weight);
+      probeIso04relSignalMcWW -> Fill(probeIso04Rel, ptEtaSignalWeight*weight);
     }
 
     // not matching mc-truth in MC: full pT range before weight
     if (probeMatchMcFromJPsi==0) { 
       if (testLPT==1) probeMvaFakeMc->Fill(probeMvaId, weight);
       if (testLPT==0) probeMvaFakeMc->Fill(probePfmvaId, weight);
-      probePtFakeMc->Fill(probePt, weight);
+      probePtFakeMc -> Fill(probePt, weight);
       probeEtaFakeMc->Fill(probeEta, weight);
-      probeDxysigFakeMc   ->Fill(probeDxySig, weight);
-      probeDztrgFakeMc    ->Fill(probeDzTrg, weight);
-      probeIso04relFakeMc ->Fill(probeIso04Rel, weight);
+      probeDxysigFakeMc -> Fill(probeDxySig, weight);
+      probeDztrgFakeMc -> Fill(probeDzTrg, weight);
+      probeIso04relFakeMc -> Fill(probeIso04Rel, weight);
     }
 
     // matching mc-truth in MC: eta/pT bins
@@ -350,30 +330,30 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
 	if (probePt>=1.0 && probePt<1.5) {
 	  mvaSignalEBMc0->Fill(theId, weight);
 	  mvaSignalEBMc0WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEBMc0->Fill(probeDxySig, weight);
-	  dztrgSignalEBMc0->Fill(probeDzTrg, weight);
-	  iso04relSignalEBMc0->Fill(probeIso04Rel, weight);
+	  dxysigSignalEBMc0 -> Fill(probeDxySig, weight);
+	  dztrgSignalEBMc0 -> Fill(probeDzTrg, weight);
+	  iso04relSignalEBMc0 -> Fill(probeIso04Rel, weight);
 	}
 	if (probePt>=1.5 && probePt<2.0) {
 	  mvaSignalEBMc1->Fill(theId, weight);
 	  mvaSignalEBMc1WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEBMc1->Fill(probeDxySig, weight);
-	  dztrgSignalEBMc1->Fill(probeDzTrg, weight);
-	  iso04relSignalEBMc1->Fill(probeIso04Rel, weight);
+	  dxysigSignalEBMc1 -> Fill(probeDxySig, weight);
+	  dztrgSignalEBMc1 -> Fill(probeDzTrg, weight);
+	  iso04relSignalEBMc1 -> Fill(probeIso04Rel, weight);
 	}
 	if (probePt>=2.0 && probePt<5.0) {
 	  mvaSignalEBMc2->Fill(theId, weight);
 	  mvaSignalEBMc2WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEBMc2->Fill(probeDxySig, weight);
-	  dztrgSignalEBMc2->Fill(probeDzTrg, weight);
-	  iso04relSignalEBMc2->Fill(probeIso04Rel, weight);
+	  dxysigSignalEBMc2 -> Fill(probeDxySig, weight);
+	  dztrgSignalEBMc2 -> Fill(probeDzTrg, weight);
+	  iso04relSignalEBMc2 -> Fill(probeIso04Rel, weight);
 	}
 	if (probePt>=5.0) {
 	  mvaSignalEBMc3->Fill(theId, weight);
 	  mvaSignalEBMc3WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEBMc3->Fill(probeDxySig, weight);
-	  dztrgSignalEBMc3->Fill(probeDzTrg, weight);
-	  iso04relSignalEBMc3->Fill(probeIso04Rel, weight);
+	  dxysigSignalEBMc3 -> Fill(probeDxySig, weight);
+	  dztrgSignalEBMc3 -> Fill(probeDzTrg, weight);
+	  iso04relSignalEBMc3 -> Fill(probeIso04Rel, weight);
 	}
 
       } else {  // endcap
@@ -381,23 +361,23 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
 	if (probePt>=1.0 && probePt<2.0) {
 	  mvaSignalEEMc0->Fill(theId, weight);
 	  mvaSignalEEMc0WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEEMc0->Fill(probeDxySig, weight);
-	  dztrgSignalEEMc0->Fill(probeDzTrg, weight);
-	  iso04relSignalEEMc0->Fill(probeIso04Rel, weight);
+	  dxysigSignalEEMc0 -> Fill(probeDxySig, weight);
+	  dztrgSignalEEMc0 -> Fill(probeDzTrg, weight);
+	  iso04relSignalEEMc0 -> Fill(probeIso04Rel, weight);
 	}
 	if (probePt>=2.0 && probePt<5.0) {
 	  mvaSignalEEMc1->Fill(theId, weight);
 	  mvaSignalEEMc1WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEEMc1->Fill(probeDxySig, weight);
-	  dztrgSignalEEMc1->Fill(probeDzTrg, weight);
-	  iso04relSignalEEMc1->Fill(probeIso04Rel, weight);
+	  dxysigSignalEEMc1 -> Fill(probeDxySig, weight);
+	  dztrgSignalEEMc1 -> Fill(probeDzTrg, weight);
+	  iso04relSignalEEMc1 -> Fill(probeIso04Rel, weight);
 	}
 	if (probePt>=5.0) {
 	  mvaSignalEEMc2->Fill(theId, weight);
 	  mvaSignalEEMc2WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEEMc2->Fill(probeDxySig, weight);
-	  dztrgSignalEEMc2->Fill(probeDzTrg, weight);
-	  iso04relSignalEEMc2->Fill(probeIso04Rel, weight);
+	  dxysigSignalEEMc2 -> Fill(probeDxySig, weight);
+	  dztrgSignalEEMc2 -> Fill(probeDzTrg, weight);
+	  iso04relSignalEEMc2 -> Fill(probeIso04Rel, weight);
 	}
       }
     }
@@ -592,20 +572,20 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
 
   // -----------------------------------------------------------------------
   // Rebin
-  mvaSignalEBMc0->Rebin(4);
-  mvaSignalEBMc1->Rebin(4);
-  mvaSignalEBMc2->Rebin(4);
-  mvaSignalEBMc3->Rebin(4);
-  mvaSignalEEMc0->Rebin(4);
-  mvaSignalEEMc1->Rebin(4);
-  mvaSignalEEMc2->Rebin(4);
-  mvaFakeEBMc0->Rebin(4);
-  mvaFakeEBMc1->Rebin(4);
-  mvaFakeEBMc2->Rebin(4);
-  mvaFakeEBMc3->Rebin(4);
-  mvaFakeEEMc0->Rebin(4);
-  mvaFakeEEMc1->Rebin(4);
-  mvaFakeEEMc2->Rebin(4);
+  mvaSignalEBMc0->Rebin();
+  mvaSignalEBMc1->Rebin();
+  mvaSignalEBMc2->Rebin();
+  mvaSignalEBMc3->Rebin();
+  mvaSignalEEMc0->Rebin();
+  mvaSignalEEMc1->Rebin();
+  mvaSignalEEMc2->Rebin();
+  mvaFakeEBMc0->Rebin();
+  mvaFakeEBMc1->Rebin();
+  mvaFakeEBMc2->Rebin();
+  mvaFakeEBMc3->Rebin();
+  mvaFakeEEMc0->Rebin();
+  mvaFakeEEMc1->Rebin();
+  mvaFakeEEMc2->Rebin();
 
 
   // -----------------------------------------------------------------------
