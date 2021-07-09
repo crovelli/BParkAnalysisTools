@@ -40,8 +40,8 @@ void getDataSet(const char *, RooWorkspace*, float, float);
 void jpsi_splot()
 {
   // set range of observable
-  Float_t lowRange  = 2.6;   // tutto EB
-  Float_t highRange = 3.4;   // tutto EB
+  Float_t lowRange  = 2.6;   
+  Float_t highRange = 3.4;   
 
   // Create a new workspace to manage the project.
   RooWorkspace* wspace = new RooWorkspace("myWS");
@@ -51,8 +51,7 @@ void jpsi_splot()
   AddModel(wspace, lowRange, highRange);
   
   // add dataset from converted root tree
-  getDataSet("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21noRegression/Formatted_March21_NoRegr_ParkingALL.root", wspace, lowRange, highRange);
-  // getDataSet("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21/production2/Formatted_TnP_March21_Run2018ALL__probeLowPt.root", wspace, lowRange, highRange);
+  getDataSet("/eos/cms/store/user/crovelli/LowPtEle/TnpData/March21noRegression/Formatted_March21_NoRegr_ParkingALL_tightCuts.root", wspace, lowRange, highRange);
   
   // inspect the workspace if you wish
   wspace->Print();
@@ -76,56 +75,111 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   
   // make a RooRealVar for the observables
   RooRealVar pair_mass("pair_mass", "M_{inv}", lowRange, highRange,"GeV");
-  // 
-  RooRealVar hlt_9ip6("hlt_9ip6", "hlt_9ip6", -0.5, 1.5, "");
-  RooRealVar probeIsPFOverlap("probeIsPFOverlap", "probeIsPFOverlap", -0.5, 1.5, "");
-  RooRealVar probePt("probePt", "probePt", 0., 15., "");
-  RooRealVar probeEta("probeEta", "probeEta", -2.4, 2.4, "");
-  RooRealVar probeDxySig("probeDxySig", "probeDxySig", -10., 10., ""); 
-  RooRealVar probeDzTrg("probeDzTrg", "probeDzTrg", -0.5, 0.5, ""); 
-  RooRealVar probeIso04Rel("probeIso04Rel", "probeIso04Rel", 0., 10., "");
-  // 
-  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -3., 15., "");                   // comment for PF 
-  // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");         // comment for LPT  
-
 
   // --------------------------------------
   // signal model
   std::cout << "make JPsi model" << std::endl;
 
-  // 
-  // EB: 1-1.5 and inclusive EB
-  /*
-  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);         
-  RooRealVar alphaL("alphaL", "alpha left",  0.4, 0.2, 0.5);       
-  RooRealVar alphaR("alphaR", "alpha right", 0.8, 0.65, 1.0);      
-  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05); 
-  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);       
-  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
-  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.8,"1/GeV");       
-  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
-  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
-  */
 
+  // ------------------------------------------------
   //
-  // EB: 1.5-2 and inclusive allEB+EE
+  // Inclusive allEB+EE
+  // loose selection
+  /*
   RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
   RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
-  RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.75, 1.0);         
+  RooRealVar alphaR("alphaR", "alpha right", 1., 0.999, 1.001);         
   RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
-  RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
-  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar nL("nL", "N left",  3.50, 3.48, 3.52);        
+  RooRealVar nR("nR", "N right", 1.60, 1.58, 1.62);       
   RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
   RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
-  m0.setConstant();            // not regression only
+  */
+  //
+  // tight cuts
+  RooRealVar m0("m0", "JPsi Mass", 3.0890, 3.0889, 3.0891);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.3, 0.1, 0.6);          
+  RooRealVar alphaR("alphaR", "alpha right", 1., 0.995, 1.005);         
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.40, 2.8, 3.52);        
+  RooRealVar nR("nR", "N right", 1.60, 0.8, 1.62);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.1, 0., 0.2,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
 
+
+
+  // ------------------------------------------------
+  // 
+  // EB: 1-1.5 
+  // loose selection, not the best fit....
+  /*  
+  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.3, 0.2, 0.5);          
+  RooRealVar alphaR("alphaR", "alpha right", 1.0, 0.99, 1.01);         
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.06);  
+  RooRealVar nL("nL", "N left",  3.3, 3.2, 3.60);  
+  RooRealVar nR("nR", "N right", 1.60, 1.50, 1.70);
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.3, 0., 0.6,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  m0.setConstant();    
+  */
+  // tight cuts
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.0895, 3.0895, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.3, 0.2, 0.5);          
+  RooRealVar alphaR("alphaR", "alpha right", 1.0, 0.99, 1.01);         
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.06);  
+  RooRealVar nL("nL", "N left",  3.3, 3.2, 3.60);  
+  RooRealVar nR("nR", "N right", 1.60, 1.50, 1.70);
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.3, 0., 0.6,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  m0.setConstant();    
+  */
+
+
+  // ------------------------------------------------
+  //
+  // EB: 1.5-2 
+  // loose selection
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
+  RooRealVar alphaR("alphaR", "alpha right", 1., 0.999, 1.001);         
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.50, 3.48, 3.52);        
+  RooRealVar nR("nR", "N right", 1.60, 1.58, 1.62);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  */
+  //
+  // tight cuts
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.0885, 3.0885, 3.0885);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.3, 0.1, 0.6);          
+  RooRealVar alphaR("alphaR", "alpha right", 1., 0.999, 1.001);         
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.40, 3.1, 3.52);        
+  RooRealVar nR("nR", "N right", 1.60, 1.4, 1.62);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  m0.setConstant();    
+  */
+
+
+  // ----------------------------------------
   //
   // EB: 2-5   
+  // loose selection
   /*
-  RooRealVar m0("m0", "JPsi Mass", 3.090, 3.090, 3.090);                  
+  RooRealVar m0("m0", "JPsi Mass", 3.090, 3.090, 3.090);  
   RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
-  RooRealVar alphaR("alphaR", "alpha right", 1.2, 1.0, 1.4); 
+  RooRealVar alphaR("alphaR", "alpha right", 1.3, 1.1, 1.5); 
   RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
   RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
   RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
@@ -134,27 +188,57 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
   m0.setConstant();  
   */
+  //
+  //tight selection
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.7);          
+  RooRealVar alphaR("alphaR", "alpha right", 1.3, 1.1, 1.5); 
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.6, 3.40, 3.64);        
+  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.15, 0.15,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  */
 
+  // ------------------------------------------------
   //
   // EB: >5   
   /*
+  // loose cuts 
   RooRealVar m0("m0", "JPsi Mass", 3.091, 3.091, 3.091);                  
   RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.5, 0.8);
-  RooRealVar alphaR("alphaR", "alpha right", 1.2, 1.0, 1.4);  
-  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar alphaR("alphaR", "alpha right", 1.4, 1.2, 1.6);  
+  RooRealVar sigma("sigma", "sigma",  0.05, 0.045, 0.055);  
   RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
   RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
   RooRealVar alpha("alpha", "Decay const for background mass spectrum",  -0.1, -0.5, 0.,"1/GeV"); 
   RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
-  m0.setConstant();  
+  */
+  //
+  /*
+  // tight cuts 
+  RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.5, 0.8);
+  RooRealVar alphaR("alphaR", "alpha right", 1.4, 1.2, 1.6);  
+  RooRealVar sigma("sigma", "sigma",  0.05, 0.045, 0.055);  
+  RooRealVar nL("nL", "N left",  3.6, 3.5, 3.64);        
+  RooRealVar nR("nR", "N right", 1.85, 1.7, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum",  -0.1, -0.8, 0.,"1/GeV"); 
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
   */
 
+
+  // ----------------------------------------------------
   // 
-  //  EE: 2-5 and inclusive EE     
+  //  EE: 2-5 
+  // loose selection
   /*
   RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
-  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
+  RooRealVar alphaL("alphaL", "alpha left",  0.3, 0.2, 0.4);          
   RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.75, 1.0);         
   RooRealVar sigma("sigma", "sigma",  0.05, 0.045, 0.06);  
   RooRealVar nL("nL", "N left",  3.6, 3.56, 3.64);        
@@ -164,9 +248,27 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
   m0.setConstant();           
   */
+  //
+  // tight selection
+  // not best fit
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.0880, 3.0880, 3.0880);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.3, 0.2, 0.4);          
+  RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.3, 1.0);         
+  RooRealVar sigma("sigma", "sigma",  0.05, 0.045, 0.06);  
+  RooRealVar nL("nL", "N left",  3.6, 0.5, 4.);        
+  RooRealVar nR("nR", "N right", 1.85, 0.5, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.8,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  m0.setConstant(); 
+  */
 
+
+  // ----------------------------------------------------
   // 
   //  EE: pt>5      
+  // loose selection
   /*
   RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
   RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.6);          
@@ -179,6 +281,20 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
   m0.setConstant();
   */
+  //
+  // tight selection
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.0880, 3.0870, 3.0895);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.3, 0.2, 0.4);          
+  RooRealVar alphaR("alphaR", "alpha right", 0.9, 0.3, 1.0);         
+  RooRealVar sigma("sigma", "sigma",  0.05, 0.045, 0.06);  
+  RooRealVar nL("nL", "N left",  3.6, 0.5, 4.);        
+  RooRealVar nR("nR", "N right", 1.85, 0.5, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.8,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  */
+
 
   RooDoubleCB jpsiModel("jpsiModel", "JPsi Model", pair_mass, m0, sigma, alphaL, alphaR, nL, nR);
 
@@ -254,11 +370,11 @@ void DoSPlot(RooWorkspace* ws){
 	    << std::endl;
   
   for(Int_t i=0; i < 10; i++) {
-      std::cout << "jpsi Weight = " << sData->GetSWeight(i,"jpsiYield")
-		<< ", bkg Weight = " << sData->GetSWeight(i,"bkgYield")
-		<< ", Total Weight = " << sData->GetSumOfEventSWeight(i)
-		<< std::endl;
-    }
+    std::cout << "jpsi Weight = " << sData->GetSWeight(i,"jpsiYield")
+	      << ", bkg Weight = " << sData->GetSWeight(i,"bkgYield")
+	      << ", Total Weight = " << sData->GetSumOfEventSWeight(i)
+	      << std::endl;
+  }
   
   std::cout << std::endl;
 
@@ -312,7 +428,7 @@ void MakePlots(RooWorkspace* ws){
   // Do this by plotting all events weighted by the sWeight for the JPsi component.
   // The SPlot class adds a new variable that has the name of the corresponding
   // yield + "_sw".
-   cdata->cd(2);
+  cdata->cd(2);
    
   // create weighted data set
   RooDataSet * dataw_jpsi = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"jpsiYield_sw") ;
@@ -356,10 +472,13 @@ void MakeHistos(RooWorkspace* ws){
 
   RooRealVar* probeMvaId = ws->var("probeMvaId");                      // comment for PF case
   // RooRealVar* probePfmvaId = ws->var("probePfmvaId");               // comment for LPT case
+
   RooRealVar* hlt_9ip6 = ws->var("hlt_9ip6");
   RooRealVar* probeIsPFOverlap = ws->var("probeIsPFOverlap"); 
+
   RooRealVar* probePt  = ws->var("probePt");
   RooRealVar* probeEta = ws->var("probeEta");
+
   RooRealVar* probeDxySig = ws->var("probeDxySig");
   RooRealVar* probeDzTrg = ws->var("probeDzTrg"); 
   RooRealVar* probeIso04Rel = ws->var("probeIso04Rel"); 
@@ -372,20 +491,23 @@ void MakeHistos(RooWorkspace* ws){
   RooDataSet * dataw_bkg  = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"bkgYield_sw") ;
   
   // convert to TH1
-  TH1 *h1_probeMvaId_jpsi  = dataw_jpsi->createHistogram("h1_probeMvaId_jpsi",*probeMvaId,Binning(54));             // comment for PF case  
-  TH1 *h1_probeMvaId_bkg   = dataw_bkg->createHistogram("h1_probeMvaId_bkg",*probeMvaId,Binning(54));               // comment for PF case  
+  TH1 *h1_probeMvaId_jpsi  = dataw_jpsi->createHistogram("h1_probeMvaId_jpsi",*probeMvaId,Binning(40));             // comment for PF case  
+  TH1 *h1_probeMvaId_bkg   = dataw_bkg->createHistogram("h1_probeMvaId_bkg",*probeMvaId,Binning(40));               // comment for PF case  
   // TH1 *h1_probePfmvaId_jpsi  = dataw_jpsi->createHistogram("h1_probePfmvaId_jpsi",*probePfmvaId,Binning(38));    // comment for LPT case    
   // TH1 *h1_probePfmvaId_bkg   = dataw_bkg->createHistogram("h1_probePfmvaId_bkg",*probePfmvaId,Binning(38));      // comment for LPT case 
 
-  TH1 *h1_probeDxySig_jpsi   = dataw_jpsi->createHistogram("h1_probeDxySig_jpsi",*probeDxySig,Binning(50)); 
-  TH1 *h1_probeDxySig_bkg    = dataw_bkg->createHistogram("h1_probeDxySig_bkg",*probeDxySig,Binning(50)); 
-  TH1 *h1_probeDzTrg_jpsi    = dataw_jpsi->createHistogram("h1_probeDzTrg_jpsi",*probeDzTrg,Binning(50)); 
-  TH1 *h1_probeDzTrg_bkg     = dataw_bkg->createHistogram("h1_probeDzTrg_bkg",*probeDzTrg,Binning(50)); 
-  TH1 *h1_probeIso04Rel_jpsi = dataw_jpsi->createHistogram("h1_probeIso04Rel_jpsi",*probeIso04Rel,Binning(50)); 
-  TH1 *h1_probeIso04Rel_bkg  = dataw_bkg->createHistogram("h1_probeIso04Rel_bkg",*probeIso04Rel,Binning(50)); 
+  TH1 *h1_probeDxySig_jpsi = dataw_jpsi->createHistogram("h1_probeDxySig_jpsi",*probeDxySig,Binning(120,-30.,30.)); 
+  TH1 *h1_probeDxySig_bkg  = dataw_bkg->createHistogram("h1_probeDxySig_bkg",*probeDxySig,Binning(120,-30.,30.)); 
 
-  TH1 *h1_probePt_jpsi  = dataw_jpsi->createHistogram("h1_probePt_jpsi",*probePt,Binning(60));
-  TH1 *h1_probePt_bkg   = dataw_bkg->createHistogram("h1_probePt_bkg",*probePt,Binning(60));
+  TH1 *h1_probeDzTrg_jpsi = dataw_jpsi->createHistogram("h1_probeDzTrg_jpsi",*probeDzTrg,Binning(100,-1.,1.)); 
+  TH1 *h1_probeDzTrg_bkg  = dataw_bkg->createHistogram("h1_probeDzTrg_bkg",*probeDzTrg,Binning(100,-1.,1.)); 
+  
+  TH1 *h1_probeIso04Rel_jpsi = dataw_jpsi->createHistogram("h1_probeIso04Rel_jpsi",*probeIso04Rel,Binning(50,0.,50.)); 
+  TH1 *h1_probeIso04Rel_bkg  = dataw_bkg->createHistogram("h1_probeIso04Rel_bkg",*probeIso04Rel,Binning(50,0.,50.)); 
+
+  TH1 *h1_probePt_jpsi = dataw_jpsi->createHistogram("h1_probePt_jpsi",*probePt,Binning(90, 0.,30.));
+  TH1 *h1_probePt_bkg  = dataw_bkg->createHistogram("h1_probePt_bkg",*probePt,Binning(90,0.,30.));
+
   TH1 *h1_probeEta_jpsi = dataw_jpsi->createHistogram("h1_probeEta_jpsi",*probeEta,Binning(40));
   TH1 *h1_probeEta_bkg  = dataw_bkg->createHistogram("h1_probeEta_bkg",*probeEta,Binning(40));
 
@@ -419,16 +541,16 @@ void MakeHistos(RooWorkspace* ws){
   h1_probeMvaId_bkg->DrawNormalized("samehist");
   ch1->SaveAs("probeMvaIdH.png");
   /*
-  TCanvas* ch1 = new TCanvas("ch1","ch1", 1);
-  h1_probePfmvaId_jpsi->SetLineWidth(2);
-  h1_probePfmvaId_bkg->SetLineWidth(2);
-  h1_probePfmvaId_jpsi->SetLineColor(6);
-  h1_probePfmvaId_bkg->SetLineColor(4);
-  h1_probePfmvaId_jpsi->SetTitle("");
-  h1_probePfmvaId_bkg->SetTitle("");
-  h1_probePfmvaId_jpsi->DrawNormalized("hist");
-  h1_probePfmvaId_bkg->DrawNormalized("samehist");
-  ch1->SaveAs("probePfmvaIdH.png");
+    TCanvas* ch1 = new TCanvas("ch1","ch1", 1);
+    h1_probePfmvaId_jpsi->SetLineWidth(2);
+    h1_probePfmvaId_bkg->SetLineWidth(2);
+    h1_probePfmvaId_jpsi->SetLineColor(6);
+    h1_probePfmvaId_bkg->SetLineColor(4);
+    h1_probePfmvaId_jpsi->SetTitle("");
+    h1_probePfmvaId_bkg->SetTitle("");
+    h1_probePfmvaId_jpsi->DrawNormalized("hist");
+    h1_probePfmvaId_bkg->DrawNormalized("samehist");
+    ch1->SaveAs("probePfmvaIdH.png");
   */
 
   TCanvas* ch2 = new TCanvas("ch2","ch2", 1);
@@ -502,17 +624,15 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   RooRealVar probeIsPFOverlap("probeIsPFOverlap", "probeIsPFOverlap", -0.5, 1.5, "");
   //
   // discriminating variables
-  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -4., 15., "");                // comment for PF case 
+  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -4, 16, "");                 // comment for PF case 
   // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");      // comment for LPT case  
-  RooRealVar probePt("probePt", "probePt", 0., 15., "");
+  RooRealVar probePt("probePt", "probePt", 0., 1000., "");
   RooRealVar probeEta("probeEta", "probeEta", -2.4, 2.4, "");
 
-  RooRealVar probeDxySig("probeDxySig", "probeDxySig", -10., 10., ""); 
-  RooRealVar probeDzTrg("probeDzTrg", "probeDzTrg", -0.5, 0.5, ""); 
-  RooRealVar probeIso04Rel("probeIso04Rel", "probeIso04Rel", 0., 10., "");
+  RooRealVar probeDxySig("probeDxySig", "probeDxySig", -200., 200., ""); 
+  RooRealVar probeDzTrg("probeDzTrg", "probeDzTrg", -10., 10., ""); 
+  RooRealVar probeIso04Rel("probeIso04Rel", "probeIso04Rel", -1., 5000., "");
 
-
-  // RooArgSet setall(pair_mass,hlt_9ip6,probeIsPFOverlap,probePfmvaId,probePt,probeEta);
   RooArgSet setall(pair_mass,hlt_9ip6,probeIsPFOverlap,probeMvaId,probePt,probeEta,probeDxySig,probeDzTrg,probeIso04Rel);
 
   TFile *file = TFile::Open(rootfile);
