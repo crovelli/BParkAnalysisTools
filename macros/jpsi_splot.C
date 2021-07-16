@@ -400,8 +400,7 @@ void MakePlots(RooWorkspace* ws){
   RooAbsPdf* jpsiModel = ws->pdf("jpsiModel");
   RooAbsPdf* bkgModel = ws->pdf("bkgModel");
   
-  RooRealVar* probeMvaId = ws->var("probeMvaId");              // comment for PF case
-  // RooRealVar* probePfmvaId = ws->var("probePfmvaId");       // comment for LPT case
+  RooRealVar* probeMvaId = ws->var("probeMvaId");         
   RooRealVar* pair_mass = ws->var("pair_mass");
 
   // note, we get the dataset with sWeights
@@ -433,8 +432,7 @@ void MakePlots(RooWorkspace* ws){
   // create weighted data set
   RooDataSet * dataw_jpsi = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"jpsiYield_sw") ;
   
-  RooPlot* frame2 = probeMvaId->frame() ;              // comment for PF case
-  // RooPlot* frame2 = probePfmvaId->frame() ;         // comment for LPT case
+  RooPlot* frame2 = probeMvaId->frame() ;      
   dataw_jpsi->plotOn(frame2, DataError(RooAbsData::SumW2) ) ;
   frame2->SetTitle("ID distribution for JPsi");
   frame2->Draw() ;
@@ -442,8 +440,7 @@ void MakePlots(RooWorkspace* ws){
   // Plot interesting variables for background
   cdata->cd(3);
   RooDataSet * dataw_bkg = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"bkgYield_sw") ;
-  RooPlot* frame3 = probeMvaId->frame() ;             // comment for PF case  
-  // RooPlot* frame3 = probePfmvaId->frame() ;        // comment for LPT case 
+  RooPlot* frame3 = probeMvaId->frame() ;          
   dataw_bkg->plotOn(frame3,DataError(RooAbsData::SumW2) ) ;
   frame3->SetTitle("ID distribution for background");
   frame3->Draw() ;
@@ -470,11 +467,9 @@ void MakeHistos(RooWorkspace* ws){
   std::cout << std::endl;
   std::cout << "save histos" << std::endl;
 
-  RooRealVar* probeMvaId = ws->var("probeMvaId");                      // comment for PF case
-  // RooRealVar* probePfmvaId = ws->var("probePfmvaId");               // comment for LPT case
+  RooRealVar* probeMvaId = ws->var("probeMvaId");                
 
   RooRealVar* hlt_9ip6 = ws->var("hlt_9ip6");
-  RooRealVar* probeIsPFOverlap = ws->var("probeIsPFOverlap"); 
 
   RooRealVar* probePt  = ws->var("probePt");
   RooRealVar* probeEta = ws->var("probeEta");
@@ -491,10 +486,8 @@ void MakeHistos(RooWorkspace* ws){
   RooDataSet * dataw_bkg  = new RooDataSet(data->GetName(),data->GetTitle(),data,*data->get(),0,"bkgYield_sw") ;
   
   // convert to TH1
-  TH1 *h1_probeMvaId_jpsi  = dataw_jpsi->createHistogram("h1_probeMvaId_jpsi",*probeMvaId,Binning(40));             // comment for PF case  
-  TH1 *h1_probeMvaId_bkg   = dataw_bkg->createHistogram("h1_probeMvaId_bkg",*probeMvaId,Binning(40));               // comment for PF case  
-  // TH1 *h1_probePfmvaId_jpsi  = dataw_jpsi->createHistogram("h1_probePfmvaId_jpsi",*probePfmvaId,Binning(38));    // comment for LPT case    
-  // TH1 *h1_probePfmvaId_bkg   = dataw_bkg->createHistogram("h1_probePfmvaId_bkg",*probePfmvaId,Binning(38));      // comment for LPT case 
+  TH1 *h1_probeMvaId_jpsi  = dataw_jpsi->createHistogram("h1_probeMvaId_jpsi",*probeMvaId,Binning(40));         
+  TH1 *h1_probeMvaId_bkg   = dataw_bkg->createHistogram("h1_probeMvaId_bkg",*probeMvaId,Binning(40));           
 
   TH1 *h1_probeDxySig_jpsi = dataw_jpsi->createHistogram("h1_probeDxySig_jpsi",*probeDxySig,Binning(120,-30.,30.)); 
   TH1 *h1_probeDxySig_bkg  = dataw_bkg->createHistogram("h1_probeDxySig_bkg",*probeDxySig,Binning(120,-30.,30.)); 
@@ -521,10 +514,8 @@ void MakeHistos(RooWorkspace* ws){
   h1_probeIso04Rel_jpsi->Write();        
   h1_probeIso04Rel_bkg->Write();        
 
-  h1_probeMvaId_jpsi->Write();                // comment for PF case
-  h1_probeMvaId_bkg->Write();                 // comment for PF case
-  //  h1_probePfmvaId_jpsi->Write();          // comment for LPT case
-  //  h1_probePfmvaId_bkg->Write();           // comment for LPT case
+  h1_probeMvaId_jpsi->Write();       
+  h1_probeMvaId_bkg->Write();        
   h1_probePt_jpsi->Write();
   h1_probePt_bkg->Write();
   h1_probeEta_jpsi->Write();
@@ -540,18 +531,6 @@ void MakeHistos(RooWorkspace* ws){
   h1_probeMvaId_jpsi->DrawNormalized("hist");
   h1_probeMvaId_bkg->DrawNormalized("samehist");
   ch1->SaveAs("probeMvaIdH.png");
-  /*
-    TCanvas* ch1 = new TCanvas("ch1","ch1", 1);
-    h1_probePfmvaId_jpsi->SetLineWidth(2);
-    h1_probePfmvaId_bkg->SetLineWidth(2);
-    h1_probePfmvaId_jpsi->SetLineColor(6);
-    h1_probePfmvaId_bkg->SetLineColor(4);
-    h1_probePfmvaId_jpsi->SetTitle("");
-    h1_probePfmvaId_bkg->SetTitle("");
-    h1_probePfmvaId_jpsi->DrawNormalized("hist");
-    h1_probePfmvaId_bkg->DrawNormalized("samehist");
-    ch1->SaveAs("probePfmvaIdH.png");
-  */
 
   TCanvas* ch2 = new TCanvas("ch2","ch2", 1);
   h1_probePt_jpsi->SetLineWidth(2);
@@ -620,12 +599,8 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   // trigger
   RooRealVar hlt_9ip6("hlt_9ip6", "hlt_9ip6", -0.5, 1.5, "");
   // 
-  // LPT / PF overlap
-  RooRealVar probeIsPFOverlap("probeIsPFOverlap", "probeIsPFOverlap", -0.5, 1.5, "");
-  //
   // discriminating variables
-  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -4, 16, "");                 // comment for PF case 
-  // RooRealVar probePfmvaId("probePfmvaId", "probePfmvaId", -10., 10., "");      // comment for LPT case  
+  RooRealVar probeMvaId("probeMvaId", "probeMvaId", -4, 16, "");           
   RooRealVar probePt("probePt", "probePt", 0., 1000., "");
   RooRealVar probeEta("probeEta", "probeEta", -2.4, 2.4, "");
 
@@ -633,7 +608,7 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   RooRealVar probeDzTrg("probeDzTrg", "probeDzTrg", -10., 10., ""); 
   RooRealVar probeIso04Rel("probeIso04Rel", "probeIso04Rel", -1., 5000., "");
 
-  RooArgSet setall(pair_mass,hlt_9ip6,probeIsPFOverlap,probeMvaId,probePt,probeEta,probeDxySig,probeDzTrg,probeIso04Rel);
+  RooArgSet setall(pair_mass,hlt_9ip6,probeMvaId,probePt,probeEta,probeDxySig,probeDzTrg,probeIso04Rel);
 
   TFile *file = TFile::Open(rootfile);
   TTree *tree = (TTree*)file->Get("tnpAna/fitter_tree");
@@ -646,10 +621,6 @@ void getDataSet(const char *rootfile, RooWorkspace *ws, float lowRange, float hi
   // EB / EE
   // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>1.0 && probeEta>-1.5 && probeEta<1.5");          
   // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probePt>2.0 && (probeEta<-1.5 || probeEta>1.5)");    
-
-  // PF overlap 
-  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probeIsPFOverlap==1");
-  // data = (RooDataSet*)data->reduce("hlt_9ip6==1 && probeIsPFOverlap==0");
 
   // Barrel:
   // pt: 1-1.5 GeV    
