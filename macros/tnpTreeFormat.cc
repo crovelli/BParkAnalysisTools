@@ -344,14 +344,19 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       if (isProbeLpt==1) { 
 	if ( tag_isPF->at(ii)==0 ) continue;
 	if ( probe_isLowPt->at(ii)==0) continue;                   
-	if ( tag_pfmvaId->at(ii)<-1. ) continue;  
+	//if ( tag_pfmvaId->at(ii)<0. ) continue;          // Tight selection  
+	if ( tag_pfmvaId->at(ii)<-1. ) continue;           // Loose selection 
       }
 
       // further selection on tag: low pt probes
       if (isProbeLpt==0) { 
 	if ( probe_isPF->at(ii)==0) continue;  
-	if ( tag_isPF->at(ii)==0 && tag_mvaId->at(ii)<2) continue;
+	if ( tag_isLowPt->at(ii)==1 && tag_mvaId->at(ii)<-1) continue;
       }
+
+      // Tight selection     
+      // further selection on B: smaller mass range    
+      // if (probe_Bmass->at(ii)<4.7 || probe_Bmass->at(ii)>5.6) continue;
 
       // e+e- invariant mass selection
       if (probe_invMass->at(ii)<2 || probe_invMass->at(ii)>4) continue;  
