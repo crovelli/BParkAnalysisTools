@@ -16,8 +16,10 @@ void nvtxInput::Loop()
   Long64_t nentries = fChain->GetEntriesFast();
   Long64_t nbytes = 0, nb = 0;
   
-  int nbins = 36;
-  float edges[37] = { 0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 50 };
+  //int nbins = 36;
+  //float edges[37] = { 0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 50 };
+  int nbins = 27;
+  float edges[28] = { 0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 50 };
 
   TH1F *H_nvtx = new TH1F("H_nvtx", "H_nvtx", nbins, edges);
   
@@ -28,6 +30,7 @@ void nvtxInput::Loop()
     nb = fChain->GetEntry(jentry);   nbytes += nb;
 
     if (jentry%500000==0) cout << jentry << endl;
+
     if (hlt9==0) continue;
 
     /////if (nvtx>37) continue; // never in MC
