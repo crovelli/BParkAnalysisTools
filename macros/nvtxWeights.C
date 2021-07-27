@@ -2,6 +2,7 @@
 #include "TFile.h"
 #include "TStyle.h"
 #include "TCanvas.h"
+#include "TLegend.h"
 
 // For PU reweighting using number of vertices
 // Take in input the outputs of nvtxInput.C
@@ -9,9 +10,9 @@
 
 void nvtxWeights() {
 
-  TFile fileData("fileNumberVtx_2018D1_upto37.root");    
-  // TFile fileMC("fileNumberMC.root");
-  TFile fileMC("fileNumberMC_withWeights.root");
+  TFile fileData("/eos/cms/store/user/crovelli/LowPtEle/Vertices/March21/fileNumberVtx2018ALL.root");    
+  // TFile fileMC("/eos/cms/store/user/crovelli/LowPtEle/Vertices/March21/fileNumberVtxMC.root");
+  TFile fileMC("/eos/cms/store/user/crovelli/LowPtEle/Vertices/March21/fileNumberVtxWithWeights.root");
   
   TH1F *mcNvtx = (TH1F*)fileMC.Get("H_nvtx");
   mcNvtx->Sumw2();
@@ -34,13 +35,22 @@ void nvtxWeights() {
   dataNvtx->GetXaxis()->SetTitle("Number of vertices");
   dataNvtx->SetLineColor(4);
   dataNvtx->SetLineWidth(2);
-  
+
+  TLegend* leg = new TLegend(0.15,0.65,0.50,0.90);
+  leg->SetFillStyle(0); 
+  leg->SetBorderSize(0); 
+  leg->SetTextSize(0.03); 
+  leg->SetFillColor(0);
+  leg->AddEntry(dataNvtx,"DATA","l");
+  leg->AddEntry(mcNvtx,"MC","l");
+
   // Plots
   TCanvas c1("c1","",1);
   gStyle->SetOptStat(0);
   gStyle->SetPalette(1);
-  dataNvtx->Draw("hist");
+  dataNvtx->Draw("histE");
   mcNvtx->Draw("samehist");
+  leg->Draw();
   c1.SaveAs("vertices.png");
 
   TH1F *myClone = (TH1F*)dataNvtx->Clone("myClone");
