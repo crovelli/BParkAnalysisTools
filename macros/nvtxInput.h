@@ -43,13 +43,9 @@ class nvtxInput {
 nvtxInput::nvtxInput(TTree *tree) : fChain(0) 
 {
   if (tree == 0) {
-    //TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/Vertices/Vertices__BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext__withVtxWeight_bin1.root");
-    //TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/Vertices/Vertices__BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext.root");
-    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/Vertices/Vertices__ParkingBPH1_Run2018D_part1_0000.root");
+    TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/eos/cms/store/user/crovelli/LowPtEle/Vertices/March21/Vertices_March21_BuToKJpsi_Toee_v2__withPuWeights.root"); 
     if (!f || !f->IsOpen()) {
-      //f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/Vertices/Vertices__BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext__withVtxWeight_bin1.root");
-      //f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/Vertices/Vertices__BuToKJpsi_Toee_BParkNANO_mc_2020May16_ext.root");
-      f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/Vertices/Vertices__ParkingBPH1_Run2018D_part1_0000.root");
+      f = new TFile("/eos/cms/store/user/crovelli/LowPtEle/Vertices/March21/Vertices_March21_BuToKJpsi_Toee_v2__withPuWeights.root");
     }
     f->GetObject("TaPtree",tree);
     
