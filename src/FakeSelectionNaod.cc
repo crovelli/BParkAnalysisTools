@@ -6,17 +6,15 @@
 
 #include "../include/FakeSelectionNaod.hh"    
 
-#define MAX_PU_REWEIGHT 60
-
 using namespace std;
 
 FakeSelectionNaod::FakeSelectionNaod(TTree *tree)     
   : BParkBase(tree) {        
 
   // Chiara: to be set by hand   
-  sampleID = 1;           // 0 = data, >=1 MC
+  sampleID = 0;           // 0 = data, >=1 MC
   donvtxreweight_ = 0;    // 
-  nvtxWFileName_  = "/afs/cern.ch/user/c/crovelli/public/bphys/nvtxWeights__bin1.root"; 
+  nvtxWFileName_  = "/afs/cern.ch/user/c/crovelli/public/bphys/march/nvtxWeights2018ALL.root";
 }
 
 FakeSelectionNaod::~FakeSelectionNaod() {
@@ -80,15 +78,13 @@ void FakeSelectionNaod::Loop() {
     h_selection->Fill(1.,perEveW);
 
     // Trigger 
-    int iHLT_Mu12_IP6 = (int)HLT_Mu12_IP6;
     int iHLT_Mu9_IP6  = (int)HLT_Mu9_IP6;
-    hlt9  = iHLT_Mu9_IP6;
-    hlt12 = iHLT_Mu12_IP6;
+    hlt9 = iHLT_Mu9_IP6;
     
     // B candidates
     if (nBToKMuMu<=0) continue;
     h_selection->Fill(2.,perEveW);
-
+    
     // Minimal Bcandidate requirements
     vector<int> goodBs;
     for (u_int iB=0; iB<nBToKMuMu; iB++) {
@@ -100,14 +96,6 @@ void FakeSelectionNaod::Loop() {
       float k_eta   = BToKMuMu_fit_k_eta[iB];    
 
       float b_xySig = BToKMuMu_l_xy[iB]/BToKMuMu_l_xy_unc[iB];
-
-      // B selection (standard cut)
-      // bool vtxFitSel = BToKMuMu_fit_pt[iB]>10.0 && b_xySig>6.0 && BToKMuMu_svprob[iB]>0.1 && BToKMuMu_fit_cos2D[iB]>0.999;
-      // bool mu1Sel = fabs(mu1_eta)<2.4;  
-      // bool mu2Sel = fabs(mu2_eta)<2.4;  
-      // bool kSel   = k_pt>0.7 && fabs(k_eta)<2.4; 
-      // bool additionalSel = BToKMuMu_fit_mass[iB]>4.5 && BToKMuMu_fit_mass[iB]<6.0;
-      // bool isBsel = vtxFitSel && mu1Sel && mu2Sel && kSel && additionalSel;
 
       // B selection (relaxed)
       bool vtxFitSel = BToKMuMu_fit_pt[iB]>5.0 && BToKMuMu_svprob[iB]>0.1 && BToKMuMu_fit_cos2D[iB]>0.99;
@@ -129,6 +117,9 @@ void FakeSelectionNaod::Loop() {
 
       int thisB = goodBs[iB];
 
+      int mu1_idx = BToKMuMu_l1Idx[thisB];
+      int mu2_idx = BToKMuMu_l2Idx[thisB];
+
       float my_mu1_pt  = BToKMuMu_fit_l1_pt[thisB]; 
       float my_mu1_eta = BToKMuMu_fit_l1_eta[thisB]; 
       float my_mu1_phi = BToKMuMu_fit_l1_phi[thisB]; 
@@ -146,9 +137,6 @@ void FakeSelectionNaod::Loop() {
       float my_k_phi = BToKMuMu_fit_k_phi[thisB]; 
       TLorentzVector kTLV(0,0,0,0);
       kTLV.SetPtEtaPhiM(my_k_pt,my_k_eta,my_k_phi,0);
-
-      int mu1_idx = BToKMuMu_l1Idx[thisB];
-      int mu2_idx = BToKMuMu_l2Idx[thisB];
 
       // Loop over fake electrons
       for (u_int iEle=0; iEle<nElectron; iEle++) {
@@ -193,17 +181,17 @@ void FakeSelectionNaod::Loop() {
 	k_eta.push_back(my_k_eta);
 	k_phi.push_back(my_k_phi);
 
-	// Muons
+	// Muons infos
 	mu1_pt.push_back(my_mu1_pt);
 	mu1_eta.push_back(my_mu1_eta);
 	mu1_phi.push_back(my_mu1_phi);
-	mu1_isTriggering.push_back(Muon_isTriggering[mu1_idx]);
+	mu1_isTriggering.push_back(Muon_isTriggering[mu1_idx]);   
 	mu1_matchMcFromJPsi.push_back(isMu1McFromJPsi);
 	//
 	mu2_pt.push_back(my_mu2_pt);
 	mu2_eta.push_back(my_mu2_eta);
 	mu2_phi.push_back(my_mu2_phi);
-	mu2_isTriggering.push_back(Muon_isTriggering[mu2_idx]);
+	mu2_isTriggering.push_back(Muon_isTriggering[mu2_idx]);   
 	mu2_matchMcFromJPsi.push_back(isMu2McFromJPsi);	
 
 	// Electrons
@@ -215,11 +203,6 @@ void FakeSelectionNaod::Loop() {
 	ele_isLowPt.push_back(Electron_isLowPt[iEle]); 
 	ele_mvaId.push_back(Electron_mvaId[iEle]);
 	ele_pfmvaId.push_back(Electron_pfmvaId[iEle]);
-	ele_dxySig.push_back(Electron_dxy[iEle]/Electron_dxyErr[iEle]);  
-	ele_dzSig.push_back(Electron_dz[iEle]/Electron_dzErr[iEle]);  
-	ele_pfRelIso.push_back(Electron_pfRelIso[iEle]);  
-	ele_trkRelIso.push_back(Electron_trkRelIso[iEle]);  
-	ele_fBrem.push_back(Electron_fBrem[iEle]);  
 	ele_unBiased.push_back(Electron_unBiased[iEle]);  
 	ele_ptBiased.push_back(Electron_ptBiased[iEle]);  
 	ele_convveto.push_back(Electron_convVeto[iEle]);
@@ -293,11 +276,6 @@ void FakeSelectionNaod::Loop() {
     ele_isLowPt.clear();
     ele_mvaId.clear();
     ele_pfmvaId.clear();
-    ele_dxySig.clear();
-    ele_dzSig.clear();
-    ele_pfRelIso.clear();
-    ele_trkRelIso.clear();
-    ele_fBrem.clear();
     ele_unBiased.clear();
     ele_ptBiased.clear();
     ele_convveto.clear();
@@ -398,7 +376,6 @@ void FakeSelectionNaod::bookOutputTree()
   outTree_->Branch("perEveW",  &perEveW,  "perEveW/F");    
 
   outTree_->Branch("hlt9",     &hlt9,     "hlt9/I");
-  outTree_->Branch("hlt12",    &hlt12,    "hlt12/I");
 
   outTree_->Branch("selectedElesSize",  &selectedElesSize,  "selectedElesSize/I");  
 
@@ -438,11 +415,6 @@ void FakeSelectionNaod::bookOutputTree()
   outTree_->Branch("ele_isLowPt",       "std::vector<bool>",   &ele_isLowPt);    
   outTree_->Branch("ele_mvaId",         "std::vector<float>",  &ele_mvaId);     
   outTree_->Branch("ele_pfmvaId",       "std::vector<float>",  &ele_pfmvaId);     
-  outTree_->Branch("ele_dxySig",        "std::vector<float>",  &ele_dxySig);     
-  outTree_->Branch("ele_dzSig",         "std::vector<float>",  &ele_dzSig);    
-  outTree_->Branch("ele_pfRelIso",      "std::vector<float>",  &ele_pfRelIso);     
-  outTree_->Branch("ele_trkRelIso",     "std::vector<float>",  &ele_trkRelIso);      
-  outTree_->Branch("ele_fBrem",         "std::vector<float>",  &ele_fBrem);     
   outTree_->Branch("ele_unBiased",      "std::vector<float>",  &ele_unBiased);     
   outTree_->Branch("ele_ptBiased",      "std::vector<float>",  &ele_ptBiased);     
   outTree_->Branch("ele_convveto",      "std::vector<bool>",   &ele_convveto);   

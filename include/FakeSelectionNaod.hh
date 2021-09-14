@@ -62,7 +62,6 @@ private:
   float perEveW;
   //
   int hlt9;
-  int hlt12;
   // 
   int selectedElesSize;
   //
