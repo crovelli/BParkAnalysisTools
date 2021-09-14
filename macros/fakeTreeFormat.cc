@@ -58,9 +58,12 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   Float_t         pu_weight;  
   Float_t         perEveW = 0;
   Int_t           hlt9 = 0;
-  Int_t           hlt12 = 0;
   Int_t           selectedElesSize = 0; 
   vector<float>   *Bmass = nullptr;  
+  vector<float>   *Bpt = nullptr;  
+  vector<float>   *Bcos2D = nullptr;  
+  vector<float>   *Bsvprob = nullptr;  
+  vector<float>   *Bxysig = nullptr;  
   vector<int>     *BmatchMC = nullptr;  
   vector<float>   *deltaR_ele_mu1 = nullptr;
   vector<float>   *deltaR_ele_mu2 = nullptr;
@@ -86,20 +89,12 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   vector<int>     *ele_isLowPt = nullptr;
   vector<float>   *ele_mvaId = nullptr;
   vector<float>   *ele_pfmvaId = nullptr;
-  vector<float>   *ele_dxySig = nullptr;
-  vector<float>   *ele_dzSig = nullptr;
-  vector<float>   *ele_pfRelIso = nullptr;
-  vector<float>   *ele_trkRelIso = nullptr;
-  vector<float>   *ele_fBrem = nullptr;
   vector<float>   *ele_unBiased = nullptr;
   vector<float>   *ele_ptBiased = nullptr;
   vector<int>     *ele_convveto = nullptr;
-  vector<float>   *probe_closeToEleForMu1_pt  = nullptr;
-  vector<float>   *probe_closeToEleForMu1_eta = nullptr;
-  vector<float>   *probe_closeToEleForMu1_phi = nullptr;
-  vector<float>   *probe_closeToEleForMu2_pt  = nullptr;
-  vector<float>   *probe_closeToEleForMu2_eta = nullptr;
-  vector<float>   *probe_closeToEleForMu2_phi = nullptr;
+  vector<float>   *probe_closeToEle_pt  = nullptr;
+  vector<float>   *probe_closeToEle_eta = nullptr;
+  vector<float>   *probe_closeToEle_phi = nullptr;
 
   // List of branches - original tree
   TBranch        *b_theRun;   //!
@@ -110,9 +105,12 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   TBranch        *b_pu_weight;   //!    
   TBranch        *b_perEveW;   //!
   TBranch        *b_hlt9;   //!
-  TBranch        *b_hlt12;   //!
   TBranch        *b_selectedElesSize;   //!  
   TBranch        *b_Bmass; //!
+  TBranch        *b_Bpt; //!
+  TBranch        *b_Bcos2D; //!
+  TBranch        *b_Bsvprob; //!
+  TBranch        *b_Bxysig; //!
   TBranch        *b_BmatchMC; //!
   TBranch        *b_deltaR_ele_mu1; //!
   TBranch        *b_deltaR_ele_mu2; //!
@@ -138,20 +136,12 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   TBranch        *b_ele_isLowPt;   //!
   TBranch        *b_ele_mvaId;   //!
   TBranch        *b_ele_pfmvaId;   //!
-  TBranch        *b_ele_dxySig;   //!
-  TBranch        *b_ele_dzSig;   //!
-  TBranch        *b_ele_pfRelIso;   //!
-  TBranch        *b_ele_trkRelIso;   //!
-  TBranch        *b_ele_fBrem;   //!
   TBranch        *b_ele_unBiased;   //!
   TBranch        *b_ele_ptBiased;   //!
   TBranch        *b_ele_convveto;   //!
-  TBranch        *b_probe_closeToEleForMu1_pt;   //!
-  TBranch        *b_probe_closeToEleForMu1_eta;   //!
-  TBranch        *b_probe_closeToEleForMu1_phi;   //!
-  TBranch        *b_probe_closeToEleForMu2_pt;   //!
-  TBranch        *b_probe_closeToEleForMu2_eta;   //!
-  TBranch        *b_probe_closeToEleForMu2_phi;   //!
+  TBranch        *b_probe_closeToEle_pt;   //!
+  TBranch        *b_probe_closeToEle_eta;   //!
+  TBranch        *b_probe_closeToEle_phi;   //!
 
   // Set branch addresses and branch pointers 
   treeOrig->SetBranchAddress("theRun", &theRun, &b_theRun);
@@ -162,9 +152,12 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   treeOrig->SetBranchAddress("pu_weight", &pu_weight, &b_pu_weight);  
   treeOrig->SetBranchAddress("perEveW", &perEveW, &b_perEveW);
   treeOrig->SetBranchAddress("hlt9", &hlt9, &b_hlt9);
-  treeOrig->SetBranchAddress("hlt12", &hlt12, &b_hlt12);
   treeOrig->SetBranchAddress("selectedElesSize", &selectedElesSize, &b_selectedElesSize);
   treeOrig->SetBranchAddress("Bmass", &Bmass, &b_Bmass);
+  treeOrig->SetBranchAddress("Bpt", &Bpt, &b_Bpt);
+  treeOrig->SetBranchAddress("Bcos2D", &Bcos2D, &b_Bcos2D);
+  treeOrig->SetBranchAddress("Bsvprob", &Bsvprob, &b_Bsvprob);
+  treeOrig->SetBranchAddress("Bxysig", &Bxysig, &b_Bxysig);
   treeOrig->SetBranchAddress("BmatchMC", &BmatchMC, &b_BmatchMC);
   treeOrig->SetBranchAddress("deltaR_ele_mu1", &deltaR_ele_mu1, &b_deltaR_ele_mu1);
   treeOrig->SetBranchAddress("deltaR_ele_mu2", &deltaR_ele_mu2, &b_deltaR_ele_mu2);
@@ -190,27 +183,23 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   treeOrig->SetBranchAddress("ele_isLowPt", &ele_isLowPt, &b_ele_isLowPt);
   treeOrig->SetBranchAddress("ele_mvaId", &ele_mvaId, &b_ele_mvaId);
   treeOrig->SetBranchAddress("ele_pfmvaId", &ele_pfmvaId, &b_ele_pfmvaId);
-  treeOrig->SetBranchAddress("ele_dxySig", &ele_dxySig, &b_ele_dxySig);
-  treeOrig->SetBranchAddress("ele_dzSig", &ele_dzSig, &b_ele_dzSig);
-  treeOrig->SetBranchAddress("ele_pfRelIso", &ele_pfRelIso, &b_ele_pfRelIso);
-  treeOrig->SetBranchAddress("ele_trkRelIso", &ele_trkRelIso, &b_ele_trkRelIso);
-  treeOrig->SetBranchAddress("ele_fBrem", &ele_fBrem, &b_ele_fBrem);
   treeOrig->SetBranchAddress("ele_unBiased", &ele_unBiased, &b_ele_unBiased);
   treeOrig->SetBranchAddress("ele_ptBiased", &ele_ptBiased, &b_ele_ptBiased);
   treeOrig->SetBranchAddress("ele_convveto", &ele_convveto, &b_ele_convveto);
-  treeOrig->SetBranchAddress("probe_closeToEleForMu1_pt",  &probe_closeToEleForMu1_pt,  &b_probe_closeToEleForMu1_pt);
-  treeOrig->SetBranchAddress("probe_closeToEleForMu1_eta", &probe_closeToEleForMu1_eta, &b_probe_closeToEleForMu1_eta);
-  treeOrig->SetBranchAddress("probe_closeToEleForMu1_phi", &probe_closeToEleForMu1_phi, &b_probe_closeToEleForMu1_phi);
-  treeOrig->SetBranchAddress("probe_closeToEleForMu2_pt",  &probe_closeToEleForMu2_pt,  &b_probe_closeToEleForMu2_pt);
-  treeOrig->SetBranchAddress("probe_closeToEleForMu2_eta", &probe_closeToEleForMu2_eta, &b_probe_closeToEleForMu2_eta);
-  treeOrig->SetBranchAddress("probe_closeToEleForMu2_phi", &probe_closeToEleForMu2_phi, &b_probe_closeToEleForMu2_phi);
+  treeOrig->SetBranchAddress("probe_closeToEle_pt",  &probe_closeToEle_pt,  &b_probe_closeToEle_pt);
+  treeOrig->SetBranchAddress("probe_closeToEle_eta", &probe_closeToEle_eta, &b_probe_closeToEle_eta);
+  treeOrig->SetBranchAddress("probe_closeToEle_phi", &probe_closeToEle_phi, &b_probe_closeToEle_phi);
 
   // New variables
   Int_t     hlt_9;
-  Int_t     hlt_12;
   Int_t     numvtx;
   Float_t   bMass;
+  Float_t   bPt;
+  Float_t   bCos2D;
+  Float_t   bSvprob;
+  Float_t   bXysig;
   Int_t     bMatchMc;
+  Float_t   mumuMass;
   Float_t   dR_ele_mu1;
   Float_t   dR_ele_mu2;
   Float_t   dR_ele_k;
@@ -243,21 +232,22 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
   Float_t   eleDxySig;
   Float_t   eleDzSig;
   Float_t   weight;
-  Float_t   probeCloseToEleForMu1Pt;
-  Float_t   probeCloseToEleForMu1Eta;
-  Float_t   probeCloseToEleForMu1Phi;
-  Float_t   probeCloseToEleForMu2Pt;
-  Float_t   probeCloseToEleForMu2Eta;
-  Float_t   probeCloseToEleForMu2Phi;
+  Float_t   probeCloseToElePt;
+  Float_t   probeCloseToEleEta;
+  Float_t   probeCloseToElePhi;
 
   // New branches
   for(int i=0; i<(int)trees.size();i++) {
     TTree *theTreeNew = trees[i];
     theTreeNew->Branch("hlt_9",  &hlt_9,  "hlt_9/I");
-    theTreeNew->Branch("hlt_12", &hlt_12, "hlt_12/I");
     theTreeNew->Branch("numvtx", &numvtx, "numvtx/I");
     theTreeNew->Branch("bMass", &bMass, "bMass/F");
+    theTreeNew->Branch("bPt", &bPt, "bPt/F");
+    theTreeNew->Branch("bCos2D", &bCos2D, "bCos2D/F");
+    theTreeNew->Branch("bSvprob", &bSvprob, "bSvprob/F");
+    theTreeNew->Branch("bXysig", &bXysig, "bXysig/F");
     theTreeNew->Branch("bMatchMc", &bMatchMc, "bMatchMc/I");
+    theTreeNew->Branch("mumuMass", &mumuMass, "mumuMass/F");
     theTreeNew->Branch("dR_ele_mu1", &dR_ele_mu1, "dR_ele_mu1/F");
     theTreeNew->Branch("dR_ele_mu2", &dR_ele_mu2, "dR_ele_mu2/F");
     theTreeNew->Branch("dR_ele_k",   &dR_ele_k,   "dR_ele_k/F");
@@ -290,12 +280,9 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
     theTreeNew->Branch("eleDxySig",&eleDxySig,"eleDxySig/F");
     theTreeNew->Branch("eleDzSig",&eleDzSig,"eleDzSig/F");
     theTreeNew->Branch("weight", &weight, "weight/F");
-    theTreeNew->Branch("probeCloseToEleForMu1Pt",  &probeCloseToEleForMu1Pt,  "probeCloseToEleForMu1Pt/F");
-    theTreeNew->Branch("probeCloseToEleForMu1Eta", &probeCloseToEleForMu1Eta, "probeCloseToEleForMu1Eta/F");
-    theTreeNew->Branch("probeCloseToEleForMu1Phi", &probeCloseToEleForMu1Phi, "probeCloseToEleForMu1Phi/F");
-    theTreeNew->Branch("probeCloseToEleForMu2Pt",  &probeCloseToEleForMu2Pt,  "probeCloseToEleForMu2Pt/F");
-    theTreeNew->Branch("probeCloseToEleForMu2Eta", &probeCloseToEleForMu2Eta, "probeCloseToEleForMu2Eta/F");
-    theTreeNew->Branch("probeCloseToEleForMu2Phi", &probeCloseToEleForMu2Phi, "probeCloseToEleForMu2Phi/F");
+    theTreeNew->Branch("probeCloseToElePt",  &probeCloseToElePt,  "probeCloseToElePt/F");
+    theTreeNew->Branch("probeCloseToEleEta", &probeCloseToEleEta, "probeCloseToEleEta/F");
+    theTreeNew->Branch("probeCloseToElePhi", &probeCloseToElePhi, "probeCloseToElePhi/F");
   }
 
   cout << "Now preparing the new tree" << endl;
@@ -305,7 +292,6 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
     treeOrig->GetEntry(i);
 
     // further selection: trigger 
-    // if (sampleID==0 && hlt9==0) continue; 
     if (hlt9==0) continue; 
 
     // Loop on electrons
@@ -313,7 +299,16 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
       
       // further selection: remove tag side
       if (mu1_isTriggering->at(ii) || mu2_isTriggering->at(ii)) continue;
-      
+
+      // Build cone around mu-mu
+      TLorentzVector mu1TLV(0,0,0,0);     
+      TLorentzVector mu2TLV(0,0,0,0);     
+      mu1TLV.SetPtEtaPhiM(mu1_pt->at(ii), mu1_eta->at(ii), mu1_phi->at(ii), 0);
+      mu2TLV.SetPtEtaPhiM(mu2_pt->at(ii), mu2_eta->at(ii), mu2_phi->at(ii), 0);
+      TLorentzVector mumuTLV = mu1TLV + mu2TLV;
+      float theMumuMass = mumuTLV.M(); 
+      mumuMass = theMumuMass;
+
       // Ele: kinematics
       if (ele_convveto->at(ii)==0)   continue;
       if (ele_pt->at(ii)<0.5)        continue;
@@ -323,13 +318,12 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
       if (isProbeLpt==1 && ele_isLowPt->at(ii)==0) continue;
       if (isProbeLpt==0 && ele_isPF->at(ii)==0)    continue;
 
+      // Tight selection
+      // further selection on B: smaller mass range 
+      if (Bmass->at(ii)<4.7 || Bmass->at(ii)>5.6) continue; 
 
-      // Build cone around mu-mu
-      TLorentzVector mu1TLV(0,0,0,0);     
-      TLorentzVector mu2TLV(0,0,0,0);     
-      mu1TLV.SetPtEtaPhiM(mu1_pt->at(ii), mu1_eta->at(ii), mu1_phi->at(ii), 0);
-      mu2TLV.SetPtEtaPhiM(mu2_pt->at(ii), mu2_eta->at(ii), mu2_phi->at(ii), 0);
-      TLorentzVector mumuTLV = mu1TLV + mu2TLV;
+      // J/Psi region
+      if (mumuMass>3.4 || mumuMass<2.8) continue;
 
       // Check dR ele-mumu
       TLorentzVector eleTLV(0,0,0,0);
@@ -338,11 +332,14 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
 
       // save new variables, making flat tree
       hlt_9  = hlt9;
-      hlt_12 = hlt12;
       numvtx = nvtx;     
 
       bMass = Bmass->at(ii); 
-      bMatchMc = Bmass->at(ii); 
+      bPt = Bpt->at(ii); 
+      bCos2D = Bcos2D->at(ii); 
+      bSvprob = Bsvprob->at(ii);  
+      bXysig = Bxysig->at(ii);   
+      bMatchMc = BmatchMC->at(ii); 
 
       dR_ele_mu1    = deltaR_ele_mu1->at(ii); 
       dR_ele_mu2    = deltaR_ele_mu2->at(ii); 
@@ -373,18 +370,10 @@ void fakeTreeFormat(const char* filename, float lumiForW, int isProbeLpt=-1) {
       eleMvaId = ele_mvaId->at(ii);
       elePfmvaId = ele_pfmvaId->at(ii);
       eleConvVeto = (int)ele_convveto->at(ii);
-      eleTrkRelIso = ele_trkRelIso->at(ii);
-      elePFRelIso = ele_pfRelIso->at(ii);
-      eleFBrem = ele_fBrem->at(ii);
-      eleDxySig = ele_dxySig->at(ii);
-      eleDzSig = ele_dzSig->at(ii);
 
-      probeCloseToEleForMu1Pt  = probe_closeToEleForMu1_pt->at(ii);
-      probeCloseToEleForMu1Eta = probe_closeToEleForMu1_eta->at(ii);
-      probeCloseToEleForMu1Phi = probe_closeToEleForMu1_phi->at(ii);
-      probeCloseToEleForMu2Pt  = probe_closeToEleForMu2_pt->at(ii);
-      probeCloseToEleForMu2Eta = probe_closeToEleForMu2_eta->at(ii);
-      probeCloseToEleForMu2Phi = probe_closeToEleForMu2_phi->at(ii);
+      probeCloseToElePt  = probe_closeToEle_pt->at(ii);
+      probeCloseToEleEta = probe_closeToEle_eta->at(ii);
+      probeCloseToElePhi = probe_closeToEle_phi->at(ii);
 
       // weights
       if (theRun==1) {   // MC                                                                           
