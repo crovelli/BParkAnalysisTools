@@ -13,8 +13,8 @@ TaPJpsiSelectionNaod::TaPJpsiSelectionNaod(TTree *tree)
 
   // Chiara: to be set by hand   
   sampleID = 1;           // 0 = data, >=1 MC
-  donvtxreweight_ = 0;    // 
-  nvtxWFileName_ = "/afs/cern.ch/user/c/crovelli/public/bphys/march/nvtxWeights_run2018D.root"; 
+  donvtxreweight_ = 1;    // 
+  nvtxWFileName_ = "/afs/cern.ch/user/c/crovelli/public/bphys/march/nvtxWeights2018ALL.root"; 
 }
 
 TaPJpsiSelectionNaod::~TaPJpsiSelectionNaod() {
@@ -232,6 +232,9 @@ void TaPJpsiSelectionNaod::Loop() {
       float ele1_phi = BToKEE_fit_l1_phi[thisB];     
       float ele2_phi = BToKEE_fit_l2_phi[thisB]; 
 
+      float ele1_normpt = Electron_pt[ele1_idx]/thisBmass;
+      float ele2_normpt = Electron_pt[ele2_idx]/thisBmass;
+
       TLorentzVector ele1TLV(0,0,0,0);
       ele1TLV.SetPtEtaPhiM(ele1_pt,ele1_eta,ele1_phi,0);
       TLorentzVector ele2TLV(0,0,0,0);
@@ -241,6 +244,7 @@ void TaPJpsiSelectionNaod::Loop() {
       if ( 1 ) { 
 	//
 	tag_pt.push_back(ele1_pt);
+	tag_normpt.push_back(ele1_normpt);
 	tag_eta.push_back(ele1_eta);
 	tag_phi.push_back(ele1_phi);
 	tag_isPF.push_back(Electron_isPF[ele1_idx]);           
@@ -249,9 +253,9 @@ void TaPJpsiSelectionNaod::Loop() {
 	tag_mvaId.push_back(Electron_mvaId[ele1_idx]);
 	tag_pfmvaId.push_back(Electron_pfmvaId[ele1_idx]);
 	tag_convveto.push_back(Electron_convVeto[ele1_idx]);
-	tag_pfRelIso.push_back(Electron_pfRelIso[ele1_idx]);  
 	//
 	probe_pt.push_back(ele2_pt);
+	probe_normpt.push_back(ele2_normpt);
 	probe_eta.push_back(ele2_eta);
 	probe_phi.push_back(ele2_phi);
 	probe_isPF.push_back(Electron_isPF[ele2_idx]);
@@ -261,8 +265,8 @@ void TaPJpsiSelectionNaod::Loop() {
 	probe_pfmvaId.push_back(Electron_pfmvaId[ele2_idx]);
 	probe_dxySig.push_back(Electron_dxy[ele2_idx]/Electron_dxyErr[ele2_idx]);  
 	probe_dzSig.push_back(Electron_dz[ele2_idx]/Electron_dzErr[ele2_idx]);  
-	probe_pfRelIso.push_back(Electron_pfRelIso[ele2_idx]);  
-	probe_trkRelIso.push_back(Electron_trkRelIso[ele2_idx]);  
+	probe_dzTrg.push_back(Electron_dzTrg[ele2_idx]);
+	probe_iso04_rel.push_back( BToKEE_l2_iso04[thisB]/BToKEE_fit_l2_pt[thisB] );
 	probe_fBrem.push_back(Electron_fBrem[ele2_idx]);  
 	probe_unBiased.push_back(Electron_unBiased[ele2_idx]);  
 	probe_ptBiased.push_back(Electron_ptBiased[ele2_idx]);  
@@ -301,6 +305,7 @@ void TaPJpsiSelectionNaod::Loop() {
       if ( 1 ) { 
 	//
 	tag_pt.push_back(ele2_pt);
+	tag_normpt.push_back(ele2_normpt);
 	tag_eta.push_back(ele2_eta);
 	tag_phi.push_back(ele2_phi);
 	tag_isPF.push_back(Electron_isPF[ele2_idx]);
@@ -309,9 +314,9 @@ void TaPJpsiSelectionNaod::Loop() {
 	tag_mvaId.push_back(Electron_mvaId[ele2_idx]);
 	tag_pfmvaId.push_back(Electron_pfmvaId[ele2_idx]);
 	tag_convveto.push_back(Electron_convVeto[ele2_idx]);
-	tag_pfRelIso.push_back(Electron_pfRelIso[ele2_idx]);  
 	//
 	probe_pt.push_back(ele1_pt);    
+	probe_normpt.push_back(ele1_normpt);    
 	probe_eta.push_back(ele1_eta); 
 	probe_phi.push_back(ele1_phi);    
 	probe_isPF.push_back(Electron_isPF[ele1_idx]);
@@ -321,8 +326,8 @@ void TaPJpsiSelectionNaod::Loop() {
 	probe_pfmvaId.push_back(Electron_pfmvaId[ele1_idx]);
 	probe_dxySig.push_back(Electron_dxy[ele1_idx]/Electron_dxyErr[ele1_idx]);  
 	probe_dzSig.push_back(Electron_dz[ele1_idx]/Electron_dzErr[ele1_idx]);  
-	probe_pfRelIso.push_back(Electron_pfRelIso[ele1_idx]);  
-	probe_trkRelIso.push_back(Electron_trkRelIso[ele1_idx]);  
+	probe_dzTrg.push_back(Electron_dzTrg[ele1_idx]);
+	probe_iso04_rel.push_back( BToKEE_l1_iso04[thisB]/BToKEE_fit_l1_pt[thisB] );
 	probe_fBrem.push_back(Electron_fBrem[ele1_idx]);  
 	probe_unBiased.push_back(Electron_unBiased[ele1_idx]);  
 	probe_ptBiased.push_back(Electron_ptBiased[ele1_idx]);  
@@ -372,6 +377,7 @@ void TaPJpsiSelectionNaod::Loop() {
     
     // Cleaning all vectors used for the output tree, ready for a new entry
     tag_pt.clear();  
+    tag_normpt.clear();  
     tag_eta.clear();  
     tag_phi.clear();  
     tag_isPF.clear();  
@@ -380,11 +386,11 @@ void TaPJpsiSelectionNaod::Loop() {
     tag_mvaId.clear();  
     tag_pfmvaId.clear();  
     tag_convveto.clear();
-    tag_pfRelIso.clear();
     tag_matchMcFromJPsi.clear();  
     tag_matchMc.clear();  
     //
     probe_pt.clear();  
+    probe_normpt.clear();  
     probe_eta.clear();  
     probe_phi.clear();  
     probe_isPF.clear();  
@@ -394,8 +400,8 @@ void TaPJpsiSelectionNaod::Loop() {
     probe_pfmvaId.clear();  
     probe_dxySig.clear();  
     probe_dzSig.clear();  
-    probe_pfRelIso.clear();  
-    probe_trkRelIso.clear();  
+    probe_dzTrg.clear(); 
+    probe_iso04_rel.clear();
     probe_fBrem.clear();  
     probe_unBiased.clear();  
     probe_ptBiased.clear();  
@@ -573,6 +579,7 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("selectedBSize",  &selectedBSize,  "selectedBSize/I");   
   
   outTree_->Branch("tag_pt", "std::vector<float>", &tag_pt);  
+  outTree_->Branch("tag_normpt", "std::vector<float>", &tag_normpt);  
   outTree_->Branch("tag_eta", "std::vector<float>", &tag_eta);  
   outTree_->Branch("tag_phi", "std::vector<float>", &tag_phi);  
   outTree_->Branch("tag_isPF", "std::vector<bool>", &tag_isPF);  
@@ -581,11 +588,11 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("tag_mvaId", "std::vector<float>", &tag_mvaId);  
   outTree_->Branch("tag_pfmvaId", "std::vector<float>", &tag_pfmvaId);  
   outTree_->Branch("tag_convveto", "std::vector<bool>", &tag_convveto);  
-  outTree_->Branch("tag_pfRelIso", "std::vector<float>", &tag_pfRelIso);  
   outTree_->Branch("tag_matchMcFromJPsi", "std::vector<bool>", &tag_matchMcFromJPsi);  
   outTree_->Branch("tag_matchMc", "std::vector<bool>", &tag_matchMc);  
 
   outTree_->Branch("probe_pt", "std::vector<float>", &probe_pt);  
+  outTree_->Branch("probe_normpt", "std::vector<float>", &probe_normpt);  
   outTree_->Branch("probe_eta", "std::vector<float>", &probe_eta);  
   outTree_->Branch("probe_phi", "std::vector<float>", &probe_phi);  
   outTree_->Branch("probe_isPF", "std::vector<bool>", &probe_isPF);  
@@ -595,8 +602,8 @@ void TaPJpsiSelectionNaod::bookOutputTree()
   outTree_->Branch("probe_pfmvaId", "std::vector<float>", &probe_pfmvaId);  
   outTree_->Branch("probe_dxySig", "std::vector<float>", &probe_dxySig);  
   outTree_->Branch("probe_dzSig", "std::vector<float>", &probe_dzSig);  
-  outTree_->Branch("probe_pfRelIso", "std::vector<float>", &probe_pfRelIso);  
-  outTree_->Branch("probe_trkRelIso", "std::vector<float>", &probe_trkRelIso);  
+  outTree_->Branch("probe_dzTrg", "std::vector<float>", &probe_dzTrg);  
+  outTree_->Branch("probe_iso04_rel", "std::vector<float>", &probe_iso04_rel);  
   outTree_->Branch("probe_fBrem", "std::vector<float>", &probe_fBrem);  
   outTree_->Branch("probe_unBiased", "std::vector<float>", &probe_unBiased);  
   outTree_->Branch("probe_ptBiased", "std::vector<float>", &probe_ptBiased);  

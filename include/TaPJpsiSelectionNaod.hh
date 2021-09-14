@@ -77,6 +77,7 @@ private:
   int selectedBSize;
   //
   vector <float> tag_pt={};   
+  vector <float> tag_normpt={};   
   vector <float> tag_eta={};
   vector <float> tag_phi={};
   vector <bool> tag_isPF={};
@@ -87,7 +88,6 @@ private:
   vector <bool>  tag_matchMcFromJPsi={};
   vector <bool>  tag_matchMc={};
   vector <bool> tag_convveto={};
-  vector <float> tag_pfRelIso={};
   //
   vector <float> probe_Bmass={};   
   vector <float> probe_Bpt={};   
@@ -97,6 +97,7 @@ private:
   vector <bool> probe_BmatchMC={};   
   vector <float> probe_Kpt={}; 
   vector <float> probe_pt={}; 
+  vector <float> probe_normpt={}; 
   vector <float> probe_eta ={};
   vector <float> probe_phi={};
   vector <bool> probe_isPF ={};
@@ -106,8 +107,8 @@ private:
   vector <float> probe_pfmvaId={};        
   vector <float> probe_dxySig={};        
   vector <float> probe_dzSig={};        
-  vector <float> probe_pfRelIso ={};
-  vector <float> probe_trkRelIso ={};
+  vector <float> probe_dzTrg={};        
+  vector <float> probe_iso04_rel={};
   vector <float> probe_fBrem ={};
   vector <float> probe_unBiased ={};
   vector <float> probe_ptBiased ={};
