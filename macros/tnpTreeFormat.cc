@@ -233,22 +233,12 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
 
   // New variables
   Int_t     hlt_9ip6;
-  /*
-  Int_t     hlt_12ip6;
-  Int_t     hlt_9ip5;
-  Int_t     hlt_9ip4;
-  Int_t     hlt_7ip4;
-  Int_t     hlt_8ip6;
-  Int_t     hlt_8ip5;
-  Int_t     hlt_8ip3;
-  Int_t     hlt_8d5ip3d5;
-  Int_t     hlt_10d5ip3d5;
-  */
   Int_t     numvtx;
   Int_t     tagMatchMcFromJPsi;
   Float_t   tagPt;
   Float_t   tagEta;
   Float_t   tagPfmvaId;
+  Float_t   tagMvaId;
   Float_t   probePt;
   Float_t   probeAbsEta;
   Float_t   probeEta;
@@ -280,22 +270,12 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
   for(int i=0; i<(int)trees.size();i++) {
     TTree *theTreeNew = trees[i];
     theTreeNew->Branch("hlt_9ip6", &hlt_9ip6, "hlt_9ip6/I");
-    /*
-    theTreeNew->Branch("hlt_12ip6", &hlt_12ip6, "hlt_12ip6/I");
-    theTreeNew->Branch("hlt_9ip5", &hlt_9ip5, "hlt_9ip5/I");
-    theTreeNew->Branch("hlt_9ip4", &hlt_9ip4, "hlt_9ip4/I");
-    theTreeNew->Branch("hlt_7ip4", &hlt_7ip4, "hlt_7ip4/I");
-    theTreeNew->Branch("hlt_8ip6", &hlt_8ip6, "hlt_8ip6/I");
-    theTreeNew->Branch("hlt_8ip5", &hlt_8ip5, "hlt_8ip5/I");
-    theTreeNew->Branch("hlt_8ip3", &hlt_8ip3, "hlt8ip3_/I");
-    theTreeNew->Branch("hlt_8d5ip3d5", &hlt_8d5ip3d5, "hlt_8d5ip3d5/I");
-    theTreeNew->Branch("hlt_10d5ip3d5", &hlt_10d5ip3d5, "hlt_10d5ip3d5/I");
-    */
     theTreeNew->Branch("numvtx", &numvtx, "numvtx/I");
     theTreeNew->Branch("tagMatchMcFromJPsi",&tagMatchMcFromJPsi,"tagMatchMcFromJPsi/I");
     theTreeNew->Branch("tagPt",&tagPt,"tagPt/F");
     theTreeNew->Branch("tagEta",&tagEta,"tagEta/F");
     theTreeNew->Branch("tagPfmvaId",&tagPfmvaId,"tagPfmvaId/F");
+    theTreeNew->Branch("tagMvaId",&tagMvaId,"tagMvaId/F");
     theTreeNew->Branch("probePt",&probePt,"probePt/F");
     theTreeNew->Branch("probeAbsEta",&probeAbsEta,"probeAbsEta/F");
     theTreeNew->Branch("probeEta",&probeEta,"probeEta/F");
@@ -339,24 +319,27 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       // conversion veto
       if ( tag_convveto->at(ii)==0)   continue;      
       if ( probe_convveto->at(ii)==0) continue;      
-
+      
       // further selection on tag: low pt probes
       if (isProbeLpt==1) { 
-	if ( tag_isPF->at(ii)==0 ) continue;
 	if ( probe_isLowPt->at(ii)==0) continue;                   
-	//if ( tag_pfmvaId->at(ii)<0. ) continue;          // Tight selection  
-	if ( tag_pfmvaId->at(ii)<-1. ) continue;           // Loose selection 
+	if ( tag_isPF->at(ii)==0 ) continue;
+	if ( tag_pfmvaId->at(ii)<0. ) continue;               // Tight selection (preferred) 
+	// if ( tag_pfmvaId->at(ii)<-1. ) continue;           // Loose selection 
       }
 
-      // further selection on tag: low pt probes
+      // further selection on tag: PF probes
       if (isProbeLpt==0) { 
-	if ( probe_isPF->at(ii)==0) continue;  
-	if ( tag_isLowPt->at(ii)==1 && tag_mvaId->at(ii)<-1) continue;
+	if ( probe_isPF->at(ii)==0) continue; 
+ 	if ( tag_isLowPt->at(ii)==1 && tag_mvaId->at(ii)<2) continue;   // Tight
+	if ( tag_isPF->at(ii)==1 && tag_pfmvaId->at(ii)<0)  continue;   // Tight
+	//if ( tag_isLowPt->at(ii)==1 && tag_mvaId->at(ii)<0) continue;   // Loose, da testare eventualmente
+	//if ( tag_isPF->at(ii)==1 && tag_pfmvaId->at(ii)<-1) continue;   // Loose, da testare eventualmente 
       }
 
-      // Tight selection     
+      // Tight selection (preferred)    
       // further selection on B: smaller mass range    
-      // if (probe_Bmass->at(ii)<4.7 || probe_Bmass->at(ii)>5.6) continue;
+      if (probe_Bmass->at(ii)<4.7 || probe_Bmass->at(ii)>5.6) continue;
 
       // e+e- invariant mass selection
       if (probe_invMass->at(ii)<2 || probe_invMass->at(ii)>4) continue;  
@@ -370,17 +353,6 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
 
       // save new variables, making flat tree
       hlt_9ip6 = hlt9ip6;
-      /*
-      hlt_12ip6 = hlt12ip6;
-      hlt_9ip5 = hlt9ip5;
-      hlt_9ip4 = hlt9ip4;
-      hlt_7ip4 = hlt7ip4;
-      hlt_8ip6 = hlt8ip6;
-      hlt_8ip5 = hlt8ip5;
-      hlt_8ip3 = hlt8ip3;
-      hlt_8d5ip3d5  = hlt8d5ip3d5;
-      hlt_10d5ip3d5 = hlt10d5ip3d5;
-      */
 
       numvtx = nvtx;     
 
@@ -397,6 +369,7 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
       tagPt  = tag_pt->at(ii);
       tagEta = tag_eta->at(ii);
       tagPfmvaId = tag_pfmvaId->at(ii);
+      tagMvaId = tag_mvaId->at(ii);
       probePt = probe_pt->at(ii);
       probeAbsEta = fabs(probe_eta->at(ii));
       probeEta = probe_eta->at(ii);
