@@ -178,10 +178,9 @@ void mcVsSplots(int doLowPt)
 {
   // Input files (after TnP selection)
   TFile *fileMC;
-  TFile *fileMCTC;
   if (doLowPt==1) {
-    fileMC   = new TFile("files_marchNoReg2/probeLowPt/myFileMcAfterTnp_noKineWeights.root");           // from prepareInputsFromMcWithTnP
-    fileMCTC = new TFile("files_marchNoReg2_TC/probeLowPt/myFileMcAfterTnp_noKineWeights.root");        // from prepareInputsFromMcWithTnP
+    fileMC = new TFile("files_marchWithReg2/probeLowPt/TightSel/myFileMcAfterTnp_TightSelection_noMcMatch_noKineWeights.root");         // from prepareInputsFromMcWithTnP
+    //fileMC = new TFile("files_marchWithReg2/probeLowPt/TightSel/myFileMcAfterTnp_TightSelection_withMcMatch_noKineWeights.root");       // from prepareInputsFromMcWithTnP
   }
   if (doLowPt==0) {
     fileMC = new TFile("");                   // from prepareInputsFromMcWithTnP
@@ -194,39 +193,39 @@ void mcVsSplots(int doLowPt)
   TFile *fileSPlotsEE1;
   TFile *fileSPlotsEE2;
   if (doLowPt==1) {
-    fileSPlotsEB0 = new TFile("files_marchNoReg2_TC/probeLowPt/fileSPlots_EB_1d0-to-1d5.root");       
-    fileSPlotsEB1 = new TFile("files_marchNoReg2_TC/probeLowPt/fileSPlots_EB_1d5-to-2d0.root");        
-    fileSPlotsEB2 = new TFile("files_marchNoReg2/probeLowPt/fileSPlots_EB_2d0-to-5d0.root");        
-    fileSPlotsEB3 = new TFile("files_marchNoReg2/probeLowPt/fileSPlots_EB_gt5d0.root");                 
-    fileSPlotsEE1 = new TFile("files_marchNoReg2/probeLowPt/fileSPlots_EE_2d0-to-5d0.root");       
-    fileSPlotsEE2 = new TFile("files_marchNoReg2/probeLowPt/fileSPlots_EE_gt5d0.root");        
+    fileSPlotsEB0 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EB_1d0-to-1d5.root");       
+    fileSPlotsEB1 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EB_1d5-to-2d0.root");        
+    fileSPlotsEB2 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EB_2d0-to-5d0.root");        
+    fileSPlotsEB3 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EB_gt5d0.root");                 
+    fileSPlotsEE1 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EE_2d0-to-5d0.root");       
+    fileSPlotsEE2 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EE_gt5d0.root");        
   }
 
   
   // MC histos in eta/pT bins
-  TH1F *probeMvaSignalMcEB0 = (TH1F*)fileMCTC->Get("mvaSignalEBMc0");
-  TH1F *probeMvaSignalMcEB1 = (TH1F*)fileMCTC->Get("mvaSignalEBMc1");
+  TH1F *probeMvaSignalMcEB0 = (TH1F*)fileMC->Get("mvaSignalEBMc0");
+  TH1F *probeMvaSignalMcEB1 = (TH1F*)fileMC->Get("mvaSignalEBMc1");
   TH1F *probeMvaSignalMcEB2 = (TH1F*)fileMC->Get("mvaSignalEBMc2");
   TH1F *probeMvaSignalMcEB3 = (TH1F*)fileMC->Get("mvaSignalEBMc3");
   TH1F *probeMvaSignalMcEE1 = (TH1F*)fileMC->Get("mvaSignalEEMc1");
   TH1F *probeMvaSignalMcEE2 = (TH1F*)fileMC->Get("mvaSignalEEMc2");
   //
-  TH1F *probeDxysigSignalMcEB0 = (TH1F*)fileMCTC->Get("dxysigSignalEBMc0");
-  TH1F *probeDxysigSignalMcEB1 = (TH1F*)fileMCTC->Get("dxysigSignalEBMc1");
+  TH1F *probeDxysigSignalMcEB0 = (TH1F*)fileMC->Get("dxysigSignalEBMc0");
+  TH1F *probeDxysigSignalMcEB1 = (TH1F*)fileMC->Get("dxysigSignalEBMc1");
   TH1F *probeDxysigSignalMcEB2 = (TH1F*)fileMC->Get("dxysigSignalEBMc2");
   TH1F *probeDxysigSignalMcEB3 = (TH1F*)fileMC->Get("dxysigSignalEBMc3");
   TH1F *probeDxysigSignalMcEE1 = (TH1F*)fileMC->Get("dxysigSignalEEMc1");
   TH1F *probeDxysigSignalMcEE2 = (TH1F*)fileMC->Get("dxysigSignalEEMc2");
   //
-  TH1F *probeDztrgSignalMcEB0 = (TH1F*)fileMCTC->Get("dztrgSignalEBMc0");
-  TH1F *probeDztrgSignalMcEB1 = (TH1F*)fileMCTC->Get("dztrgSignalEBMc1");
+  TH1F *probeDztrgSignalMcEB0 = (TH1F*)fileMC->Get("dztrgSignalEBMc0");
+  TH1F *probeDztrgSignalMcEB1 = (TH1F*)fileMC->Get("dztrgSignalEBMc1");
   TH1F *probeDztrgSignalMcEB2 = (TH1F*)fileMC->Get("dztrgSignalEBMc2");
   TH1F *probeDztrgSignalMcEB3 = (TH1F*)fileMC->Get("dztrgSignalEBMc3");
   TH1F *probeDztrgSignalMcEE1 = (TH1F*)fileMC->Get("dztrgSignalEEMc1");
   TH1F *probeDztrgSignalMcEE2 = (TH1F*)fileMC->Get("dztrgSignalEEMc2");
   //
-  TH1F *probeIso04relSignalMcEB0 = (TH1F*)fileMCTC->Get("iso04relSignalEBMc0");
-  TH1F *probeIso04relSignalMcEB1 = (TH1F*)fileMCTC->Get("iso04relSignalEBMc1");
+  TH1F *probeIso04relSignalMcEB0 = (TH1F*)fileMC->Get("iso04relSignalEBMc0");
+  TH1F *probeIso04relSignalMcEB1 = (TH1F*)fileMC->Get("iso04relSignalEBMc1");
   TH1F *probeIso04relSignalMcEB2 = (TH1F*)fileMC->Get("iso04relSignalEBMc2");
   TH1F *probeIso04relSignalMcEB3 = (TH1F*)fileMC->Get("iso04relSignalEBMc3");
   TH1F *probeIso04relSignalMcEE1 = (TH1F*)fileMC->Get("iso04relSignalEEMc1");
