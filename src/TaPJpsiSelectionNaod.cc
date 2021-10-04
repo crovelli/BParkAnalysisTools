@@ -13,7 +13,7 @@ TaPJpsiSelectionNaod::TaPJpsiSelectionNaod(TTree *tree)
 
   // Chiara: to be set by hand   
   sampleID = 1;           // 0 = data, >=1 MC
-  donvtxreweight_ = 1;    // 
+  donvtxreweight_ = 0;    // 
   nvtxWFileName_ = "/afs/cern.ch/user/c/crovelli/public/bphys/march/nvtxWeights2018ALL.root"; 
 }
 
