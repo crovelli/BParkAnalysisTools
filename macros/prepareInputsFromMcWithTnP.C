@@ -14,7 +14,7 @@
 
 using namespace std;
 
-void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool studyOverlap=0)
+void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
 {
   if (fChain == 0) return;
 
@@ -32,8 +32,14 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   TH1F *probePtFakeMc    = new TH1F("probePtFakeMc",    "probePtFakeMc",    90,  0.,  30.);
   TH1F *probeEtaSignalMc = new TH1F("probeEtaSignalMc", "probeEtaSignalMc", 40, -2.4, 2.4);
   TH1F *probeEtaFakeMc   = new TH1F("probeEtaFakeMc",   "probeEtaFakeMc",   40, -2.4, 2.4);
-  TH1F *probeMvaSignalMc = new TH1F("probeMvaSignalMc", "probeMvaSignalMc", 40, -4., 16.);    
-  TH1F *probeMvaFakeMc   = new TH1F("probeMvaFakeMc",   "probeMvaFakeMc",   40, -4., 16.);
+  TH1F *probeMvaSignalMc, *probeMvaFakeMc;
+  if (testLPT==1) {
+    probeMvaSignalMc = new TH1F("probeMvaSignalMc", "probeMvaSignalMc", 40, -4., 16.);    
+    probeMvaFakeMc   = new TH1F("probeMvaFakeMc",   "probeMvaFakeMc",   40, -4., 16.);
+  } else {
+    probeMvaSignalMc = new TH1F("probeMvaSignalMc", "probeMvaSignalMc", 44, -12., 10.);    
+    probeMvaFakeMc   = new TH1F("probeMvaFakeMc",   "probeMvaFakeMc",   44, -12., 10.);
+  }
   TH1F *probeDxysigSignalMc   = new TH1F("probeDxysigSignalMc",   "probeDxysigSignalMc",   120, -30., 30.);  
   TH1F *probeDxysigFakeMc     = new TH1F("probeDxysigFakeMc",     "probeDxysigFakeMc",     120, -30., 30.);  
   TH1F *probeDztrgSignalMc    = new TH1F("probeDztrgSignalMc",    "probeDztrgSignalMc",    100, -1., 1.); 
@@ -56,7 +62,12 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   // With weight (kine only)
   TH1F *probePtSignalMcWW  = new TH1F("probePtSignalMcWW",  "probePtSignalMcWW",  90,  0.,  30.);
   TH1F *probeEtaSignalMcWW = new TH1F("probeEtaSignalMcWW", "probeEtaSignalMcWW", 40, -2.4, 2.4);
-  TH1F *probeMvaSignalMcWW = new TH1F("probeMvaSignalMcWW", "probeMvaSignalMcWW", 40, -4., 16.); 
+  TH1F *probeMvaSignalMcWW;
+  if (testLPT==1) {
+    probeMvaSignalMcWW = new TH1F("probeMvaSignalMcWW", "probeMvaSignalMcWW", 40, -4., 16.); 
+  } else {
+    probeMvaSignalMcWW = new TH1F("probeMvaSignalMcWW", "probeMvaSignalMcWW", 44, -12., 10.); 
+  }
   TH1F *probeDxysigSignalMcWW   = new TH1F("probeDxysigSignalMcWW",   "probeDxysigSignalMcWW",   120, -30., 30.);  
   TH1F *probeDztrgSignalMcWW    = new TH1F("probeDztrgSignalMcWW",    "probeDztrgSignalMcWW",    100, -1., 1.); 
   TH1F *probeIso04relSignalMcWW = new TH1F("probeIso04relSignalMcWW", "probeIso04relSignalMcWW",  50,  0., 50.);  
@@ -69,13 +80,26 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
 
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): ID output
-  TH1F *mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 40, -4., 16.);  // pT: 1.0-1.5
-  TH1F *mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 40, -4., 16.);  // 1.5-2.0
-  TH1F *mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 40, -4., 16.);  // 2.0-5.0
-  TH1F *mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 40, -4., 16.);  // >5
-  TH1F *mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 40, -4., 16.);  // pT: 1.0-2.0  
-  TH1F *mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 40, -4., 16.);  // pT: 2.0-5.0  
-  TH1F *mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 40, -4., 16.);  // >5
+  TH1F *mvaSignalEBMc0, *mvaSignalEBMc1, *mvaSignalEBMc2, *mvaSignalEBMc3;
+  TH1F *mvaSignalEEMc0, *mvaSignalEEMc1, *mvaSignalEEMc2;
+  if (testLPT==1) {
+    mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 40, -4., 16.);  // pT: 1.0-1.5
+    mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 40, -4., 16.);  // 1.5-2.0
+    mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 40, -4., 16.);  // 2.0-5.0
+    mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 40, -4., 16.);  // >5
+    mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 40, -4., 16.);  // pT: 1.0-2.0  
+    mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 40, -4., 16.);  // pT: 2.0-5.0  
+    mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 40, -4., 16.);  // >5
+  } else {
+    mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 44, -12., 10.);  // pT: 1.0-1.5
+    mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 44, -12., 10.);  // 1.5-2.0
+    mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 44, -12., 10.);  // 2.0-5.0
+    mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 44, -12., 10.);  // >5
+    mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 44, -12., 10.);  // pT: 1.0-2.0  
+    mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 44, -12., 10.);  // pT: 2.0-5.0  
+    mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 44, -12., 10.);  // >5
+  }
+
   mvaSignalEBMc0->Sumw2();
   mvaSignalEBMc1->Sumw2();
   mvaSignalEBMc2->Sumw2();
@@ -84,13 +108,25 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   mvaSignalEEMc1->Sumw2();
   mvaSignalEEMc2->Sumw2();
   //
-  TH1F *mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 40, -4., 16.);  // pT: 1.0-1.5
-  TH1F *mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 40, -4., 16.);  // 1.5-2.0
-  TH1F *mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 40, -4., 16.);  // 2.0-5.0
-  TH1F *mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 40, -4., 16.);  // >5
-  TH1F *mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 40, -4., 16.);  // pT: 1.0-2.0
-  TH1F *mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 40, -4., 16.);  // pT: 2.0-5.0
-  TH1F *mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 40, -4., 16.);  // >5
+  TH1F *mvaFakeEBMc0, *mvaFakeEBMc1, *mvaFakeEBMc2, *mvaFakeEBMc3;
+  TH1F *mvaFakeEEMc0, *mvaFakeEEMc1, *mvaFakeEEMc2;
+  if (testLPT==1) {
+    mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 40, -4., 16.);  // pT: 1.0-1.5
+    mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 40, -4., 16.);  // 1.5-2.0
+    mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 40, -4., 16.);  // 2.0-5.0
+    mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 40, -4., 16.);  // >5
+    mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 40, -4., 16.);  // pT: 1.0-2.0
+    mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 40, -4., 16.);  // pT: 2.0-5.0
+    mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 40, -4., 16.);  // >5
+  } else {
+    mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 44, -12., 10.);  // pT: 1.0-1.5
+    mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 44, -12., 10.);  // 1.5-2.0
+    mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 44, -12., 10.);  // 2.0-5.0
+    mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 44, -12., 10.);  // >5
+    mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 44, -12., 10.);  // pT: 1.0-2.0
+    mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 44, -12., 10.);  // pT: 2.0-5.0
+    mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 44, -12., 10.);  // >5
+  }
   mvaFakeEBMc0->Sumw2();
   mvaFakeEBMc1->Sumw2();
   mvaFakeEBMc2->Sumw2();
@@ -101,13 +137,25 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   
   // -----------------------------------------------------------------------
   // Many pT/eta bins (with weight): ID output
-  TH1F *mvaSignalEBMc0WW = new TH1F("mvaSignalEBMc0WW", "mvaSignalEBMc0WW", 40, -4., 16.);  // pT: 1.0-1.5
-  TH1F *mvaSignalEBMc1WW = new TH1F("mvaSignalEBMc1WW", "mvaSignalEBMc1WW", 40, -4., 16.);  // 1.5-2.0
-  TH1F *mvaSignalEBMc2WW = new TH1F("mvaSignalEBMc2WW", "mvaSignalEBMc2WW", 40, -4., 16.);  // 2.0-5.0
-  TH1F *mvaSignalEBMc3WW = new TH1F("mvaSignalEBMc3WW", "mvaSignalEBMc3WW", 40, -4., 16.);  // >5
-  TH1F *mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 40, -4., 16.);  // pT: 1.0-2.0 
-  TH1F *mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 40, -4., 16.);  // pT: 2.0-5.0 
-  TH1F *mvaSignalEEMc2WW = new TH1F("mvaSignalEEMc2WW", "mvaSignalEEMc2WW", 40, -4., 16.);  // >5
+  TH1F *mvaSignalEBMc0WW, *mvaSignalEBMc1WW, *mvaSignalEBMc2WW, *mvaSignalEBMc3WW;
+  TH1F *mvaSignalEEMc0WW, *mvaSignalEEMc1WW, *mvaSignalEEMc2WW;
+  if (testLPT==0) {
+    mvaSignalEBMc0WW = new TH1F("mvaSignalEBMc0WW", "mvaSignalEBMc0WW", 44, -12., 10.);  // pT: 1.0-1.5
+    mvaSignalEBMc1WW = new TH1F("mvaSignalEBMc1WW", "mvaSignalEBMc1WW", 44, -12., 10.);  // 1.5-2.0
+    mvaSignalEBMc2WW = new TH1F("mvaSignalEBMc2WW", "mvaSignalEBMc2WW", 44, -12., 10.);  // 2.0-5.0
+    mvaSignalEBMc3WW = new TH1F("mvaSignalEBMc3WW", "mvaSignalEBMc3WW", 44, -12., 10.);  // >5
+    mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 44, -12., 10.);  // pT: 1.0-2.0 
+    mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 44, -12., 10.);  // pT: 2.0-5.0 
+    mvaSignalEEMc2WW = new TH1F("mvaSignalEEMc2WW", "mvaSignalEEMc2WW", 44, -12., 10.);  // >5
+  } else {
+    mvaSignalEBMc0WW = new TH1F("mvaSignalEBMc0WW", "mvaSignalEBMc0WW", 40, -4., 16.);  // pT: 1.0-1.5
+    mvaSignalEBMc1WW = new TH1F("mvaSignalEBMc1WW", "mvaSignalEBMc1WW", 40, -4., 16.);  // 1.5-2.0
+    mvaSignalEBMc2WW = new TH1F("mvaSignalEBMc2WW", "mvaSignalEBMc2WW", 40, -4., 16.);  // 2.0-5.0
+    mvaSignalEBMc3WW = new TH1F("mvaSignalEBMc3WW", "mvaSignalEBMc3WW", 40, -4., 16.);  // >5
+    mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 40, -4., 16.);  // pT: 1.0-2.0 
+    mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 40, -4., 16.);  // pT: 2.0-5.0 
+    mvaSignalEEMc2WW = new TH1F("mvaSignalEEMc2WW", "mvaSignalEEMc2WW", 40, -4., 16.);  // >5
+  }
   mvaSignalEBMc0WW->Sumw2();
   mvaSignalEBMc1WW->Sumw2();
   mvaSignalEBMc2WW->Sumw2();
@@ -168,22 +216,6 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   iso04relSignalEEMc2->Sumw2();
 
   // --------------------------
-  // Full pT range: distributions for data/MC checking overlap between LPT and PF
-  TH1F *probePtSignalMc_LptPfOverlap  = new TH1F("probePtSignalMc_LptPfOverlap",  "probePtSignalMc_LptPfOverlap",  90,  0.,  30.);
-  TH1F *probeEtaSignalMc_LptPfOverlap = new TH1F("probeEtaSignalMc_LptPfOverlap", "probeEtaSignalMc_LptPfOverlap", 40, -2.4, 2.4);
-  TH1F *probeMvaSignalMc_LptPfOverlap = new TH1F("probeMvaSignalMc_LptPfOverlap", "probeMvaSignalMc_LptPfOverlap", 40, -4., 16.); 
-  probePtSignalMc_LptPfOverlap->Sumw2();
-  probeEtaSignalMc_LptPfOverlap->Sumw2();
-  probeMvaSignalMc_LptPfOverlap->Sumw2(); 
-
-  TH1F *probePtSignalMc_LptNotPfOverlap  = new TH1F("probePtSignalMc_LptNotPfOverlap",  "probePtSignalMc_LptNotPfOverlap",  90,  0.,  30.);
-  TH1F *probeEtaSignalMc_LptNotPfOverlap = new TH1F("probeEtaSignalMc_LptNotPfOverlap", "probeEtaSignalMc_LptNotPfOverlap", 40, -2.4, 2.4);
-  TH1F *probeMvaSignalMc_LptNotPfOverlap = new TH1F("probeMvaSignalMc_LptNotPfOverlap", "probeMvaSignalMc_LptNotPfOverlap", 40, -4., 16.); 
-  probePtSignalMc_LptNotPfOverlap->Sumw2();
-  probeEtaSignalMc_LptNotPfOverlap->Sumw2();
-  probeMvaSignalMc_LptNotPfOverlap->Sumw2(); 
-
-  // --------------------------
   // weights (pt vs eta)
   float minBPt[100], maxBPt[100], minBEta[100], maxBEta[100];      
   int nBinsWPt  = -999;
@@ -203,7 +235,8 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   }
 
   if (applyWeight) {
-    TFile fileWeight("files_marchNoReg2/probeLowPt/weightFile_tnpVsNani.root"); 
+    //TFile fileWeight("files_marchNoReg2/probeLowPt/weightFile_tnpVsNani.root"); 
+    TFile fileWeight("files_marchNoReg2_TC/probeLowPt/weightFile_tnpVsNani.root"); 
     TH2F *signalWeights = (TH2F*)fileWeight.Get("ptVsEtaSignalWeights"); 
     nBinsWPt  = signalWeights->GetNbinsY(); 
     nBinsWEta = signalWeights->GetNbinsX(); 
@@ -236,9 +269,6 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
     if (ientry < 0) break;
     nb = fChain->GetEntry(jentry);   nbytes += nb;
 
-    // Sanity check 
-    if (studyOverlap==1 && testLPT!=1) { cout << "should not happen!" << endl; continue; }
-
     // HLT
     if (hlt_9ip6==0) continue;
     
@@ -252,7 +282,11 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
     if (pair_mass<2.6 || pair_mass>3.4) continue;
 
     // Apply same loose cuts as done for data - chiara
-    if (probeMvaId<-4 || probeMvaId>16) continue;  
+    if (testLPT==1) {
+      if (probeMvaId<-4 || probeMvaId>16) continue;  
+    } else {
+      if (probePfmvaId<-12 || probePfmvaId>10) continue;    
+    }
     if (probePt>1000) continue;
     if (fabs(probeEta)>2.4) continue;  
     if (fabs(probeDxySig)>200) continue;   
@@ -282,18 +316,6 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
       probeDxysigSignalMc -> Fill(probeDxySig, weight);
       probeDztrgSignalMc -> Fill(probeDzTrg, weight);
       probeIso04relSignalMc -> Fill(probeIso04Rel, weight);
-
-      if (studyOverlap==1) {
-	if (probeIsPFOverlap==1) {
-	  probePtSignalMc_LptPfOverlap -> Fill(probePt, weight);
-	  probeEtaSignalMc_LptPfOverlap->Fill(probeEta, weight);
-	  probeMvaSignalMc_LptPfOverlap->Fill(probeMvaId, weight);
-	} else {
-	  probePtSignalMc_LptNotPfOverlap -> Fill(probePt, weight);
-	  probeEtaSignalMc_LptNotPfOverlap->Fill(probeEta, weight);
-	  probeMvaSignalMc_LptNotPfOverlap->Fill(probeMvaId, weight);
-	}
-      }
     }
     
     // matching mc-truth in MC: full pT range after weight
@@ -498,15 +520,6 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT, bool study
   probeDztrgFakeMc      -> Write();
   probeIso04relSignalMc -> Write();
   probeIso04relFakeMc   -> Write();
-  //
-  if (studyOverlap==1) {
-    probePtSignalMc_LptNotPfOverlap->Write();
-    probeEtaSignalMc_LptNotPfOverlap->Write();
-    probeMvaSignalMc_LptNotPfOverlap->Write();
-    probePtSignalMc_LptPfOverlap->Write();
-    probeEtaSignalMc_LptPfOverlap->Write();
-    probeMvaSignalMc_LptPfOverlap->Write();
-  }
   //
   probePtSignalMcWW->Write();
   probeEtaSignalMcWW->Write();
