@@ -183,91 +183,121 @@ void mcVsSplots(int doLowPt)
     //fileMC = new TFile("files_marchWithReg2/probeLowPt/TightSel/myFileMcAfterTnp_TightSelection_withMcMatch_noKineWeights.root");       // from prepareInputsFromMcWithTnP
   }
   if (doLowPt==0) {
-    fileMC = new TFile("");                   // from prepareInputsFromMcWithTnP
+    fileMC = new TFile("files_marchWithReg2/probePF/TightSel/myFileMcAfterTnp_noMcMatch_noKineWeights.root");         // from prepareInputsFromMcWithTnP
+    //fileMC = new TFile("files_marchWithReg2/probePF/TightSel/myFileMcAfterTnp_withMcMatch_noKineWeights.root");         // from prepareInputsFromMcWithTnP
   }
   
   TFile *fileSPlotsEB0;
   TFile *fileSPlotsEB1;
   TFile *fileSPlotsEB2;
   TFile *fileSPlotsEB3;
+  TFile *fileSPlotsEE0;
   TFile *fileSPlotsEE1;
-  TFile *fileSPlotsEE2;
   if (doLowPt==1) {
     fileSPlotsEB0 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EB_1d0-to-1d5.root");       
     fileSPlotsEB1 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EB_1d5-to-2d0.root");        
     fileSPlotsEB2 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EB_2d0-to-5d0.root");        
     fileSPlotsEB3 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EB_gt5d0.root");                 
-    fileSPlotsEE1 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EE_2d0-to-5d0.root");       
-    fileSPlotsEE2 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EE_gt5d0.root");        
+    fileSPlotsEE0 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EE_2d0-to-5d0.root");       
+    fileSPlotsEE1 = new TFile("files_marchWithReg2/probeLowPt/TightSel/fileSPlots_EE_gt5d0.root");        
+  } else {
+    fileSPlotsEB0 = new TFile("files_marchWithReg2/probePF/TightSel/fileSPlots_EB_2d0-to-5d0.root");        
+    fileSPlotsEB1 = new TFile("files_marchWithReg2/probePF/TightSel/fileSPlots_EB_gt5d0.root");                 
+    fileSPlotsEE0 = new TFile("files_marchWithReg2/probePF/TightSel/fileSPlots_EE_2d0-to-5d0.root");       
+    fileSPlotsEE1 = new TFile("files_marchWithReg2/probePF/TightSel/fileSPlots_EE_gt5d0.root");        
   }
-
   
   // MC histos in eta/pT bins
   TH1F *probeMvaSignalMcEB0 = (TH1F*)fileMC->Get("mvaSignalEBMc0");
   TH1F *probeMvaSignalMcEB1 = (TH1F*)fileMC->Get("mvaSignalEBMc1");
-  TH1F *probeMvaSignalMcEB2 = (TH1F*)fileMC->Get("mvaSignalEBMc2");
-  TH1F *probeMvaSignalMcEB3 = (TH1F*)fileMC->Get("mvaSignalEBMc3");
+  TH1F *probeMvaSignalMcEE0 = (TH1F*)fileMC->Get("mvaSignalEEMc0");
   TH1F *probeMvaSignalMcEE1 = (TH1F*)fileMC->Get("mvaSignalEEMc1");
-  TH1F *probeMvaSignalMcEE2 = (TH1F*)fileMC->Get("mvaSignalEEMc2");
+  TH1F *probeMvaSignalMcEB2, *probeMvaSignalMcEB3;
+  if (doLowPt==1) {
+    probeMvaSignalMcEB2 = (TH1F*)fileMC->Get("mvaSignalEBMc2");
+    probeMvaSignalMcEB3 = (TH1F*)fileMC->Get("mvaSignalEBMc3");
+  }
   //
   TH1F *probeDxysigSignalMcEB0 = (TH1F*)fileMC->Get("dxysigSignalEBMc0");
   TH1F *probeDxysigSignalMcEB1 = (TH1F*)fileMC->Get("dxysigSignalEBMc1");
-  TH1F *probeDxysigSignalMcEB2 = (TH1F*)fileMC->Get("dxysigSignalEBMc2");
-  TH1F *probeDxysigSignalMcEB3 = (TH1F*)fileMC->Get("dxysigSignalEBMc3");
+  TH1F *probeDxysigSignalMcEE0 = (TH1F*)fileMC->Get("dxysigSignalEEMc0");
   TH1F *probeDxysigSignalMcEE1 = (TH1F*)fileMC->Get("dxysigSignalEEMc1");
-  TH1F *probeDxysigSignalMcEE2 = (TH1F*)fileMC->Get("dxysigSignalEEMc2");
+  TH1F *probeDxysigSignalMcEB2, *probeDxysigSignalMcEB3;
+  if (doLowPt==1) {
+    probeDxysigSignalMcEB2 = (TH1F*)fileMC->Get("dxysigSignalEBMc2");
+    probeDxysigSignalMcEB3 = (TH1F*)fileMC->Get("dxysigSignalEBMc3");
+  }  
   //
   TH1F *probeDztrgSignalMcEB0 = (TH1F*)fileMC->Get("dztrgSignalEBMc0");
   TH1F *probeDztrgSignalMcEB1 = (TH1F*)fileMC->Get("dztrgSignalEBMc1");
-  TH1F *probeDztrgSignalMcEB2 = (TH1F*)fileMC->Get("dztrgSignalEBMc2");
-  TH1F *probeDztrgSignalMcEB3 = (TH1F*)fileMC->Get("dztrgSignalEBMc3");
+  TH1F *probeDztrgSignalMcEE0 = (TH1F*)fileMC->Get("dztrgSignalEEMc0");
   TH1F *probeDztrgSignalMcEE1 = (TH1F*)fileMC->Get("dztrgSignalEEMc1");
-  TH1F *probeDztrgSignalMcEE2 = (TH1F*)fileMC->Get("dztrgSignalEEMc2");
+  TH1F *probeDztrgSignalMcEB2, *probeDztrgSignalMcEB3;
+  if (doLowPt==1) {
+    probeDztrgSignalMcEB2 = (TH1F*)fileMC->Get("dztrgSignalEBMc2");
+    probeDztrgSignalMcEB3 = (TH1F*)fileMC->Get("dztrgSignalEBMc3");
+  }
   //
   TH1F *probeIso04relSignalMcEB0 = (TH1F*)fileMC->Get("iso04relSignalEBMc0");
   TH1F *probeIso04relSignalMcEB1 = (TH1F*)fileMC->Get("iso04relSignalEBMc1");
-  TH1F *probeIso04relSignalMcEB2 = (TH1F*)fileMC->Get("iso04relSignalEBMc2");
-  TH1F *probeIso04relSignalMcEB3 = (TH1F*)fileMC->Get("iso04relSignalEBMc3");
+  TH1F *probeIso04relSignalMcEE0 = (TH1F*)fileMC->Get("iso04relSignalEEMc0");
   TH1F *probeIso04relSignalMcEE1 = (TH1F*)fileMC->Get("iso04relSignalEEMc1");
-  TH1F *probeIso04relSignalMcEE2 = (TH1F*)fileMC->Get("iso04relSignalEEMc2");
+  TH1F *probeIso04relSignalMcEB2, *probeIso04relSignalMcEB3;
+  if (doLowPt==1) {
+    probeIso04relSignalMcEB2 = (TH1F*)fileMC->Get("iso04relSignalEBMc2");
+    probeIso04relSignalMcEB3 = (TH1F*)fileMC->Get("iso04relSignalEBMc3");
+  }
 
   // s-Plots output in eta/pT bins
   TH1F *probeMvaSignalDataEB0;
   TH1F *probeMvaSignalDataEB1;
   TH1F *probeMvaSignalDataEB2;
   TH1F *probeMvaSignalDataEB3;
+  TH1F *probeMvaSignalDataEE0;
   TH1F *probeMvaSignalDataEE1;
-  TH1F *probeMvaSignalDataEE2;
   if (doLowPt==1) {
     probeMvaSignalDataEB0 = (TH1F*)fileSPlotsEB0->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEB1 = (TH1F*)fileSPlotsEB1->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEB2 = (TH1F*)fileSPlotsEB2->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEB3 = (TH1F*)fileSPlotsEB3->Get("h1_probeMvaId_jpsi__probeMvaId");
+    probeMvaSignalDataEE0 = (TH1F*)fileSPlotsEE0->Get("h1_probeMvaId_jpsi__probeMvaId");
     probeMvaSignalDataEE1 = (TH1F*)fileSPlotsEE1->Get("h1_probeMvaId_jpsi__probeMvaId");
-    probeMvaSignalDataEE2 = (TH1F*)fileSPlotsEE2->Get("h1_probeMvaId_jpsi__probeMvaId");
+  } else {
+    probeMvaSignalDataEB0 = (TH1F*)fileSPlotsEB0->Get("h1_probePfmvaId_jpsi__probePfmvaId");
+    probeMvaSignalDataEB1 = (TH1F*)fileSPlotsEB1->Get("h1_probePfmvaId_jpsi__probePfmvaId");
+    probeMvaSignalDataEE0 = (TH1F*)fileSPlotsEE0->Get("h1_probePfmvaId_jpsi__probePfmvaId");
+    probeMvaSignalDataEE1 = (TH1F*)fileSPlotsEE1->Get("h1_probePfmvaId_jpsi__probePfmvaId");
   }
   //
   TH1F *probeDxySigSignalDataEB0 = (TH1F*)fileSPlotsEB0->Get("h1_probeDxySig_jpsi__probeDxySig");
   TH1F *probeDxySigSignalDataEB1 = (TH1F*)fileSPlotsEB1->Get("h1_probeDxySig_jpsi__probeDxySig");
-  TH1F *probeDxySigSignalDataEB2 = (TH1F*)fileSPlotsEB2->Get("h1_probeDxySig_jpsi__probeDxySig");
-  TH1F *probeDxySigSignalDataEB3 = (TH1F*)fileSPlotsEB3->Get("h1_probeDxySig_jpsi__probeDxySig");
+  TH1F *probeDxySigSignalDataEE0 = (TH1F*)fileSPlotsEE0->Get("h1_probeDxySig_jpsi__probeDxySig");
   TH1F *probeDxySigSignalDataEE1 = (TH1F*)fileSPlotsEE1->Get("h1_probeDxySig_jpsi__probeDxySig");
-  TH1F *probeDxySigSignalDataEE2 = (TH1F*)fileSPlotsEE2->Get("h1_probeDxySig_jpsi__probeDxySig");
+  TH1F *probeDxySigSignalDataEB2, *probeDxySigSignalDataEB3;
+  if (doLowPt==1) {
+    probeDxySigSignalDataEB2 = (TH1F*)fileSPlotsEB2->Get("h1_probeDxySig_jpsi__probeDxySig"); 
+    probeDxySigSignalDataEB3 = (TH1F*)fileSPlotsEB3->Get("h1_probeDxySig_jpsi__probeDxySig"); 
+  }
   //
   TH1F *probeDzTrgSignalDataEB0 = (TH1F*)fileSPlotsEB0->Get("h1_probeDzTrg_jpsi__probeDzTrg");
   TH1F *probeDzTrgSignalDataEB1 = (TH1F*)fileSPlotsEB1->Get("h1_probeDzTrg_jpsi__probeDzTrg");
-  TH1F *probeDzTrgSignalDataEB2 = (TH1F*)fileSPlotsEB2->Get("h1_probeDzTrg_jpsi__probeDzTrg");
-  TH1F *probeDzTrgSignalDataEB3 = (TH1F*)fileSPlotsEB3->Get("h1_probeDzTrg_jpsi__probeDzTrg");
+  TH1F *probeDzTrgSignalDataEE0 = (TH1F*)fileSPlotsEE0->Get("h1_probeDzTrg_jpsi__probeDzTrg");
   TH1F *probeDzTrgSignalDataEE1 = (TH1F*)fileSPlotsEE1->Get("h1_probeDzTrg_jpsi__probeDzTrg");
-  TH1F *probeDzTrgSignalDataEE2 = (TH1F*)fileSPlotsEE2->Get("h1_probeDzTrg_jpsi__probeDzTrg");
+  TH1F *probeDzTrgSignalDataEB2, *probeDzTrgSignalDataEB3;
+  if (doLowPt==1) { 
+    probeDzTrgSignalDataEB2 = (TH1F*)fileSPlotsEB2->Get("h1_probeDzTrg_jpsi__probeDzTrg");
+    probeDzTrgSignalDataEB3 = (TH1F*)fileSPlotsEB3->Get("h1_probeDzTrg_jpsi__probeDzTrg");
+  }
   //
   TH1F *probeIso04RelSignalDataEB0 = (TH1F*)fileSPlotsEB0->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
   TH1F *probeIso04RelSignalDataEB1 = (TH1F*)fileSPlotsEB1->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
-  TH1F *probeIso04RelSignalDataEB2 = (TH1F*)fileSPlotsEB2->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
-  TH1F *probeIso04RelSignalDataEB3 = (TH1F*)fileSPlotsEB3->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
+  TH1F *probeIso04RelSignalDataEE0 = (TH1F*)fileSPlotsEE0->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
   TH1F *probeIso04RelSignalDataEE1 = (TH1F*)fileSPlotsEE1->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
-  TH1F *probeIso04RelSignalDataEE2 = (TH1F*)fileSPlotsEE2->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
-
+  TH1F *probeIso04RelSignalDataEB2, *probeIso04RelSignalDataEB3;
+  if (doLowPt==1) {
+    probeIso04RelSignalDataEB2 = (TH1F*)fileSPlotsEB2->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
+    probeIso04RelSignalDataEB3 = (TH1F*)fileSPlotsEB3->Get("h1_probeIso04Rel_jpsi__probeIso04Rel");
+  }
 
   // Plots
   gROOT->SetStyle("Plain");
@@ -276,96 +306,30 @@ void mcVsSplots(int doLowPt)
 
   // Id
   probeMvaSignalDataEB0->Rebin(2);
-  probeMvaSignalDataEB1->Rebin(2);
-  probeMvaSignalDataEB2->Rebin(2);
-  probeMvaSignalDataEB3->Rebin(2);
-  probeMvaSignalDataEE1->Rebin(4);
-  probeMvaSignalDataEE2->Rebin(4);
-  //
   probeMvaSignalMcEB0->Rebin(2);
-  probeMvaSignalMcEB1->Rebin(2);
-  probeMvaSignalMcEB2->Rebin(2);
-  probeMvaSignalMcEB3->Rebin(2);
-  probeMvaSignalMcEE1->Rebin(4);
-  probeMvaSignalMcEE2->Rebin(4);
-  // 
-  drawTH1pair(probeMvaSignalDataEB0, probeMvaSignalMcEB0,  "ele ID BDT","a.u.",1.,"Id_EB-1d0-1d5","./",2,"Data","MC",0);
-  drawTH1pair(probeMvaSignalDataEB1, probeMvaSignalMcEB1,  "ele ID BDT","a.u.",1.,"Id_EB-1d5-2d0","./",2,"Data","MC",0);
-  drawTH1pair(probeMvaSignalDataEB2, probeMvaSignalMcEB2,  "ele ID BDT","a.u.",1.,"Id_EB-2d0-5d0","./",2,"Data","MC");
-  drawTH1pair(probeMvaSignalDataEB3, probeMvaSignalMcEB3,  "ele ID BDT","a.u.",1.,"Id_EB-gt5","./",2,"Data","MC");
-  drawTH1pair(probeMvaSignalDataEE1, probeMvaSignalMcEE1,  "ele ID BDT","a.u.",1.,"Id_EE-2g0-5d0","./",4,"Data","MC");
-  drawTH1pair(probeMvaSignalDataEE2, probeMvaSignalMcEE2,  "ele ID BDT","a.u.",1.,"Id_EE-gt5d0","./",4,"Data","MC");
-  //
-  //                                    
-  // 
-  // Dxy significance
-  probeDxySigSignalDataEB0->Rebin(6);
-  probeDxySigSignalDataEB1->Rebin(6);
-  probeDxySigSignalDataEB2->Rebin(6);
-  probeDxySigSignalDataEB3->Rebin(6);
-  probeDxySigSignalDataEE1->Rebin(6);
-  probeDxySigSignalDataEE2->Rebin(6);
-  //
-  probeDxysigSignalMcEB0->Rebin(6);
-  probeDxysigSignalMcEB1->Rebin(6);
-  probeDxysigSignalMcEB2->Rebin(6);
-  probeDxysigSignalMcEB3->Rebin(6);
-  probeDxysigSignalMcEE1->Rebin(6);
-  probeDxysigSignalMcEE2->Rebin(6);
-  //
-  drawTH1pair(probeDxySigSignalDataEB0, probeDxysigSignalMcEB0,  "dxySig","a.u.",1.,"DxySig_EB-1d0-1d5","./",2,"Data","MC",0);
-  drawTH1pair(probeDxySigSignalDataEB1, probeDxysigSignalMcEB1,  "dxySig","a.u.",1.,"DxySig_EB-1d5-2d0","./",2,"Data","MC",0);
-  drawTH1pair(probeDxySigSignalDataEB2, probeDxysigSignalMcEB2,  "dxySig","a.u.",1.,"DxySig_EB-2d0-5d0","./",2,"Data","MC",0);
-  drawTH1pair(probeDxySigSignalDataEB3, probeDxysigSignalMcEB3,  "dxySig","a.u.",1.,"DxySig_EB-gt5","./",2,"Data","MC",0);
-  drawTH1pair(probeDxySigSignalDataEE1, probeDxysigSignalMcEE1,  "dxySig","a.u.",1.,"DxySig_EE-2g0-5d0","./",4,"Data","MC",0);
-  drawTH1pair(probeDxySigSignalDataEE2, probeDxysigSignalMcEE2,  "dxySig","a.u.",1.,"DxySig_EE-gt5d0","./",4,"Data","MC",0);
-  //
-  //                                    
-  // 
-  // Dz trg
-  probeDzTrgSignalDataEB0->Rebin(4);
-  probeDzTrgSignalDataEB1->Rebin(4);
-  probeDzTrgSignalDataEB2->Rebin(4);
-  probeDzTrgSignalDataEB3->Rebin(4);
-  probeDzTrgSignalDataEE1->Rebin(4);
-  probeDzTrgSignalDataEE2->Rebin(4);
-  //
-  probeDztrgSignalMcEB0->Rebin(4);
-  probeDztrgSignalMcEB1->Rebin(4);
-  probeDztrgSignalMcEB2->Rebin(4);
-  probeDztrgSignalMcEB3->Rebin(4);
-  probeDztrgSignalMcEE1->Rebin(4);
-  probeDztrgSignalMcEE2->Rebin(4);
-  //
-  drawTH1pair(probeDzTrgSignalDataEB0, probeDztrgSignalMcEB0,  "dzTrg","a.u.",1.,"DzTrg_EB-1d0-1d5","./",2,"Data","MC",0);
-  drawTH1pair(probeDzTrgSignalDataEB1, probeDztrgSignalMcEB1,  "dzTrg","a.u.",1.,"DzTrg_EB-1d5-2d0","./",2,"Data","MC",0);
-  drawTH1pair(probeDzTrgSignalDataEB2, probeDztrgSignalMcEB2,  "dzTrg","a.u.",1.,"DzTrg_EB-2d0-5d0","./",2,"Data","MC",0);
-  drawTH1pair(probeDzTrgSignalDataEB3, probeDztrgSignalMcEB3,  "dzTrg","a.u.",1.,"DzTrg_EB-gt5","./",2,"Data","MC",0);
-  drawTH1pair(probeDzTrgSignalDataEE1, probeDztrgSignalMcEE1,  "dzTrg","a.u.",1.,"DzTrg_EE-2g0-5d0","./",4,"Data","MC",0);
-  drawTH1pair(probeDzTrgSignalDataEE2, probeDztrgSignalMcEE2,  "dzTrg","a.u.",1.,"DzTrg_EE-gt5d0","./",4,"Data","MC",0);
-  //
-  //                                    
-  // 
-  // Isolation
-  probeIso04RelSignalDataEB0->Rebin(2);
-  probeIso04RelSignalDataEB1->Rebin(2);
-  probeIso04RelSignalDataEB2->Rebin(2);
-  probeIso04RelSignalDataEB3->Rebin(2);
-  probeIso04RelSignalDataEE1->Rebin(2);
-  probeIso04RelSignalDataEE2->Rebin(2);
-  //
-  probeIso04relSignalMcEB0->Rebin(2);
-  probeIso04relSignalMcEB1->Rebin(2);
-  probeIso04relSignalMcEB2->Rebin(2);
-  probeIso04relSignalMcEB3->Rebin(2);
-  probeIso04relSignalMcEE1->Rebin(2);
-  probeIso04relSignalMcEE2->Rebin(2);
-  //
-  drawTH1pair(probeIso04RelSignalDataEB0, probeIso04relSignalMcEB0,  "iso04rel","a.u.",1.,"Iso04Rel_EB-1d0-1d5","./",2,"Data","MC",0);
-  drawTH1pair(probeIso04RelSignalDataEB1, probeIso04relSignalMcEB1,  "iso04rel","a.u.",1.,"Iso04Rel_EB-1d5-2d0","./",2,"Data","MC",0);
-  drawTH1pair(probeIso04RelSignalDataEB2, probeIso04relSignalMcEB2,  "iso04rel","a.u.",1.,"Iso04Rel_EB-2d0-5d0","./",2,"Data","MC",0);
-  drawTH1pair(probeIso04RelSignalDataEB3, probeIso04relSignalMcEB3,  "iso04rel","a.u.",1.,"Iso04Rel_EB-gt5","./",2,"Data","MC",0);
-  drawTH1pair(probeIso04RelSignalDataEE1, probeIso04relSignalMcEE1,  "iso04rel","a.u.",1.,"Iso04Rel_EE-2g0-5d0","./",4,"Data","MC",0);
-  drawTH1pair(probeIso04RelSignalDataEE2, probeIso04relSignalMcEE2,  "iso04rel","a.u.",1.,"Iso04Rel_EE-gt5d0","./",4,"Data","MC",0);
+  if (doLowPt==1) drawTH1pair(probeMvaSignalDataEB0, probeMvaSignalMcEB0,  "ele ID BDT","a.u.",1.,"Id_EB-1d0-1d5","./",2,"Data","MC",0);
+  else            drawTH1pair(probeMvaSignalDataEB0, probeMvaSignalMcEB0,  "ele ID BDT","a.u.",1.,"Id_EB-2d0-5d0","./",2,"Data","MC",1);
 
+  probeMvaSignalDataEB1->Rebin(2);
+  probeMvaSignalMcEB1->Rebin(2);
+  if (doLowPt==1) drawTH1pair(probeMvaSignalDataEB1, probeMvaSignalMcEB1,  "ele ID BDT","a.u.",1.,"Id_EB-1d5-2d0","./",2,"Data","MC",0);
+  else            drawTH1pair(probeMvaSignalDataEB1, probeMvaSignalMcEB1,  "ele ID BDT","a.u.",1.,"Id_EB-gt5d0","./",2,"Data","MC",1);
+
+  if (doLowPt==1) {
+    probeMvaSignalDataEB2->Rebin(2);
+    probeMvaSignalMcEB2->Rebin(2);
+    drawTH1pair(probeMvaSignalDataEB2, probeMvaSignalMcEB2,  "ele ID BDT","a.u.",1.,"Id_EB-2d0-5d0","./",2,"Data","MC",0);
+
+    probeMvaSignalDataEB3->Rebin(2);
+    probeMvaSignalMcEB3->Rebin(2);
+    drawTH1pair(probeMvaSignalDataEB3, probeMvaSignalMcEB3,  "ele ID BDT","a.u.",1.,"Id_EB-gt5d0","./",2,"Data","MC",0);
+  }
+
+  probeMvaSignalDataEE0->Rebin(4);
+  probeMvaSignalMcEE0->Rebin(4);
+  drawTH1pair(probeMvaSignalDataEE0, probeMvaSignalMcEE0,  "ele ID BDT","a.u.",1.,"Id_EE-2g0-5d0","./",4,"Data","MC");
+
+  probeMvaSignalDataEE1->Rebin(4);
+  probeMvaSignalMcEE1->Rebin(4);
+  drawTH1pair(probeMvaSignalDataEE1, probeMvaSignalMcEE1,  "ele ID BDT","a.u.",1.,"Id_EE-gt5d0","./",4,"Data","MC");
 }
