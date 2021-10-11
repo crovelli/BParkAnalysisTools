@@ -328,11 +328,11 @@ void tnpTreeFormat(const char* filename, float lumiForW, int isProbeLpt) {
 	// if ( tag_pfmvaId->at(ii)<-1. ) continue;           // Loose selection 
       }
 
-      // further selection on tag: PF probes
+      // further selection on tag: PF probes - Tight selection
       if (isProbeLpt==0) { 
 	if ( probe_isPF->at(ii)==0) continue; 
- 	if ( tag_isLowPt->at(ii)==1 && tag_mvaId->at(ii)<2) continue;   
-	if ( tag_isPF->at(ii)==1 && tag_pfmvaId->at(ii)<0)  continue;   
+	if ( tag_isLowPt->at(ii)==0) continue;
+	if ( tag_mvaId->at(ii)<4) continue;   
       }
 
       // Tight selection (preferred)    
