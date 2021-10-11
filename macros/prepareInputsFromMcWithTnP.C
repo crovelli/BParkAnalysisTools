@@ -81,139 +81,136 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): ID output
   TH1F *mvaSignalEBMc0, *mvaSignalEBMc1, *mvaSignalEBMc2, *mvaSignalEBMc3;
-  TH1F *mvaSignalEEMc0, *mvaSignalEEMc1, *mvaSignalEEMc2;
+  TH1F *mvaSignalEEMc0, *mvaSignalEEMc1;
   if (testLPT==1) {
     mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 40, -4., 16.);  // pT: 1.0-1.5
     mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 40, -4., 16.);  // 1.5-2.0
     mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 40, -4., 16.);  // 2.0-5.0
     mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 40, -4., 16.);  // >5
-    mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 40, -4., 16.);  // pT: 1.0-2.0  
-    mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 40, -4., 16.);  // pT: 2.0-5.0  
-    mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 40, -4., 16.);  // >5
+    mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 40, -4., 16.);  // pT: 2.0-5.0  
+    mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 40, -4., 16.);  // >5
   } else {
-    mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 44, -12., 10.);  // pT: 1.0-1.5
-    mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 44, -12., 10.);  // 1.5-2.0
-    mvaSignalEBMc2 = new TH1F("mvaSignalEBMc2", "mvaSignalEBMc2", 44, -12., 10.);  // 2.0-5.0
-    mvaSignalEBMc3 = new TH1F("mvaSignalEBMc3", "mvaSignalEBMc3", 44, -12., 10.);  // >5
-    mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 44, -12., 10.);  // pT: 1.0-2.0  
-    mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 44, -12., 10.);  // pT: 2.0-5.0  
-    mvaSignalEEMc2 = new TH1F("mvaSignalEEMc2", "mvaSignalEEMc2", 44, -12., 10.);  // >5
+    mvaSignalEBMc0 = new TH1F("mvaSignalEBMc0", "mvaSignalEBMc0", 44, -12., 10.);  // 2.0-5.0
+    mvaSignalEBMc1 = new TH1F("mvaSignalEBMc1", "mvaSignalEBMc1", 44, -12., 10.);  // >5
+    mvaSignalEEMc0 = new TH1F("mvaSignalEEMc0", "mvaSignalEEMc0", 44, -12., 10.);  // pT: 2.0-5.0  
+    mvaSignalEEMc1 = new TH1F("mvaSignalEEMc1", "mvaSignalEEMc1", 44, -12., 10.);  // >5
   }
 
   mvaSignalEBMc0->Sumw2();
   mvaSignalEBMc1->Sumw2();
-  mvaSignalEBMc2->Sumw2();
-  mvaSignalEBMc3->Sumw2();
   mvaSignalEEMc0->Sumw2();
   mvaSignalEEMc1->Sumw2();
-  mvaSignalEEMc2->Sumw2();
+  if (testLPT==1) {
+    mvaSignalEBMc2->Sumw2();
+    mvaSignalEBMc3->Sumw2();
+  }
   //
   TH1F *mvaFakeEBMc0, *mvaFakeEBMc1, *mvaFakeEBMc2, *mvaFakeEBMc3;
-  TH1F *mvaFakeEEMc0, *mvaFakeEEMc1, *mvaFakeEEMc2;
+  TH1F *mvaFakeEEMc0, *mvaFakeEEMc1;
   if (testLPT==1) {
     mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 40, -4., 16.);  // pT: 1.0-1.5
     mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 40, -4., 16.);  // 1.5-2.0
     mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 40, -4., 16.);  // 2.0-5.0
     mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 40, -4., 16.);  // >5
-    mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 40, -4., 16.);  // pT: 1.0-2.0
-    mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 40, -4., 16.);  // pT: 2.0-5.0
-    mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 40, -4., 16.);  // >5
+    mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 40, -4., 16.);  // pT: 2.0-5.0
+    mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 40, -4., 16.);  // >5
   } else {
-    mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 44, -12., 10.);  // pT: 1.0-1.5
-    mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 44, -12., 10.);  // 1.5-2.0
-    mvaFakeEBMc2 = new TH1F("mvaFakeEBMc2", "mvaFakeEBMc2", 44, -12., 10.);  // 2.0-5.0
-    mvaFakeEBMc3 = new TH1F("mvaFakeEBMc3", "mvaFakeEBMc3", 44, -12., 10.);  // >5
-    mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 44, -12., 10.);  // pT: 1.0-2.0
-    mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 44, -12., 10.);  // pT: 2.0-5.0
-    mvaFakeEEMc2 = new TH1F("mvaFakeEEMc2", "mvaFakeEEMc2", 44, -12., 10.);  // >5
+    mvaFakeEBMc0 = new TH1F("mvaFakeEBMc0", "mvaFakeEBMc0", 44, -12., 10.);  // 2.0-5.0
+    mvaFakeEBMc1 = new TH1F("mvaFakeEBMc1", "mvaFakeEBMc1", 44, -12., 10.);  // >5
+    mvaFakeEEMc0 = new TH1F("mvaFakeEEMc0", "mvaFakeEEMc0", 44, -12., 10.);  // pT: 2.0-5.0
+    mvaFakeEEMc1 = new TH1F("mvaFakeEEMc1", "mvaFakeEEMc1", 44, -12., 10.);  // >5
   }
   mvaFakeEBMc0->Sumw2();
   mvaFakeEBMc1->Sumw2();
-  mvaFakeEBMc2->Sumw2();
-  mvaFakeEBMc3->Sumw2();
   mvaFakeEEMc0->Sumw2();
   mvaFakeEEMc1->Sumw2();
-  mvaFakeEEMc2->Sumw2();
+  if (testLPT==1) {
+    mvaFakeEBMc2->Sumw2();
+    mvaFakeEBMc3->Sumw2();
+  }
   
   // -----------------------------------------------------------------------
   // Many pT/eta bins (with weight): ID output
   TH1F *mvaSignalEBMc0WW, *mvaSignalEBMc1WW, *mvaSignalEBMc2WW, *mvaSignalEBMc3WW;
-  TH1F *mvaSignalEEMc0WW, *mvaSignalEEMc1WW, *mvaSignalEEMc2WW;
+  TH1F *mvaSignalEEMc0WW, *mvaSignalEEMc1WW;
   if (testLPT==0) {
     mvaSignalEBMc0WW = new TH1F("mvaSignalEBMc0WW", "mvaSignalEBMc0WW", 44, -12., 10.);  // pT: 1.0-1.5
     mvaSignalEBMc1WW = new TH1F("mvaSignalEBMc1WW", "mvaSignalEBMc1WW", 44, -12., 10.);  // 1.5-2.0
     mvaSignalEBMc2WW = new TH1F("mvaSignalEBMc2WW", "mvaSignalEBMc2WW", 44, -12., 10.);  // 2.0-5.0
     mvaSignalEBMc3WW = new TH1F("mvaSignalEBMc3WW", "mvaSignalEBMc3WW", 44, -12., 10.);  // >5
-    mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 44, -12., 10.);  // pT: 1.0-2.0 
-    mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 44, -12., 10.);  // pT: 2.0-5.0 
-    mvaSignalEEMc2WW = new TH1F("mvaSignalEEMc2WW", "mvaSignalEEMc2WW", 44, -12., 10.);  // >5
+    mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 44, -12., 10.);  // pT: 2.0-5.0 
+    mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 44, -12., 10.);  // >5
   } else {
-    mvaSignalEBMc0WW = new TH1F("mvaSignalEBMc0WW", "mvaSignalEBMc0WW", 40, -4., 16.);  // pT: 1.0-1.5
-    mvaSignalEBMc1WW = new TH1F("mvaSignalEBMc1WW", "mvaSignalEBMc1WW", 40, -4., 16.);  // 1.5-2.0
-    mvaSignalEBMc2WW = new TH1F("mvaSignalEBMc2WW", "mvaSignalEBMc2WW", 40, -4., 16.);  // 2.0-5.0
-    mvaSignalEBMc3WW = new TH1F("mvaSignalEBMc3WW", "mvaSignalEBMc3WW", 40, -4., 16.);  // >5
-    mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 40, -4., 16.);  // pT: 1.0-2.0 
-    mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 40, -4., 16.);  // pT: 2.0-5.0 
-    mvaSignalEEMc2WW = new TH1F("mvaSignalEEMc2WW", "mvaSignalEEMc2WW", 40, -4., 16.);  // >5
+    mvaSignalEBMc0WW = new TH1F("mvaSignalEBMc0WW", "mvaSignalEBMc0WW", 40, -4., 16.);  // 2.0-5.0
+    mvaSignalEBMc1WW = new TH1F("mvaSignalEBMc1WW", "mvaSignalEBMc1WW", 40, -4., 16.);  // >5
+    mvaSignalEEMc0WW = new TH1F("mvaSignalEEMc0WW", "mvaSignalEEMc0WW", 40, -4., 16.);  // pT: 2.0-5.0 
+    mvaSignalEEMc1WW = new TH1F("mvaSignalEEMc1WW", "mvaSignalEEMc1WW", 40, -4., 16.);  // >5
   }
   mvaSignalEBMc0WW->Sumw2();
   mvaSignalEBMc1WW->Sumw2();
-  mvaSignalEBMc2WW->Sumw2();
-  mvaSignalEBMc3WW->Sumw2();
   mvaSignalEEMc0WW->Sumw2();
   mvaSignalEEMc1WW->Sumw2();
-  mvaSignalEEMc2WW->Sumw2();
+  if (testLPT==1) {
+    mvaSignalEBMc2WW->Sumw2();
+    mvaSignalEBMc3WW->Sumw2();
+  }
 
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): dxy significance
-  TH1F *dxysigSignalEBMc0 = new TH1F("dxysigSignalEBMc0", "dxysigSignalEBMc0", 120, -30., 30.);  // pT: 1.0-1.5
-  TH1F *dxysigSignalEBMc1 = new TH1F("dxysigSignalEBMc1", "dxysigSignalEBMc1", 120, -30., 30.);  // 1.5-2.0
-  TH1F *dxysigSignalEBMc2 = new TH1F("dxysigSignalEBMc2", "dxysigSignalEBMc2", 120, -30., 30.);  // 2.0-5.0
-  TH1F *dxysigSignalEBMc3 = new TH1F("dxysigSignalEBMc3", "dxysigSignalEBMc3", 120, -30., 30.);  // >5
-  TH1F *dxysigSignalEEMc0 = new TH1F("dxysigSignalEEMc0", "dxysigSignalEEMc0", 120, -30., 30.);  // pT: 1.0-2.0 
-  TH1F *dxysigSignalEEMc1 = new TH1F("dxysigSignalEEMc1", "dxysigSignalEEMc1", 120, -30., 30.);  // pT: 2.0-5.0 
-  TH1F *dxysigSignalEEMc2 = new TH1F("dxysigSignalEEMc2", "dxysigSignalEEMc2", 120, -30., 30.);  // >5
+  TH1F *dxysigSignalEBMc0 = new TH1F("dxysigSignalEBMc0", "dxysigSignalEBMc0", 120, -30., 30.); 
+  TH1F *dxysigSignalEBMc1 = new TH1F("dxysigSignalEBMc1", "dxysigSignalEBMc1", 120, -30., 30.);
+  TH1F *dxysigSignalEEMc0 = new TH1F("dxysigSignalEEMc0", "dxysigSignalEEMc0", 120, -30., 30.); 
+  TH1F *dxysigSignalEEMc1 = new TH1F("dxysigSignalEEMc1", "dxysigSignalEEMc1", 120, -30., 30.); 
   dxysigSignalEBMc0->Sumw2();
   dxysigSignalEBMc1->Sumw2();
-  dxysigSignalEBMc2->Sumw2();
-  dxysigSignalEBMc3->Sumw2();
   dxysigSignalEEMc0->Sumw2();
   dxysigSignalEEMc1->Sumw2();
-  dxysigSignalEEMc2->Sumw2();
+
+  TH1F *dxysigSignalEBMc2, *dxysigSignalEBMc3;
+  if (testLPT==1) {
+    dxysigSignalEBMc2 = new TH1F("dxysigSignalEBMc2", "dxysigSignalEBMc2", 120, -30., 30.); 
+    dxysigSignalEBMc3 = new TH1F("dxysigSignalEBMc3", "dxysigSignalEBMc3", 120, -30., 30.); 
+    dxysigSignalEBMc2->Sumw2();
+    dxysigSignalEBMc3->Sumw2();
+  }
 
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): dzTrg
-  TH1F *dztrgSignalEBMc0 = new TH1F("dztrgSignalEBMc0", "dztrgSignalEBMc0", 100, -1., 1.);  // pT: 1.0-1.5
-  TH1F *dztrgSignalEBMc1 = new TH1F("dztrgSignalEBMc1", "dztrgSignalEBMc1", 100, -1., 1.);  // 1.5-2.0
-  TH1F *dztrgSignalEBMc2 = new TH1F("dztrgSignalEBMc2", "dztrgSignalEBMc2", 100, -1., 1.);  // 2.0-5.0
-  TH1F *dztrgSignalEBMc3 = new TH1F("dztrgSignalEBMc3", "dztrgSignalEBMc3", 100, -1., 1.);  // >5
-  TH1F *dztrgSignalEEMc0 = new TH1F("dztrgSignalEEMc0", "dztrgSignalEEMc0", 100, -1., 1.);  // pT: 1.0-2.0 
-  TH1F *dztrgSignalEEMc1 = new TH1F("dztrgSignalEEMc1", "dztrgSignalEEMc1", 100, -1., 1.);  // pT: 2.0-5.0 
-  TH1F *dztrgSignalEEMc2 = new TH1F("dztrgSignalEEMc2", "dztrgSignalEEMc2", 100, -1., 1.);  // >5
+  TH1F *dztrgSignalEBMc0 = new TH1F("dztrgSignalEBMc0", "dztrgSignalEBMc0", 100, -1., 1.); 
+  TH1F *dztrgSignalEBMc1 = new TH1F("dztrgSignalEBMc1", "dztrgSignalEBMc1", 100, -1., 1.); 
+  TH1F *dztrgSignalEEMc0 = new TH1F("dztrgSignalEEMc0", "dztrgSignalEEMc0", 100, -1., 1.); 
+  TH1F *dztrgSignalEEMc1 = new TH1F("dztrgSignalEEMc1", "dztrgSignalEEMc1", 100, -1., 1.); 
   dztrgSignalEBMc0->Sumw2();
   dztrgSignalEBMc1->Sumw2();
-  dztrgSignalEBMc2->Sumw2();
-  dztrgSignalEBMc3->Sumw2();
   dztrgSignalEEMc0->Sumw2();
   dztrgSignalEEMc1->Sumw2();
-  dztrgSignalEEMc2->Sumw2();
+
+  TH1F *dztrgSignalEBMc2, *dztrgSignalEBMc3;
+  if (testLPT==1) {
+    dztrgSignalEBMc2 = new TH1F("dztrgSignalEBMc2", "dztrgSignalEBMc2", 100, -1., 1.); 
+    dztrgSignalEBMc3 = new TH1F("dztrgSignalEBMc3", "dztrgSignalEBMc3", 100, -1., 1.);
+    dztrgSignalEBMc2->Sumw2();
+    dztrgSignalEBMc3->Sumw2();
+  }
 
   // -----------------------------------------------------------------------
   // Many pT/eta bins (no weight): iso04rel
-  TH1F *iso04relSignalEBMc0 = new TH1F("iso04relSignalEBMc0", "iso04relSignalEBMc0", 50, 0., 50.); // pT: 1.0-1.5
-  TH1F *iso04relSignalEBMc1 = new TH1F("iso04relSignalEBMc1", "iso04relSignalEBMc1", 50, 0., 50.); // 1.5-2.0
-  TH1F *iso04relSignalEBMc2 = new TH1F("iso04relSignalEBMc2", "iso04relSignalEBMc2", 50, 0., 50.); // 2.0-5.0
-  TH1F *iso04relSignalEBMc3 = new TH1F("iso04relSignalEBMc3", "iso04relSignalEBMc3", 50, 0., 50.); // >5
-  TH1F *iso04relSignalEEMc0 = new TH1F("iso04relSignalEEMc0", "iso04relSignalEEMc0", 50, 0., 50.); // pT: 1.0-2.0
-  TH1F *iso04relSignalEEMc1 = new TH1F("iso04relSignalEEMc1", "iso04relSignalEEMc1", 50, 0., 50.); // pT: 2.0-5.0
-  TH1F *iso04relSignalEEMc2 = new TH1F("iso04relSignalEEMc2", "iso04relSignalEEMc2", 50, 0., 50.); // >5
+  TH1F *iso04relSignalEBMc0 = new TH1F("iso04relSignalEBMc0", "iso04relSignalEBMc0", 50, 0., 50.); 
+  TH1F *iso04relSignalEBMc1 = new TH1F("iso04relSignalEBMc1", "iso04relSignalEBMc1", 50, 0., 50.); 
+  TH1F *iso04relSignalEEMc0 = new TH1F("iso04relSignalEEMc0", "iso04relSignalEEMc0", 50, 0., 50.); 
+  TH1F *iso04relSignalEEMc1 = new TH1F("iso04relSignalEEMc1", "iso04relSignalEEMc1", 50, 0., 50.); 
   iso04relSignalEBMc0->Sumw2();
   iso04relSignalEBMc1->Sumw2();
-  iso04relSignalEBMc2->Sumw2();
-  iso04relSignalEBMc3->Sumw2();
   iso04relSignalEEMc0->Sumw2();
   iso04relSignalEEMc1->Sumw2();
-  iso04relSignalEEMc2->Sumw2();
+
+  TH1F *iso04relSignalEBMc2, *iso04relSignalEBMc3;
+  if (testLPT==1) {
+    iso04relSignalEBMc2 = new TH1F("iso04relSignalEBMc2", "iso04relSignalEBMc2", 50, 0., 50.); 
+    iso04relSignalEBMc3 = new TH1F("iso04relSignalEBMc3", "iso04relSignalEBMc3", 50, 0., 50.); 
+    iso04relSignalEBMc2->Sumw2();
+    iso04relSignalEBMc3->Sumw2();
+  }
 
   // --------------------------
   // weights (pt vs eta)
@@ -348,58 +345,72 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
       if (testLPT==1) theId=probeMvaId;
       if (testLPT==0) theId=probePfmvaId;
 
-      if (fabs(probeEta)<1.5) {  // barrel
-	if (probePt>=1.0 && probePt<1.5) {
-	  mvaSignalEBMc0->Fill(theId, weight);
-	  mvaSignalEBMc0WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEBMc0 -> Fill(probeDxySig, weight);
-	  dztrgSignalEBMc0 -> Fill(probeDzTrg, weight);
-	  iso04relSignalEBMc0 -> Fill(probeIso04Rel, weight);
+      if (fabs(probeEta)<1.5) {   // barrel
+
+	if (testLPT==1) {  // LPT barrel	
+
+	  if (probePt>=1.0 && probePt<1.5) {
+	    mvaSignalEBMc0      -> Fill(theId, weight);
+	    mvaSignalEBMc0WW    -> Fill(theId,ptEtaSignalWeight*weight);
+	    dxysigSignalEBMc0   -> Fill(probeDxySig, weight);
+	    dztrgSignalEBMc0    -> Fill(probeDzTrg, weight);
+	    iso04relSignalEBMc0 -> Fill(probeIso04Rel, weight);
+	  }
+	  if (probePt>=1.5 && probePt<2.0) {
+	    mvaSignalEBMc1      -> Fill(theId, weight);
+	    mvaSignalEBMc1WW    -> Fill(theId,ptEtaSignalWeight*weight);
+	    dxysigSignalEBMc1   -> Fill(probeDxySig, weight);
+	    dztrgSignalEBMc1    -> Fill(probeDzTrg, weight);
+	    iso04relSignalEBMc1 -> Fill(probeIso04Rel, weight);
+	  }
+	  if (probePt>=2.0 && probePt<5.0) {
+	    mvaSignalEBMc2      -> Fill(theId, weight);
+	    mvaSignalEBMc2WW    -> Fill(theId,ptEtaSignalWeight*weight);
+	    dxysigSignalEBMc2   -> Fill(probeDxySig, weight);
+	    dztrgSignalEBMc2    -> Fill(probeDzTrg, weight);
+	    iso04relSignalEBMc2 -> Fill(probeIso04Rel, weight);
+	  }
+	  if (probePt>=5.0) {
+	    mvaSignalEBMc3      -> Fill(theId, weight);
+	    mvaSignalEBMc3WW    -> Fill(theId,ptEtaSignalWeight*weight);
+	    dxysigSignalEBMc3   -> Fill(probeDxySig, weight);
+	    dztrgSignalEBMc3    -> Fill(probeDzTrg, weight);
+	    iso04relSignalEBMc3 -> Fill(probeIso04Rel, weight);
+	  }
+
+	} else {  // PF barrel
+
+	  if (probePt>=2.0 && probePt<5.0) {
+	    mvaSignalEBMc0      -> Fill(theId, weight);
+	    mvaSignalEBMc0WW    -> Fill(theId,ptEtaSignalWeight*weight);
+	    dxysigSignalEBMc0   -> Fill(probeDxySig, weight);
+	    dztrgSignalEBMc0    -> Fill(probeDzTrg, weight);
+	    iso04relSignalEBMc0 -> Fill(probeIso04Rel, weight);
+	  }
+	  if (probePt>=5.0) {
+	    mvaSignalEBMc1      -> Fill(theId, weight);
+	    mvaSignalEBMc1WW    -> Fill(theId,ptEtaSignalWeight*weight);
+	    dxysigSignalEBMc1   -> Fill(probeDxySig, weight);
+	    dztrgSignalEBMc1    -> Fill(probeDzTrg, weight);
+	    iso04relSignalEBMc1 -> Fill(probeIso04Rel, weight);
+	  }
 	}
-	if (probePt>=1.5 && probePt<2.0) {
-	  mvaSignalEBMc1->Fill(theId, weight);
-	  mvaSignalEBMc1WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEBMc1 -> Fill(probeDxySig, weight);
-	  dztrgSignalEBMc1 -> Fill(probeDzTrg, weight);
-	  iso04relSignalEBMc1 -> Fill(probeIso04Rel, weight);
-	}
+
+      } else {  // endcap (PF and LPT)
+
 	if (probePt>=2.0 && probePt<5.0) {
-	  mvaSignalEBMc2->Fill(theId, weight);
-	  mvaSignalEBMc2WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEBMc2 -> Fill(probeDxySig, weight);
-	  dztrgSignalEBMc2 -> Fill(probeDzTrg, weight);
-	  iso04relSignalEBMc2 -> Fill(probeIso04Rel, weight);
-	}
-	if (probePt>=5.0) {
-	  mvaSignalEBMc3->Fill(theId, weight);
-	  mvaSignalEBMc3WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEBMc3 -> Fill(probeDxySig, weight);
-	  dztrgSignalEBMc3 -> Fill(probeDzTrg, weight);
-	  iso04relSignalEBMc3 -> Fill(probeIso04Rel, weight);
-	}
-
-      } else {  // endcap
-
-	if (probePt>=1.0 && probePt<2.0) {
-	  mvaSignalEEMc0->Fill(theId, weight);
-	  mvaSignalEEMc0WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEEMc0 -> Fill(probeDxySig, weight);
-	  dztrgSignalEEMc0 -> Fill(probeDzTrg, weight);
+	  mvaSignalEEMc0      -> Fill(theId, weight);
+	  mvaSignalEEMc0WW    -> Fill(theId,ptEtaSignalWeight*weight);
+	  dxysigSignalEEMc0   -> Fill(probeDxySig, weight);
+	  dztrgSignalEEMc0    -> Fill(probeDzTrg, weight);
 	  iso04relSignalEEMc0 -> Fill(probeIso04Rel, weight);
 	}
-	if (probePt>=2.0 && probePt<5.0) {
-	  mvaSignalEEMc1->Fill(theId, weight);
-	  mvaSignalEEMc1WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEEMc1 -> Fill(probeDxySig, weight);
-	  dztrgSignalEEMc1 -> Fill(probeDzTrg, weight);
-	  iso04relSignalEEMc1 -> Fill(probeIso04Rel, weight);
-	}
 	if (probePt>=5.0) {
-	  mvaSignalEEMc2->Fill(theId, weight);
-	  mvaSignalEEMc2WW->Fill(theId,ptEtaSignalWeight*weight);
-	  dxysigSignalEEMc2 -> Fill(probeDxySig, weight);
-	  dztrgSignalEEMc2 -> Fill(probeDzTrg, weight);
-	  iso04relSignalEEMc2 -> Fill(probeIso04Rel, weight);
+	  mvaSignalEEMc1      -> Fill(theId, weight);
+	  mvaSignalEEMc1WW    -> Fill(theId,ptEtaSignalWeight*weight);
+	  dxysigSignalEEMc1   -> Fill(probeDxySig, weight);
+	  dztrgSignalEEMc1    -> Fill(probeDzTrg, weight);
+	  iso04relSignalEEMc1 -> Fill(probeIso04Rel, weight);
 	}
       }
     }
@@ -412,15 +423,18 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
       if (testLPT==0) theId=probePfmvaId;
 
       if (fabs(probeEta)<1.5) {  // barrel
-	if (probePt>=1.0 && probePt<1.5) mvaFakeEBMc0->Fill(theId, weight);
-	if (probePt>=1.5 && probePt<2.0) mvaFakeEBMc1->Fill(theId, weight);
-	if (probePt>=2.0 && probePt<5.0) mvaFakeEBMc2->Fill(theId, weight);
-	if (probePt>=5.0) mvaFakeEBMc3->Fill(theId, weight);
-
+	if (testLPT==1) { 
+	  if (probePt>=1.0 && probePt<1.5) mvaFakeEBMc0->Fill(theId, weight);
+	  if (probePt>=1.5 && probePt<2.0) mvaFakeEBMc1->Fill(theId, weight);
+	  if (probePt>=2.0 && probePt<5.0) mvaFakeEBMc2->Fill(theId, weight);
+	  if (probePt>=5.0) mvaFakeEBMc3->Fill(theId, weight);
+	} else {
+	  if (probePt>=2.0 && probePt<5.0) mvaFakeEBMc0->Fill(theId, weight);
+	  if (probePt>=5.0)                mvaFakeEBMc1->Fill(theId, weight);	
+	}
       } else {  // endcap
-	if (probePt>=1.0 && probePt<2.0) mvaFakeEEMc0->Fill(theId, weight);
-	if (probePt>=2.0 && probePt<5.0) mvaFakeEEMc1->Fill(theId, weight);
-	if (probePt>=5.0) mvaFakeEEMc2->Fill(theId, weight);
+	if (probePt>=2.0 && probePt<5.0) mvaFakeEEMc0->Fill(theId, weight);
+	if (probePt>=5.0)                mvaFakeEEMc1->Fill(theId, weight);
       }
     }
 
@@ -456,51 +470,51 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
   //
   mvaSignalEBMc0 -> SetLineWidth(2); 
   mvaSignalEBMc1 -> SetLineWidth(2); 
-  mvaSignalEBMc2 -> SetLineWidth(2); 
-  mvaSignalEBMc3 -> SetLineWidth(2); 
   mvaSignalEBMc0 -> SetLineColor(6); 
   mvaSignalEBMc1 -> SetLineColor(6); 
-  mvaSignalEBMc2 -> SetLineColor(6); 
-  mvaSignalEBMc3 -> SetLineColor(6); 
+  if (testLPT==1) {
+    mvaSignalEBMc2 -> SetLineWidth(2); 
+    mvaSignalEBMc3 -> SetLineWidth(2); 
+    mvaSignalEBMc2 -> SetLineColor(6); 
+    mvaSignalEBMc3 -> SetLineColor(6); 
+  }
   //
   mvaSignalEBMc0WW -> SetLineWidth(2); 
   mvaSignalEBMc1WW -> SetLineWidth(2); 
-  mvaSignalEBMc2WW -> SetLineWidth(2); 
-  mvaSignalEBMc3WW -> SetLineWidth(2); 
   mvaSignalEBMc0WW -> SetLineColor(6); 
   mvaSignalEBMc1WW -> SetLineColor(6); 
-  mvaSignalEBMc2WW -> SetLineColor(6); 
-  mvaSignalEBMc3WW -> SetLineColor(6); 
+  if (testLPT==1) {
+    mvaSignalEBMc2WW -> SetLineWidth(2); 
+    mvaSignalEBMc3WW -> SetLineWidth(2); 
+    mvaSignalEBMc2WW -> SetLineColor(6); 
+    mvaSignalEBMc3WW -> SetLineColor(6); 
+  }
   //
   mvaSignalEEMc0 -> SetLineWidth(2); 
   mvaSignalEEMc1 -> SetLineWidth(2); 
-  mvaSignalEEMc2 -> SetLineWidth(2); 
   mvaSignalEEMc0 -> SetLineColor(6); 
   mvaSignalEEMc1 -> SetLineColor(6); 
-  mvaSignalEEMc2 -> SetLineColor(6); 
   //
   mvaSignalEEMc0WW -> SetLineWidth(2); 
   mvaSignalEEMc1WW -> SetLineWidth(2); 
-  mvaSignalEEMc2WW -> SetLineWidth(2); 
   mvaSignalEEMc0WW -> SetLineColor(6); 
   mvaSignalEEMc1WW -> SetLineColor(6); 
-  mvaSignalEEMc2WW -> SetLineColor(6); 
   //
   mvaFakeEBMc0 -> SetLineWidth(2); 
   mvaFakeEBMc1 -> SetLineWidth(2); 
-  mvaFakeEBMc2 -> SetLineWidth(2); 
-  mvaFakeEBMc3 -> SetLineWidth(2); 
   mvaFakeEBMc0 -> SetLineColor(4); 
   mvaFakeEBMc1 -> SetLineColor(4); 
-  mvaFakeEBMc2 -> SetLineColor(4); 
-  mvaFakeEBMc3 -> SetLineColor(4); 
+  if (testLPT==1) {
+    mvaFakeEBMc2 -> SetLineWidth(2); 
+    mvaFakeEBMc3 -> SetLineWidth(2); 
+    mvaFakeEBMc2 -> SetLineColor(4); 
+    mvaFakeEBMc3 -> SetLineColor(4); 
+  }
   //
   mvaFakeEEMc0 -> SetLineWidth(2); 
   mvaFakeEEMc1 -> SetLineWidth(2); 
-  mvaFakeEEMc2 -> SetLineWidth(2); 
   mvaFakeEEMc0 -> SetLineColor(4); 
   mvaFakeEEMc1 -> SetLineColor(4); 
-  mvaFakeEEMc2 -> SetLineColor(4); 
 
 
   // -----------------------------------------------------------------------
@@ -533,51 +547,57 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
   //
   mvaSignalEBMc0->Write();
   mvaSignalEBMc1->Write();
-  mvaSignalEBMc2->Write();
-  mvaSignalEBMc3->Write();
+  if (testLPT==1) {
+    mvaSignalEBMc2->Write();
+    mvaSignalEBMc3->Write();
+  }
   mvaSignalEEMc0->Write();
   mvaSignalEEMc1->Write();
-  mvaSignalEEMc2->Write();
   //
   mvaSignalEBMc0WW->Write();
   mvaSignalEBMc1WW->Write();
-  mvaSignalEBMc2WW->Write();
-  mvaSignalEBMc3WW->Write();
+  if (testLPT==1) {
+    mvaSignalEBMc2WW->Write();
+    mvaSignalEBMc3WW->Write();
+  }
   mvaSignalEEMc0WW->Write();
   mvaSignalEEMc1WW->Write();
-  mvaSignalEEMc2WW->Write();
   //
   mvaFakeEBMc0->Write();
   mvaFakeEBMc1->Write();
-  mvaFakeEBMc2->Write();
-  mvaFakeEBMc3->Write();
+  if (testLPT==1) {
+    mvaFakeEBMc2->Write();
+    mvaFakeEBMc3->Write();
+  }
   mvaFakeEEMc0->Write();
   mvaFakeEEMc1->Write();
-  mvaFakeEEMc2->Write();
   //
   dxysigSignalEBMc0->Write();
   dxysigSignalEBMc1->Write();
-  dxysigSignalEBMc2->Write();
-  dxysigSignalEBMc3->Write();
+  if (testLPT==1) {
+    dxysigSignalEBMc2->Write();
+    dxysigSignalEBMc3->Write();
+  }
   dxysigSignalEEMc0->Write();
   dxysigSignalEEMc1->Write();
-  dxysigSignalEEMc2->Write();
   //
   dztrgSignalEBMc0->Write();
   dztrgSignalEBMc1->Write();
-  dztrgSignalEBMc2->Write();
-  dztrgSignalEBMc3->Write();
+  if (testLPT==1) {
+    dztrgSignalEBMc2->Write();
+    dztrgSignalEBMc3->Write();
+  }
   dztrgSignalEEMc0->Write();
   dztrgSignalEEMc1->Write();
-  dztrgSignalEEMc2->Write();
   //
   iso04relSignalEBMc0->Write();
   iso04relSignalEBMc1->Write();
-  iso04relSignalEBMc2->Write();
-  iso04relSignalEBMc3->Write();
+  if (testLPT==1) {
+    iso04relSignalEBMc2->Write();
+    iso04relSignalEBMc3->Write();
+  }
   iso04relSignalEEMc0->Write();
   iso04relSignalEEMc1->Write();
-  iso04relSignalEEMc2->Write();
   //
 
   myFile.Close();
@@ -587,18 +607,21 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
   // Rebin
   mvaSignalEBMc0->Rebin();
   mvaSignalEBMc1->Rebin();
-  mvaSignalEBMc2->Rebin();
-  mvaSignalEBMc3->Rebin();
+  if (testLPT==1) {
+    mvaSignalEBMc2->Rebin();
+    mvaSignalEBMc3->Rebin();
+  }
   mvaSignalEEMc0->Rebin();
   mvaSignalEEMc1->Rebin();
-  mvaSignalEEMc2->Rebin();
+
   mvaFakeEBMc0->Rebin();
   mvaFakeEBMc1->Rebin();
-  mvaFakeEBMc2->Rebin();
-  mvaFakeEBMc3->Rebin();
+  if (testLPT==1) {
+    mvaFakeEBMc2->Rebin();
+    mvaFakeEBMc3->Rebin();
+  }
   mvaFakeEEMc0->Rebin();
   mvaFakeEEMc1->Rebin();
-  mvaFakeEEMc2->Rebin();
 
 
   // -----------------------------------------------------------------------
@@ -694,72 +717,74 @@ void prepareInputsFromMcWithTnP::Loop(bool applyWeight, bool testLPT)
   cis04mc.SaveAs("iso04rel_matchVsFake_withTnP.png");
 
   TCanvas cmvaeb0("cmvaeb0","cmvaeb0",1);
-  mvaSignalEBMc0 -> SetTitle("EB, 0.5 < pT < 1.5");
-  mvaFakeEBMc0   -> SetTitle("EB, 0.5 < pT < 1.5");
+  if (testLPT==1) {
+    mvaSignalEBMc0 -> SetTitle("EB, 1.0 < pT < 1.5");
+    mvaFakeEBMc0   -> SetTitle("EB, 1.0 < pT < 1.5");
+  } else {
+    mvaSignalEBMc0 -> SetTitle("EB, 2.0 < pT < 5.0");
+    mvaFakeEBMc0   -> SetTitle("EB, 2.0 < pT < 5.0");
+  }
   mvaSignalEBMc0 -> GetXaxis()->SetTitle("Id BDT");
   mvaFakeEBMc0   -> GetXaxis()->SetTitle("Id BDT");
-  mvaFakeEBMc0->DrawNormalized("hist");
-  mvaSignalEBMc0->DrawNormalized("samehist");
+  mvaFakeEBMc0   -> DrawNormalized("hist");
+  mvaSignalEBMc0 -> DrawNormalized("samehist");
   legB->Draw();
   cmvaeb0.SaveAs("outputBDT_matchVsFake_withTnP_EB0.png");  
   //
   TCanvas cmvaeb1("cmvaeb1","cmvaeb1",1);
-  mvaSignalEBMc1 -> SetTitle("EB, 1.5 < pT < 2.0");
-  mvaFakeEBMc1   -> SetTitle("EB, 1.5 < pT < 2.0");
+  if (testLPT==1) {
+    mvaSignalEBMc1 -> SetTitle("EB, 1.5 < pT < 2.0");
+    mvaFakeEBMc1   -> SetTitle("EB, 1.5 < pT < 2.0");
+  } else {
+    mvaSignalEBMc1 -> SetTitle("EB, pT >= 5");
+    mvaFakeEBMc1   -> SetTitle("EB, pT >= 5");
+  }
   mvaSignalEBMc1 -> GetXaxis()->SetTitle("Id BDT");
   mvaFakeEBMc1   -> GetXaxis()->SetTitle("Id BDT");
-  mvaFakeEBMc1->DrawNormalized("hist");
-  mvaSignalEBMc1->DrawNormalized("samehist");
+  mvaFakeEBMc1   -> DrawNormalized("hist");
+  mvaSignalEBMc1 -> DrawNormalized("samehist");
   legB->Draw();
   cmvaeb1.SaveAs("outputBDT_matchVsFake_withTnP_EB1.png");  
   //
-  TCanvas cmvaeb2("cmvaeb2","cmvaeb2",1);
-  mvaSignalEBMc2 -> SetTitle("EB, 2.0 < pT < 5.0");
-  mvaFakeEBMc2   -> SetTitle("EB, 2.0 < pT < 5.0");
-  mvaSignalEBMc2 -> GetXaxis()->SetTitle("Id BDT");
-  mvaFakeEBMc2   -> GetXaxis()->SetTitle("Id BDT");
-  mvaFakeEBMc2->DrawNormalized("hist");
-  mvaSignalEBMc2->DrawNormalized("samehist");
-  legB->Draw();
-  cmvaeb2.SaveAs("outputBDT_matchVsFake_withTnP_EB2.png");  
-  //
-  TCanvas cmvaeb3("cmvaeb3","cmvaeb3",1);
-  mvaSignalEBMc3 -> SetTitle("EB, pT >= 5");
-  mvaFakeEBMc3   -> SetTitle("EB, pT >= 5");
-  mvaSignalEBMc3 -> GetXaxis()->SetTitle("Id BDT");
-  mvaFakeEBMc3   -> GetXaxis()->SetTitle("Id BDT");
-  mvaSignalEBMc3->DrawNormalized("hist");
-  mvaFakeEBMc3->DrawNormalized("samehist");
-  legB->Draw();
-  cmvaeb3.SaveAs("outputBDT_matchVsFake_withTnP_EB3.png");  
+  if (testLPT==1) {
+    TCanvas cmvaeb2("cmvaeb2","cmvaeb2",1);
+    mvaSignalEBMc2 -> SetTitle("EB, 2.0 < pT < 5.0");
+    mvaFakeEBMc2   -> SetTitle("EB, 2.0 < pT < 5.0");
+    mvaSignalEBMc2 -> GetXaxis()->SetTitle("Id BDT");
+    mvaFakeEBMc2   -> GetXaxis()->SetTitle("Id BDT");
+    mvaFakeEBMc2   -> DrawNormalized("hist");
+    mvaSignalEBMc2 -> DrawNormalized("samehist");
+    legB->Draw();
+    cmvaeb2.SaveAs("outputBDT_matchVsFake_withTnP_EB2.png");  
+    //
+    TCanvas cmvaeb3("cmvaeb3","cmvaeb3",1);
+    mvaSignalEBMc3 -> SetTitle("EB, pT >= 5");
+    mvaFakeEBMc3   -> SetTitle("EB, pT >= 5");
+    mvaSignalEBMc3 -> GetXaxis()->SetTitle("Id BDT");
+    mvaFakeEBMc3   -> GetXaxis()->SetTitle("Id BDT");
+    mvaSignalEBMc3 -> DrawNormalized("hist");
+    mvaFakeEBMc3   -> DrawNormalized("samehist");
+    legB->Draw();
+    cmvaeb3.SaveAs("outputBDT_matchVsFake_withTnP_EB3.png");  
+  }
 
   TCanvas cmvaee0("cmvaee0","cmvaee0",1);
-  mvaSignalEEMc0 -> SetTitle("EE, 1.0 < pT < 2.0");
-  mvaFakeEEMc0   -> SetTitle("EE, 1.0 < pT < 2.0");
+  mvaSignalEEMc0 -> SetTitle("EE, 2.0 < pT < 5.0");
+  mvaFakeEEMc0   -> SetTitle("EE, 2.0 < pT < 5.0");
   mvaSignalEEMc0 -> GetXaxis()->SetTitle("Id BDT");
   mvaFakeEEMc0   -> GetXaxis()->SetTitle("Id BDT");
-  mvaFakeEEMc0->DrawNormalized("hist");
-  mvaSignalEEMc0->DrawNormalized("samehist");
+  mvaFakeEEMc0   -> DrawNormalized("hist");
+  mvaSignalEEMc0 -> DrawNormalized("samehist");
   legB->Draw();
   cmvaee0.SaveAs("outputBDT_matchVsFake_withTnP_EE0.png");  
   //
   TCanvas cmvaee1("cmvaee1","cmvaee1",1);
-  mvaSignalEEMc1 -> SetTitle("EE, 2.0 < pT < 5.0");
-  mvaFakeEEMc1   -> SetTitle("EE, 2.0 < pT < 5.0");
+  mvaSignalEEMc1 -> SetTitle("EE, pT >= 5.0");
+  mvaFakeEEMc1   -> SetTitle("EE, pT >= 5.0");
   mvaSignalEEMc1 -> GetXaxis()->SetTitle("Id BDT");
   mvaFakeEEMc1   -> GetXaxis()->SetTitle("Id BDT");
   mvaFakeEEMc1->DrawNormalized("hist");
   mvaSignalEEMc1->DrawNormalized("samehist");
   legB->Draw();
   cmvaee1.SaveAs("outputBDT_matchVsFake_withTnP_EE1.png");  
-  //
-  TCanvas cmvaee2("cmvaee2","cmvaee2",1);
-  mvaSignalEEMc2 -> SetTitle("EE, pT >= 5.0");
-  mvaFakeEEMc2   -> SetTitle("EE, pT >= 5.0");
-  mvaSignalEEMc2 -> GetXaxis()->SetTitle("Id BDT");
-  mvaFakeEEMc2   -> GetXaxis()->SetTitle("Id BDT");
-  mvaSignalEEMc2->DrawNormalized("hist");
-  mvaFakeEEMc2->DrawNormalized("samehist");
-  legB->Draw();
-  cmvaee2.SaveAs("outputBDT_matchVsFake_withTnP_EE2.png");  
 }
