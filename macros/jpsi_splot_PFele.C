@@ -52,6 +52,7 @@ void jpsi_splot_PFele()
   
   // add dataset from converted root tree
   getDataSet("/eos/cms/store/group/phys_egamma/crovelli/LowPtEle/TnpData/March21_withRegr/FormattedTnP_PF_TightSel_withRegr_March21_Parking2018ALL.root", wspace, lowRange, highRange);
+  // getDataSet("/eos/cms/store/group/phys_egamma/crovelli/LowPtEle/TnpData/March21_withRegr/FormattedTnP_PF_TightSel_withRegr_March21_BuToKJpsi_Toee_mc_bparkPU.root", wspace, lowRange, highRange);
 
   // inspect the workspace if you wish
   wspace->Print();
@@ -82,8 +83,8 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
 
 
   // ------------------------------------------------
-  // EB: 2-5   
-  // Fit bello e matrice errori ok. Fit failed pero'
+  /*
+  // EB: 2-5 - Versione usata per ANv3 
   RooRealVar m0("m0", "JPsi Mass", 3.09286, 3.09286, 3.09286);                  
   RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.7);          
   RooRealVar alphaR("alphaR", "alpha right", 1., 0.7, 1.5); 
@@ -93,10 +94,37 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
   RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  */
+
+  /*
+  // Fit to MC; EB: 2-5
+  RooRealVar m0("m0", "JPsi Mass", 3.09286, 3.090, 3.098);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.1, 1.);          
+  RooRealVar alphaR("alphaR", "alpha right", 1., 0.7, 1.5); 
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.35, 1., 3.5);        
+  RooRealVar nR("nR", "N right", 1.8, 1.7, 3.5);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background",  10000 , 1., 5000000) ; 
+  bkgYield.setConstant(0); 
+  */
+
+  // Fit to DATA; EB: 2-5  
+  RooRealVar m0("m0", "JPsi Mass", 3.09778, 3.0964, 3.099);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.472, 0.1, 1.0);          
+  RooRealVar alphaR("alphaR", "alpha right", 0.965, 0.7, 1.5);
+  RooRealVar sigma("sigma", "sigma", 0.0336670, 0.03, 0.05);
+  RooRealVar nL("nL", "N left",  2.46, 1.0, 3.5);
+  RooRealVar nR("nR", "N right", 3.50, 1.7, 4.0);
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+
 
   // ------------------------------------------------
-  // EB: pT>5
   /*
+  // EB: pT>5: Versione usata per ANv3 
   RooRealVar m0("m0", "JPsi Mass", 3.090, 3.088, 3.091);                  
   RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.7);          
   RooRealVar alphaR("alphaR", "alpha right", 1.3, 0.8, 1.5); 
@@ -108,10 +136,38 @@ void AddModel(RooWorkspace* ws, float lowRange, float highRange){
   RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
   */
 
+  // Fit to MC; EB: pT>5  
+  /*
+  RooRealVar m0("m0", "JPsi Mass", 3.090, 3.085, 3.098);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.5, 0.3, 0.7);          
+  RooRealVar alphaR("alphaR", "alpha right", 1.3, 0.8, 1.5); 
+  RooRealVar sigma("sigma", "sigma",  0.04, 0.03, 0.05);  
+  RooRealVar nL("nL", "N left",  3.30, 3.25, 3.35);        
+  RooRealVar nR("nR", "N right", 1.85, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  bkgYield.setConstant(0); 
+  */
+
+  /*
+  // Fit to DATA; EB: pT>5  
+  RooRealVar m0("m0", "JPsi Mass", 3.087, 3.084, 3.098);                  
+  RooRealVar alphaL("alphaL", "alpha left",  0.6, 0.3, 0.7);          
+  RooRealVar alphaR("alphaR", "alpha right", 1.4, 0.8, 1.5); 
+  RooRealVar sigma("sigma", "sigma",  0.048, 0.03, 0.06);  
+  RooRealVar nL("nL", "N left",  3.27, 3.25, 3.35);        
+  RooRealVar nR("nR", "N right", 1.95, 1.75, 1.95);       
+  RooRealVar alpha("alpha", "Decay const for background mass spectrum", 0.0, -0.2, 0.2,"1/GeV");      
+  RooRealVar jpsiYield("jpsiYield","fitted yield for JPsi",      2000 , 1., 500000) ;              
+  RooRealVar bkgYield("bkgYield","fitted yield for background", 10000 , 1., 5000000) ;             
+  */
+
+
   // ----------------------------------------------------
+  /*
   //  EE: 2-5 
   // Converge e errori ok. Molti parametri al limite, ma la statistica e' quella che e'
-  /*
   RooRealVar m0("m0", "JPsi Mass", 3.089, 3.0885, 3.0895);                  
   RooRealVar alphaL("alphaL", "alpha left",  0.3, 0.2, 0.4);          
   RooRealVar alphaR("alphaR", "alpha right", 0.75, 0.7, 0.9);         
